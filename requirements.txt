@@ -1,0 +1,13 @@
+ annotated-types
+ sqlalchemy
+ uvicorn
+ fastapi
+ scipy
+ scikit-learn
+ statsmodels
+ pydantic
+ mplfinance
+ psycopg2
+ schedule
+ pandas_ta
+ python-multipart

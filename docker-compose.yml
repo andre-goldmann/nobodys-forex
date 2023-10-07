@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  backend:
+    container_name: backend
+    build: ./
+    ports:
+      - "6081:6081"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/backend
+    #env_file:
+    #  - variables.env
+    depends_on:
+      - "db"
+    #command: pip install python-multipart
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=nobodysforex
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=trading-db
+    expose:
+      - "6432" # Publishes 5433 to other containers but NOT to host machine
+    ports:
+      - '6432:6432'
+    volumes:
+      - db:/var/lib/postgresql/data
+    command: -p 6432
+volumes:
+  db:
+    driver: local
