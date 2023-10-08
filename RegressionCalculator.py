@@ -40,7 +40,7 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
     df = df.loc[mask]
     #print("Len after: ", len(df))
 
-    print("First row: ", df.iloc[0]['DATETIME'])
+    #print("First row: ", df.iloc[0]['DATETIME'])
     lsma_arr = []
     dates_arr = []
 
@@ -58,9 +58,9 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
     all_df = pd.concat([lsma_df,df], axis=1)
     all_df.dropna(inplace=True)
 
-    print("First row: ", all_df.iloc[0]['DATETIME'])
-    print("Last row:  ", all_df.iloc[-1]['DATETIME'])
-    print("###################################")
+    #print("First row: ", all_df.iloc[0]['DATETIME'])
+    #print("Last row:  ", all_df.iloc[-1]['DATETIME'])
+    #print("###################################")
 
     end = timer()
     print("Regression took: ", timedelta(seconds=end-start))
@@ -91,7 +91,7 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
                                 Regressions.endValue).statement,
             con = engine
         )
-        print(len(dfFromDb), " regression entries stored.")
+        #print(len(dfFromDb), " regression entries stored.")
         #print("Last row: ")
         #print(df.iloc[-1])
 
@@ -100,9 +100,9 @@ def deleteRegressionData(symbol:str, timeFrame:TimeFrame):
         try:
             results = session.query(Regressions).filter(Regressions.symbol==symbol, Regressions.timeFrame==timeFrame).all()
             #print(results)
-            print("ToDelete:")
+            #print("ToDelete:")
             for r in results:
-                print(r)
+                #print(r)
                 session.delete(r)
             session.commit()
         except Exception:

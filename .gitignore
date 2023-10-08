@@ -160,3 +160,7 @@ cython_debug/
 #.idea/
 
 .secrets
+mysql
+letsencrypt
+.idea
+app/package-lock.json

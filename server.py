@@ -4,7 +4,6 @@ import threading
 import time
 from datetime import timedelta
 from timeit import default_timer as timer
-# from VWAPScalpingStrategy import runFirstStrategy
 from typing import List
 
 import numpy as np
@@ -78,8 +77,6 @@ manager = ConnectionManager()
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
     await manager.connect(websocket)
-    #while True:
-    #    data = await websocket.receive_text()
 
     last = lastCandle("EURUSD", TimeFrame.PERIOD_M15)
     json_compatible_item_data = jsonable_encoder(last)
@@ -92,15 +89,11 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
             #When a WebSocket connection is closed, the await websocket.receive_text()
             # will raise a WebSocketDisconnect exception, which you can then catch and handle like in this
 
-            #await manager.broadcast(f"Client #{client_id} says: {data}")
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        #await manager.broadcast(f"Client #{client_id} left the chat"
 
 @app.get("/unActiveTrades")
 async def unActiveTrades():
-    #json_compatible_item_data = jsonable_encoder(getOpenTrades())
-    #return json.dumps()
     trades = getUnActiveTrades()
     result = []
     for trade in trades:
@@ -180,7 +173,6 @@ async def storeCandle(candle:CandlesDto):
     timeframeEnum: TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
 
     if timeframeEnum != TimeFrame.PERIOD_M1:
-        #print("Store: " , candle)
         storeCandleInDb(candle)
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))
@@ -234,8 +226,6 @@ def autoDetectSupportAndResistance(symbol:str, sliceMax:int, peaksMax:int, timeF
                 caclulator="defaultsr"
             )
         )
-
-
 
     return {
         'prices': prices

@@ -1,12 +1,9 @@
 import numpy as np
-import pandas as pd
-import pandas_ta as ta
-import matplotlib.pyplot as plt
 
+from CandleStorageHandler import loadDfFromDb
 from DataBaseManagement import TimeFrame
 from trendline_automation import fit_trendlines_single
-import mplfinance as mpf
-from CandleStorageHandler import loadDfFromDb
+
 
 def trendline_breakout(close: np.array, lookback:int):
     s_tl = np.zeros(len(close))

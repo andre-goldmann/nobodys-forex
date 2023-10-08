@@ -1,13 +1,10 @@
 import enum
 
+from pydantic import BaseModel
+from sqlalchemy import String
 from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import String, Enum
-from pydantic import BaseModel
-#engine = create_engine('sqlite:///trading.db', echo=True)
-#engine = create_engine('sqlite:///trading.db')
-#Session = sessionmaker(engine)
 
 #engine = create_engine('postgresql://tiims-subscription-management:pwd@172.26.165.187:5432/trading-db')
 # Docker-Config
