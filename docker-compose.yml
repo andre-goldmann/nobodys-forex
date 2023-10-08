@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     ports:
       # Public HTTP Port:
-      - '80:80'
+      #- '80:80'
       # Public HTTPS Port:
       - '443:443'
       # Admin Web Port:
@@ -65,7 +65,19 @@ services:
     #  - variables.env
     depends_on:
       - "db"
-    #command: pip install python-multipart
+
+  tvsignals:
+    container_name: tvsignals
+    build: ./tvsignals
+    ports:
+      - "80:80"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
+    #env_file:
+    #  - variables.env
+    depends_on:
+      - "db"
+
   db:
     image: postgres:14.1-alpine
     restart: always

@@ -33,7 +33,7 @@ from trendline_breakout import trendline_breakout
 import sys
 
 
-version = f"{sys.version_info.major}.{sys.version_info.minor}"
+#version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 app = FastAPI()
 
