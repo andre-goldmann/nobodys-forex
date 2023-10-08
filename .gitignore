@@ -164,3 +164,4 @@ app/package-lock.json
 data/
 volumes/
 letsencrypt/
+mysql/
