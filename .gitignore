@@ -161,5 +161,6 @@ cython_debug/
 .secrets
 .idea
 app/package-lock.json
-nginxdata
-volumes
+data/
+volumes/
+letsencrypt/
