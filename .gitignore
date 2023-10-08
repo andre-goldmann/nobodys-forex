@@ -163,3 +163,5 @@ mysql
 letsencrypt
 .idea
 app/package-lock.json
+data/keys.json
+data/nginx
