@@ -165,3 +165,7 @@ letsencrypt
 app/package-lock.json
 data/keys.json
 data/nginx/*
+data/access
+data/custom_ssl
+data/letsencrypt-acme-challenge
+data/logs
