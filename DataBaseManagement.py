@@ -90,14 +90,14 @@ def updateTrade(tradeUpdateDto:TradeUpdateDto):
 
     #storeTrade = session.query(Trade).filter(Trade.symbol == tradeActivationDto.symbol, Trade.id == tradeActivationDto.magic).first()
     storeTrade = session.query(Trade).filter(Trade.symbol == tradeUpdateDto.symbol, Trade.id == tradeUpdateDto.magic).first()
+    if storeTrade is not None:
+        storeTrade.swap = tradeUpdateDto.swap
+        storeTrade.profit = tradeUpdateDto.profit
+        storeTrade.commision = tradeUpdateDto.commision
+        if tradeUpdateDto.closed is not None and tradeUpdateDto.closed != "" and tradeUpdateDto.closed != "-":
+            storeTrade.closed = tradeUpdateDto.closed
 
-    storeTrade.swap = tradeUpdateDto.swap
-    storeTrade.profit = tradeUpdateDto.profit
-    storeTrade.commision = tradeUpdateDto.commision
-    if tradeUpdateDto.closed is not None and tradeUpdateDto.closed != "" and tradeUpdateDto.closed != "-":
-        storeTrade.closed = tradeUpdateDto.closed
-
-    session.commit()
+        session.commit()
     #print("Trade Updated:", storeTrade)
 
 def initTradingDb():
