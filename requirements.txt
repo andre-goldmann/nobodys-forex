@@ -1,6 +1,6 @@
  annotated-types
  sqlalchemy
- uvicorn
+ uvicorn[standard]
  fastapi
  scipy
  scikit-learn
