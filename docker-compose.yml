@@ -31,8 +31,8 @@ services:
       # Uncomment this if IPv6 is not enabled on your host
       # DISABLE_IPV6: 'true'
     volumes:
-      - ./data:/data
-      - ./letsencrypt:/etc/letsencrypt
+      - ./nginxdata:/data
+      - ./nginxdata/letsencrypt:/etc/letsencrypt
     #secrets:
     #  - MYSQL_PWD
     depends_on:
@@ -49,7 +49,7 @@ services:
       MYSQL_PASSWORD: "npm"  # use secret instead
      # MYSQL_PASSWORD__FILE: /run/secrets/MYSQL_PWD
     volumes:
-      - ./mysql:/var/lib/mysql
+      - ./nginxdata/mysql:/var/lib/mysql
     #secrets:
     #  - DB_ROOT_PWD
     #  - MYSQL_PWD
