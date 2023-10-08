@@ -9,8 +9,9 @@ from pydantic import BaseModel
 #engine = create_engine('sqlite:///trading.db')
 #Session = sessionmaker(engine)
 
-engine = create_engine('postgresql://tiims-subscription-management:pwd@172.26.165.187:5432/trading-db')
-#engine = create_engine('postgresql://nobodysforex:pwd@172.26.165.187:6432/trading-db')
+#engine = create_engine('postgresql://tiims-subscription-management:pwd@172.26.165.187:5432/trading-db')
+# Docker-Config
+engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
