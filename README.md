@@ -3,3 +3,10 @@ https://tvsignals.nobodys-forex.duckdns.org/
 https://nobodys-forex.duckdns.org/
 
 https://www.duckdns.org/domains
+
+
+curl -H 'Content-Type: application/json; charset=utf-8' -d '{"symbol": "BTCUSD", "timestamp": "11.03.2023", "type":"buy", "entry": 1.0, "sl": 1.1, "tp": 1.2, "strategy": "Hello World"}' -X POST https://tvsignals.nobodys-forex.duckdns.org/signal
+
+curl -H 'Content-Type: application/json; charset=utf-8' -d '{"symbol": "BTCUSD", "timestamp": "11.03.2023", "type":"buy", "entry": 1.0, "sl": 1.1, "tp": 1.2, "strategy": "Hello World"}' -X POST http://85.215.32.163/signal
+
+                                                            {"symbol": "BTCUSD", "timestamp": "11.03.2023", "type":"buy", "entry": 1.0, "sl": 1.1, "tp": 1.2, "strategy": "HalfTrend"}

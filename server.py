@@ -77,7 +77,7 @@ manager = ConnectionManager()
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
     await manager.connect(websocket)
-
+    print(f"Client with id: {client_id} connected!!!")
     last = lastCandle("EURUSD", TimeFrame.PERIOD_M15)
     json_compatible_item_data = jsonable_encoder(last)
     await manager.broadcast(json.dumps(json_compatible_item_data))
