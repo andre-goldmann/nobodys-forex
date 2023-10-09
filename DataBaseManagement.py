@@ -35,8 +35,8 @@ class Trade(Base):
     sl: Mapped[float]
     tp: Mapped[float]
     lots: Mapped[float]
-    spread: Mapped[float]
-    tradeid: Mapped[int]
+    spread: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    tradeid: Mapped[int] = mapped_column(nullable=True, default=0)
     stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
     # werden erst nach der Erstellung des Trades gesetzt
     activated: Mapped[str] = mapped_column(nullable=True, default="")
@@ -45,6 +45,7 @@ class Trade(Base):
     profit: Mapped[float] = mapped_column(nullable=True, default=0.0)
     closed: Mapped[str] = mapped_column(nullable=True, default="")
     commision: Mapped[float] = mapped_column(nullable=True, default="")
+    strategy: Mapped[str] = mapped_column(nullable=True, default="")
 
     def as_dict(self):
         #return {c.name: getattr(self, c.name) for c in self.__table__.columns}

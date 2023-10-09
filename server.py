@@ -115,9 +115,7 @@ async def createOrder(symbol: Annotated[str, Form()],
         entry=entry,
         sl=sl,
         tp=tp,
-        lots=lots,
-        spread=0,
-        tradeid=0
+        lots=lots
     ))
     return "Order created"
 
