@@ -6,6 +6,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 import sys
 
+from pydantic import BaseModel
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
