@@ -6,7 +6,6 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 import sys
 
-from DataBaseManagement import storeTrade, Trade
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
@@ -37,15 +36,15 @@ async def read_root():
 @app.post("/signal")
 async def signals(signal:SignalDto):
     print(signal)
-    storeTrade(Trade(
-        symbol=signal.symbol,
-        type=signal.type,
-        entry=signal.entry,
-        sl=signal.sl,
-        tp=signal.tp,
-        lots=0.5,
-        strategy=signal.strategy
-    ))
+    #storeTrade(Trade(
+    #    symbol=signal.symbol,
+    #    type=signal.type,
+    #    entry=signal.entry,
+    #    sl=signal.sl,
+    #    tp=signal.tp,
+    #    lots=0.5,
+    #    strategy=signal.strategy
+    #))
 
 #if __name__ == "__main__":
 #    uvicorn.run(app, host="0.0.0.0", port=80)
