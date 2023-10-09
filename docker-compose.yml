@@ -54,18 +54,6 @@ services:
     #  - DB_ROOT_PWD
     #  - MYSQL_PWD
 
-  backend:
-    container_name: backend
-    build: ./
-    ports:
-      - "6081:6081"
-    volumes:
-      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/backend
-    #env_file:
-    #  - variables.env
-    depends_on:
-      - "db"
-
   tvsignals:
     container_name: tvsignals
     build: ./tvsignals
@@ -73,6 +61,18 @@ services:
       - "80:80"
     volumes:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
+    #env_file:
+    #  - variables.env
+    depends_on:
+      - "db"
+
+  backend:
+    container_name: backend
+    build: ./
+    ports:
+      - "6081:6081"
+    volumes:
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/backend
     #env_file:
     #  - variables.env
     depends_on:
