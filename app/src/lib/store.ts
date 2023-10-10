@@ -6,6 +6,7 @@ import { writable, derived } from 'svelte/store';
  **/
 export const symbolsApiData = writable([]);
 export const tradesApiData = writable([]);
+export const tradeSelected = writable();
 
 export const symbols = derived(symbolsApiData, ($apiData) => {
     if ($apiData){
@@ -18,7 +19,7 @@ export const symbols = derived(symbolsApiData, ($apiData) => {
 export const trades = derived(tradesApiData, ($apiData) => {
     if ($apiData){
         //return $apiData.sort(e => e.level);
-        return $apiData.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0))
+        return $apiData.sort((a,b) => (a.id < b.id) ? 1 : ((b.id < a.id) ? -1 : 0))
     }
     return [];
 });

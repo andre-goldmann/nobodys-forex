@@ -4,7 +4,7 @@
     let symbol:string = 'EURUSD';
     let type:string = '';
     const HOST = "http://85.215.32.163:6081";
-    import {symbols, tradesApiData} from '$lib/store.ts';
+    import {tradesApiData, tradeSelected} from '$lib/store.ts';
     import {trades} from "$lib/store";
 
     const handleSubmit = e => {
@@ -38,9 +38,9 @@
         loadUnActiveTrades();
     });
 
-    function deleteRow(id:number) {
-        console.info(`Call delete action on: ${id}`);
-
+    function rowSelected(trade:Trade) {
+        console.info(`Call delete action on: ${trade}`);
+        tradeSelected.set(trade);
     }
 
 </script>
@@ -78,6 +78,8 @@
                             <option value="GBPCHF">GBPCHF</option>
                             <option value="EURCHF">EURCHF</option>
                             <option value="CHFJPY">CHFJPY</option>
+                            <option value="CADCHF">CADCHF</option>
+                            <option value="NZDJPY">NZDJPY</option>
                         </select>
                     </div>
 
@@ -133,7 +135,6 @@
             </form>
         </div>
 
-
         <div class="w-full">
             <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
                 <h1 class="mb-8 text-3xl text-center">Inactive Orders</h1>
@@ -154,7 +155,7 @@
                         <tr/>
                         </thead>
                         {#each $trades as trade}
-                            <tr class="hover">
+                            <tr class="hover" on:click={() => rowSelected(trade)}>
                                 <td>{trade.id}</td>
                                 <td>{trade.symbol}</td>
                                 <td>{trade.type}</td>
@@ -162,9 +163,9 @@
                                 <td>{trade.sl}</td>
                                 <td>{trade.tp}</td>
                                 <td>{trade.lots}</td>
-                                <button class="btn btn-ghost btn-xs" on:click={() => deleteRow(trade.id)}>
+                                <!--button class="btn btn-ghost btn-xs" on:click={() => rowSelected(trade)}>
                                     Remove
-                                </button>
+                                </button-->
                             <tr/>
                         {/each}
                     </table>
@@ -174,5 +175,82 @@
 
             </div>
         </div>
+
+        <!--div>
+            <p>{ $tradeSelected }</p>
+        </div-->
+
+    <div class="basis-1/4">
+        <!--form class="flex items-center space-x-6" action="http://127.0.0.1:6081/createorder" on:submit|preventDefault={handleSubmit} method="POST"-->
+        <form class="flex items-center space-x-6" action="http://85.215.32.163:6081/modifyorder" on:submit|preventDefault={handleSubmit} method="POST">
+            <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
+                <h1 class="mb-8 text-3xl text-center">New Order</h1>
+                <div class="w-full max-w-xs">
+                    <!--label class="label" for="symbols">
+                        <span class="label-text">Symbol</span>
+                    </label-->
+                    <input
+                            type="text"
+                            class="input input-bordered input-primary w-full max-w-xs mb-4"
+                            id="symbol"
+                            name="symbol"
+                            value={$tradeSelected.symbol}
+                            disabled/>
+                </div>
+
+                <div class="w-full max-w-xs">
+
+                    <input
+                            type="text"
+                            class="input input-bordered input-primary w-full max-w-xs mb-4"
+                            id="type"
+                            name="type"
+                            value={$tradeSelected.type}
+                            disabled/>
+                </div>
+
+                <input
+                        type="number"
+                        step=".0001"
+                        class="input input-bordered input-primary w-full max-w-xs mb-4"
+                        id="entry"
+                        name="entry"
+                        value={$tradeSelected.entry}
+                        placeholder="Entry" />
+
+                <input
+                        type="number"
+                        step=".0001"
+                        class="input input-bordered input-primary w-full max-w-xs mb-4"
+                        id="sl"
+                        name="sl"
+                        value={$tradeSelected.sl}
+                        placeholder="Stoploss" />
+
+                <input
+                        type="number"
+                        step=".0001"
+                        class="input input-bordered input-primary w-full max-w-xs mb-4"
+                        id="tp"
+                        name="tp"
+                        value={$tradeSelected.tp}
+                        placeholder="Take Profit" />
+                <input
+                        type="number"
+                        step=".001"
+                        class="input input-bordered input-primary w-full max-w-xs mb-4"
+                        id="lots"
+                        name="lots"
+                        value={$tradeSelected.lots}
+                        placeholder="Volume/Lots" />
+
+                <div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-primary">Delete</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
 
 </div>
