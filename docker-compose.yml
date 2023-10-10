@@ -54,29 +54,29 @@ services:
     #  - DB_ROOT_PWD
     #  - MYSQL_PWD
 
-  tvsignals:
-    container_name: tvsignals
-    build: ./tvsignals
-    ports:
-      - "80:80"
-    volumes:
-      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
+  #tvsignals:
+  #  container_name: tvsignals
+  #  build: ./tvsignals
+  #  ports:
+  #    - "80:80"
+  #  volumes:
+  #    - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
     #env_file:
     #  - variables.env
-    depends_on:
-      - "db"
+  #  depends_on:
+  #    - "db"
 
-  backend:
-    container_name: backend
-    build: ./
-    ports:
-      - "6081:6081"
-    volumes:
-      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/backend
+  #backend:
+    #container_name: backend
+    #build: ./
+    #ports:
+    #  - "6081:6081"
+    #volumes:
+    #  - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/backend
     #env_file:
     #  - variables.env
-    depends_on:
-      - "db"
+  #  depends_on:
+  #    - "db"
 
   db:
     image: postgres:14.1-alpine
@@ -93,15 +93,13 @@ services:
       - db:/var/lib/postgresql/data
     command: -p 6432
 
-  #pgadmin:
-  #  container_name: pgadmin4_container
-  #  image: dpage/pgadmin4
-  #  restart: always
-  #  environment:
-  #    PGADMIN_DEFAULT_EMAIL: admin@admin.com
-  #    PGADMIN_DEFAULT_PASSWORD: root
-  #  ports:
-  #    - "5050:5050"
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
 
 volumes:
   db:
