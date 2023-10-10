@@ -1,14 +1,11 @@
-import uvicorn
+import sys
+
 from fastapi import FastAPI, Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 # Bellow the import create a job that will be executed on background
 from fastapi.responses import JSONResponse
-import sys
-
-from pydantic import BaseModel
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from pydantic import BaseModel
 from sqlalchemy import String
 from sqlalchemy import create_engine, DateTime, func
@@ -23,6 +20,9 @@ session = Session()
 
 app = FastAPI()
 
+app.add_middleware(
+    TrustedHostMiddleware, allowed_hosts=["52.89.214.238","34.212.75.30","54.218.53.128","52.32.178.7"]
+)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
