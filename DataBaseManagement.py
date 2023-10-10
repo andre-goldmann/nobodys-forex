@@ -69,7 +69,13 @@ def storeTrade(trade: Trade):
     session.commit()
 
 def getUnActiveTrades():
-    return session.query(Trade.symbol, Trade.tp, Trade.sl).filter(Trade.tradeid == 0, Trade.activated =="", Trade.openprice == 0.0).all()
+    return session.query(Trade.id,
+                         Trade.symbol,
+                         Trade.type,
+                         Trade.entry,
+                         Trade.sl,
+                         Trade.tp,
+                         Trade.lots).filter(Trade.tradeid == 0, Trade.activated =="", Trade.openprice == 0.0).all()
 
 def activeTrade(tradeActivationDto:TradeActivationDto):
     #print("Activating Trade", tradeActivationDto)
