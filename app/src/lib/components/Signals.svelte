@@ -181,7 +181,21 @@
             <!--form class="flex items-center space-x-6" action="http://127.0.0.1:6081/createorder" on:submit|preventDefault={handleSubmit} method="POST"-->
             <form class="flex items-center space-x-6" action="http://85.215.32.163:6081/modifyorder" on:submit|preventDefault={handleSubmit} method="POST">
                 <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
-                    <h1 class="mb-8 text-3xl text-center">New Order</h1>
+                    <h1 class="mb-8 text-3xl text-center">Update Order</h1>
+
+                    <div class="w-full max-w-xs">
+                        <!--label class="label" for="symbols">
+                            <span class="label-text">Symbol</span>
+                        </label-->
+                        <input
+                                type="number"
+                                class="input input-bordered input-primary w-full max-w-xs mb-4"
+                                id="id"
+                                name="id"
+                                value={$tradeSelected.id}
+                                disabled/>
+                    </div>
+
                     <div class="w-full max-w-xs">
                         <!--label class="label" for="symbols">
                             <span class="label-text">Symbol</span>
