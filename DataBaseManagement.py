@@ -42,7 +42,7 @@ class Trade(Base):
     swap: Mapped[float] = mapped_column(nullable=True, default=0.0)
     profit: Mapped[float] = mapped_column(nullable=True, default=0.0)
     closed: Mapped[str] = mapped_column(nullable=True, default="")
-    commision: Mapped[float] = mapped_column(nullable=True, default="")
+    commision: Mapped[float] = mapped_column(nullable=True, default=0.0)
     strategy: Mapped[str] = mapped_column(nullable=True, default="")
 
     def as_dict(self):
