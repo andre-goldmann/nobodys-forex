@@ -193,7 +193,7 @@
                                 id="id"
                                 name="id"
                                 value={$tradeSelected.id}
-                                disabled/>
+                                readonly/>
                     </div>
 
                     <div class="w-full max-w-xs">
@@ -206,7 +206,7 @@
                                 id="symbol"
                                 name="symbol"
                                 value={$tradeSelected.symbol}
-                                disabled/>
+                                readonly/>
                     </div>
 
                     <div class="w-full max-w-xs">
@@ -217,7 +217,7 @@
                                 id="type"
                                 name="type"
                                 value={$tradeSelected.type}
-                                disabled/>
+                                readonly/>
                     </div>
 
                     <input
