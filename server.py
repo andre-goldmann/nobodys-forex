@@ -31,11 +31,17 @@ from SupportResistanceRepository import storeSupportResistance, SupportResistanc
     deleteSupportResistance
 from trendline_breakout import trendline_breakout
 import sys
-
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 app = FastAPI()
+
+#this is changing, so need to update this
+#https://www.iplocation.net/
+app.add_middleware(
+    TrustedHostMiddleware, allowed_hosts=["193.32.248.217"]
+)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
