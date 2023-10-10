@@ -136,6 +136,7 @@ async def deleteOrder(id: Annotated[int, Form()]):
 
 @app.post("/modifyorder/")
 async def modifyOrder(id: Annotated[int, Form()],
+                      symbol: Annotated[str, Form()],
                       type: Annotated[str, Form()],
                       entry: Annotated[float, Form()],
                       sl: Annotated[float, Form()],

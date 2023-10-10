@@ -1,0 +1,8 @@
+{
+  "symbol": "BTCUSD",
+  "timestamp": "11.03.2023",
+  "price": 27927.33,
+  "sl": 27886.85,
+  "tp": 400,
+  "indicator": "TesrIndicator"
+  }
