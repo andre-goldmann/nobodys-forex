@@ -39,9 +39,9 @@ app = FastAPI()
 
 #this is changing, so need to update this
 #https://www.iplocation.net/
-app.add_middleware(
-    TrustedHostMiddleware, allowed_hosts=["193.32.248.217"]
-)
+#app.add_middleware(
+#    TrustedHostMiddleware, allowed_hosts=["193.32.248.217"]
+#)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):

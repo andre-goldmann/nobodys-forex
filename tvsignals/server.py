@@ -21,7 +21,7 @@ session = Session()
 app = FastAPI()
 
 app.add_middleware(
-    TrustedHostMiddleware, allowed_hosts=["52.89.214.238","34.212.75.30","54.218.53.128","52.32.178.7"]
+    TrustedHostMiddleware, allowed_hosts=["52.89.214.238","34.212.75.30:47464","54.218.53.128","52.32.178.7:58232"]
 )
 
 @app.exception_handler(RequestValidationError)
