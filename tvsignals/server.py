@@ -83,6 +83,7 @@ async def signals(signal:SignalDto):
         sl=signal.sl,
         tp=signal.tp,
         lots=0.5,
+        commision=0.0,
         strategy=signal.strategy
     ))
 
