@@ -96,6 +96,9 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
 async def unActiveTrades():
     trades = getUnActiveTrades()
     result = []
+    print("###################################")
+    print(f"Trades from db loaded:{len(trades)}")
+    print("###################################")
     for trade in trades:
         result.append({'id': trade.id, 'symbol': trade.symbol, 'type': trade.type, 'entry': trade.entry, 'sl': trade.sl, 'tp': trade.tp, 'lots': trade.lots})
 

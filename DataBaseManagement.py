@@ -25,7 +25,6 @@ class TimeFrame(enum.Enum):
 class Base(DeclarativeBase):
     pass
 
-
 class Trade(Base):
     __tablename__ = "Trades"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
