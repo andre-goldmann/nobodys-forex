@@ -33,7 +33,7 @@ from trendline_breakout import trendline_breakout
 import sys
 
 
-#version = f"{sys.version_info.major}.{sys.version_info.minor}"
+version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 app = FastAPI()
 
@@ -69,10 +69,10 @@ class ConnectionManager:
 
 manager = ConnectionManager()
 
-#@app.get("/")
-#async def read_root():
-#    message = f"Hello world! From FastAPI running on Uvicorn with Gunicorn. Using Python {version}"
-#    return {"message": message}
+@app.get("/")
+async def read_root():
+    message = f"Hello world! From FastAPI running on Uvicorn with Gunicorn. Using Python {version}"
+    return {"message": message}
 
 @app.websocket("/ws/{client_id}")
 async def websocket_endpoint(websocket: WebSocket, client_id: str):
