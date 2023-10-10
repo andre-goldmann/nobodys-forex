@@ -134,7 +134,7 @@ async def deleteOrder(id: Annotated[int, Form()]):
 
     return "Order deleted"
 
-@app.put("/modifyorder/")
+@app.post("/modifyorder/")
 async def modifyOrder(id: Annotated[int, Form()],
                       type: Annotated[str, Form()],
                       entry: Annotated[float, Form()],
