@@ -25,7 +25,7 @@ from typing_extensions import Annotated
 from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, lastCandle, storeData, countEntries
 from DataBaseManagement import Session, initTradingDb, symbols, storeTrade, Trade, getUnActiveTrades, \
     TradeActivationDto, \
-    activeTrade, TradeUpdateDto, updateTrade
+    activeTrade, TradeUpdateDto, updateTrade, modifyTrade, deleteTrade
 from RegressionCalculator import regressionCalculation, Regressions, TimeFrame
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
@@ -127,6 +127,24 @@ async def createOrder(symbol: Annotated[str, Form()],
         lots=lots
     ))
     return "Order created"
+
+@app.delete("/deleteorder/")
+async def deleteOrder(id: Annotated[int, Form()]):
+    deleteTrade(id)
+
+    return "Order deleted"
+
+@app.put("/modifyorder/")
+async def modifyOrder(id: Annotated[int, Form()],
+                      type: Annotated[str, Form()],
+                      entry: Annotated[float, Form()],
+                      sl: Annotated[float, Form()],
+                      tp: Annotated[float, Form()],
+                      lots: Annotated[float, Form()]):
+    print("Updating...")
+    modifyTrade(id, type, entry, sl, tp, lots)
+
+    return "Order modified"
 
 # TODO add symbol as param
 @app.get("/linesinfo/")

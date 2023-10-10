@@ -68,6 +68,20 @@ def storeTrade(trade: Trade):
     session.add(trade)
     session.commit()
 
+def modifyTrade(id:int, type:str, entry:float, sl:float, tp:float, lots:float):
+    storeTrade = session.query(Trade).filter(Trade.id == id).first()
+    session.delete(storeTrade)
+    session.commit()
+
+def deleteTrade(id:int):
+    storeTrade = session.query(Trade).filter(Trade.id == id).dele
+    storeTrade.type=type
+    storeTrade.openprice=entry
+    storeTrade.sl=sl
+    storeTrade.tp=tp
+    storeTrade.lots=lots
+    session.commit()
+
 def getUnActiveTrades():
     return session.query(Trade.id,
                          Trade.symbol,
