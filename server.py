@@ -472,4 +472,4 @@ if __name__ == "__main__":
     # Start the background thread
     stop_run_continuously = run_continuously()
 
-    #uvicorn.run(app, host="0.0.0.0", port=6081)
+    uvicorn.run(app, host="0.0.0.0", port=6081)
