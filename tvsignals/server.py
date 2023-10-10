@@ -83,7 +83,7 @@ async def signals(signal:SignalDto):
         sl=signal.sl,
         tp=signal.tp,
         lots=0.5,
-        indicator=signal.strategy
+        strategy=signal.strategy
     ))
 
 #if __name__ == "__main__":
