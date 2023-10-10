@@ -8,16 +8,14 @@
 
     import { onMount } from 'svelte';
     import webSocket from '$lib/websocket';
-    import {apiData} from '$lib/store.ts';
+    import {symbolsApiData} from '$lib/store.ts';
     import type {Candle, SrLevel} from "$lib/model";
     import {writable, derived} from 'svelte/store';
     import '$lib/global.css';
     let wsClient;
-    //const endpoint = "http://127.0.0.1:6081/srlevels/?symbol=";
-    const endpoint = "https://backend.nobodys-forex.duckdns.org/srlevels/?symbol=";
-    let calculator:string = '';
-    let symbol:string = 'EURUSD';
-    let type:string = '';
+
+    const HOST = "http://85.215.32.163:6081";
+
     // TODO read find the biggest daily candle this is then the diff here
     let diff:number = 0.02194;
 
@@ -75,13 +73,9 @@
         });
     });
 
-    const sendMessage = (message) => {
-        const payload = { message };
-        wsClient.send(JSON.stringify(payload));
-    };
 
     async function loadSrLevels(symbol:string){
-        await fetch(endpoint + symbol)
+        await fetch(HOST + "/srlevels/?symbol=" + symbol)
             .then(response => response.json())
             .then(data => {
 
@@ -114,7 +108,7 @@
                     entry.distance = actualLevel - entry.level;
                 });
 
-                apiData.set(between);
+                symbolsApiData.set(between);
             }).catch(error => {
                 console.log(error);
                 return [];
@@ -125,6 +119,7 @@
         loadSrLevels(symbol.key);
         return "Loaded"
     }
+
     let items = [
         { label: "Support Resistance",
             value: 1,

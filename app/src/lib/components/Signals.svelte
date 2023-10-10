@@ -1,6 +1,11 @@
 <script lang="ts">
+    import type {Trade} from "$lib/model";
+    import {onMount} from "svelte";
     let symbol:string = 'EURUSD';
     let type:string = '';
+    const HOST = "http://85.215.32.163:6081";
+    import {symbols, tradesApiData} from '$lib/store.ts';
+    import {trades} from "$lib/store";
 
     const handleSubmit = e => {
         // getting the action url
@@ -14,12 +19,36 @@
             body: formData
         });
     }
+
+    async function loadUnActiveTrades(){
+        await fetch(HOST + "/unActiveTrades")
+            .then(response => response.json())
+            .then(data => {
+                //let trades:Trade[] = data;
+                //let trades:Trade[] = JSON.parse(data);
+                //console.info(trades);
+                tradesApiData.set(data);
+            }).catch(error => {
+                console.log(error);
+                return [];
+            });
+    }
+
+    onMount(() => {
+        loadUnActiveTrades();
+    });
+
+    function deleteRow(id:number) {
+        console.info(`Call delete action on: ${id}`);
+
+    }
+
 </script>
 <div class="flex flex-row">
 
         <div class="basis-1/4">
             <!--form class="flex items-center space-x-6" action="http://127.0.0.1:6081/createorder" on:submit|preventDefault={handleSubmit} method="POST"-->
-            <form class="flex items-center space-x-6" action="https://backend.nobodys-forex.duckdns.org/createorder" on:submit|preventDefault={handleSubmit} method="POST">
+            <form class="flex items-center space-x-6" action="http://85.215.32.163:6081/createorder" on:submit|preventDefault={handleSubmit} method="POST">
                 <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
                     <h1 class="mb-8 text-3xl text-center">New Order</h1>
                     <div class="w-full max-w-xs">
@@ -48,6 +77,7 @@
                             <option value="AUDJPY">AUDJPY</option>
                             <option value="GBPCHF">GBPCHF</option>
                             <option value="EURCHF">EURCHF</option>
+                            <option value="CHFJPY">CHFJPY</option>
                         </select>
                     </div>
 
@@ -106,34 +136,40 @@
 
         <div class="w-full">
             <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
-                <h1 class="mb-8 text-3xl text-center">Running Orders</h1>
+                <h1 class="mb-8 text-3xl text-center">Inactive Orders</h1>
 
                 <div class="overflow-x-auto">
+
                     <table class="table">
-                        <!-- head -->
                         <thead>
                         <tr>
-                            <th>Symbol</th>
-                            <th>Entry</th>
-                            <th>Stopp Loss</th>
-                            <th>Take profit</th>
-                            <th>Spread</th>
-                            <th>Date</th>
-                        </tr>
+                            <th>ID</th>
+                            <th>SYMBOL</th>
+                            <th>TYPE</th>
+                            <th>ENTRY</th>
+                            <th>SL</th>
+                            <th>TP</th>
+                            <th>LOTS</th>
+                            <th></th>
+                        <tr/>
                         </thead>
-                        <tbody>
-                        <!-- row 1 -->
-                        <tr>
-                            <th>EURUSD</th>
-                            <td>1.0489</td>
-                            <td>1.0489</td>
-                            <td>1.0489</td>
-                            <td>0.01</td>
-                            <td>04.10.2023 10:00:00</td>
-                        </tr>
-
-                        </tbody>
+                        {#each $trades as trade}
+                            <tr class="hover">
+                                <td>{trade.id}</td>
+                                <td>{trade.symbol}</td>
+                                <td>{trade.type}</td>
+                                <td>{trade.entry}</td>
+                                <td>{trade.sl}</td>
+                                <td>{trade.tp}</td>
+                                <td>{trade.lots}</td>
+                                <button class="btn btn-ghost btn-xs" on:click={() => deleteRow(trade.id)}>
+                                    Remove
+                                </button>
+                            <tr/>
+                        {/each}
                     </table>
+
+
                 </div>
 
             </div>
