@@ -99,5 +99,5 @@ def updateTrade(tradeUpdateDto:TradeUpdateDto):
     #print("Trade Updated:", storeTrade)
 
 def initTradingDb():
-    Trade.__table__.drop(engine)
+    #Trade.__table__.drop(engine)
     Base.metadata.create_all(engine)
