@@ -99,8 +99,9 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
         manager.disconnect(websocket)
 
 @app.get("/lastCandle/")
-async def getLastCandleStamp(symbol:str, timeFrame:TimeFrame):
-    last = lastCandle(symbol, timeFrame)
+async def getLastCandleStamp(symbol:str, timeFrame:str):
+    timeframeEnum: TimeFrame = TimeFrame.__dict__[timeFrame]
+    last = lastCandle(symbol, timeframeEnum)
     return {'stamp': last.DATETIME}
 
 @app.get("/unActiveTrades")
