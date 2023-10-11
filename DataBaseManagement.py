@@ -6,7 +6,6 @@ from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
 
-#engine = create_engine('postgresql://tiims-subscription-management:pwd@172.26.165.187:5432/trading-db')
 # Docker-Config
 engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
@@ -46,7 +45,6 @@ class Trade(Base):
     strategy: Mapped[str] = mapped_column(nullable=True, default="")
 
     def as_dict(self):
-        #return {c.name: getattr(self, c.name) for c in self.__table__.columns}
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
 
 class TradeActivationDto(BaseModel):
@@ -74,12 +72,8 @@ def modifyTrade(id:int, type:str, entry:float, sl:float, tp:float, lots:float):
     session.commit()
 
 def deleteTrade(id:int):
-    storeTrade = session.query(Trade).filter(Trade.id == id).dele
-    storeTrade.type=type
-    storeTrade.openprice=entry
-    storeTrade.sl=sl
-    storeTrade.tp=tp
-    storeTrade.lots=lots
+    storeTrade = session.query(Trade).filter(Trade.id == id)
+    session.delete(storeTrade)
     session.commit()
 
 def getUnActiveTrades():
@@ -89,12 +83,12 @@ def getUnActiveTrades():
                          Trade.entry,
                          Trade.sl,
                          Trade.tp,
-                         Trade.lots).filter(Trade.tradeid == 0, Trade.activated =="", Trade.openprice == 0.0).all()
+                         Trade.lots,
+                         Trade.stamp).filter(Trade.tradeid == 0, Trade.activated =="", Trade.openprice == 0.0).all()
 
 def activeTrade(tradeActivationDto:TradeActivationDto):
     #print("Activating Trade", tradeActivationDto)
 
-    #storeTrade = session.query(Trade).filter(Trade.symbol == tradeActivationDto.symbol, Trade.id == tradeActivationDto.magic).first()
     storeTrade = session.query(Trade).filter(Trade.symbol == tradeActivationDto.symbol, Trade.id == tradeActivationDto.magic).first()
     storeTrade.activated=tradeActivationDto.timestamp
     storeTrade.openprice=tradeActivationDto.open_price
@@ -104,7 +98,6 @@ def activeTrade(tradeActivationDto:TradeActivationDto):
 def updateTrade(tradeUpdateDto:TradeUpdateDto):
     #print("Updating Trade", tradeUpdateDto)
 
-    #storeTrade = session.query(Trade).filter(Trade.symbol == tradeActivationDto.symbol, Trade.id == tradeActivationDto.magic).first()
     storeTrade = session.query(Trade).filter(Trade.symbol == tradeUpdateDto.symbol, Trade.id == tradeUpdateDto.magic).first()
     if storeTrade is not None:
         storeTrade.swap = tradeUpdateDto.swap

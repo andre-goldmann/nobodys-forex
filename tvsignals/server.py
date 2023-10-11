@@ -77,6 +77,15 @@ def storeTrade(trade: Trade):
 @app.post("/signal")
 async def signals(signal:SignalDto):
     print(signal)
+
+    # no need to check for trend in TradingView we send everything
+    # and do the check here
+    # D-EMA200, H4-EMA, D-Regression, H4-Regression
+    # Support Resistance
+    # TODO this we first need a data updating process:
+    # getLastEntry(symbol:str, timeFrame:TimeFrame):
+    # return last entry in database
+    # with this mql5 needs to load the data until now and uploads it to the server
     storeTrade(Trade(
         symbol=signal.symbol,
         type=signal.type,

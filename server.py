@@ -98,6 +98,11 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
+@app.get("/lastCandle")
+async def getLastCandleStamp(symbol:str, timeFrame:TimeFrame):
+    last = lastCandle(symbol, timeFrame)
+    return {'stamp': last.DATETIME}
+
 @app.get("/unActiveTrades")
 async def unActiveTrades():
     trades = getUnActiveTrades()
@@ -106,7 +111,14 @@ async def unActiveTrades():
     #print(f"Trades from db loaded:{len(trades)}")
     #print("###################################")
     for trade in trades:
-        result.append({'id': trade.id, 'symbol': trade.symbol, 'type': trade.type, 'entry': trade.entry, 'sl': trade.sl, 'tp': trade.tp, 'lots': trade.lots})
+        result.append({'id': trade.id,
+                       'symbol': trade.symbol,
+                       'type': trade.type,
+                       'entry': trade.entry,
+                       'sl': trade.sl,
+                       'tp': trade.tp,
+                       'lots': trade.lots,
+                       'stamp': trade.stamp})
 
     return result
 
