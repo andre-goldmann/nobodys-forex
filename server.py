@@ -98,7 +98,7 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
     except WebSocketDisconnect:
         manager.disconnect(websocket)
 
-@app.get("/lastCandle")
+@app.get("/lastCandle/")
 async def getLastCandleStamp(symbol:str, timeFrame:TimeFrame):
     last = lastCandle(symbol, timeFrame)
     return {'stamp': last.DATETIME}
