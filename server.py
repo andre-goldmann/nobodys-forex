@@ -102,6 +102,8 @@ async def websocket_endpoint(websocket: WebSocket, client_id: str):
 async def getLastCandleStamp(symbol:str, timeFrame:str):
     timeframeEnum: TimeFrame = TimeFrame.__dict__[timeFrame]
     last = lastCandle(symbol, timeframeEnum)
+    if last is None:
+        return {'stamp': "2016.01.01 00:00:00"}
     return {'stamp': last.DATETIME}
 
 @app.get("/unActiveTrades")
