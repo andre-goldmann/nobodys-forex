@@ -11,10 +11,8 @@ from sqlalchemy import String
 from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
-
-from DataBaseManagement import TimeFrame
-from RegressionCalculator import Regressions
-
+from sqlalchemy import Enum
+import enum
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
@@ -37,6 +35,28 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 class Base(DeclarativeBase):
     pass
+
+class TimeFrame(enum.Enum):
+    PERIOD_M1 = 1
+    PERIOD_M15 = 15
+    PERIOD_H1 = 60
+    PERIOD_H4 = 240
+    PERIOD_D1 = 6*240
+    PERIOD_W1 = 30*6*240
+
+class Regressions(Base):
+    __tablename__ = "regressions"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    startTime: Mapped[str] = mapped_column(String(30))
+    endTime: Mapped[str] = mapped_column(String(30))
+    startValue: Mapped[float]
+    endValue: Mapped[float]
+
+    def __repr__(self) -> str:
+        return (f"Regression(id={self.id!r}, symbol={self.symbol!r}, timeFrame={self.timeFrame!r}, startTime={self.startTime!r}, endTime={self.endTime!r})"
+                f", startValue={self.startValue!r}, endValue={self.endValue!r})")
 
 class Trade(Base):
     __tablename__ = "Trades"
