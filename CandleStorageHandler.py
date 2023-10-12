@@ -94,10 +94,12 @@ def storeData(symbol:str, timeFrame:TimeFrame):
     df.to_sql(name='Candles', con=engine, if_exists='append')
 
 def storeCandleInDb(candle:CandlesDto):
-    print(candle)
+
     #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
+    timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
+    print(candle)
     count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
-                                                CandlesEntity.TIMEFRAME == TimeFrame.__dict__[candle.TIMEFRAME],
+                                                CandlesEntity.TIMEFRAME == timeFrame,
                                                 CandlesEntity.TIMEFRAME == candle.DATE + ' ' + candle.TIME,
                                                 CandlesEntity.CLOSE == candle.CLOSE).count()
 
@@ -117,7 +119,7 @@ def storeCandleInDb(candle:CandlesDto):
         session.add(spongebob)
         session.commit()
     else:
-        print(candle)
+        print("Allreadys exists!!!")
 
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
