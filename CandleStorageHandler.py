@@ -46,26 +46,9 @@ def countEntries(symbol:str, timeFrame:TimeFrame):
 
 def storeData(symbol:str, timeFrame:TimeFrame):
     print(f"storeData for: {symbol}-{timeFrame}")
-    pairTimeFrameMap = {"EURUSD:PERIOD_M15": 'data/EURUSD_M15.csv',
-                       "EURUSD:PERIOD_H1": 'data/EURUSD_H1.csv',
-                       "EURUSD:PERIOD_H4": 'data/EURUSD_H4.csv',
-                       "EURUSD:PERIOD_D1": 'data/EURUSD_Daily.csv',
-                       "EURUSD:PERIOD_W1": 'data/EURUSD_Weekly.csv',
 
-                        "GBPUSD:PERIOD_M15": "data/GBPUSD_M15.csv",
-                        "GBPUSD:PERIOD_H1": "data/GBPUSD_H1.csv",
-                        "GBPUSD:PERIOD_H4": "data/GBPUSD_H4.csv",
-                        "GBPUSD:PERIOD_D1": "data/GBPUSD_Daily.csv",
-                        "GBPUSD:PERIOD_W1": "data/GBPUSD_Weekly.csv",
-
-                        "XAGUSD:PERIOD_M15": "data/XAGUSD_M15.csv",
-                        "XAGUSD:PERIOD_H1": "data/XAGUSD_H1.csv",
-                        "XAGUSD:PERIOD_H4": "data/XAGUSD_H4.csv",
-                        "XAGUSD:PERIOD_D1": "data/XAGUSD_Daily.csv",
-                        "XAGUSD:PERIOD_W1": "data/XAGUSD_Weekly.csv"
-                        }
-
-    file = pairTimeFrameMap[symbol + ":" + timeFrame.name]
+    timeFrameStr = timeFrame.name.replace("PERIOD_", "")
+    file = f"data/{symbol}_{timeFrameStr}.csv"
     df = loadData(file)
 
     #import pandas_ta as ta
@@ -154,11 +137,17 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
     return df
 
 
-if __name__ == "__main__":
-    initTradingDb()
+#if __name__ == "__main__":
+    #initTradingDb()
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
-    for symbol in symbols:
-        for timeFrame in TimeFrame:
-            if TimeFrame.PERIOD_M1 is not timeFrame:
-                storeData(symbol,timeFrame)
-                loadDfFromDb(symbol, timeFrame)
+    #for symbol in symbols:
+    #    for timeFrame in TimeFrame:
+    #        if TimeFrame.PERIOD_M1 is not timeFrame:
+    #            storeData(symbol,timeFrame)
+    #            loadDfFromDb(symbol, timeFrame)
+  #  for symbol in symbols:
+ #       for timeFrame in TimeFrame:
+   #         if TimeFrame.PERIOD_M1 is not timeFrame:
+    #            timeFrameStr = timeFrame.name.replace("PERIOD_", "")
+     #           file = f"data/{symbol}_{timeFrameStr}.csv"
+      #          df = loadData(file)
