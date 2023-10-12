@@ -97,7 +97,7 @@ def storeCandleInDb(candle:CandlesDto):
     print(candle)
     #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
     count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
-                                                CandlesEntity.TIMEFRAME == candle.TimeFrame.__dict__[candle.TIMEFRAME],
+                                                CandlesEntity.TIMEFRAME == TimeFrame.__dict__[candle.TIMEFRAME],
                                                 CandlesEntity.TIMEFRAME == candle.DATE + ' ' + candle.TIME,
                                                 CandlesEntity.CLOSE == candle.CLOSE).count()
 
