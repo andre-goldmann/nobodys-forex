@@ -105,10 +105,6 @@ async def signals(signal:SignalDto):
     # and do the check here
     # D-EMA200, H4-EMA, D-Regression, H4-Regression
     # Support Resistance
-    # TODO this we first need a data updating process:
-    # getLastEntry(symbol:str, timeFrame:TimeFrame):
-    # return last entry in database
-    # with this mql5 needs to load the data until now and uploads it to the server
 
     if "buy" == signal.type and signal.sl > signal.tp:
         print(f"Ignore (1. Condition) Buy-Signal: {signal}")

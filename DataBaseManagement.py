@@ -68,13 +68,19 @@ def storeTrade(trade: Trade):
 
 def modifyTrade(id:int, type:str, entry:float, sl:float, tp:float, lots:float):
     storeTrade = session.query(Trade).filter(Trade.id == id).first()
-    session.delete(storeTrade)
-    session.commit()
+    if storeTrade is not None:
+        storeTrade.type=type
+        storeTrade.entry=entry
+        storeTrade.sl=sl
+        storeTrade.tp=tp
+        storeTrade.lots=lots
+        session.commit()
 
 def deleteTrade(id:int):
-    storeTrade = session.query(Trade).filter(Trade.id == id)
-    session.delete(storeTrade)
-    session.commit()
+    storeTrade = session.query(Trade).filter(Trade.id == id).first()
+    if storeTrade is not None:
+        session.delete(storeTrade)
+        session.commit()
 
 def getUnActiveTrades():
     return session.query(Trade.id,
