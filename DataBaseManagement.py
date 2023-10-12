@@ -11,7 +11,7 @@ engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
-symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "CHFJPY", "EURUSD", "EURCHF", "GBPUSD",  "XAGUSD", "USDCAD", "USDCHF"]
+symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF"]
 
 class TimeFrame(enum.Enum):
     PERIOD_M1 = 1
