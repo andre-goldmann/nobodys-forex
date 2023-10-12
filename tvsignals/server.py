@@ -12,6 +12,9 @@ from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
 
+from DataBaseManagement import TimeFrame
+from RegressionCalculator import Regressions
+
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
@@ -86,16 +89,43 @@ async def signals(signal:SignalDto):
     # getLastEntry(symbol:str, timeFrame:TimeFrame):
     # return last entry in database
     # with this mql5 needs to load the data until now and uploads it to the server
-    storeTrade(Trade(
-        symbol=signal.symbol,
-        type=signal.type,
-        entry=signal.entry,
-        sl=signal.sl,
-        tp=signal.tp,
-        lots=0.5,
-        commision=0.0,
-        strategy=signal.strategy
-    ))
+
+    if "buy" == signal.type and signal.sl > signal.tp:
+        print(f"Ignore (1. Condition) Buy-Signal: {signal}")
+        return
+
+    if "sell" == signal.type and signal.sl < signal.tp:
+        print(f"Ignore (1. Condition) Sell-Signal: {signal}")
+        return
+
+    regressionLineD1 = Session().query(Regressions).filter(
+        Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
+
+    regressionLineH4 = Session().query(Regressions).filter(
+        Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
+
+    if len(regressionLineD1) > 0 and len(regressionLineH4) > 0:
+
+        if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
+            print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
+            return
+
+        if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
+            print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
+            return
+
+        storeTrade(Trade(
+            symbol=signal.symbol,
+            type=signal.type,
+            entry=signal.entry,
+            sl=signal.sl,
+            tp=signal.tp,
+            lots=0.5,
+            commision=0.0,
+            strategy=signal.strategy
+        ))
+    else:
+        print(f"No Regression-Data found for {signal.symbol}")
 
 #if __name__ == "__main__":
 #    uvicorn.run(app, host="0.0.0.0", port=80)

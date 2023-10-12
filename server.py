@@ -416,70 +416,29 @@ def job():
     now = datetime.datetime.now()
     minute = now.minute
     hour = now.hour
-    # braucht man das wirklich?
-    #if minute % 15 == 0:
-    #    regressionCalculation("EURUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_M15)
-    #    regressionCalculation("XRPUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_M15)
-    #    regressionCalculation("XRPUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_M15)
-
-    # braucht man das wirklich?
-    #if minute == 0:
-    #    regressionCalculation("EURUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_H1)
-    #    regressionCalculation("XRPUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_H1)
 
     if hour % 4 == 0 and minute == 0:
 
-        deleteSupportResistance("EURUSD", TimeFrame.PERIOD_H4)
-        deleteSupportResistance("GBPUSD", TimeFrame.PERIOD_H4)
-        deleteSupportResistance("XRPUSD", TimeFrame.PERIOD_H4)
-        deleteSupportResistance("XAGUSD", TimeFrame.PERIOD_H4)
-
-        regressionCalculation("EURUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_H4)
-        regressionCalculation("GBPUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_H4)
-        regressionCalculation("XRPUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_H4)
-        regressionCalculation("XAGUSD","2023-01-01 00:00:00", TimeFrame.PERIOD_H4)
-
-        trendlinebreakout("EURUSD", TimeFrame.PERIOD_H4)
-        trendlinebreakout("GBPUSD", TimeFrame.PERIOD_H4)
-        trendlinebreakout("XRPUSD", TimeFrame.PERIOD_H4)
-        trendlinebreakout("XAGUSD", TimeFrame.PERIOD_H4)
-
-        autoDetectSupportAndResistance("EURUSD", 30000, 20, TimeFrame.PERIOD_H4)
-        autoDetectSupportAndResistance("GBPUSD", 30000, 20, TimeFrame.PERIOD_H4)
-        autoDetectSupportAndResistance("XRPUSD", 30000, 20, TimeFrame.PERIOD_H4)
-        autoDetectSupportAndResistance("XAGUSD", 30000, 20, TimeFrame.PERIOD_H4)
-
-        defaultsr("EURUSD", 0.01, TimeFrame.PERIOD_H4)
-        defaultsr("GBPUSD", 0.01, TimeFrame.PERIOD_H4)
-        defaultsr("XRPUSD", 0.01, TimeFrame.PERIOD_H4)
-        defaultsr("XAGUSD", 0.01, TimeFrame.PERIOD_H4)
+        for symbol in symbols:
+            for timeFrame in TimeFrame:
+                if TimeFrame.PERIOD_H4 is timeFrame:
+                    deleteSupportResistance(symbol, timeFrame)
+                    regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
+                    trendlinebreakout(symbol, timeFrame)
+                    autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
+                    defaultsr(symbol, 0.01, timeFrame)
 
     if hour == 0 and minute == 1:
 
-        deleteSupportResistance("EURUSD", TimeFrame.PERIOD_D1)
-        deleteSupportResistance("GBPUSD", TimeFrame.PERIOD_D1)
-        deleteSupportResistance("XRPUSD", TimeFrame.PERIOD_D1)
-        deleteSupportResistance("XAGUSD", TimeFrame.PERIOD_D1)
+        for symbol in symbols:
+            for timeFrame in TimeFrame:
+                if TimeFrame.PERIOD_D1 is timeFrame:
+                    deleteSupportResistance(symbol, timeFrame)
+                    regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
+                    trendlinebreakout(symbol, timeFrame)
+                    autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
+                    defaultsr(symbol, 0.01, timeFrame)
 
-        regressionCalculation("EURUSD","2023-01-01 00:00:00.000000", TimeFrame.PERIOD_D1)
-        regressionCalculation("GBPUSD","2023-01-01 00:00:00.000000", TimeFrame.PERIOD_D1)
-        regressionCalculation("XRPUSD","2023-01-01 00:00:00.000000", TimeFrame.PERIOD_D1)
-        regressionCalculation("XAGUSD","2023-01-01 00:00:00.000000", TimeFrame.PERIOD_D1)
-
-        trendlinebreakout("EURUSD", TimeFrame.PERIOD_D1)
-        trendlinebreakout("GBPUSD", TimeFrame.PERIOD_D1)
-        trendlinebreakout("XRPUSD", TimeFrame.PERIOD_D1)
-        trendlinebreakout("XAGUSD", TimeFrame.PERIOD_D1)
-
-        autoDetectSupportAndResistance("EURUSD", 30000, 20, TimeFrame.PERIOD_D1)
-        autoDetectSupportAndResistance("GBPUSD", 30000, 20, TimeFrame.PERIOD_D1)
-        autoDetectSupportAndResistance("XRPUSD", 30000, 20, TimeFrame.PERIOD_D1)
-        autoDetectSupportAndResistance("XAGUSD", 30000, 20, TimeFrame.PERIOD_D1)
-
-        defaultsr("EURUSD", 0.01, TimeFrame.PERIOD_D1)
-        defaultsr("GBPUSD", 0.01, TimeFrame.PERIOD_D1)
-        defaultsr("XRPUSD", 0.01, TimeFrame.PERIOD_D1)
-        defaultsr("XAGUSD", 0.01, TimeFrame.PERIOD_D1)
     #TODO how to get end/start of the week?
 
 if __name__ == "__main__":
