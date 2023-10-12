@@ -73,7 +73,6 @@ def storeCandleInDb(candle:CandlesDto):
 
     #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
     timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
-    print(candle)
     count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
                                                 CandlesEntity.TIMEFRAME == timeFrame,
                                                 CandlesEntity.DATETIME == candle.DATETIME,
@@ -92,6 +91,7 @@ def storeCandleInDb(candle:CandlesDto):
             VOL=candle.VOL,
             SPREAD=candle.SPREAD,
         )
+        print(f"Stored: {candle}")
         session.add(spongebob)
         session.commit()
     else:
