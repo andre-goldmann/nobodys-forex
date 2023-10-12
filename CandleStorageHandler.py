@@ -52,12 +52,6 @@ def storeData(symbol:str, timeFrame:TimeFrame):
                        "EURUSD:PERIOD_D1": 'data/EURUSD_Daily.csv',
                        "EURUSD:PERIOD_W1": 'data/EURUSD_Weekly.csv',
 
-                        "XRPUSD:PERIOD_M15": 'data/XRPUSD_M15.csv',
-                        "XRPUSD:PERIOD_H1": 'data/XRPUSD_H1.csv',
-                        "XRPUSD:PERIOD_H4": 'data/XRPUSD_H4.csv',
-                        "XRPUSD:PERIOD_D1": 'data/XRPUSD_Daily.csv',
-                        "XRPUSD:PERIOD_W1": 'data/XRPUSD_Weekly.csv',
-
                         "GBPUSD:PERIOD_M15": "data/GBPUSD_M15.csv",
                         "GBPUSD:PERIOD_H1": "data/GBPUSD_H1.csv",
                         "GBPUSD:PERIOD_H4": "data/GBPUSD_H4.csv",
