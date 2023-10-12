@@ -31,8 +31,7 @@ class CandlesDto(BaseModel):
     #wird nicht gespeichert, für jedes Symbol ein DB
     symbol:str
     TIMEFRAME:str
-    DATE:str
-    TIME:str
+    DATETIME:str
     OPEN:float
     HIGH:float
     LOW:float
@@ -100,14 +99,14 @@ def storeCandleInDb(candle:CandlesDto):
     print(candle)
     count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
                                                 CandlesEntity.TIMEFRAME == timeFrame,
-                                                CandlesEntity.DATETIME == candle.DATE + ' ' + candle.TIME,
+                                                CandlesEntity.DATETIME == candle.DATETIME,
                                                 CandlesEntity.CLOSE == candle.CLOSE).count()
 
     if count == 0:
         spongebob = CandlesEntity(
             SYMBOL=candle.symbol,
             TIMEFRAME= TimeFrame.__dict__[candle.TIMEFRAME].name,
-            DATETIME= candle.DATE + ' ' + candle.TIME,
+            DATETIME= candle.DATETIME,
             OPEN=candle.HIGH,
             HIGH=candle.HIGH,
             LOW=candle.LOW,
