@@ -95,22 +95,30 @@ def storeData(symbol:str, timeFrame:TimeFrame):
 
 def storeCandleInDb(candle:CandlesDto):
 
-    print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
-    spongebob = CandlesEntity(
-        SYMBOL=candle.symbol,
-        TIMEFRAME= TimeFrame.__dict__[candle.TIMEFRAME].name,
-        DATETIME= candle.DATE + ' ' + candle.TIME,
-        OPEN=candle.HIGH,
-        HIGH=candle.HIGH,
-        LOW=candle.LOW,
-        CLOSE=candle.CLOSE,
-        TICKVOL=candle.TICKVOL,
-        VOL=candle.VOL,
-        SPREAD=candle.SPREAD,
-    )
+    #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
+    count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
+                                                CandlesEntity.TIMEFRAME == candle.TimeFrame.__dict__[candle.TIMEFRAME],
+                                                CandlesEntity.TIMEFRAME == candle.DATE + ' ' + candle.TIME,
+                                                CandlesEntity.CLOSE == candle.CLOSE).count()
 
-    session.add(spongebob)
-    session.commit()
+    if count == 0:
+        spongebob = CandlesEntity(
+            SYMBOL=candle.symbol,
+            TIMEFRAME= TimeFrame.__dict__[candle.TIMEFRAME].name,
+            DATETIME= candle.DATE + ' ' + candle.TIME,
+            OPEN=candle.HIGH,
+            HIGH=candle.HIGH,
+            LOW=candle.LOW,
+            CLOSE=candle.CLOSE,
+            TICKVOL=candle.TICKVOL,
+            VOL=candle.VOL,
+            SPREAD=candle.SPREAD,
+        )
+        session.add(spongebob)
+        session.commit()
+    else:
+        print(f"Candle(id={candle.id!r}, DATETIME={candle.DATETIME!r}"
+               f", OPEN={candle.OPEN!r}, CLOSE={candle.CLOSE!r}) allready stored!")
 
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
