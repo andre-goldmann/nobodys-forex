@@ -495,7 +495,7 @@ if __name__ == "__main__":
                     if last is None:
                         storeData(symbol,timeFrame)
                         #loadDfFromDb(symbol, timeFrame)
-                        print(f"Inserted data for {symbol} + ${timeFrame}")
+                        print(f"Inserted data for {symbol} + {timeFrame}")
 
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
     for symbol in symbols:
