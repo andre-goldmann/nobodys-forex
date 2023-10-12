@@ -487,23 +487,25 @@ if __name__ == "__main__":
 
     # NUR wenn DB leer bzw. für Kombination aus Symbol + Timeframe kein Eintrag
     # gefunden wird
-    #for symbol in symbols:
-    #    for timeFrame in TimeFrame:
-    #        if TimeFrame.PERIOD_M1 is not timeFrame:
-    #            if countEntries(symbol,timeFrame) == 0:
-    #                storeData(symbol,timeFrame)
-    #                #loadDfFromDb(symbol, timeFrame)
-    #                print(f"Inserted data for {symbol} + ${timeFrame}")
+    for symbol in symbols:
+        for timeFrame in TimeFrame:
+            if TimeFrame.PERIOD_M1 is not timeFrame:
+                if countEntries(symbol,timeFrame) == 0:
+                    last = lastCandle(symbol, timeFrame)
+                    if last is None:
+                        storeData(symbol,timeFrame)
+                        #loadDfFromDb(symbol, timeFrame)
+                        print(f"Inserted data for {symbol} + ${timeFrame}")
 
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
-    #for symbol in symbols:
-    #    for timeFrame in TimeFrame:
-    #        if TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
-    #            deleteSupportResistance(symbol, timeFrame)
-    #            trendlinebreakout(symbol, timeFrame)
-    #            autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
-    #            defaultsr(symbol, 0.01, timeFrame)
-    #            regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
+    for symbol in symbols:
+        for timeFrame in TimeFrame:
+            if TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
+                deleteSupportResistance(symbol, timeFrame)
+                trendlinebreakout(symbol, timeFrame)
+                autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
+                defaultsr(symbol, 0.01, timeFrame)
+                regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
 
 
 
