@@ -31,6 +31,7 @@ from SupportResistanceRepository import storeSupportResistance, SupportResistanc
     deleteSupportResistance
 from trendline_breakout import trendline_breakout
 import sys
+from kafka import KafkaConsumer
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -51,6 +52,22 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 app.add_middleware(CORSMiddleware, allow_origins=["*"])
+
+#consumer = KafkaConsumer(value_deserializer=msgpack.loads)
+consumer = KafkaConsumer(
+    'candles-consumer',
+    auto_offset_reset='earliest',
+    enable_auto_commit=True,
+    group_id='database-storage',
+    #value_deserializer=lambda m: loads(m.decode('utf-8')),
+    #value_deserializer=msgpack.loads,
+    value_deserializer=lambda m: json.loads(m).decode('utf-8'),
+    bootstrap_servers='kafka:9092')
+
+
+def receivedMsg(message):
+    print(f"{message} received on Queue!!!############")
+
 
 # Connected svelte: an implement a check list for trades:
 # - crossed support/resistance done
@@ -442,35 +459,10 @@ def job():
     #TODO how to get end/start of the week?
 
 if __name__ == "__main__":
-    initTradingDb()
-
-    # NUR wenn DB leer bzw. für Kombination aus Symbol + Timeframe kein Eintrag
-    # gefunden wird
-    for symbol in symbols:
-        for timeFrame in TimeFrame:
-            if TimeFrame.PERIOD_M1 is not timeFrame:
-                if countEntries(symbol,timeFrame) == 0:
-                    last = lastCandle(symbol, timeFrame)
-                    if last is None:
-                        storeData(symbol,timeFrame)
-                        #loadDfFromDb(symbol, timeFrame)
-                        print(f"Inserted data for {symbol} + {timeFrame}")
-
-    #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
-    for symbol in symbols:
-        for timeFrame in TimeFrame:
-            if TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
-                deleteSupportResistance(symbol, timeFrame)
-                trendlinebreakout(symbol, timeFrame)
-                autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
-                defaultsr(symbol, 0.01, timeFrame)
-                regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
-
-
-
-    schedule.every().hour.do(job)
-    #schedule.every().hour.do(runFirstStrategy)
-    # Start the background thread
-    #stop_run_continuously = run_continuously()
 
     uvicorn.run(app, host="0.0.0.0", port=6081)
+
+    consumer.subscribe(['test:1:1'])
+
+    for message in consumer:
+        receivedMsg(message)

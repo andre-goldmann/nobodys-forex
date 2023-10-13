@@ -1,13 +1,15 @@
- annotated-types
- sqlalchemy
- uvicorn[standard]
- fastapi
- scipy
- scikit-learn
- statsmodels
- pydantic
- mplfinance
- psycopg2
- schedule
- pandas_ta
- python-multipart
+annotated-types
+sqlalchemy
+uvicorn[standard]
+fastapi
+scipy
+scikit-learn
+statsmodels
+pydantic
+mplfinance
+psycopg2
+schedule
+pandas_ta
+python-multipart
+kafka
+kafka-python

@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 from pydantic import BaseModel
 from sqlalchemy import String, Enum, DateTime
@@ -6,6 +8,11 @@ from sqlalchemy.orm import mapped_column
 
 from DataBaseManagement import Base, TimeFrame, session, engine
 from utils import loadData
+from kafka import KafkaProducer
+
+#docker inside
+#producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 
 class CandlesEntity(Base):
@@ -72,6 +79,8 @@ def storeData(symbol:str, timeFrame:TimeFrame):
     df.to_sql(name='Candles', con=engine, if_exists='append')
 
 def storeCandleInDb(candle:CandlesDto):
+
+    producer.send('test:1:1', candle)
 
     #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
     timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
