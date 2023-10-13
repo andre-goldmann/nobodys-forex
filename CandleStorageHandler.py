@@ -12,7 +12,7 @@ from kafka import  KafkaProducer
 
 #docker inside
 #producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-producer = KafkaProducer(bootstrap_servers='kafka:9092', value_deserializer=lambda m: json.loads(m.decode('utf-8')))
+producer = KafkaProducer(bootstrap_servers='kafka:9092')
 
 
 class CandlesEntity(Base):
