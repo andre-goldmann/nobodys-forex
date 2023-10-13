@@ -1,10 +1,10 @@
 import pandas as pd
 from pydantic import BaseModel
-from sqlalchemy import String, Enum
+from sqlalchemy import String, Enum, DateTime
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
-from DataBaseManagement import Base, TimeFrame, session, engine, initTradingDb, symbols
+from DataBaseManagement import Base, TimeFrame, session, engine
 from utils import loadData
 
 
@@ -13,7 +13,8 @@ class CandlesEntity(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     SYMBOL: Mapped[str] = mapped_column(String(6))
     TIMEFRAME: Mapped[Enum] = mapped_column(Enum(TimeFrame))
-    DATETIME: Mapped[str] = mapped_column(String(30))
+    DATETIME: Mapped[DateTime] = mapped_column(DateTime(timezone=True))
+    ##TIMESTAMP:Mapped[DateTime] = mapped_column(DateTime(timezone=True))
     OPEN: Mapped[float]
     HIGH: Mapped[float]
     LOW: Mapped[float]
@@ -61,6 +62,7 @@ def storeData(symbol:str, timeFrame:TimeFrame):
         df['TIME'] = "00:00:00"
     df['SYMBOL'] = symbol
     df['DATETIME'] = df['DATE'] + ' ' + df['TIME']
+    #df['TIMESTAMP'] =  df['DATETIME'].map(lambda dtStr: time.mktime(datetime.datetime.strptime(dtStr, "%Y.%m.%d %H:%M:%S").timetuple()))
     df['DATETIME'] = df['DATETIME'].astype('datetime64[s]')
     df = df.set_index('DATETIME')
     df.drop(columns=['DATE', 'TIME'])
@@ -75,8 +77,8 @@ def storeCandleInDb(candle:CandlesDto):
     timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
     count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
                                                 CandlesEntity.TIMEFRAME == timeFrame,
-                                                CandlesEntity.DATETIME == candle.DATETIME,
-                                                CandlesEntity.CLOSE == candle.CLOSE).count()
+                                                CandlesEntity.CLOSE == candle.CLOSE,
+                                                CandlesEntity.OPEN == candle.OPEN).count()
 
     if count == 0:
         spongebob = CandlesEntity(
@@ -138,8 +140,19 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
 
 
 #if __name__ == "__main__":
-    #initTradingDb()
+ #   initTradingDb()
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
+
+  #  lastCandle:CandlesDto = CandlesDto()
+    # "EURUSD",TimeFrame.PERIOD_W1, "2023.10.08 00:00:00",1.0553, 1.06396, 1.05194, 1.06225,291058,0, 0
+
+    timeframeEnum: TimeFrame = TimeFrame.__dict__[lastCandle.TIMEFRAME]
+
+    #if timeframeEnum != TimeFrame.PERIOD_M1:
+        #storeCandleInDb(lastCandle)
+
+    #storeData("EURUSD",TimeFrame.PERIOD_W1)
+
     #for symbol in symbols:
     #    for timeFrame in TimeFrame:
     #        if TimeFrame.PERIOD_M1 is not timeFrame:

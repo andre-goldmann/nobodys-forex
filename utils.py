@@ -11,3 +11,9 @@ def loadData(file:str):
 def sliceDf(index, constant, df):
     return df[index:constant+index]
 
+#if __name__ == "__main__":
+#    import time
+#    import datetime
+#    s = "2023.09.10 00:00:00"
+#    result = time.mktime(datetime.datetime.strptime(s, "%Y.%m.%d %H:%M:%S").timetuple())
+#    print(result)
