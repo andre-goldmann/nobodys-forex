@@ -491,7 +491,7 @@ if __name__ == "__main__":
     #stop_run_continuously = run_continuously()
     uvicorn.run(app, host="0.0.0.0", port=6081)
 
-    consumer.subscribe(['test:1:1'])
+    #consumer.subscribe(['test:1:1'])
 
-    for message in consumer:
-        receivedMsg(message)
+    #for message in consumer:
+    #    receivedMsg(message)

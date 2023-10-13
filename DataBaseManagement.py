@@ -6,9 +6,9 @@ from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
 
-
+engine = create_engine('postgresql://tiims-subscription-management:pwd@172.30.218.157:5432/trading-db')
 # Docker-Config
-engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
+#engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
 session = Session()
 

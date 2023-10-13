@@ -8,11 +8,11 @@ from sqlalchemy.orm import mapped_column
 
 from DataBaseManagement import Base, TimeFrame, session, engine
 from utils import loadData
-from kafka import  KafkaProducer
+#from kafka import  KafkaProducer
 
 #docker inside
 #producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-producer = KafkaProducer(bootstrap_servers='kafka:9092')
+#producer = KafkaProducer(bootstrap_servers='172.30.218.157:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
 
 class CandlesEntity(Base):
@@ -80,7 +80,7 @@ def storeData(symbol:str, timeFrame:TimeFrame):
 
 def storeCandleInDb(candle:CandlesDto):
 
-    producer.send('test:1:1', b'another_message')
+    #producer.send('test:1:1', b'another_message')
     #producer.send('test:1:1',
     #              {"symbol": candle.symbol,
     #                    "TIMEFRAME": candle.TIMEFRAME,
@@ -92,6 +92,10 @@ def storeCandleInDb(candle:CandlesDto):
     #                    "TICKVOL": candle.TICKVOL,
     #                    "VOL": candle.VOL,
     #                    "SPREAD": candle.SPREAD})
+
+    #producer.send('test:1:1',
+    #              {'foo': 'bar'})
+
 
     #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
     timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
