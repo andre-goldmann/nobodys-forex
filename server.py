@@ -54,15 +54,15 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 #consumer = KafkaConsumer(value_deserializer=msgpack.loads)
-consumer = KafkaConsumer(
-    'candles-consumer',
-    auto_offset_reset='earliest',
-    enable_auto_commit=True,
-    group_id='database-storage',
-    #value_deserializer=lambda m: loads(m.decode('utf-8')),
-    #value_deserializer=msgpack.loads,
-    value_deserializer=lambda m: json.loads(m.decode('utf-8')),
-    bootstrap_servers='kafka:9092')
+#consumer = KafkaConsumer(
+#    'candles-consumer',
+#    auto_offset_reset='earliest',
+#    enable_auto_commit=True,
+#    group_id='database-storage',
+#    #value_deserializer=lambda m: loads(m.decode('utf-8')),
+#    #value_deserializer=msgpack.loads,
+#    value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+#    bootstrap_servers='kafka:9092')
 
 
 def receivedMsg(message):
