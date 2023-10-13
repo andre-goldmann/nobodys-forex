@@ -62,7 +62,7 @@ consumer = KafkaConsumer(
     #value_deserializer=lambda m: loads(m.decode('utf-8')),
     #value_deserializer=msgpack.loads,
     value_deserializer=lambda m: json.loads(m).decode('utf-8'),
-    bootstrap_servers='kafka:9092')
+    bootstrap_servers='192.168.99.100:9092')
 
 
 def receivedMsg(message):
