@@ -80,7 +80,17 @@ def storeData(symbol:str, timeFrame:TimeFrame):
 
 def storeCandleInDb(candle:CandlesDto):
 
-    producer.send('test:1:1', candle)
+    producer.send('test:1:1',
+                  {"symbol": candle.symbol,
+                        "TIMEFRAME": candle.TIMEFRAME,
+                        "DATETIME": candle.DATETIME,
+                        "OPEN": candle.OPEN,
+                        "HIGH": candle.HIGH,
+                        "LOW": candle.LOW,
+                        "CLOSE": candle.CLOSE,
+                        "TICKVOL": candle.TICKVOL,
+                        "VOL": candle.VOL,
+                        "SPREAD": candle.SPREAD})
 
     #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
     timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
