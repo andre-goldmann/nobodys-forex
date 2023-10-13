@@ -70,6 +70,7 @@ services:
   backend:
     container_name: backend
     build: ./
+    restart: on-failure
     ports:
       - "6081:6081"
     volumes:

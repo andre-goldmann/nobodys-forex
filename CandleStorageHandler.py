@@ -12,7 +12,7 @@ from kafka import  KafkaProducer
 
 #docker inside
 #producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-producer = KafkaProducer(bootstrap_servers='kafka:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'))
+producer = KafkaProducer(bootstrap_servers='kafka:9092')
 
 
 class CandlesEntity(Base):
@@ -80,17 +80,18 @@ def storeData(symbol:str, timeFrame:TimeFrame):
 
 def storeCandleInDb(candle:CandlesDto):
 
-    producer.send('test:1:1',
-                  {"symbol": candle.symbol,
-                        "TIMEFRAME": candle.TIMEFRAME,
-                        "DATETIME": candle.DATETIME,
-                        "OPEN": candle.OPEN,
-                        "HIGH": candle.HIGH,
-                        "LOW": candle.LOW,
-                        "CLOSE": candle.CLOSE,
-                        "TICKVOL": candle.TICKVOL,
-                        "VOL": candle.VOL,
-                        "SPREAD": candle.SPREAD})
+    producer.send('test:1:1', b'another_message')
+    #producer.send('test:1:1',
+    #              {"symbol": candle.symbol,
+    #                    "TIMEFRAME": candle.TIMEFRAME,
+    #                    "DATETIME": candle.DATETIME,
+    #                    "OPEN": candle.OPEN,
+    #                    "HIGH": candle.HIGH,
+    #                    "LOW": candle.LOW,
+    #                    "CLOSE": candle.CLOSE,
+    #                    "TICKVOL": candle.TICKVOL,
+    #                    "VOL": candle.VOL,
+    #                    "SPREAD": candle.SPREAD})
 
     #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
     timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
