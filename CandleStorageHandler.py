@@ -108,7 +108,7 @@ def storeCandleInDb(candle:CandlesDto):
     if count == 0:
         spongebob = CandlesEntity(
             SYMBOL=candle.symbol,
-            TIMEFRAME= TimeFrame.__dict__[candle.TIMEFRAME].name,
+            TIMEFRAME= timeFrame,
             DATETIME= candle.DATETIME,
             OPEN=candle.HIGH,
             HIGH=candle.HIGH,
@@ -118,7 +118,8 @@ def storeCandleInDb(candle:CandlesDto):
             VOL=candle.VOL,
             SPREAD=candle.SPREAD,
         )
-        print(f"Stored: {candle}, actual {count}")
+        last = lastCandle(candle.symbol, timeFrame)
+        print(f"New: {candle}, last {last}")
         session.add(spongebob)
         session.commit()
     else:
