@@ -118,7 +118,7 @@ def storeCandleInDb(candle:CandlesDto):
             VOL=candle.VOL,
             SPREAD=candle.SPREAD,
         )
-        print(f"Stored: {candle}")
+        print(f"Stored: {candle}, actual {count}")
         session.add(spongebob)
         session.commit()
     else:
