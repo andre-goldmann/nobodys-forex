@@ -125,7 +125,7 @@ def storeCandleInDb(candle:CandlesDto):
 
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
-    last = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.id.asc()).first()
+    last = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
     return last
 
 #def lastCandle(symbol:str, timeFrame:TimeFrame):
