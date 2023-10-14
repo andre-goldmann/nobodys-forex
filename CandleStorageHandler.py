@@ -2,7 +2,7 @@ import json
 
 import pandas as pd
 from pydantic import BaseModel
-from sqlalchemy import String, Enum, DateTime
+from sqlalchemy import String, Enum, DateTime, UniqueConstraint
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
@@ -29,6 +29,7 @@ class CandlesEntity(Base):
     TICKVOL: Mapped[float]
     VOL: Mapped[float]
     SPREAD: Mapped[float]
+    UniqueConstraint("SYMBOL", "TIMEFRAME", "OPEN", "CLOSE", name="uix_1"),
     #STAMP: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     def __repr__(self) -> str:
