@@ -29,7 +29,7 @@ class CandlesEntity(Base):
     TICKVOL: Mapped[float]
     VOL: Mapped[float]
     SPREAD: Mapped[float]
-    UniqueConstraint("SYMBOL", "TIMEFRAME", "OPEN", "CLOSE", name="uix_1"),
+    UniqueConstraint("SYMBOL", "TIMEFRAME", "OPEN", "CLOSE", name="uix_1")
     #STAMP: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
 
     def __repr__(self) -> str:
