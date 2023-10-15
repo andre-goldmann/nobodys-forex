@@ -1,8 +1,9 @@
 import json
-
+import time
+from datetime import datetime
 import pandas as pd
 from pydantic import BaseModel
-from sqlalchemy import String, Enum, DateTime, UniqueConstraint
+from sqlalchemy import String, Enum, DateTime, UniqueConstraint, func
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 
@@ -106,10 +107,15 @@ def storeCandleInDb(candle:CandlesDto):
                                                 CandlesEntity.OPEN == candle.OPEN).count()
 
     if count == 0:
+
         spongebob = CandlesEntity(
             SYMBOL=candle.symbol,
             TIMEFRAME= timeFrame,
-            DATETIME= candle.DATETIME,
+            # Falscher Datentyp hier wird ein String anstelle from sqlalchemy import DateTime gespeichert
+           # DATETIME= candle.DATETIME,
+            DATETIME=datetime.strptime('2023.10.13 23:45', "%Y.%m.%d %H:%M"),
+            #DATETIME=candle.DATETIME.astype('datetime64[s]')
+            #DATETIME= #time.mktime(datetime.datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M:%S").timetuple()))
             OPEN=candle.HIGH,
             HIGH=candle.HIGH,
             LOW=candle.LOW,
@@ -119,7 +125,7 @@ def storeCandleInDb(candle:CandlesDto):
             SPREAD=candle.SPREAD,
         )
         last = lastCandle(candle.symbol, timeFrame)
-        print(f"New: {candle}, last {last}")
+        print(f"New: {candle} ----- last {last}")
         session.add(spongebob)
         session.commit()
     else:
@@ -166,13 +172,16 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
 
 
 #if __name__ == "__main__":
+    #x = datetime.strptime('2023.10.13 23:45', "%Y.%m.%d %H:%M")
+    #print(type(x))
+    #print(x.strftime('"%Y.%m.%d %H:%M'))
  #   initTradingDb()
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
 
   #  lastCandle:CandlesDto = CandlesDto()
     # "EURUSD",TimeFrame.PERIOD_W1, "2023.10.08 00:00:00",1.0553, 1.06396, 1.05194, 1.06225,291058,0, 0
 
-    timeframeEnum: TimeFrame = TimeFrame.__dict__[lastCandle.TIMEFRAME]
+    #timeframeEnum: TimeFrame = TimeFrame.__dict__[lastCandle.TIMEFRAME]
 
     #if timeframeEnum != TimeFrame.PERIOD_M1:
         #storeCandleInDb(lastCandle)
