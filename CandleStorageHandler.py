@@ -107,13 +107,12 @@ def storeCandleInDb(candle:CandlesDto):
                                                 CandlesEntity.OPEN == candle.OPEN).count()
 
     if count == 0:
-
         spongebob = CandlesEntity(
             SYMBOL=candle.symbol,
             TIMEFRAME= timeFrame,
             # Falscher Datentyp hier wird ein String anstelle from sqlalchemy import DateTime gespeichert
            # DATETIME= candle.DATETIME,
-            DATETIME=datetime.strptime('2023.10.13 23:45', "%Y.%m.%d %H:%M"),
+            DATETIME=datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M"),
             #DATETIME=candle.DATETIME.astype('datetime64[s]')
             #DATETIME= #time.mktime(datetime.datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M:%S").timetuple()))
             OPEN=candle.HIGH,
@@ -133,8 +132,8 @@ def storeCandleInDb(candle:CandlesDto):
 
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
-    #return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
-    return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.id.desc()).first()
+    return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
+    #return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.id.desc()).first()
 
 #def lastCandle(symbol:str, timeFrame:TimeFrame):
 #    return session.query(CandlesEntity.SYMBOL,
