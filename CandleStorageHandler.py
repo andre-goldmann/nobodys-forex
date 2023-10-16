@@ -133,8 +133,8 @@ def storeCandleInDb(candle:CandlesDto):
 
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
-    last = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
-    return last
+    #return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
+    return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.id.desc()).first()
 
 #def lastCandle(symbol:str, timeFrame:TimeFrame):
 #    return session.query(CandlesEntity.SYMBOL,
@@ -171,7 +171,7 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
     return df
 
 
-#if __name__ == "__main__":
+if __name__ == "__main__":
     #x = datetime.strptime('2023.10.13 23:45', "%Y.%m.%d %H:%M")
     #print(type(x))
     #print(x.strftime('"%Y.%m.%d %H:%M'))
@@ -186,7 +186,7 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
     #if timeframeEnum != TimeFrame.PERIOD_M1:
         #storeCandleInDb(lastCandle)
 
-    #storeData("EURUSD",TimeFrame.PERIOD_W1)
+    storeData("EURUSD",TimeFrame.PERIOD_M15)
 
     #for symbol in symbols:
     #    for timeFrame in TimeFrame:

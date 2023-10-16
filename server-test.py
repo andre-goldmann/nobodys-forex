@@ -31,12 +31,12 @@ def deletedata():
 
 def storecandle():
     data = {"symbol": "EURUSD",
-            "TIMEFRAME": "PERIOD_W1",
-            "DATETIME": "2023.10.08 00:00:00",
-            "OPEN": 1.0553,
-            "HIGH": 1.0553,
-            "LOW": 1.0553,
-            "CLOSE": 1.0553,
+            "TIMEFRAME": "PERIOD_M15",
+            "DATETIME": "2023.10.12 11:15:00",
+            "OPEN": 1.06207,
+            "HIGH": 1.06269,
+            "LOW": 1.06204,
+            "CLOSE": 1.06259,
             "TICKVOL": 1.0553,
             "VOL": 1.0553,
             "SPREAD": 1}
@@ -49,8 +49,16 @@ def storecandle():
     print(response.json())
     assert response.status_code == 200
 
+def lastCandle():
+    response = client.get("/lastCandle/?symbol=EURUSD&timeFrame=PERIOD_M15")
+    print(response.json())
+    assert response.status_code == 200
+    assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
+
 #test_read_main()
 #defaultsr()
 #deletedata()
 #adsar()
-storecandle()
+#2023-10-12 11:15:00.000000 +00:00
+lastCandle()
+#storecandle()
