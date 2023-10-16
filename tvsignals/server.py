@@ -120,8 +120,27 @@ async def signals(signal:SignalDto):
     regressionLineH4 = Session().query(Regressions).filter(
         Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
 
-    if len(regressionLineD1) > 0 and len(regressionLineH4) > 0:
+    if len(regressionLineH4) > 0:
 
+        if "buy" == signal.type and signal.entry < regressionLineH4[0].endValue:
+            print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
+            return
+
+        if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
+            print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
+            return
+
+        storeTrade(Trade(
+            symbol=signal.symbol,
+            type=signal.type,
+            entry=signal.entry,
+            sl=signal.sl,
+            tp=signal.tp,
+            lots=0.5,
+            commision=0.0,
+            strategy=signal.strategy
+        ))
+    elif len(regressionLineD1) > 0:
         if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
             print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
             return
@@ -136,7 +155,7 @@ async def signals(signal:SignalDto):
             entry=signal.entry,
             sl=signal.sl,
             tp=signal.tp,
-            lots=0.5,
+            lots=0.1,
             commision=0.0,
             strategy=signal.strategy
         ))
