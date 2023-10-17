@@ -28,5 +28,12 @@ export interface Trade {
     entry:number,
     sl:number,
     tp:number,
-    lots:number
+    lots:number,
+    stamp:string
+}
+
+export interface IgnoredSignal {
+    id: number,
+    json: string,
+    reason: string
 }
