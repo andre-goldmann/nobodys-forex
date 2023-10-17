@@ -13,6 +13,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Enum
 import enum
+import uvicorn
 
 engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
@@ -210,5 +211,6 @@ def storeIgnoredSignal(signal: IgnoredSignal):
     session.add(signal)
     session.commit()
 
-#if __name__ == "__main__":
-#    uvicorn.run(app, host="0.0.0.0", port=80)
+if __name__ == "__main__":
+    Base.metadata.create_all(engine)
+    uvicorn.run(app, host="0.0.0.0", port=80)
