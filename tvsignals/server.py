@@ -187,7 +187,7 @@ async def signals(signal:SignalDto):
     else:
         print(f"No Regression-Data found for {signal.symbol}")
 
-@app.post("/ignoredsignals")
+@app.get("/ignoredsignals")
 async def signals():
     signals = session.query(IgnoredSignal.id,
                             IgnoredSignal.json,
