@@ -62,6 +62,7 @@
                             <option selected>Choose a Symbol</option>
                             <option value="EURUSD">EURUSD</option>
                             <option value="GBPUSD">GBPUSD</option>
+                            <option value="GBPCAD">GBPCAD</option>
                             <option value="XRPUSD">XRPUSD</option>
                             <option value="XAGUSD">XAGUSD</option>
                             <option value="USDCHF">USDCHF</option>
