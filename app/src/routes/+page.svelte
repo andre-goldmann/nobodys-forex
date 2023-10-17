@@ -2,7 +2,6 @@
 
     import SupportResistance from "$lib/components/SupportResistance.svelte";
     import Emas from "$lib/components/Emas.svelte";
-    import Signals from "$lib/components/Signals.svelte";
     import Tabs from "$lib/components/Tabs.svelte";
     import '$lib/global.css';
 
@@ -128,10 +127,6 @@
         { label: "Emas",
             value: 2,
             component: Emas
-        },
-        { label: "Signals",
-            value: 3,
-            component: Signals
         }
     ];
 
