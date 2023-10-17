@@ -58,7 +58,7 @@ class Regressions(Base):
                 f", startValue={self.startValue!r}, endValue={self.endValue!r})")
 
 class IgnoredSignal(Base):
-    __tablename__ = "IgnoredSignal"
+    __tablename__ = "IgnoredSignals"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     json: Mapped[str] = mapped_column(String(64000))
     reason: Mapped[str] = mapped_column(String(64000))
@@ -189,9 +189,7 @@ async def signals(signal:SignalDto):
 
 @app.get("/ignoredsignals")
 async def signals():
-    signals = session.query(IgnoredSignal.id,
-                            IgnoredSignal.json,
-                            IgnoredSignal.reason).all()
+    signals = session.query(IgnoredSignal).all()
     result = []
     print("###################################")
     print(f"IgnoredSignals from db loaded:{len(signals)}")
