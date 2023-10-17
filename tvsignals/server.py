@@ -1,3 +1,4 @@
+import json
 import sys
 
 from fastapi import FastAPI, Request, status
@@ -58,6 +59,12 @@ class Regressions(Base):
         return (f"Regression(id={self.id!r}, symbol={self.symbol!r}, timeFrame={self.timeFrame!r}, startTime={self.startTime!r}, endTime={self.endTime!r})"
                 f", startValue={self.startValue!r}, endValue={self.endValue!r})")
 
+class IgnoredSignal(Base):
+    __tablename__ = "IgnoredSignal"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    json: Mapped[str] = mapped_column(String(64000))
+    reason: Mapped[str] = mapped_column(String(64000))
+
 class Trade(Base):
     __tablename__ = "Trades"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -97,6 +104,10 @@ def storeTrade(trade: Trade):
     session.add(trade)
     session.commit()
 
+def storeIgnoredSignal(signal: IgnoredSignal):
+    session.add(signal)
+    session.commit()
+
 @app.post("/signal")
 async def signals(signal:SignalDto):
     print(signal)
@@ -108,10 +119,18 @@ async def signals(signal:SignalDto):
 
     if "buy" == signal.type and signal.sl > signal.tp:
         print(f"Ignore (1. Condition) Buy-Signal: {signal}")
+        storeIgnoredSignal(IgnoredSignal(
+            json=json.dumps(signal),
+            reason=f"Ignore (1. Condition) Buy-Signal: {signal}"
+        ))
         return
 
     if "sell" == signal.type and signal.sl < signal.tp:
         print(f"Ignore (1. Condition) Sell-Signal: {signal}")
+        storeIgnoredSignal(IgnoredSignal(
+            json=json.dumps(signal),
+            reason=f"Ignore (1. Condition) Sell-Signal: {signal}"
+        ))
         return
 
     regressionLineD1 = Session().query(Regressions).filter(
@@ -124,10 +143,18 @@ async def signals(signal:SignalDto):
 
         if "buy" == signal.type and signal.entry < regressionLineH4[0].endValue:
             print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
+            storeIgnoredSignal(IgnoredSignal(
+                json=json.dumps(signal),
+                reason=f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}"
+            ))
             return
 
         if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
             print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
+            storeIgnoredSignal(IgnoredSignal(
+                json=json.dumps(signal),
+                reason=f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}"
+            ))
             return
 
         storeTrade(Trade(
@@ -143,10 +170,18 @@ async def signals(signal:SignalDto):
     elif len(regressionLineD1) > 0:
         if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
             print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
+            storeIgnoredSignal(IgnoredSignal(
+                json=json.dumps(signal),
+                reason=f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}"
+            ))
             return
 
         if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
             print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
+            storeIgnoredSignal(IgnoredSignal(
+                json=json.dumps(signal),
+                reason=f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}"
+            ))
             return
 
         storeTrade(Trade(
