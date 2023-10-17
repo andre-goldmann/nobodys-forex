@@ -1,5 +1,4 @@
 import json
-import sys
 
 from fastapi import FastAPI, Request, status
 from fastapi.encoders import jsonable_encoder
@@ -14,7 +13,6 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Enum
 import enum
-version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
 engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
@@ -97,16 +95,8 @@ class SignalDto(BaseModel):
 
 @app.get("/")
 async def read_root():
-    message = f"Hello world! From FastAPI running on Uvicorn with Gunicorn. Using Python {version}"
+    message = f"Hello world!"
     return {"message": message}
-
-def storeTrade(trade: Trade):
-    session.add(trade)
-    session.commit()
-
-def storeIgnoredSignal(signal: IgnoredSignal):
-    session.add(signal)
-    session.commit()
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
@@ -196,6 +186,31 @@ async def signals(signal:SignalDto):
         ))
     else:
         print(f"No Regression-Data found for {signal.symbol}")
+
+@app.post("/ignoredsignals")
+async def signals():
+    signals = session.query(IgnoredSignal.id,
+                            IgnoredSignal.json,
+                            IgnoredSignal.reason).all()
+    result = []
+    print("###################################")
+    print(f"IgnoredSignals from db loaded:{len(signals)}")
+    print("###################################")
+    for signal in signals:
+        result.append({'id': signal.id,
+                       'json': signal.json,
+                       'reason': signal.reason})
+
+    return result
+
+
+def storeTrade(trade: Trade):
+    session.add(trade)
+    session.commit()
+
+def storeIgnoredSignal(signal: IgnoredSignal):
+    session.add(signal)
+    session.commit()
 
 #if __name__ == "__main__":
 #    uvicorn.run(app, host="0.0.0.0", port=80)
