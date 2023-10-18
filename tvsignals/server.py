@@ -21,6 +21,9 @@ session = Session()
 
 app = FastAPI()
 
+symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
+strategies = ["NNR", "Super AI Trend", "70% Strategy"]
+
 # does not work
 #app.add_middleware(
 #    TrustedHostMiddleware, allowed_hosts=["52.89.214.238","34.212.75.30:47464","54.218.53.128","52.32.178.7:58232"]
@@ -94,19 +97,36 @@ class SignalDto(BaseModel):
     tp:float
     strategy: str
 
-@app.get("/")
-async def read_root():
-    message = f"Hello world!"
-    return {"message": message}
+#@app.get("/")
+#async def read_root():
+#    message = f"Hello world!"
+#    return {"message": message}
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
-    print(signal)
+
 
     # no need to check for trend in TradingView we send everything
     # and do the check here
     # D-EMA200, H4-EMA, D-Regression, H4-Regression
     # Support Resistance
+
+    if signal.symbol not in symbols:
+        print(f"Ignore Signal because symbol is not handled yet: {signal}")
+        storeIgnoredSignal(IgnoredSignal(
+            json=json.dumps(signal),
+            reason=f"Ignore Signal because symbol is not handled yet: {signal}"
+        ))
+        return
+
+    if signal.strategy not in strategies:
+        print(f"Ignore Signal because strategy is unknown: {signal}")
+        storeIgnoredSignal(IgnoredSignal(
+            json=json.dumps(signal),
+            reason=f"Ignore Signal because symbol is unknown: {signal}"
+        ))
+        return
+
 
     if "buy" == signal.type and signal.sl > signal.tp:
         print(f"Ignore (1. Condition) Buy-Signal: {signal}")

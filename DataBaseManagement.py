@@ -13,6 +13,7 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
+tradeTypes = ["buy", "sell"]
 
 class TimeFrame(enum.Enum):
     PERIOD_M1 = 1

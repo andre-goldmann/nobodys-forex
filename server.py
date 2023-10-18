@@ -25,7 +25,7 @@ from typing_extensions import Annotated
 from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, lastCandle, storeData, countEntries
 from DataBaseManagement import Session, initTradingDb, symbols, storeTrade, Trade, getUnActiveTrades, \
     TradeActivationDto, \
-    activeTrade, TradeUpdateDto, updateTrade, modifyTrade, deleteTrade
+    activeTrade, TradeUpdateDto, updateTrade, modifyTrade, deleteTrade, tradeTypes
 from RegressionCalculator import regressionCalculation, Regressions, TimeFrame
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
@@ -150,6 +150,14 @@ async def createOrder(symbol: Annotated[str, Form()],
                       tp: Annotated[float, Form()],
                       lots: Annotated[float, Form()]):
 
+    if symbol not in symbols:
+        print(f"Ignore order because symbol is not handled yet: {symbol}")
+        return
+
+    if type not in tradeTypes:
+        print(f"Ignore order because type is not handled: {type}")
+        return
+
     storeTrade(Trade(
         symbol=symbol,
         type=type,
@@ -174,6 +182,11 @@ async def modifyOrder(id: Annotated[int, Form()],
                       sl: Annotated[float, Form()],
                       tp: Annotated[float, Form()],
                       lots: Annotated[float, Form()]):
+
+    if type not in tradeTypes:
+        print(f"Ignore order because type is not handled: {type}")
+        return
+
     print("Updating...")
     modifyTrade(id, type, entry, sl, tp, lots)
 
@@ -182,6 +195,10 @@ async def modifyOrder(id: Annotated[int, Form()],
 # TODO add symbol as param
 @app.get("/linesinfo/")
 async def linesInfo(symbol:str, timeframe: str):
+
+    if symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {symbol}")
+        return
 
     timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
     print("Loading linesinfo at %s for TF %s" % (datetime.datetime.now(), timeframeEnum))
@@ -197,6 +214,10 @@ async def linesInfo(symbol:str, timeframe: str):
 
 @app.get("/srlevels/")
 async def srlevels(symbol:str):
+
+    if symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {symbol}")
+        return
 
     result = Session().query(SupportResistance).filter(
         SupportResistance.symbol == symbol
@@ -217,16 +238,26 @@ async def srlevels(symbol:str):
 
 @app.post("/updatetrade")
 async def updatetrade(tradeUpdateDto:TradeUpdateDto):
+    if tradeUpdateDto.symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {tradeUpdateDto}")
+        return
     updateTrade(tradeUpdateDto)
     #TODO send information to clients
 
 @app.post("/tradeactivated")
 async def tradeactivated(tradeActivation:TradeActivationDto):
+    if tradeActivation.symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {tradeActivation}")
+        return
+
     activeTrade(tradeActivation)
     #TODO send information to clients
 
 @app.post("/storecandle")
 async def storeCandle(candle:CandlesDto):
+    if candle.symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {candle}")
+        return
 
     timeframeEnum: TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
 
