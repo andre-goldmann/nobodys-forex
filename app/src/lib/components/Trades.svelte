@@ -28,7 +28,7 @@
                 tradesApiData.set(data);
             }).catch(error => {
                 console.log(error);
-                return [];
+                tradesApiData.set([]);
             });
     }
 
@@ -61,7 +61,7 @@
                             <th>TP</th>
                             <th>LOTS</th>
                             <th>STAMP</th>
-                            <th></th>
+                            <!--th></th-->
                         <tr/>
                         </thead>
                         {#each $trades as trade}

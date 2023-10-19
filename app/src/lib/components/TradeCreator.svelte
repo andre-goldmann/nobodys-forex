@@ -3,7 +3,8 @@
     let symbol:string = 'EURUSD';
     let type:string = '';
     const HOST = "http://85.215.32.163";
-    import {ignoredSignalsApiData, ignoredSignals} from '$lib/store.ts';
+    import {ignoredSignalsApiData, ignoredSignals, ignoredSignalSelected} from '$lib/store.ts';
+    import type {IgnoredSignal} from "$lib/model";
 
     const handleSubmit = e => {
         // getting the action url
@@ -31,8 +32,22 @@
                 ignoredSignalsApiData.set(data);
             }).catch(error => {
                 console.log(error);
-                return [];
+                //// Just for Testing ////
+                let mock:IgnoredSignal[] = [];
+                let signal:IgnoredSignal = {
+                    id: 1,
+                    json: "{symbol:'EURUSD'}",
+                    reason: "Failure whatever"
+                };
+                mock.push(signal);
+                ignoredSignalsApiData.set(mock);
+                //// Just for Testing ////
             });
+    }
+
+    function rowSelected(signal:IgnoredSignal) {
+        console.info(`Call delete action on: ${signal}`);
+        ignoredSignalSelected.set(signal);
     }
 
     onMount(() => {
@@ -48,9 +63,6 @@
             <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
                 <h1 class="mb-8 text-3xl text-center">New Order</h1>
                 <div class="w-full max-w-xs">
-                    <!--label class="label" for="symbols">
-                        <span class="label-text">Symbol</span>
-                    </label-->
                     <select class="select select-primary w-full max-w-xs mb-4"
                             id="symbol"
                             name="symbol"
@@ -80,9 +92,6 @@
                 </div>
 
                 <div class="w-full max-w-xs">
-                    <!--label class="label" for="symbols">
-                        <span class="label-text">Symbol</span>
-                    </label-->
                     <select class="select select-primary w-full max-w-xs mb-4"
                             id="type"
                             name="type"
@@ -131,12 +140,66 @@
         </form>
     </div>
     <div class="basis-1/4">
-        <!-- http://85.215.32.163/ignoredsignals >
-        TODO create a form to load and resend the ignoredSignals-->
-        <p>Resend JSONS:</p>
-        {#each $ignoredSignals as signal}
-            {signal}
-        {/each}
+
+        <h1 class="mb-8 text-3xl text-center">Ignored Signals</h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <!--th>ID</th-->
+                <th>JSON</th>
+                <th>REASON</th>
+                <!--th></th-->
+            <tr/>
+            </thead>
+            {#each $ignoredSignals as signal}
+                <tr class="hover" on:click={() => rowSelected(signal)}>
+                    <!--td>{signal.id}</td-->
+                    <td>{signal.json}</td>
+                    <td>{signal.reason}</td>
+
+                    <!--button class="btn btn-ghost btn-xs" on:click={() => rowSelected(trade)}>
+                        Remove
+                    </button-->
+                <tr/>
+            {/each}
+        </table>
 
     </div>
+    {#if $ignoredSignalSelected}
+        <div class="basis-1/4">
+            <form class="flex items-center space-x-6" action="http://85.215.32.163/resendsignal" on:submit|preventDefault={handleSubmit} method="POST">
+                <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
+                    <h1 class="mb-8 text-3xl text-center">Update Order</h1>
+
+                    <!--div class="w-full max-w-xs">
+                        <input
+                                type="number"
+                                class="input input-bordered input-primary w-full max-w-xs mb-4"
+                                id="id"
+                                name="id"
+                                value={$ignoredSignalSelected.id}
+                                readonly/>
+                    </div-->
+
+                    <div class="w-full">
+
+                        <textarea class="textarea textarea-bordered"
+                                id="json"
+                                name="json"
+                                rows="6"
+                                cols="42"
+                                value={$ignoredSignalSelected.json}/>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn btn-primary">Delete</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    {/if}
+
 </div>
