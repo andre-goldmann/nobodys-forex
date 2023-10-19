@@ -109,13 +109,13 @@ async def signals(signal:SignalDto):
     # D-EMA200, H4-EMA, D-Regression, H4-Regression
     # Support Resistance
 
-    jsonSignal = {'symbol': signal.symbol,
+    jsonSignal =str({'symbol': signal.symbol,
                   'timestamp': signal.timestamp,
                   'type': signal.type,
                   'entry': signal.entry,
                   'sl': signal.sl,
                   'tp': signal.tp,
-                  'strategy': signal.strategy}
+                  'strategy': signal.strategy})
 
     if signal.symbol not in symbols:
         print(f"Ignore Signal because symbol is not handled yet: {signal}")
@@ -162,7 +162,7 @@ async def signals(signal:SignalDto):
             print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
             storeIgnoredSignal(IgnoredSignal(
                 json=jsonSignal,
-                reason=f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}"
+                reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
             ))
             return
 
@@ -170,7 +170,7 @@ async def signals(signal:SignalDto):
             print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
             storeIgnoredSignal(IgnoredSignal(
                 json=jsonSignal,
-                reason=f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}"
+                reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
             ))
             return
 
@@ -189,7 +189,7 @@ async def signals(signal:SignalDto):
             print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
             storeIgnoredSignal(IgnoredSignal(
                 json=jsonSignal,
-                reason=f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}"
+                reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
             ))
             return
 
@@ -197,7 +197,7 @@ async def signals(signal:SignalDto):
             print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
             storeIgnoredSignal(IgnoredSignal(
                 json=jsonSignal,
-                reason=f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}"
+                reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
             ))
             return
 
