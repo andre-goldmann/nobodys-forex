@@ -120,7 +120,7 @@ async def signals(signal:SignalDto):
         return
 
     if signal.strategy not in strategies:
-        print(f"Ignore Signal because strategy is unknown: {signal}")
+        print(f"Ignore Signal because strategy is unknown: {signal.strategy}")
         storeIgnoredSignal(IgnoredSignal(
             json=json.dumps(signal),
             reason=f"Ignore Signal because symbol is unknown: {signal}"
