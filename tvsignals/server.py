@@ -109,8 +109,7 @@ async def signals(signal:SignalDto):
     # D-EMA200, H4-EMA, D-Regression, H4-Regression
     # Support Resistance
 
-    jsonSignal = {'id': signal.id,
-                  'symbol': signal.symbol,
+    jsonSignal = {'symbol': signal.symbol,
                   'timestamp': signal.timestamp,
                   'type': signal.type,
                   'entry': signal.entry,
