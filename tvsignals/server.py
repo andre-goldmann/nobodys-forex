@@ -101,6 +101,10 @@ class SignalDto(BaseModel):
 #    message = f"Hello world!"
 #    return {"message": message}
 
+class User(BaseModel):
+    id: int
+    name = "Jane Doe"
+
 @app.post("/resendsignal/")
 async def resendsignal(symbol: Annotated[str, Form()],
                       timestamp: Annotated[str, Form()],
@@ -109,25 +113,25 @@ async def resendsignal(symbol: Annotated[str, Form()],
                       sl: Annotated[float, Form()],
                       tp: Annotated[float, Form()],
                       strategy: Annotated[str, Form()]):
-
-    #signal = SignalDto(
-    #    symbol=symbol,
-    #    timestamp= timestamp,
-    #    type = type,
-    #    entry = entry,
-    #    sl = sl,
-    #    tp = tp,
-    #    strategy = strategy
+    user = User(id="123")
+    signal = SignalDto(
+        symbol=symbol,
+        timestamp= timestamp,
+        type = type,
+        entry = entry,
+        sl = sl,
+        tp = tp,
+        strategy = strategy
+    )
+    #signal = SignalDto()
+    #signal.symbol=symbol,
+    #signal.timestamp= timestamp,
+    #signal.type = type,
+    #signal.entry = entry,
+    #signal.sl = sl,
+    #signal.tp = tp,
+    #signal.strategy = strategy
     #)
-    signal = SignalDto()
-    signal.symbol=symbol
-    signal.timestamp= timestamp
-    signal.type = type
-    signal.entry = entry
-    signal.sl = sl
-    signal.tp = tp
-    signal.strategy = strategy
-
     await signals(signal)
 
 @app.post("/signal")
