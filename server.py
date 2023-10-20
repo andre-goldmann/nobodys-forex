@@ -128,7 +128,7 @@ async def waitingSignals():
     signals = getWaitingSignals()
     result = []
     #print("###################################")
-    #print(f"Trades from db loaded:{len(signals)}")
+    #print(f"Signals from db loaded:{len(signals)}")
     #print("###################################")
     for signal in signals:
         result.append({'id': signal.id,
@@ -236,11 +236,11 @@ async def srlevels(symbol:str):
     #https://www.youtube.com/@CodeTradingCafe/videos
 
 @app.post("/updatesignal")
-async def updateSignal(tradeUpdateDto:SignalUpdateDto):
-    if tradeUpdateDto.symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {tradeUpdateDto}")
+async def updateSignal(signalUpdateDto:SignalUpdateDto):
+    if signalUpdateDto.symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
         return
-    updateSignalInDb(tradeUpdateDto)
+    updateSignalInDb(signalUpdateDto)
     #TODO send information to clients
 
 @app.post("/signalactivated")
