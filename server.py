@@ -152,7 +152,9 @@ async def executedSignals():
                        'sl': signal.sl,
                        'tp': signal.tp,
                        'lots': signal.lots,
-                       'stamp': signal.stamp})
+                       'stamp': signal.stamp,
+                       'strategy': signal.strategy,
+                       'activated': signal.activated})
 
     return result
 
