@@ -113,8 +113,7 @@ async def test(signal:SignalDto):
         tp = signal.tp,
         strategy = signal.strategy
     )
-    print(sigi)
-    await signals(sigi)
+
 
 @app.post("/resendsignal/")
 async def resendsignal(symbol: Annotated[str, Form()],
@@ -134,34 +133,51 @@ async def resendsignal(symbol: Annotated[str, Form()],
         tp = tp,
         strategy = strategy
     )
-    #signal = SignalDto()
-    #signal.symbol=symbol,
-    #signal.timestamp= timestamp,
-    #signal.type = type,
-    #signal.entry = entry,
-    #signal.sl = sl,
-    #signal.tp = tp,
-    #signal.strategy = strategy
-    #)
-    print(signal)
-    #await signals(signal)
+    proceedSignal(signal)
+
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
+    proceedSignal(signal)
 
 
+
+@app.get("/ignoredsignals")
+async def signals():
+    signals = session.query(IgnoredSignal).all()
+    result = []
+    #print("###################################")
+    #print(f"IgnoredSignals from db loaded:{len(signals)}")
+    #print("###################################")
+    for signal in signals:
+        result.append({'id': signal.id,
+                       'json': signal.json,
+                       'reason': signal.reason})
+
+    return result
+
+
+def storeTrade(trade: Trade):
+    session.add(trade)
+    session.commit()
+
+def storeIgnoredSignal(signal: IgnoredSignal):
+    session.add(signal)
+    session.commit()
+
+def proceedSignal(signal):
     # no need to check for trend in TradingView we send everything
     # and do the check here
     # D-EMA200, H4-EMA, D-Regression, H4-Regression
     # Support Resistance
 
     jsonSignal =str({'symbol': signal.symbol,
-                  'timestamp': signal.timestamp,
-                  'type': signal.type,
-                  'entry': signal.entry,
-                  'sl': signal.sl,
-                  'tp': signal.tp,
-                  'strategy': signal.strategy})
+                     'timestamp': signal.timestamp,
+                     'type': signal.type,
+                     'entry': signal.entry,
+                     'sl': signal.sl,
+                     'tp': signal.tp,
+                     'strategy': signal.strategy})
 
     if signal.symbol not in symbols:
         print(f"Ignore Signal because symbol is not handled yet: {signal}")
@@ -259,29 +275,6 @@ async def signals(signal:SignalDto):
         ))
     else:
         print(f"No Regression-Data found for {signal.symbol}")
-
-@app.get("/ignoredsignals")
-async def signals():
-    signals = session.query(IgnoredSignal).all()
-    result = []
-    #print("###################################")
-    #print(f"IgnoredSignals from db loaded:{len(signals)}")
-    #print("###################################")
-    for signal in signals:
-        result.append({'id': signal.id,
-                       'json': signal.json,
-                       'reason': signal.reason})
-
-    return result
-
-
-def storeTrade(trade: Trade):
-    session.add(trade)
-    session.commit()
-
-def storeIgnoredSignal(signal: IgnoredSignal):
-    session.add(signal)
-    session.commit()
 
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
