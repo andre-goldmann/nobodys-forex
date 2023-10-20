@@ -135,12 +135,9 @@ async def resendsignal(symbol: Annotated[str, Form()],
     )
     proceedSignal(signal)
 
-
 @app.post("/signal")
 async def signals(signal:SignalDto):
     proceedSignal(signal)
-
-
 
 @app.get("/ignoredsignals")
 async def signals():
