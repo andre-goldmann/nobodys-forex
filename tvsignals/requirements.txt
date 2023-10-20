@@ -1,6 +1,7 @@
- annotated-types
- sqlalchemy
- uvicorn[standard]
- fastapi
- pydantic
- psycopg2
+annotated-types
+sqlalchemy
+uvicorn[standard]
+fastapi
+pydantic
+psycopg2
+python-multipart
