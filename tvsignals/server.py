@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -12,6 +12,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Enum
 import enum
 import uvicorn
+from typing_extensions import Annotated
 
 engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
@@ -99,6 +100,26 @@ class SignalDto(BaseModel):
 #async def read_root():
 #    message = f"Hello world!"
 #    return {"message": message}
+
+@app.post("/resendsignal/")
+async def createOrder(symbol: Annotated[str, Form()],
+                      timestamp: Annotated[str, Form()],
+                      type: Annotated[str, Form()],
+                      entry: Annotated[float, Form()],
+                      sl: Annotated[float, Form()],
+                      tp: Annotated[float, Form()],
+                      strategy: Annotated[str, Form()]):
+
+    signal = SignalDto(
+        symbol=symbol,
+        timestamp= timestamp,
+        type = type,
+        entry = entry,
+        sl = sl,
+        tp = tp,
+        strategy = strategy
+    )
+    await signals(signal)
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
@@ -218,9 +239,9 @@ async def signals(signal:SignalDto):
 async def signals():
     signals = session.query(IgnoredSignal).all()
     result = []
-    print("###################################")
-    print(f"IgnoredSignals from db loaded:{len(signals)}")
-    print("###################################")
+    #print("###################################")
+    #print(f"IgnoredSignals from db loaded:{len(signals)}")
+    #print("###################################")
     for signal in signals:
         result.append({'id': signal.id,
                        'json': signal.json,
