@@ -116,13 +116,15 @@ async def test(signal:SignalDto):
 
 
 @app.post("/resendsignal/")
-async def resendsignal(symbol: Annotated[str, Form()],
-                      timestamp: Annotated[str, Form()],
-                      type: Annotated[str, Form()],
-                      entry: Annotated[float, Form()],
-                      sl: Annotated[float, Form()],
-                      tp: Annotated[float, Form()],
-                      strategy: Annotated[str, Form()]):
+async def resendsignal(
+        id: Annotated[int, Form()],
+        symbol: Annotated[str, Form()],
+        timestamp: Annotated[str, Form()],
+        type: Annotated[str, Form()],
+        entry: Annotated[float, Form()],
+        sl: Annotated[float, Form()],
+        tp: Annotated[float, Form()],
+        strategy: Annotated[str, Form()]):
 
     signal = SignalDto(
         symbol=symbol,
@@ -133,7 +135,12 @@ async def resendsignal(symbol: Annotated[str, Form()],
         tp = tp,
         strategy = strategy
     )
-    proceedSignal(signal)
+    #proceedSignal(signal)
+    # TODO delete IgnoredSignal when comes here
+    signal = session.query(IgnoredSignal).filter(IgnoredSignal.id == id).first()
+    if signal is not None:
+        session.delete(signal)
+        session.commit()
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
