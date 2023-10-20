@@ -102,7 +102,7 @@ class SignalDto(BaseModel):
 #    return {"message": message}
 
 @app.post("/resendsignal/")
-async def createOrder(symbol: Annotated[str, Form()],
+async def resendsignal(symbol: Annotated[str, Form()],
                       timestamp: Annotated[str, Form()],
                       type: Annotated[str, Form()],
                       entry: Annotated[float, Form()],
@@ -110,15 +110,24 @@ async def createOrder(symbol: Annotated[str, Form()],
                       tp: Annotated[float, Form()],
                       strategy: Annotated[str, Form()]):
 
-    signal = SignalDto(
-        symbol=symbol,
-        timestamp= timestamp,
-        type = type,
-        entry = entry,
-        sl = sl,
-        tp = tp,
-        strategy = strategy
-    )
+    #signal = SignalDto(
+    #    symbol=symbol,
+    #    timestamp= timestamp,
+    #    type = type,
+    #    entry = entry,
+    #    sl = sl,
+    #    tp = tp,
+    #    strategy = strategy
+    #)
+    signal = SignalDto()
+    signal.symbol=symbol
+    signal.timestamp= timestamp
+    signal.type = type
+    signal.entry = entry
+    signal.sl = sl
+    signal.tp = tp
+    signal.strategy = strategy
+
     await signals(signal)
 
 @app.post("/signal")
