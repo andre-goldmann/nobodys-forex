@@ -154,7 +154,11 @@ async def executedSignals():
                        'lots': signal.lots,
                        'stamp': signal.stamp,
                        'strategy': signal.strategy,
-                       'activated': signal.activated})
+                       'activated': signal.activated,
+                       'openprice': signal.openprice,
+                       'profit': signal.profit,
+                       'commision': signal.commision,
+                       'swap': signal.swap})
 
     return result
 
