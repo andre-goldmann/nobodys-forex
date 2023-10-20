@@ -101,9 +101,20 @@ class SignalDto(BaseModel):
 #    message = f"Hello world!"
 #    return {"message": message}
 
-class User(BaseModel):
-    id: int
-    name = "Jane Doe"
+@app.post("/test")
+async def test(signal:SignalDto):
+
+    sigi = SignalDto(
+        symbol=signal.symbol,
+        timestamp= signal.timestamp,
+        type = signal.type,
+        entry = signal.entry,
+        sl = signal.sl,
+        tp = signal.tp,
+        strategy = signal.strategy
+    )
+    print(sigi)
+    await signals(sigi)
 
 @app.post("/resendsignal/")
 async def resendsignal(symbol: Annotated[str, Form()],
@@ -113,7 +124,7 @@ async def resendsignal(symbol: Annotated[str, Form()],
                       sl: Annotated[float, Form()],
                       tp: Annotated[float, Form()],
                       strategy: Annotated[str, Form()]):
-    user = User(id="123")
+
     signal = SignalDto(
         symbol=symbol,
         timestamp= timestamp,
@@ -132,7 +143,8 @@ async def resendsignal(symbol: Annotated[str, Form()],
     #signal.tp = tp,
     #signal.strategy = strategy
     #)
-    await signals(signal)
+    print(signal)
+    #await signals(signal)
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
