@@ -141,7 +141,7 @@ async def waitingSignals():
     return result
 
 @app.get("/executedsignals")
-async def waitingSignals():
+async def executedSignals():
     signals = getExecutedSignals()
     result = []
     for signal in signals:
