@@ -129,7 +129,7 @@ async def signals(signal:SignalDto):
         print(f"Ignore Signal because strategy is unknown: {signal.strategy}")
         storeIgnoredSignal(IgnoredSignal(
             json=jsonSignal,
-            reason=f"Ignore Signal because symbol is unknown: {signal}"
+            reason=f"Ignore Signal because strategy is unknown: {signal.strategy}"
         ))
         return
 
