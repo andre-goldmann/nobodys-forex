@@ -7,7 +7,7 @@
 
 <ul>
     {#each items as item}
-        <a class={activeTabValue === item.value ? 'tab tab-bordered tab-active' : 'tab tab-bordered'}>
+        <a class={activeTabValue === item.value ? 'tab tab-bordered tab-active mt-12' : 'tab tab-bordered mt-12'}>
             <span on:click={handleClick(item.value)}>{item.label}</span>
         </a>
     {/each}

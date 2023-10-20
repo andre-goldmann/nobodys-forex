@@ -9,6 +9,8 @@ export const tradesApiData = writable([]);
 export const tradeSelected = writable();
 export const ignoredSignalsApiData = writable([]);
 
+export const ignoredSignalSelected = writable();
+
 export const symbols = derived(symbolsApiData, ($apiData) => {
     if ($apiData){
         //return $apiData.sort(e => e.level);
