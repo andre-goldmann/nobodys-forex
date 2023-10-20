@@ -102,7 +102,9 @@ def getExecutedSignals():
                          Signal.sl,
                          Signal.tp,
                          Signal.lots,
-                         Signal.stamp).filter(Signal.tradeid > 0, Signal.openprice > 0.0).all()
+                         Signal.stamp,
+                         Signal.strategy,
+                         Signal.activated).filter(Signal.openprice > 0.0).all()
 
 def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
