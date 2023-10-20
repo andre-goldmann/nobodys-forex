@@ -66,7 +66,7 @@ class IgnoredSignal(Base):
     json: Mapped[str] = mapped_column(String(64000))
     reason: Mapped[str] = mapped_column(String(64000))
 
-class Trade(Base):
+class Signal(Base):
     __tablename__ = "Trades"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     symbol: Mapped[str] = mapped_column(String(6))
@@ -135,7 +135,7 @@ async def resendsignal(
         tp = tp,
         strategy = strategy
     )
-    #proceedSignal(signal)
+    proceedSignal(signal)
     # TODO delete IgnoredSignal when comes here
     signal = session.query(IgnoredSignal).filter(IgnoredSignal.id == id).first()
     if signal is not None:
@@ -161,8 +161,8 @@ async def signals():
     return result
 
 
-def storeTrade(trade: Trade):
-    session.add(trade)
+def storeSignal(signal: Signal):
+    session.add(signal)
     session.commit()
 
 def storeIgnoredSignal(signal: IgnoredSignal):
@@ -240,7 +240,7 @@ def proceedSignal(signal):
             ))
             return
 
-        storeTrade(Trade(
+        storeSignal(Signal(
             symbol=signal.symbol,
             type=signal.type,
             entry=signal.entry,
@@ -267,7 +267,7 @@ def proceedSignal(signal):
             ))
             return
 
-        storeTrade(Trade(
+        storeSignal(Signal(
             symbol=signal.symbol,
             type=signal.type,
             entry=signal.entry,

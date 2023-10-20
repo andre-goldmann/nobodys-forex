@@ -26,7 +26,7 @@ class TimeFrame(enum.Enum):
 class Base(DeclarativeBase):
     pass
 
-class Trade(Base):
+class Signal(Base):
     __tablename__ = "Trades"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     symbol: Mapped[str] = mapped_column(String(6))
@@ -49,13 +49,13 @@ class Trade(Base):
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
 
-class TradeActivationDto(BaseModel):
+class SignalActivationDto(BaseModel):
     symbol:str
     timestamp:str
     magic:int
     open_price:float
 
-class TradeUpdateDto(BaseModel):
+class SignalUpdateDto(BaseModel):
     symbol:str
     timestamp:str
     magic:int
@@ -64,58 +64,58 @@ class TradeUpdateDto(BaseModel):
     closed:str
     commision:float
 
-def storeTrade(trade: Trade):
-    session.add(trade)
+def storeSignal(signal: Signal):
+    session.add(signal)
     session.commit()
 
-def modifyTrade(id:int, type:str, entry:float, sl:float, tp:float, lots:float):
-    storeTrade = session.query(Trade).filter(Trade.id == id).first()
-    if storeTrade is not None:
-        storeTrade.type=type
-        storeTrade.entry=entry
-        storeTrade.sl=sl
-        storeTrade.tp=tp
-        storeTrade.lots=lots
+def modifySignalInDb(id:int, type:str, entry:float, sl:float, tp:float, lots:float):
+    storeSignal = session.query(Signal).filter(Signal.id == id).first()
+    if storeSignal is not None:
+        storeSignal.type=type
+        storeSignal.entry=entry
+        storeSignal.sl=sl
+        storeSignal.tp=tp
+        storeSignal.lots=lots
         session.commit()
 
-def deleteTrade(id:int):
-    storeTrade = session.query(Trade).filter(Trade.id == id).first()
-    if storeTrade is not None:
-        session.delete(storeTrade)
+def deleteSignalInDb(id:int):
+    storeSignal = session.query(Signal).filter(Signal.id == id).first()
+    if storeSignal is not None:
+        session.delete(storeSignal)
         session.commit()
 
-def getUnActiveTrades():
-    return session.query(Trade.id,
-                         Trade.symbol,
-                         Trade.type,
-                         Trade.entry,
-                         Trade.sl,
-                         Trade.tp,
-                         Trade.lots,
-                         Trade.stamp).filter(Trade.tradeid == 0, Trade.activated =="", Trade.openprice == 0.0).all()
+def getWaitingSignals():
+    return session.query(Signal.id,
+                         Signal.symbol,
+                         Signal.type,
+                         Signal.entry,
+                         Signal.sl,
+                         Signal.tp,
+                         Signal.lots,
+                         Signal.stamp).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
 
-def activeTrade(tradeActivationDto:TradeActivationDto):
+def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
 
-    storeTrade = session.query(Trade).filter(Trade.symbol == tradeActivationDto.symbol, Trade.id == tradeActivationDto.magic).first()
-    storeTrade.activated=tradeActivationDto.timestamp
-    storeTrade.openprice=tradeActivationDto.open_price
+    storeSignal = session.query(Signal).filter(Signal.symbol == tradeActivationDto.symbol, Signal.id == tradeActivationDto.magic).first()
+    storeSignal.activated=tradeActivationDto.timestamp
+    storeSignal.openprice=tradeActivationDto.open_price
     session.commit()
-    #print("Trade Activated:", storeTrade.openprice)
+    #print("Trade Activated:", storeSignal.openprice)
 
-def updateTrade(tradeUpdateDto:TradeUpdateDto):
+def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
     #print("Updating Trade", tradeUpdateDto)
 
-    storeTrade = session.query(Trade).filter(Trade.symbol == tradeUpdateDto.symbol, Trade.id == tradeUpdateDto.magic).first()
-    if storeTrade is not None:
-        storeTrade.swap = tradeUpdateDto.swap
-        storeTrade.profit = tradeUpdateDto.profit
-        storeTrade.commision = tradeUpdateDto.commision
-        if tradeUpdateDto.closed is not None and tradeUpdateDto.closed != "" and tradeUpdateDto.closed != "-":
-            storeTrade.closed = tradeUpdateDto.closed
+    storedSignal = session.query(Signal).filter(Signal.symbol == signalUpdateDto.symbol, Signal.id == signalUpdateDto.magic).first()
+    if storedSignal is not None:
+        storedSignal.swap = signalUpdateDto.swap
+        storedSignal.profit = signalUpdateDto.profit
+        storedSignal.commision = signalUpdateDto.commision
+        if signalUpdateDto.closed is not None and signalUpdateDto.closed != "" and signalUpdateDto.closed != "-":
+            storedSignal.closed = signalUpdateDto.closed
 
         session.commit()
-    #print("Trade Updated:", storeTrade)
+    #print("Trade Updated:", storedSignal)
 
 def initTradingDb():
     #Trade.__table__.drop(engine)

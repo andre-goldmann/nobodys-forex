@@ -23,9 +23,9 @@ from sqlalchemy.orm import Session
 from typing_extensions import Annotated
 
 from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, lastCandle, storeData, countEntries
-from DataBaseManagement import Session, initTradingDb, symbols, storeTrade, Trade, getUnActiveTrades, \
-    TradeActivationDto, \
-    activeTrade, TradeUpdateDto, updateTrade, modifyTrade, deleteTrade, tradeTypes
+from DataBaseManagement import Session, initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
+    SignalActivationDto, \
+    activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes
 from RegressionCalculator import regressionCalculation, Regressions, TimeFrame
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
@@ -123,27 +123,27 @@ async def getLastCandleStamp(symbol:str, timeFrame:str):
         return {'stamp': "2016.01.01 00:00:00"}
     return {'stamp': last.DATETIME}
 
-@app.get("/unActiveTrades")
-async def unActiveTrades():
-    trades = getUnActiveTrades()
+@app.get("/waitingSignals")
+async def waitingSignals():
+    signals = getWaitingSignals()
     result = []
     #print("###################################")
-    #print(f"Trades from db loaded:{len(trades)}")
+    #print(f"Trades from db loaded:{len(signals)}")
     #print("###################################")
-    for trade in trades:
-        result.append({'id': trade.id,
-                       'symbol': trade.symbol,
-                       'type': trade.type,
-                       'entry': trade.entry,
-                       'sl': trade.sl,
-                       'tp': trade.tp,
-                       'lots': trade.lots,
-                       'stamp': trade.stamp})
+    for signal in signals:
+        result.append({'id': signal.id,
+                       'symbol': signal.symbol,
+                       'type': signal.type,
+                       'entry': signal.entry,
+                       'sl': signal.sl,
+                       'tp': signal.tp,
+                       'lots': signal.lots,
+                       'stamp': signal.stamp})
 
     return result
 
-@app.post("/createorder/")
-async def createOrder(symbol: Annotated[str, Form()],
+@app.post("/createsignal/")
+async def createsignal(symbol: Annotated[str, Form()],
                       type: Annotated[str, Form()],
                       entry: Annotated[float, Form()],
                       sl: Annotated[float, Form()],
@@ -158,7 +158,7 @@ async def createOrder(symbol: Annotated[str, Form()],
         print(f"Ignore order because type is not handled: {type}")
         return
 
-    storeTrade(Trade(
+    storeSignal(Signal(
         symbol=symbol,
         type=type,
         entry=entry,
@@ -168,14 +168,13 @@ async def createOrder(symbol: Annotated[str, Form()],
     ))
     return "Order created"
 
-@app.delete("/deleteorder/")
+@app.delete("/deletesignal/")
 async def deleteOrder(id: Annotated[int, Form()]):
-    deleteTrade(id)
+    deleteSignalInDb(id)
+    return "Signal deleted"
 
-    return "Order deleted"
-
-@app.post("/modifyorder/")
-async def modifyOrder(id: Annotated[int, Form()],
+@app.post("/modifysignal/")
+async def modifySignalIn(id: Annotated[int, Form()],
                       symbol: Annotated[str, Form()],
                       type: Annotated[str, Form()],
                       entry: Annotated[float, Form()],
@@ -188,7 +187,7 @@ async def modifyOrder(id: Annotated[int, Form()],
         return
 
     print("Updating...")
-    modifyTrade(id, type, entry, sl, tp, lots)
+    modifySignalInDb(id, type, entry, sl, tp, lots)
 
     return "Order modified"
 
@@ -236,21 +235,21 @@ async def srlevels(symbol:str):
     #https://www.youtube.com/watch?v=XK2IU5vRJr0
     #https://www.youtube.com/@CodeTradingCafe/videos
 
-@app.post("/updatetrade")
-async def updatetrade(tradeUpdateDto:TradeUpdateDto):
+@app.post("/updatesignal")
+async def updateSignal(tradeUpdateDto:SignalUpdateDto):
     if tradeUpdateDto.symbol not in symbols:
         print(f"Ignore request because symbol is not handled yet: {tradeUpdateDto}")
         return
-    updateTrade(tradeUpdateDto)
+    updateSignalInDb(tradeUpdateDto)
     #TODO send information to clients
 
-@app.post("/tradeactivated")
-async def tradeactivated(tradeActivation:TradeActivationDto):
-    if tradeActivation.symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {tradeActivation}")
+@app.post("/signalactivated")
+async def signalActivated(signalActivation:SignalActivationDto):
+    if signalActivation.symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {signalActivation}")
         return
 
-    activeTrade(tradeActivation)
+    activateSignal(signalActivation)
     #TODO send information to clients
 
 @app.post("/storecandle")
