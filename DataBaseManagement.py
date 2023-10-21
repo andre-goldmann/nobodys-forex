@@ -121,7 +121,7 @@ def getExecutedSignals():
 
 def signalStats():
     return session.query(Signal.strategy,
-                         func.sum(Signal.id).label("trades"),
+                         func.count(Signal.id).label("trades"),
                          func.sum(Signal.profit).label("profit"),
                          func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
 
