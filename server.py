@@ -268,13 +268,13 @@ async def updateSignal(signalUpdateDto:SignalUpdateDto):
 @app.get("/signalstats")
 async def getSignalStats():
     stats = signalStats()
+    print(stats)
     result = []
     #print("###################################")
     #print(f"IgnoredSignals from db loaded:{len(signals)}")
     #print("###################################")
     for stat in stats:
-        result.append({'symbol': stat.symbol,
-                       'strategy': stat.strategy,
+        result.append({'strategy': stat.strategy,
                        'profit': stat.profit,
                        'swap': stat.swap})
 

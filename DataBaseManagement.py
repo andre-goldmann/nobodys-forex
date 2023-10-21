@@ -6,9 +6,9 @@ from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
 
-
+engine = create_engine('postgresql://tiims-subscription-management:pwd@172.30.222.24:5432/trading-db')
 # Docker-Config
-engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
+#engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -120,7 +120,7 @@ def getExecutedSignals():
                          Signal.closed).filter(Signal.openprice > 0.0).all()
 
 def signalStats():
-    return session.query(Signal.symbol,Signal.strategy, func.sum(Signal.profit), func.sum(Signal.swap)).group_by(Signal.symbol, Signal.strategy).all()
+    return session.query(Signal.strategy, func.sum(Signal.profit).label("profit"), func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
 
 def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
