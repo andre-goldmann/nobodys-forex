@@ -158,7 +158,8 @@ async def executedSignals():
                        'openprice': signal.openprice,
                        'profit': signal.profit,
                        'commision': signal.commision,
-                       'swap': signal.swap})
+                       'swap': signal.swap,
+                       'closed': signal.closed})
 
     return result
 
@@ -268,8 +269,7 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
     if historyUpdateDto.symbol not in symbols:
         print(f"Ignore request because symbol is not handled yet: {historyUpdateDto}")
         return
-    print(historyUpdateDto)
-    ##updateSignalInDb(signalUpdateDto)
+    updateSignalInDb(signalUpdateDto)
     #TODO send information to clients
 
 @app.post("/signalactivated")

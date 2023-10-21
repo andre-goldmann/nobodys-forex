@@ -116,7 +116,8 @@ def getExecutedSignals():
                          Signal.openprice,
                          Signal.profit,
                          Signal.commision,
-                         Signal.swap).filter(Signal.openprice > 0.0).all()
+                         Signal.swap,
+                         Signal.closed).filter(Signal.openprice > 0.0).all()
 
 def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
@@ -143,7 +144,7 @@ def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
 
 def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
     #print("Updating Trade", tradeUpdateDto)
-
+    print(historyUpdateDto)
     storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
     if storedSignal is not None:
         storedSignal.swap = historyUpdateDto.swap
@@ -153,6 +154,9 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
             storedSignal.closed = historyUpdateDto.closed
 
         session.commit()
+        print("Updated...")
+    else:
+        print("Not found...")
 
 def initTradingDb():
     #Trade.__table__.drop(engine)
