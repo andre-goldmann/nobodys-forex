@@ -275,6 +275,7 @@ async def getSignalStats():
     #print("###################################")
     for stat in stats:
         result.append({'strategy': stat.strategy,
+                       'trades': stat.trades,
                        'profit': stat.profit,
                        'swap': stat.swap})
 
