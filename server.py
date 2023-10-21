@@ -26,7 +26,7 @@ from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, last
 from DataBaseManagement import Session, initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
-    getExecutedSignals
+    getExecutedSignals, HistoryUpdateDto
 from RegressionCalculator import regressionCalculation, Regressions, TimeFrame
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
@@ -261,6 +261,15 @@ async def updateSignal(signalUpdateDto:SignalUpdateDto):
         print(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
         return
     updateSignalInDb(signalUpdateDto)
+    #TODO send information to clients
+
+@app.post("/updatehistory")
+async def updateHistory(historyUpdateDto:HistoryUpdateDto):
+    if historyUpdateDto.symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {historyUpdateDto}")
+        return
+    print(historyUpdateDto)
+    ##updateSignalInDb(signalUpdateDto)
     #TODO send information to clients
 
 @app.post("/signalactivated")

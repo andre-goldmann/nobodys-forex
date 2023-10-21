@@ -64,6 +64,14 @@ class SignalUpdateDto(BaseModel):
     closed:str
     commision:float
 
+class HistoryUpdateDto(BaseModel):
+    symbol:str
+    closed:str
+    magic:int
+    profit: float
+    swap:float
+    commision:float
+
 def storeSignal(signal: Signal):
     session.add(signal)
     session.commit()
@@ -132,6 +140,19 @@ def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
 
         session.commit()
     #print("Trade Updated:", storedSignal)
+
+def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
+    #print("Updating Trade", tradeUpdateDto)
+
+    storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
+    if storedSignal is not None:
+        storedSignal.swap = historyUpdateDto.swap
+        storedSignal.profit = historyUpdateDto.profit
+        storedSignal.commision = historyUpdateDto.commision
+        if historyUpdateDto.closed is not None and historyUpdateDto.closed != "" and historyUpdateDto.closed != "-":
+            storedSignal.closed = historyUpdateDto.closed
+
+        session.commit()
 
 def initTradingDb():
     #Trade.__table__.drop(engine)

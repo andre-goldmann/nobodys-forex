@@ -101,18 +101,18 @@ class SignalDto(BaseModel):
 #    message = f"Hello world!"
 #    return {"message": message}
 
-@app.post("/test")
-async def test(signal:SignalDto):
+#@app.post("/test")
+#async def test(signal:SignalDto):
 
-    sigi = SignalDto(
-        symbol=signal.symbol,
-        timestamp= signal.timestamp,
-        type = signal.type,
-        entry = signal.entry,
-        sl = signal.sl,
-        tp = signal.tp,
-        strategy = signal.strategy
-    )
+#    sigi = SignalDto(
+#        symbol=signal.symbol,
+#        timestamp= signal.timestamp,
+        #type = signal.type,
+        #entry = signal.entry,
+        #sl = signal.sl,
+        #tp = signal.tp,
+        #strategy = signal.strategy
+    #)
 
 
 @app.post("/resendsignal/")
