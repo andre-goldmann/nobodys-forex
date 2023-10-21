@@ -274,7 +274,7 @@ async def getSignalStats():
     #print(f"IgnoredSignals from db loaded:{len(signals)}")
     #print("###################################")
     for stat in stats:
-        if "" != stat.strategy:
+        if "" != stat.strategy and stat.strategy is not None:
             result.append({'strategy': stat.strategy,
                             'trades': stat.trades,
                             'profit': stat.profit,
