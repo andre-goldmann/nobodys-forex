@@ -123,6 +123,7 @@ def signalStats():
     return session.query(Signal.strategy,
                          func.count(Signal.id).label("trades"),
                          func.sum(Signal.profit).label("profit"),
+                         func.sum(Signal.commision).label("commission"),
                          func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
 
 def activateSignal(tradeActivationDto:SignalActivationDto):

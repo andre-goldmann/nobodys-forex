@@ -278,6 +278,7 @@ async def getSignalStats():
             result.append({'strategy': stat.strategy,
                             'trades': stat.trades,
                             'profit': stat.profit,
+                            'commission': stat.commission,
                             'swap': stat.swap})
 
     return result
