@@ -26,7 +26,7 @@ from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, last
 from DataBaseManagement import Session, initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
-    getExecutedSignals, HistoryUpdateDto
+    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory
 from RegressionCalculator import regressionCalculation, Regressions, TimeFrame
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
