@@ -147,7 +147,7 @@ async def signals(signal:SignalDto):
     proceedSignal(signal)
 
 @app.get("/ignoredsignals")
-async def signals():
+async def ignoredSignals():
     signals = session.query(IgnoredSignal).all()
     result = []
     #print("###################################")
