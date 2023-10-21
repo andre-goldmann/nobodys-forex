@@ -269,7 +269,7 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
     if historyUpdateDto.symbol not in symbols:
         print(f"Ignore request because symbol is not handled yet: {historyUpdateDto}")
         return
-    updateSignalInDb(historyUpdateDto)
+    updateSignalByHistory(historyUpdateDto)
     #TODO send information to clients
 
 @app.post("/signalactivated")
