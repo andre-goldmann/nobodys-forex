@@ -54,10 +54,17 @@ def lastCandle():
     assert response.status_code == 200
     assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
 
+def signalStats():
+    response = client.get("/signalstats")
+    print(response.json())
+    assert response.status_code == 200
+    assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
+
 #test_read_main()
 #defaultsr()
 #deletedata()
 #adsar()
 #2023-10-12 11:15:00.000000 +00:00
-lastCandle()
+#lastCandle()
 #storecandle()
+signalStats()
