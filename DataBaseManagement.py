@@ -119,6 +119,9 @@ def getExecutedSignals():
                          Signal.swap,
                          Signal.closed).filter(Signal.openprice > 0.0).all()
 
+def signalStats():
+    return session.query(Signal.symbol, func.sum(Signal.profit), func.sum(Signal.swap)).group_by(Signal.strategy).all()
+
 def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
 

@@ -26,7 +26,7 @@ from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, last
 from DataBaseManagement import Session, initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
-    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory
+    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats
 from RegressionCalculator import regressionCalculation, Regressions, TimeFrame
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
@@ -263,6 +263,22 @@ async def updateSignal(signalUpdateDto:SignalUpdateDto):
         return
     updateSignalInDb(signalUpdateDto)
     #TODO send information to clients
+
+
+@app.get("/signalstats")
+async def getSignalStats():
+    stats = signalStats()
+    result = []
+    #print("###################################")
+    #print(f"IgnoredSignals from db loaded:{len(signals)}")
+    #print("###################################")
+    for stat in stats:
+        result.append({'symbol': stat.symbol,
+                       'profit': stat.profit,
+                       'swap': stat.swap})
+
+    return result
+
 
 @app.post("/updatehistory")
 async def updateHistory(historyUpdateDto:HistoryUpdateDto):
