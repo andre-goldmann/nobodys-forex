@@ -246,7 +246,7 @@ def proceedSignal(signal):
             entry=signal.entry,
             sl=signal.sl,
             tp=signal.tp,
-            lots=0.5,
+            lots=0.1,
             commision=0.0,
             strategy=signal.strategy
         ))
