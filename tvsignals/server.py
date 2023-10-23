@@ -164,6 +164,9 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
     #print(df.iloc[-1])
     return df
 
+def lastCandle(symbol:str, timeFrame:TimeFrame):
+    return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
+
 @app.get("/atr/")
 async def atrEndpoint(symbol:str, timeframe: str):
     timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
@@ -303,12 +306,25 @@ def proceedSignal(signal):
             ))
             return
 
+        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4)
+        last = lastCandle(signal.symbol, TimeFrame.PERIOD_M15)
+        atrValue = atr(df)
+
+        sl = 0.0
+        tp = 0.0
+        if signal.type is "sell":
+            sl = last.CLOSE + atrValue.iloc[-1]
+            tp = last.CLOSE - atrValue.iloc[-1]
+        if signal.type is "buy":
+            sl = last.CLOSE - atrValue.iloc[-1]
+            tp = last + atrValue.iloc[-1]
+
         storeSignal(Signal(
             symbol=signal.symbol,
             type=signal.type,
             entry=signal.entry,
-            sl=signal.sl,
-            tp=signal.tp,
+            sl=sl,
+            tp=tp,
             lots=0.1,
             commision=0.0,
             strategy=signal.strategy
@@ -330,12 +346,25 @@ def proceedSignal(signal):
             ))
             return
 
+        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4)
+        last = lastCandle(signal.symbol, TimeFrame.PERIOD_M15)
+        atrValue = atr(df)
+
+        sl = 0.0
+        tp = 0.0
+        if signal.type is "sell":
+            sl = last.CLOSE + atrValue.iloc[-1]
+            tp = last.CLOSE - atrValue.iloc[-1]
+        if signal.type is "buy":
+            sl = last.CLOSE - atrValue.iloc[-1]
+            tp = last + atrValue.iloc[-1]
+
         storeSignal(Signal(
             symbol=signal.symbol,
             type=signal.type,
             entry=signal.entry,
-            sl=signal.sl,
-            tp=signal.tp,
+            sl=sl,
+            tp=tp,
             lots=0.1,
             commision=0.0,
             strategy=signal.strategy
