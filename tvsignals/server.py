@@ -317,7 +317,7 @@ def proceedSignal(signal):
             tp = last.CLOSE - atrValue.iloc[-1]
         if signal.type is "buy":
             sl = last.CLOSE - atrValue.iloc[-1]
-            tp = last + atrValue.iloc[-1]
+            tp = last.CLOSE + atrValue.iloc[-1]
 
         storeSignal(Signal(
             symbol=signal.symbol,
@@ -357,7 +357,7 @@ def proceedSignal(signal):
             tp = last.CLOSE - atrValue.iloc[-1]
         if signal.type is "buy":
             sl = last.CLOSE - atrValue.iloc[-1]
-            tp = last + atrValue.iloc[-1]
+            tp = last.CLOSE + atrValue.iloc[-1]
 
         storeSignal(Signal(
             symbol=signal.symbol,
