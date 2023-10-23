@@ -190,7 +190,7 @@ async def createsignal(symbol: Annotated[str, Form()],
     ))
     return "Order created"
 
-@app.delete("/deletesignal/")
+@app.post("/deletesignal/")
 async def deleteOrder(id: int):
     deleteSignalInDb(id)
     return "Signal deleted"
