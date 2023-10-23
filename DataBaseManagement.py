@@ -100,7 +100,8 @@ def getWaitingSignals():
                          Signal.sl,
                          Signal.tp,
                          Signal.lots,
-                         Signal.stamp).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
+                         Signal.stamp,
+                         Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
 
 def getExecutedSignals():
     return session.query(Signal.id,
