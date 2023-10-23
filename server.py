@@ -191,7 +191,7 @@ async def createsignal(symbol: Annotated[str, Form()],
     return "Order created"
 
 @app.delete("/deletesignal/")
-async def deleteOrder(id: Annotated[int, Form()]):
+async def deleteOrder(id: int):
     deleteSignalInDb(id)
     return "Signal deleted"
 
