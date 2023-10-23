@@ -190,6 +190,7 @@ async def createsignal(symbol: Annotated[str, Form()],
     ))
     return "Order created"
 
+#need to use form here, because delete does not work
 @app.post("/deletesignal/")
 async def deleteOrder(id: Annotated[int, Form()]):
     deleteSignalInDb(id)

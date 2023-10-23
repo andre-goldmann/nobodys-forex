@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 import pandas as pd
 from pydantic import BaseModel
-from sqlalchemy import String, Enum, DateTime, UniqueConstraint, func
+from sqlalchemy import String, Enum, DateTime, UniqueConstraint
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 

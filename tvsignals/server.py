@@ -1,3 +1,4 @@
+import pandas as pd
 from fastapi import FastAPI, Request, status, Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -7,6 +8,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy import String
 from sqlalchemy import create_engine, DateTime, func
+from sqlalchemy import String, Enum, DateTime, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Enum
@@ -14,6 +16,7 @@ import enum
 import uvicorn
 from typing_extensions import Annotated
 
+#engine = create_engine('postgresql://tiims-subscription-management:pwd@172.26.173.247:5432/trading-db')
 engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -87,6 +90,27 @@ class Signal(Base):
     commision: Mapped[float] = mapped_column(nullable=True, default="")
     strategy: Mapped[str] = mapped_column(nullable=True, default="")
 
+class CandlesEntity(Base):
+    __tablename__ = "Candles"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    SYMBOL: Mapped[str] = mapped_column(String(6))
+    TIMEFRAME: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    DATETIME: Mapped[DateTime] = mapped_column(DateTime(timezone=True))
+    ##TIMESTAMP:Mapped[DateTime] = mapped_column(DateTime(timezone=True))
+    OPEN: Mapped[float]
+    HIGH: Mapped[float]
+    LOW: Mapped[float]
+    CLOSE: Mapped[float]
+    TICKVOL: Mapped[float]
+    VOL: Mapped[float]
+    SPREAD: Mapped[float]
+    UniqueConstraint("SYMBOL", "TIMEFRAME", "DATETIME", "OPEN", "CLOSE", name="uix_1")
+    #STAMP: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    def __repr__(self) -> str:
+        return (f"Candles(id={self.id!r}, DATETIME={self.DATETIME!r}"
+                f", OPEN={self.OPEN!r}, CLOSE={self.CLOSE!r})")
+
 class SignalDto(BaseModel):
     symbol:str
     timestamp:str
@@ -101,18 +125,57 @@ class SignalDto(BaseModel):
 #    message = f"Hello world!"
 #    return {"message": message}
 
-#@app.post("/test")
-#async def test(signal:SignalDto):
+def wwma(values, n):
+    """
+     J. Welles Wilder's EMA
+    """
+    return values.ewm(alpha=1/n, adjust=False).mean()
 
-#    sigi = SignalDto(
-#        symbol=signal.symbol,
-#        timestamp= signal.timestamp,
-        #type = signal.type,
-        #entry = signal.entry,
-        #sl = signal.sl,
-        #tp = signal.tp,
-        #strategy = signal.strategy
-    #)
+def atr(df, n=14):
+    data = df.copy()
+    high = data['HIGH']
+    low = data['LOW']
+    close = data['CLOSE']
+    data['tr0'] = abs(high - low)
+    data['tr1'] = abs(high - close.shift())
+    data['tr2'] = abs(low - close.shift())
+    tr = data[['tr0', 'tr1', 'tr2']].max(axis=1)
+    atr = wwma(tr, n)
+    return atr
+
+def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
+    df = pd.read_sql_query(
+        sql = session.query(CandlesEntity.SYMBOL,
+                            CandlesEntity.TIMEFRAME,
+                            CandlesEntity.DATETIME,
+                            CandlesEntity.OPEN,
+                            CandlesEntity.HIGH,
+                            CandlesEntity.LOW,
+                            CandlesEntity.CLOSE,
+                            CandlesEntity.TICKVOL,
+                            CandlesEntity.VOL,
+                            CandlesEntity.SPREAD)
+        .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
+        .statement,
+        con = engine
+    )
+    print(len(df), " database entries loaded for ",timeFrame)
+    #print("Last row: ")
+    #print(df.iloc[-1])
+    return df
+
+@app.get("/atr/")
+async def atrEndpoint(symbol:str, timeframe: str):
+    timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
+
+    df = loadDfFromDb(symbol, timeframeEnum)
+    atrValue = atr(df)
+    x = df.iloc[-1].CLOSE - atrValue.iloc[-1]
+    y  = df.iloc[-1].CLOSE + atrValue.iloc[-1]
+    return {'atr:': atrValue.iloc[-1],
+            'lastprice': df.iloc[-1].CLOSE,
+            'lastprice-atr': x,
+            'lastprice+atr': y}
 
 
 @app.post("/resendsignal/")
