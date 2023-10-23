@@ -191,7 +191,7 @@ async def createsignal(symbol: Annotated[str, Form()],
     return "Order created"
 
 @app.post("/deletesignal/")
-async def deleteOrder(id: int):
+async def deleteOrder(id: Annotated[int, Form()]):
     deleteSignalInDb(id)
     return "Signal deleted"
 
