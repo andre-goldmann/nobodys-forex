@@ -5,3 +5,4 @@ fastapi
 pydantic
 psycopg2
 python-multipart
+pandas
