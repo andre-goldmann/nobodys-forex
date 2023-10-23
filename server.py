@@ -137,7 +137,7 @@ async def waitingSignals():
                        'tp': signal.tp,
                        'lots': signal.lots,
                        'stamp': signal.stamp,
-                       'strategy': signal.stamp})
+                       'strategy': signal.strategy})
 
     return result
 
