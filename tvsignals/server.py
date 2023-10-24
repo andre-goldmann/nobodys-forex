@@ -16,7 +16,6 @@ import enum
 import uvicorn
 from typing_extensions import Annotated
 
-#engine = create_engine('postgresql://tiims-subscription-management:pwd@172.26.173.247:5432/trading-db')
 engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 Session = sessionmaker(bind=engine)
 session = Session()
