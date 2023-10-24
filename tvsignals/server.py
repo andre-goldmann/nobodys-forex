@@ -307,17 +307,16 @@ def proceedSignal(signal):
             return
 
         df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4)
-        last = lastCandle(signal.symbol, TimeFrame.PERIOD_M15)
         atrValue = atr(df)
 
         sl = 0.0
         tp = 0.0
-        if signal.type is "sell":
-            sl = last.CLOSE + atrValue.iloc[-1]
-            tp = last.CLOSE - atrValue.iloc[-1]
-        if signal.type is "buy":
-            sl = last.CLOSE - atrValue.iloc[-1]
-            tp = last.CLOSE + atrValue.iloc[-1]
+        if signal.type == "sell":
+            sl = signal.entry + atrValue.iloc[-1]
+            tp = signal.entry - atrValue.iloc[-1]
+        if signal.type == "buy":
+            sl = signal.entry - atrValue.iloc[-1]
+            tp = signal.entry + atrValue.iloc[-1]
 
         storeSignal(Signal(
             symbol=signal.symbol,
@@ -347,17 +346,16 @@ def proceedSignal(signal):
             return
 
         df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4)
-        last = lastCandle(signal.symbol, TimeFrame.PERIOD_M15)
         atrValue = atr(df)
 
         sl = 0.0
         tp = 0.0
-        if signal.type is "sell":
-            sl = last.CLOSE + atrValue.iloc[-1]
-            tp = last.CLOSE - atrValue.iloc[-1]
-        if signal.type is "buy":
-            sl = last.CLOSE - atrValue.iloc[-1]
-            tp = last.CLOSE + atrValue.iloc[-1]
+        if signal.type == "sell":
+            sl = signal.entry + atrValue.iloc[-1]
+            tp = signal.entry - atrValue.iloc[-1]
+        if signal.type == "buy":
+            sl = signal.entry - atrValue.iloc[-1]
+            tp = signal.entry + atrValue.iloc[-1]
 
         storeSignal(Signal(
             symbol=signal.symbol,
