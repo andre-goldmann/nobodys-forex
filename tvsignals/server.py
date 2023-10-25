@@ -264,22 +264,22 @@ def proceedSignal(signal):
         ))
         return
 
+    #because of setting sl and tp here we can not check it here anymore
+    #if "buy" == signal.type and signal.sl > signal.tp:
+    #    print(f"Ignore (1. Condition) Buy-Signal: {signal}")
+    #    storeIgnoredSignal(IgnoredSignal(
+    #        json=jsonSignal,
+    #        reason=f"Ignore (1. Condition) Buy-Signal: {signal}"
+    #    ))
+    #    return
 
-    if "buy" == signal.type and signal.sl > signal.tp:
-        print(f"Ignore (1. Condition) Buy-Signal: {signal}")
-        storeIgnoredSignal(IgnoredSignal(
-            json=jsonSignal,
-            reason=f"Ignore (1. Condition) Buy-Signal: {signal}"
-        ))
-        return
-
-    if "sell" == signal.type and signal.sl < signal.tp:
-        print(f"Ignore (1. Condition) Sell-Signal: {signal}")
-        storeIgnoredSignal(IgnoredSignal(
-            json=jsonSignal,
-            reason=f"Ignore (1. Condition) Sell-Signal: {signal}"
-        ))
-        return
+    #if "sell" == signal.type and signal.sl < signal.tp:
+    #    print(f"Ignore (1. Condition) Sell-Signal: {signal}")
+    #    storeIgnoredSignal(IgnoredSignal(
+    #        json=jsonSignal,
+    #        reason=f"Ignore (1. Condition) Sell-Signal: {signal}"
+    #    ))
+    #    return
 
     regressionLineD1 = Session().query(Regressions).filter(
         Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
