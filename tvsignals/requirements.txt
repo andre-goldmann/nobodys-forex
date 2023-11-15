@@ -6,3 +6,4 @@ pydantic
 psycopg2
 python-multipart
 pandas
+python-dotenv

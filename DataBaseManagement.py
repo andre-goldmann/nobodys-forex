@@ -5,9 +5,13 @@ from sqlalchemy import String
 from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Docker-Config
-engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
+engine = create_engine(os.environ['POSTGRES_URL'])
 Session = sessionmaker(bind=engine)
 session = Session()
 

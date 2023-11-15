@@ -15,8 +15,13 @@ from sqlalchemy import Enum
 import enum
 import uvicorn
 from typing_extensions import Annotated
+from dotenv import load_dotenv
+import os
 
-engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
+load_dotenv()
+
+#engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
+engine = create_engine(os.environ['POSTGRES_URL'])
 Session = sessionmaker(bind=engine)
 session = Session()
 
