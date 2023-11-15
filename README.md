@@ -18,3 +18,8 @@ curl -H 'Content-Type: application/json; charset=utf-8' -d '{"symbol": "BTCUSD",
                                                             {"symbol": "BTCUSD", "timestamp": "11.03.2023", "type":"buy", "entry": 1.0,     "sl": 1.1, "tp": 1.2, "strategy": "HalfTrend"}
                                                             {"symbol": "BTCUSD", "timestamp": "11.03.2023", "type":"sell","entry":27498.22, "sl":27390,"tp":400, "strategy":"TestIndicator"}
                                                             {"symbol": "GBPUSD", "timestamp": "11.03.2023", "type":"buy", "entry": 1.0, "sl": 1.1, "tp": 1.2, "strategy": "HalfTrend"}        
+
+
+docker compose up --build
+If you want to stop the containers, type: "docker-compose down"
+If you want to remove the containers, type: "docker-compose down -v" after this command finished, type: "docker-compose down --rmi all"
