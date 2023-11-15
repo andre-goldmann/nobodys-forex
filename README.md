@@ -27,3 +27,4 @@ If you want to remove the containers, type: "docker-compose down -v" after this 
 URLS:
 http://85.215.32.163:6081/linesinfo/?symbol=XRPUSD&timeframe=PERIOD_D1
 http://85.215.32.163:6081/linesinfo/?symbol=XRPUSD&timeframe=PERIOD_M15
+http://85.215.32.163:6081/lastCandle/?symbol=AUDUSD&timeFrame=PERIOD_D1
