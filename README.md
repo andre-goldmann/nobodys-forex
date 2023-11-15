@@ -23,3 +23,7 @@ curl -H 'Content-Type: application/json; charset=utf-8' -d '{"symbol": "BTCUSD",
 docker compose up --build
 If you want to stop the containers, type: "docker-compose down"
 If you want to remove the containers, type: "docker-compose down -v" after this command finished, type: "docker-compose down --rmi all"
+
+URLS:
+http://85.215.32.163:6081/linesinfo/?symbol=XRPUSD&timeframe=PERIOD_D1
+http://85.215.32.163:6081/linesinfo/?symbol=XRPUSD&timeframe=PERIOD_M15
