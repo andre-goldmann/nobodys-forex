@@ -216,21 +216,6 @@ async def resendsignal(
 async def signals(signal:SignalDto):
     proceedSignal(signal)
 
-@app.get("/ignoredsignals")
-async def ignoredSignals():
-    signals = session.query(IgnoredSignal).all()
-    result = []
-    #print("###################################")
-    #print(f"IgnoredSignals from db loaded:{len(signals)}")
-    #print("###################################")
-    for signal in signals:
-        result.append({'id': signal.id,
-                       'json': signal.json,
-                       'reason': signal.reason})
-
-    return result
-
-
 def storeSignal(signal: Signal):
     session.add(signal)
     session.commit()

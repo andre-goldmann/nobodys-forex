@@ -26,7 +26,7 @@ from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, last
 from DataBaseManagement import Session, initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
-    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats
+    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats, IgnoredSignal, getIgnoredSignals
 from RegressionCalculator import regressionCalculation, Regressions, TimeFrame
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
@@ -123,6 +123,20 @@ async def getLastCandleStamp(symbol:str, timeFrame:str):
     if last is None:
         return {'stamp': "2016.01.01 00:00:00"}
     return {'stamp': last.DATETIME}
+
+@app.get("/ignoredsignals")
+async def ignoredSignals():
+    signals = getIgnoredSignals()
+    result = []
+    #print("###################################")
+    #print(f"IgnoredSignals from db loaded:{len(signals)}")
+    #print("###################################")
+    for signal in signals:
+        result.append({'id': signal.id,
+                       'json': signal.json,
+                       'reason': signal.reason})
+
+    return result
 
 @app.get("/waitingsignalsx")
 async def waitingSignals():

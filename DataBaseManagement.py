@@ -52,6 +52,12 @@ class Signal(Base):
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
 
+class IgnoredSignal(Base):
+    __tablename__ = "IgnoredSignals"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    json: Mapped[str] = mapped_column(String(64000))
+    reason: Mapped[str] = mapped_column(String(64000))
+
 class SignalActivationDto(BaseModel):
     symbol:str
     timestamp:str
@@ -94,6 +100,9 @@ def deleteSignalInDb(id:int):
     if storeSignal is not None:
         session.delete(storeSignal)
         session.commit()
+
+def getIgnoredSignals():
+    session.query(IgnoredSignal).all()
 
 def getWaitingSignals():
     return session.query(Signal.id,
