@@ -124,7 +124,7 @@ async def getLastCandleStamp(symbol:str, timeFrame:str):
         return {'stamp': "2016.01.01 00:00:00"}
     return {'stamp': last.DATETIME}
 
-@app.get("/waitingsignals")
+@app.get("/waitingsignalsx")
 async def waitingSignals():
     signals = getWaitingSignals()
     result = []
