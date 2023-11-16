@@ -21,7 +21,7 @@
 
     async function loadIgnoredSignals() {
         //http://85.215.32.163/ignoredsignals
-        await fetch(HOST + "/ignoredsignals")
+        await fetch(HOST + ":6081/ignoredsignals")
             .then(response => response.json())
             .then(data => {
                 //let trades:Trade[] = data;

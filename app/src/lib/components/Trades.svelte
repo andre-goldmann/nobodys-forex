@@ -19,7 +19,7 @@
     }
 
     async function loadUnActiveTrades(){
-        await fetch(HOST + "/unActiveTrades")
+        await fetch(HOST + "/waitingsignalsx")
             .then(response => response.json())
             .then(data => {
                 //let trades:Trade[] = data;

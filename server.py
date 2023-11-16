@@ -123,6 +123,7 @@ async def getLastCandleStamp(symbol:str, timeFrame:str):
         return {'stamp': "2016.01.01 00:00:00"}
     return {'stamp': last.DATETIME}
 
+
 @app.get("/ignoredsignals")
 async def ignoredSignals():
     signals = getIgnoredSignals()
