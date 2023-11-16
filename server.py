@@ -32,7 +32,6 @@ from SupportResistanceRepository import storeSupportResistance, SupportResistanc
     deleteSupportResistance
 from trendline_breakout import trendline_breakout
 import sys
-from kafka import KafkaConsumer
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"

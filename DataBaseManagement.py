@@ -102,7 +102,7 @@ def deleteSignalInDb(id:int):
         session.commit()
 
 def getIgnoredSignals():
-    session.query(IgnoredSignal).all()
+    return session.query(IgnoredSignal).all()
 
 def getWaitingSignals():
     return session.query(Signal.id,
