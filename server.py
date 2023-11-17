@@ -155,6 +155,24 @@ async def waitingSignals():
 
     return result
 
+@app.get("/signalstats")
+async def getSignalStats():
+    stats = signalStats()
+    print(stats)
+    result = []
+    #print("###################################")
+    #print(f"IgnoredSignals from db loaded:{len(signals)}")
+    #print("###################################")
+    for stat in stats:
+        if "" != stat.strategy and stat.strategy is not None:
+            result.append({'strategy': stat.strategy,
+                           'trades': stat.trades,
+                           'profit': stat.profit,
+                           'commission': stat.commission,
+                           'swap': stat.swap})
+
+    return result
+
 @app.get("/executedsignals")
 async def executedSignals():
     signals = getExecutedSignals()
@@ -282,25 +300,6 @@ async def updateSignal(signalUpdateDto:SignalUpdateDto):
         return
     updateSignalInDb(signalUpdateDto)
     #TODO send information to clients
-
-
-@app.get("/signalstats")
-async def getSignalStats():
-    stats = signalStats()
-    print(stats)
-    result = []
-    #print("###################################")
-    #print(f"IgnoredSignals from db loaded:{len(signals)}")
-    #print("###################################")
-    for stat in stats:
-        if "" != stat.strategy and stat.strategy is not None:
-            result.append({'strategy': stat.strategy,
-                            'trades': stat.trades,
-                            'profit': stat.profit,
-                            'commission': stat.commission,
-                            'swap': stat.swap})
-
-    return result
 
 
 @app.post("/updatehistory")

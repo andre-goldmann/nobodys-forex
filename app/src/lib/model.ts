@@ -37,3 +37,11 @@ export interface IgnoredSignal {
     json: string,
     reason: string
 }
+
+export interface Strategy {
+    strategy:string,
+    profit:number,
+    swap:number,
+    trades:number,
+    commission:number
+}
