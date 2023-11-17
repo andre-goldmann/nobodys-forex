@@ -281,18 +281,18 @@ def proceedSignal(signal):
 
         if "buy" == signal.type and signal.entry < regressionLineH4[0].endValue:
             print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
-            storeIgnoredSignal(IgnoredSignal(
-                json=jsonSignal,
-                reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
-            ))
+            #storeIgnoredSignal(IgnoredSignal(
+            #    json=jsonSignal,
+            #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
+            #))
             return
 
         if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
             print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
-            storeIgnoredSignal(IgnoredSignal(
-                json=jsonSignal,
-                reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
-            ))
+            #storeIgnoredSignal(IgnoredSignal(
+            #    json=jsonSignal,
+            #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
+            #))
             return
 
         df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4)
@@ -320,21 +320,21 @@ def proceedSignal(signal):
     elif len(regressionLineD1) > 0:
         if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
             print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
-            storeIgnoredSignal(IgnoredSignal(
-                json=jsonSignal,
-                reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
-            ))
+            #storeIgnoredSignal(IgnoredSignal(
+            #    json=jsonSignal,
+            #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
+            #))
             return
 
         if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
             print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
-            storeIgnoredSignal(IgnoredSignal(
-                json=jsonSignal,
-                reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
-            ))
+            #storeIgnoredSignal(IgnoredSignal(
+            #    json=jsonSignal,
+            #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
+            #))
             return
 
-        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4)
+        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1)
         atrValue = atr(df)
 
         sl = 0.0
