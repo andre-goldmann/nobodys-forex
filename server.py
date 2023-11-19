@@ -23,7 +23,6 @@ from sklearn.neighbors import KernelDensity
 from sqlalchemy.orm import Session
 from typing_extensions import Annotated
 
-from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, lastCandle, storeData, countEntries
 from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \

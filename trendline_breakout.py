@@ -1,7 +1,6 @@
 import numpy as np
 
-from CandleStorageHandler import loadDfFromDb
-from DataBaseManagement import TimeFrame
+from DataBaseManagement import TimeFrame, loadDfFromDb
 from trendline_automation import fit_trendlines_single
 
 

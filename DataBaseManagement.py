@@ -1,12 +1,17 @@
+from utils import loadData
+from datetime import datetime
 import sys
 import traceback
 from datetime import timedelta
 from timeit import default_timer as timer
 
+from sqlalchemy import String, Enum, DateTime, UniqueConstraint
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+
 import pandas as pd
 import statsmodels.api as sm
 
-from CandleStorageHandler import loadDfFromDb
 from DataBaseManagement import Session, TimeFrame, engine
 
 import enum
@@ -54,6 +59,27 @@ class Regressions(Base):
     def __repr__(self) -> str:
         return (f"Regression(id={self.id!r}, symbol={self.symbol!r}, timeFrame={self.timeFrame!r}, startTime={self.startTime!r}, endTime={self.endTime!r})"
                 f", startValue={self.startValue!r}, endValue={self.endValue!r})")
+
+class CandlesEntity(Base):
+    __tablename__ = "Candles"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    SYMBOL: Mapped[str] = mapped_column(String(6))
+    TIMEFRAME: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    DATETIME: Mapped[DateTime] = mapped_column(DateTime(timezone=True))
+    ##TIMESTAMP:Mapped[DateTime] = mapped_column(DateTime(timezone=True))
+    OPEN: Mapped[float]
+    HIGH: Mapped[float]
+    LOW: Mapped[float]
+    CLOSE: Mapped[float]
+    TICKVOL: Mapped[float]
+    VOL: Mapped[float]
+    SPREAD: Mapped[float]
+    UniqueConstraint("SYMBOL", "TIMEFRAME", "DATETIME", "OPEN", "CLOSE", name="uix_1")
+    #STAMP: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    def __repr__(self) -> str:
+        return (f"Candles(id={self.id!r}, DATETIME={self.DATETIME!r}"
+                f", OPEN={self.OPEN!r}, CLOSE={self.CLOSE!r})")
 
 class Signal(Base):
     __tablename__ = "Trades"
@@ -107,6 +133,45 @@ class HistoryUpdateDto(BaseModel):
     swap:float
     commision:float
 
+class CandlesDto(BaseModel):
+    #wird nicht gespeichert, für jedes Symbol ein DB
+    symbol:str
+    TIMEFRAME:str
+    DATETIME:str
+    OPEN:float
+    HIGH:float
+    LOW:float
+    CLOSE:float
+    TICKVOL:float
+    VOL:float
+    SPREAD:int
+
+def storeData(symbol:str, timeFrame:TimeFrame):
+    print(f"storeData for: {symbol}-{timeFrame}")
+
+    timeFrameStr = timeFrame.name.replace("PERIOD_", "")
+    file = f"data/{symbol}_{timeFrameStr}.csv"
+    df = loadData(file)
+
+    #import pandas_ta as ta
+    #if TimeFrame.PERIOD_M15 == timeFrame:
+    #   df["EMA20"] = ta.ema(df["CLOSE"], length=200)
+    #  dfD1 = loadData('data/EURUSD_Daily_201501020000_202309290000.csv')
+
+    df['TIMEFRAME'] = timeFrame.name
+    if TimeFrame.PERIOD_D1 == timeFrame or TimeFrame.PERIOD_W1 == timeFrame:
+        df['TIME'] = "00:00:00"
+    df['SYMBOL'] = symbol
+    df['DATETIME'] = df['DATE'] + ' ' + df['TIME']
+    #df['TIMESTAMP'] =  df['DATETIME'].map(lambda dtStr: time.mktime(datetime.datetime.strptime(dtStr, "%Y.%m.%d %H:%M:%S").timetuple()))
+    df['DATETIME'] = df['DATETIME'].astype('datetime64[s]')
+    df = df.set_index('DATETIME')
+    df.drop(columns=['DATE', 'TIME'])
+    df = df.dropna()
+    df = df.drop('DATE', axis=1)
+    df = df.drop('TIME', axis=1)
+    df.to_sql(name='Candles', con=engine, if_exists='append')
+
 def storeSignal(signal: Signal):
     with Session.begin() as session:
         session.add(signal)
@@ -122,6 +187,100 @@ def modifySignalInDb(id:int, type:str, entry:float, sl:float, tp:float, lots:flo
             storeSignal.tp=tp
             storeSignal.lots=lots
             session.commit()
+
+def storeCandleInDb(candle:CandlesDto):
+    with Session.begin() as session:
+        #producer.send('test:1:1', b'another_message')
+        #producer.send('test:1:1',
+        #              {"symbol": candle.symbol,
+        #                    "TIMEFRAME": candle.TIMEFRAME,
+        #                    "DATETIME": candle.DATETIME,
+        #                    "OPEN": candle.OPEN,
+        #                    "HIGH": candle.HIGH,
+        #                    "LOW": candle.LOW,
+        #                    "CLOSE": candle.CLOSE,
+        #                    "TICKVOL": candle.TICKVOL,
+        #                    "VOL": candle.VOL,
+        #                    "SPREAD": candle.SPREAD})
+
+        #producer.send('test:1:1',
+        #              {'foo': 'bar'})
+
+
+        #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
+        timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
+        count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
+                                                    CandlesEntity.TIMEFRAME == timeFrame,
+                                                    CandlesEntity.CLOSE == candle.CLOSE,
+                                                    CandlesEntity.OPEN == candle.OPEN).count()
+
+        if count == 0:
+            spongebob = CandlesEntity(
+                SYMBOL=candle.symbol,
+                TIMEFRAME= timeFrame,
+                # Falscher Datentyp hier wird ein String anstelle from sqlalchemy import DateTime gespeichert
+                # DATETIME= candle.DATETIME,
+                DATETIME=datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M"),
+                #DATETIME=candle.DATETIME.astype('datetime64[s]')
+                #DATETIME= #time.mktime(datetime.datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M:%S").timetuple()))
+                OPEN=candle.HIGH,
+                HIGH=candle.HIGH,
+                LOW=candle.LOW,
+                CLOSE=candle.CLOSE,
+                TICKVOL=candle.TICKVOL,
+                VOL=candle.VOL,
+                SPREAD=candle.SPREAD,
+            )
+            last = lastCandle(candle.symbol, timeFrame)
+            print(f"New: {candle} ----- last {last}")
+            session.add(spongebob)
+            session.commit()
+        else:
+            print("Allreadys exists!!!")
+
+
+def lastCandle(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
+
+#def lastCandle(symbol:str, timeFrame:TimeFrame):
+#    return session.query(CandlesEntity.SYMBOL,
+#                         CandlesEntity.TIMEFRAME,
+#                         CandlesEntity.DATETIME,
+#                         CandlesEntity.OPEN,
+#                         CandlesEntity.HIGH,
+#                         CandlesEntity.LOW,
+#                         CandlesEntity.CLOSE,
+#                         CandlesEntity.TICKVOL,
+#                         CandlesEntity.VOL,
+#                         CandlesEntity.SPREAD).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).first()
+
+
+def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        df = pd.read_sql_query(
+            sql = session.query(CandlesEntity.SYMBOL,
+                                CandlesEntity.TIMEFRAME,
+                                CandlesEntity.DATETIME,
+                                CandlesEntity.OPEN,
+                                CandlesEntity.HIGH,
+                                CandlesEntity.LOW,
+                                CandlesEntity.CLOSE,
+                                CandlesEntity.TICKVOL,
+                                CandlesEntity.VOL,
+                                CandlesEntity.SPREAD)
+            .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
+            .statement,
+            con = engine
+        )
+        print(len(df), " database entries loaded for ",timeFrame)
+        print("Last row: ")
+        print(df.iloc[-1])
+        return df
+
+def countEntries(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).count()
 
 def deleteSignalInDb(id:int):
     with Session.begin() as session:
