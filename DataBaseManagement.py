@@ -12,8 +12,6 @@ from sqlalchemy.orm import mapped_column
 import pandas as pd
 import statsmodels.api as sm
 
-from DataBaseManagement import Session, TimeFrame, engine
-
 import enum
 
 from pydantic import BaseModel
