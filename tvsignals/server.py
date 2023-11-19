@@ -23,8 +23,6 @@ load_dotenv()
 #engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
 engine = create_engine(os.environ['POSTGRES_URL'], pool_size=20, max_overflow=0)
 Session = sessionmaker(bind=engine)
-session = Session()
-
 app = FastAPI()
 
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
@@ -148,28 +146,31 @@ def atr(df, n=14):
     return atr
 
 def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
-    df = pd.read_sql_query(
-        sql = session.query(CandlesEntity.SYMBOL,
-                            CandlesEntity.TIMEFRAME,
-                            CandlesEntity.DATETIME,
-                            CandlesEntity.OPEN,
-                            CandlesEntity.HIGH,
-                            CandlesEntity.LOW,
-                            CandlesEntity.CLOSE,
-                            CandlesEntity.TICKVOL,
-                            CandlesEntity.VOL,
-                            CandlesEntity.SPREAD)
-        .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
-        .statement,
-        con = engine
-    )
-    print(len(df), " database entries loaded for ",timeFrame)
-    #print("Last row: ")
-    #print(df.iloc[-1])
-    return df
+    with Session.begin() as session:
+        df = pd.read_sql_query(
+            sql = session.query(CandlesEntity.SYMBOL,
+                                CandlesEntity.TIMEFRAME,
+                                CandlesEntity.DATETIME,
+                                CandlesEntity.OPEN,
+                                CandlesEntity.HIGH,
+                                CandlesEntity.LOW,
+                                CandlesEntity.CLOSE,
+                                CandlesEntity.TICKVOL,
+                                CandlesEntity.VOL,
+                                CandlesEntity.SPREAD)
+            .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
+            .statement,
+            con = engine
+        )
+        print(len(df), " database entries loaded for ",timeFrame)
+        #print("Last row: ")
+        #print(df.iloc[-1])
+        return df
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
-    return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
+    with Session.begin() as session:
+        candle = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
+        return session.expunge(candle)
 
 @app.get("/atr/")
 async def atrEndpoint(symbol:str, timeframe: str):
@@ -206,23 +207,27 @@ async def resendsignal(
         strategy = strategy
     )
     proceedSignal(signal)
-    # TODO delete IgnoredSignal when comes here
-    signal = session.query(IgnoredSignal).filter(IgnoredSignal.id == id).first()
-    if signal is not None:
-        session.delete(signal)
-        session.commit()
+
+    with Session.begin() as session:
+        # TODO delete IgnoredSignal when comes here
+        signal = session.query(IgnoredSignal).filter(IgnoredSignal.id == id).first()
+        if signal is not None:
+            session.delete(signal)
+            session.commit()
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
     proceedSignal(signal)
 
 def storeSignal(signal: Signal):
-    session.add(signal)
-    session.commit()
+    with Session.begin() as session:
+        session.add(signal)
+        session.commit()
 
 def storeIgnoredSignal(signal: IgnoredSignal):
-    session.add(signal)
-    session.commit()
+    with Session.begin() as session:
+        session.add(signal)
+        session.commit()
 
 def proceedSignal(signal):
     # no need to check for trend in TradingView we send everything
