@@ -27,7 +27,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats, getIgnoredSignals, TimeFrame, \
-    getLinesInfo, regressionCalculation
+    getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
 from trendline_breakout import trendline_breakout
