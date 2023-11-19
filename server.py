@@ -20,7 +20,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from scipy.signal import argrelextrema, find_peaks
 from sklearn.neighbors import KernelDensity
-from sqlalchemy.orm import Session
 from typing_extensions import Annotated
 
 from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \

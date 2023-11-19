@@ -1,27 +1,23 @@
-from utils import loadData
-from datetime import datetime
+import enum
+import os
 import sys
 import traceback
+from datetime import datetime
 from datetime import timedelta
 from timeit import default_timer as timer
 
-from sqlalchemy import String, Enum, DateTime, UniqueConstraint
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-
 import pandas as pd
 import statsmodels.api as sm
-
-import enum
-
+from dotenv import load_dotenv
 from pydantic import BaseModel
 from sqlalchemy import Enum
 from sqlalchemy import String
+from sqlalchemy import UniqueConstraint
 from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-import os
+
+from utils import loadData
 
 load_dotenv()
 
