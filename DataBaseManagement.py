@@ -291,11 +291,13 @@ def deleteSignalInDb(id:int):
 
 def getIgnoredSignals():
     with Session.begin() as session:
-        return session.query(IgnoredSignal).all()
+        signals = session.query(IgnoredSignal).all()
+        session.expunge_all()
+        return signals
 
 def getWaitingSignals():
     with Session.begin() as session:
-        return session.query(Signal.id,
+        signals = session.query(Signal.id,
                              Signal.symbol,
                              Signal.type,
                              Signal.entry,
@@ -304,10 +306,12 @@ def getWaitingSignals():
                              Signal.lots,
                              Signal.stamp,
                              Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
+        session.expunge_all()
+        return signals
 
 def getExecutedSignals():
     with Session.begin() as session:
-        return session.query(Signal.id,
+        signals = session.query(Signal.id,
                              Signal.symbol,
                              Signal.type,
                              Signal.entry,
@@ -322,14 +326,18 @@ def getExecutedSignals():
                              Signal.commision,
                              Signal.swap,
                              Signal.closed).filter(Signal.openprice > 0.0).all()
+        session.expunge_all()
+        return signals
 
 def signalStats():
     with Session.begin() as session:
-        return session.query(Signal.strategy,
+        signalStats = session.query(Signal.strategy,
                              func.count(Signal.id).label("trades"),
                              func.sum(Signal.profit).label("profit"),
                              func.sum(Signal.commision).label("commission"),
                              func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
+        session.expunge_all()
+        return signalStats
 
 def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
@@ -357,9 +365,11 @@ def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
 
 def getLinesInfo(symbol, timeframeEnum):
     with Session.begin() as session:
-        return Session().query(Regressions).filter(
+        infos = session.query(Regressions).filter(
             Regressions.symbol == symbol,
             Regressions.timeFrame == timeframeEnum).all()
+        session.expunge_all()
+        return infos
 
 def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
     #print("Updating Trade", tradeUpdateDto)
