@@ -27,9 +27,8 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats, getIgnoredSignals, TimeFrame, \
-    getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData
-from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
-    deleteSupportResistance
+    getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
+    getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance
 from trendline_breakout import trendline_breakout
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -272,9 +271,7 @@ async def srlevels(symbol:str):
         print(f"Ignore request because symbol is not handled yet: {symbol}")
         return
 
-    result = Session().query(SupportResistance).filter(
-        SupportResistance.symbol == symbol
-    ).all()
+    result = getSrLevels(symbol)
 
     if len(result) > 0:
         json_compatible_item_data = jsonable_encoder(result)

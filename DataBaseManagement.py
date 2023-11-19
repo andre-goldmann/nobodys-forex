@@ -33,6 +33,10 @@ Session = sessionmaker(bind=engine)
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
 tradeTypes = ["buy", "sell"]
 
+class SupportResistanceType(enum.Enum):
+    SUPPORT = 0
+    RESISTANCE = 1
+
 class TimeFrame(enum.Enum):
     PERIOD_M1 = 1
     PERIOD_M15 = 15
@@ -57,6 +61,15 @@ class Regressions(Base):
     def __repr__(self) -> str:
         return (f"Regression(id={self.id!r}, symbol={self.symbol!r}, timeFrame={self.timeFrame!r}, startTime={self.startTime!r}, endTime={self.endTime!r})"
                 f", startValue={self.startValue!r}, endValue={self.endValue!r})")
+
+class SupportResistance(Base):
+    __tablename__ = "SupportResistance"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    timeframe: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    type: Mapped[Enum] = mapped_column(Enum(SupportResistanceType))
+    level: Mapped[float]
+    caclulator: Mapped[str]
 
 class CandlesEntity(Base):
     __tablename__ = "Candles"
@@ -469,6 +482,42 @@ def deleteRegressionData(symbol:str, timeFrame:TimeFrame):
             traceback.print_exc(file=sys.stdout)
             print("-"*60)
             session.rollback()
+
+def getSrLevels(symbol:str):
+    with Session.begin() as session:
+        levels = session.query(SupportResistance).filter(
+            SupportResistance.symbol == symbol
+        ).all()
+        session.expunge_all()
+        return levels
+
+def deleteSupportResistance(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        try:
+            results = session.query(SupportResistance).filter(
+                SupportResistance.symbol==symbol,
+                SupportResistance.timeframe==timeFrame).all()
+            for r in results:
+                session.delete(r)
+            session.commit()
+        except Exception:
+            print("Exception while deleting SupportResistance:")
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+            session.rollback()
+
+def storeSupportResistance(sr:SupportResistance):
+    # nur jeden Tage einmal löschen
+    #deleteSupportResistance(sr.symbol)
+
+    with Session.begin() as session:
+        session.add(sr)
+        session.commit()
+
+def loadSrs(symbol:str):
+    with Session.begin() as session:
+        return session.query(SupportResistance).filter(SupportResistance.symbol==symbol).all()
 
 def initTradingDb():
     #Trade.__table__.drop(engine)
