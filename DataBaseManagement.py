@@ -13,7 +13,7 @@ load_dotenv()
 # Docker-Config
 engine = create_engine(os.environ['POSTGRES_URL'], pool_size=20, max_overflow=0)
 Session = sessionmaker(bind=engine)
-session = Session()
+#session = Session()
 
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
 tradeTypes = ["buy", "sell"]
@@ -82,101 +82,110 @@ class HistoryUpdateDto(BaseModel):
     commision:float
 
 def storeSignal(signal: Signal):
-    session.add(signal)
-    session.commit()
+    with Session.begin() as session:
+        session.add(signal)
+        session.commit()
 
 def modifySignalInDb(id:int, type:str, entry:float, sl:float, tp:float, lots:float):
-    storeSignal = session.query(Signal).filter(Signal.id == id).first()
-    if storeSignal is not None:
-        storeSignal.type=type
-        storeSignal.entry=entry
-        storeSignal.sl=sl
-        storeSignal.tp=tp
-        storeSignal.lots=lots
-        session.commit()
+    with Session.begin() as session:
+        storeSignal = session.query(Signal).filter(Signal.id == id).first()
+        if storeSignal is not None:
+            storeSignal.type=type
+            storeSignal.entry=entry
+            storeSignal.sl=sl
+            storeSignal.tp=tp
+            storeSignal.lots=lots
+            session.commit()
 
 def deleteSignalInDb(id:int):
-    storeSignal = session.query(Signal).filter(Signal.id == id).first()
-    if storeSignal is not None:
-        session.delete(storeSignal)
-        session.commit()
+    with Session.begin() as session:
+        storeSignal = session.query(Signal).filter(Signal.id == id).first()
+        if storeSignal is not None:
+            session.delete(storeSignal)
+            session.commit()
 
 def getIgnoredSignals():
-    return session.query(IgnoredSignal).all()
+    with Session.begin() as session:
+        return session.query(IgnoredSignal).all()
 
 def getWaitingSignals():
-    return session.query(Signal.id,
-                         Signal.symbol,
-                         Signal.type,
-                         Signal.entry,
-                         Signal.sl,
-                         Signal.tp,
-                         Signal.lots,
-                         Signal.stamp,
-                         Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
+    with Session.begin() as session:
+        return session.query(Signal.id,
+                             Signal.symbol,
+                             Signal.type,
+                             Signal.entry,
+                             Signal.sl,
+                             Signal.tp,
+                             Signal.lots,
+                             Signal.stamp,
+                             Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
 
 def getExecutedSignals():
-    return session.query(Signal.id,
-                         Signal.symbol,
-                         Signal.type,
-                         Signal.entry,
-                         Signal.sl,
-                         Signal.tp,
-                         Signal.lots,
-                         Signal.stamp,
-                         Signal.strategy,
-                         Signal.activated,
-                         Signal.openprice,
-                         Signal.profit,
-                         Signal.commision,
-                         Signal.swap,
-                         Signal.closed).filter(Signal.openprice > 0.0).all()
+    with Session.begin() as session:
+        return session.query(Signal.id,
+                             Signal.symbol,
+                             Signal.type,
+                             Signal.entry,
+                             Signal.sl,
+                             Signal.tp,
+                             Signal.lots,
+                             Signal.stamp,
+                             Signal.strategy,
+                             Signal.activated,
+                             Signal.openprice,
+                             Signal.profit,
+                             Signal.commision,
+                             Signal.swap,
+                             Signal.closed).filter(Signal.openprice > 0.0).all()
 
 def signalStats():
-    return session.query(Signal.strategy,
-                         func.count(Signal.id).label("trades"),
-                         func.sum(Signal.profit).label("profit"),
-                         func.sum(Signal.commision).label("commission"),
-                         func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
+    with Session.begin() as session:
+        return session.query(Signal.strategy,
+                             func.count(Signal.id).label("trades"),
+                             func.sum(Signal.profit).label("profit"),
+                             func.sum(Signal.commision).label("commission"),
+                             func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
 
 def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
-
-    storeSignal = session.query(Signal).filter(Signal.symbol == tradeActivationDto.symbol, Signal.id == tradeActivationDto.magic).first()
-    storeSignal.activated=tradeActivationDto.timestamp
-    storeSignal.openprice=tradeActivationDto.open_price
-    session.commit()
+    with Session.begin() as session:
+        storeSignal = session.query(Signal).filter(Signal.symbol == tradeActivationDto.symbol, Signal.id == tradeActivationDto.magic).first()
+        storeSignal.activated=tradeActivationDto.timestamp
+        storeSignal.openprice=tradeActivationDto.open_price
+        session.commit()
     #print("Trade Activated:", storeSignal.openprice)
 
 def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
     #print("Updating Trade", tradeUpdateDto)
 
-    storedSignal = session.query(Signal).filter(Signal.symbol == signalUpdateDto.symbol, Signal.id == signalUpdateDto.magic).first()
-    if storedSignal is not None:
-        storedSignal.swap = signalUpdateDto.swap
-        storedSignal.profit = signalUpdateDto.profit
-        storedSignal.commision = signalUpdateDto.commision
-        if signalUpdateDto.closed is not None and signalUpdateDto.closed != "" and signalUpdateDto.closed != "-":
-            storedSignal.closed = signalUpdateDto.closed
+    with Session.begin() as session:
+        storedSignal = session.query(Signal).filter(Signal.symbol == signalUpdateDto.symbol, Signal.id == signalUpdateDto.magic).first()
+        if storedSignal is not None:
+            storedSignal.swap = signalUpdateDto.swap
+            storedSignal.profit = signalUpdateDto.profit
+            storedSignal.commision = signalUpdateDto.commision
+            if signalUpdateDto.closed is not None and signalUpdateDto.closed != "" and signalUpdateDto.closed != "-":
+                storedSignal.closed = signalUpdateDto.closed
 
-        session.commit()
-    #print("Trade Updated:", storedSignal)
+            session.commit()
+        #print("Trade Updated:", storedSignal)
 
 def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
     #print("Updating Trade", tradeUpdateDto)
     print(historyUpdateDto)
-    storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
-    if storedSignal is not None:
-        storedSignal.swap = historyUpdateDto.swap
-        storedSignal.profit = historyUpdateDto.profit
-        storedSignal.commision = historyUpdateDto.commision
-        if historyUpdateDto.closed is not None and historyUpdateDto.closed != "" and historyUpdateDto.closed != "-":
-            storedSignal.closed = historyUpdateDto.closed
+    with Session.begin() as session:
+        storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
+        if storedSignal is not None:
+            storedSignal.swap = historyUpdateDto.swap
+            storedSignal.profit = historyUpdateDto.profit
+            storedSignal.commision = historyUpdateDto.commision
+            if historyUpdateDto.closed is not None and historyUpdateDto.closed != "" and historyUpdateDto.closed != "-":
+                storedSignal.closed = historyUpdateDto.closed
 
-        session.commit()
-        print("Updated...")
-    else:
-        print("Not found...")
+            session.commit()
+            print("Updated...")
+        else:
+            print("Not found...")
 
 def initTradingDb():
     #Trade.__table__.drop(engine)
