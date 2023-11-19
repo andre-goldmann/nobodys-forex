@@ -21,7 +21,7 @@ import os
 load_dotenv()
 
 #engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
-engine = create_engine(os.environ['POSTGRES_URL'])
+engine = create_engine(os.environ['POSTGRES_URL'], pool_size=20, max_overflow=0)
 Session = sessionmaker(bind=engine)
 session = Session()
 
