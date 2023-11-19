@@ -1,5 +1,6 @@
 import datetime
 import json
+import sys
 import threading
 import time
 from datetime import timedelta
@@ -23,16 +24,14 @@ from sqlalchemy.orm import Session
 from typing_extensions import Annotated
 
 from CandleStorageHandler import CandlesDto, storeCandleInDb, loadDfFromDb, lastCandle, storeData, countEntries
-from DataBaseManagement import Session, initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
+from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
-    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats, IgnoredSignal, getIgnoredSignals
-from RegressionCalculator import regressionCalculation, Regressions, TimeFrame
+    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats, getIgnoredSignals, TimeFrame, \
+    getLinesInfo, regressionCalculation
 from SupportResistanceRepository import storeSupportResistance, SupportResistance, SupportResistanceType, \
     deleteSupportResistance
 from trendline_breakout import trendline_breakout
-import sys
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
@@ -260,9 +259,7 @@ async def linesInfo(symbol:str, timeframe: str):
     if TimeFrame.PERIOD_D1 is not timeframeEnum or TimeFrame.PERIOD_H4 is not timeframeEnum:
         return f"For {timeframeEnum} no line information is greated!!!"
 
-    result = Session().query(Regressions).filter(
-        Regressions.symbol == symbol,
-        Regressions.timeFrame == timeframeEnum).all()
+    result = getLinesInfo(symbol, timeframeEnum)
 
     if len(result) > 0:
         return {'startTime': result[0].startTime, 'endTime': result[0].endTime, 'startValue': result[0].startValue, 'endValue': result[0].endValue}
