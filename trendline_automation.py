@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from CandleStorageHandler import loadDfFromDb
 from DataBaseManagement import TimeFrame
 
 

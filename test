@@ -1,0 +1,35 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © Sofien-Kaabar
+
+//@version=5
+indicator("K's Correlation Indicator", overlay = true)
+
+upper_threshold = input(defval = 0.75, title = 'Threshold')
+
+auto_correl_1 = ta.correlation(close, close[1], 2)
+auto_correl_2 = ta.correlation(close, close[2], 3)
+auto_correl_3 = ta.correlation(close, close[3], 4)
+auto_correl_4 = ta.correlation(close, close[4], 5)
+auto_correl_5 = ta.correlation(close, close[5], 6)
+auto_correl_6 = ta.correlation(close, close[6], 7)
+auto_correl_7 = ta.correlation(close, close[7], 8)
+auto_correl_8 = ta.correlation(close, close[8], 9)
+auto_correl_9 = ta.correlation(close, close[9], 10)
+auto_correl_10 = ta.correlation(close, close[10], 11)
+
+//plot(auto_correl_1, color = color.red)
+//plot(auto_correl_2, color = color.blue)
+//plot(auto_correl_3, color = color.green)
+//plot(auto_correl_4, color = color.orange)
+//plot(auto_correl_5, color = color.black)
+//plot(auto_correl_6, color = color.purple)
+//plot(auto_correl_7, color = color.orange)
+//plot(auto_correl_8, color = color.rgb(88, 32, 90))
+//plot(auto_correl_9, color = color.rgb(100, 48, 48))
+//plot(auto_correl_10, color = color.rgb(148, 142, 142))
+buy_signal  = ta.rsi(close, 14) <= 50 and auto_correl_1 >=  upper_threshold and auto_correl_2 >=  upper_threshold and auto_correl_3 >=  upper_threshold and auto_correl_4 >=  upper_threshold and auto_correl_5 >= upper_threshold  and auto_correl_6 >=  upper_threshold and auto_correl_7 >= upper_threshold  and auto_correl_8 >= upper_threshold  and auto_correl_9 >=  upper_threshold
+sell_signal = ta.rsi(close, 14) >= 50 and auto_correl_1 >=  upper_threshold and auto_correl_2 >=  upper_threshold and auto_correl_3 >=  upper_threshold and auto_correl_4 >=  upper_threshold and auto_correl_5 >= upper_threshold  and auto_correl_6 >=  upper_threshold and auto_correl_7 >= upper_threshold  and auto_correl_8 >= upper_threshold  and auto_correl_9 >=  upper_threshold
+//hline(upper_threshold)
+//hline(-upper_threshold)
+plotshape(buy_signal,  style = shape.triangleup,   color = color.green,  location =  location.belowbar, size = size.small)
+plotshape(sell_signal,  style = shape.triangledown, color = color.red,    location =  location.abovebar, size = size.small)

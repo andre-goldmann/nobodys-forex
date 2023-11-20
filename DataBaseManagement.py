@@ -1,22 +1,36 @@
 import enum
+import os
+import sys
+import traceback
+from datetime import datetime
+from datetime import timedelta
+from timeit import default_timer as timer
 
+import pandas as pd
+import statsmodels.api as sm
+from dotenv import load_dotenv
 from pydantic import BaseModel
+from sqlalchemy import Enum
 from sqlalchemy import String
+from sqlalchemy import UniqueConstraint
 from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-import os
+
+from utils import loadData
 
 load_dotenv()
 
 # Docker-Config
-engine = create_engine(os.environ['POSTGRES_URL'])
+engine = create_engine(os.environ['POSTGRES_URL'], pool_size=20, max_overflow=0)
 Session = sessionmaker(bind=engine)
-session = Session()
 
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
 tradeTypes = ["buy", "sell"]
+
+class SupportResistanceType(enum.Enum):
+    SUPPORT = 0
+    RESISTANCE = 1
 
 class TimeFrame(enum.Enum):
     PERIOD_M1 = 1
@@ -28,6 +42,50 @@ class TimeFrame(enum.Enum):
 
 class Base(DeclarativeBase):
     pass
+
+class Regressions(Base):
+    __tablename__ = "regressions"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    startTime: Mapped[str] = mapped_column(String(30))
+    endTime: Mapped[str] = mapped_column(String(30))
+    startValue: Mapped[float]
+    endValue: Mapped[float]
+
+    def __repr__(self) -> str:
+        return (f"Regression(id={self.id!r}, symbol={self.symbol!r}, timeFrame={self.timeFrame!r}, startTime={self.startTime!r}, endTime={self.endTime!r})"
+                f", startValue={self.startValue!r}, endValue={self.endValue!r})")
+
+class SupportResistance(Base):
+    __tablename__ = "SupportResistance"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    timeframe: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    type: Mapped[Enum] = mapped_column(Enum(SupportResistanceType))
+    level: Mapped[float]
+    caclulator: Mapped[str]
+
+class CandlesEntity(Base):
+    __tablename__ = "Candles"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    SYMBOL: Mapped[str] = mapped_column(String(6))
+    TIMEFRAME: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    DATETIME: Mapped[DateTime] = mapped_column(DateTime(timezone=True))
+    ##TIMESTAMP:Mapped[DateTime] = mapped_column(DateTime(timezone=True))
+    OPEN: Mapped[float]
+    HIGH: Mapped[float]
+    LOW: Mapped[float]
+    CLOSE: Mapped[float]
+    TICKVOL: Mapped[float]
+    VOL: Mapped[float]
+    SPREAD: Mapped[float]
+    UniqueConstraint("SYMBOL", "TIMEFRAME", "DATETIME", "OPEN", "CLOSE", name="uix_1")
+    #STAMP: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
+
+    def __repr__(self) -> str:
+        return (f"Candles(id={self.id!r}, DATETIME={self.DATETIME!r}"
+                f", OPEN={self.OPEN!r}, CLOSE={self.CLOSE!r})")
 
 class Signal(Base):
     __tablename__ = "Trades"
@@ -81,102 +139,380 @@ class HistoryUpdateDto(BaseModel):
     swap:float
     commision:float
 
+class CandlesDto(BaseModel):
+    #wird nicht gespeichert, für jedes Symbol ein DB
+    symbol:str
+    TIMEFRAME:str
+    DATETIME:str
+    OPEN:float
+    HIGH:float
+    LOW:float
+    CLOSE:float
+    TICKVOL:float
+    VOL:float
+    SPREAD:int
+
+def storeData(symbol:str, timeFrame:TimeFrame):
+    print(f"storeData for: {symbol}-{timeFrame}")
+
+    timeFrameStr = timeFrame.name.replace("PERIOD_", "")
+    file = f"data/{symbol}_{timeFrameStr}.csv"
+    df = loadData(file)
+
+    #import pandas_ta as ta
+    #if TimeFrame.PERIOD_M15 == timeFrame:
+    #   df["EMA20"] = ta.ema(df["CLOSE"], length=200)
+    #  dfD1 = loadData('data/EURUSD_Daily_201501020000_202309290000.csv')
+
+    df['TIMEFRAME'] = timeFrame.name
+    if TimeFrame.PERIOD_D1 == timeFrame or TimeFrame.PERIOD_W1 == timeFrame:
+        df['TIME'] = "00:00:00"
+    df['SYMBOL'] = symbol
+    df['DATETIME'] = df['DATE'] + ' ' + df['TIME']
+    #df['TIMESTAMP'] =  df['DATETIME'].map(lambda dtStr: time.mktime(datetime.datetime.strptime(dtStr, "%Y.%m.%d %H:%M:%S").timetuple()))
+    df['DATETIME'] = df['DATETIME'].astype('datetime64[s]')
+    df = df.set_index('DATETIME')
+    df.drop(columns=['DATE', 'TIME'])
+    df = df.dropna()
+    df = df.drop('DATE', axis=1)
+    df = df.drop('TIME', axis=1)
+    df.to_sql(name='Candles', con=engine, if_exists='append')
+
 def storeSignal(signal: Signal):
-    session.add(signal)
-    session.commit()
+    with Session.begin() as session:
+        session.add(signal)
+        session.commit()
 
 def modifySignalInDb(id:int, type:str, entry:float, sl:float, tp:float, lots:float):
-    storeSignal = session.query(Signal).filter(Signal.id == id).first()
-    if storeSignal is not None:
-        storeSignal.type=type
-        storeSignal.entry=entry
-        storeSignal.sl=sl
-        storeSignal.tp=tp
-        storeSignal.lots=lots
-        session.commit()
+    with Session.begin() as session:
+        storeSignal = session.query(Signal).filter(Signal.id == id).first()
+        if storeSignal is not None:
+            storeSignal.type=type
+            storeSignal.entry=entry
+            storeSignal.sl=sl
+            storeSignal.tp=tp
+            storeSignal.lots=lots
+            session.commit()
+
+def storeCandleInDb(candle:CandlesDto):
+    with Session.begin() as session:
+        #producer.send('test:1:1', b'another_message')
+        #producer.send('test:1:1',
+        #              {"symbol": candle.symbol,
+        #                    "TIMEFRAME": candle.TIMEFRAME,
+        #                    "DATETIME": candle.DATETIME,
+        #                    "OPEN": candle.OPEN,
+        #                    "HIGH": candle.HIGH,
+        #                    "LOW": candle.LOW,
+        #                    "CLOSE": candle.CLOSE,
+        #                    "TICKVOL": candle.TICKVOL,
+        #                    "VOL": candle.VOL,
+        #                    "SPREAD": candle.SPREAD})
+
+        #producer.send('test:1:1',
+        #              {'foo': 'bar'})
+
+
+        #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
+        timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
+        count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
+                                                    CandlesEntity.TIMEFRAME == timeFrame,
+                                                    CandlesEntity.CLOSE == candle.CLOSE,
+                                                    CandlesEntity.OPEN == candle.OPEN).count()
+
+        if count == 0:
+            spongebob = CandlesEntity(
+                SYMBOL=candle.symbol,
+                TIMEFRAME= timeFrame,
+                # Falscher Datentyp hier wird ein String anstelle from sqlalchemy import DateTime gespeichert
+                # DATETIME= candle.DATETIME,
+                DATETIME=datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M"),
+                #DATETIME=candle.DATETIME.astype('datetime64[s]')
+                #DATETIME= #time.mktime(datetime.datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M:%S").timetuple()))
+                OPEN=candle.HIGH,
+                HIGH=candle.HIGH,
+                LOW=candle.LOW,
+                CLOSE=candle.CLOSE,
+                TICKVOL=candle.TICKVOL,
+                VOL=candle.VOL,
+                SPREAD=candle.SPREAD,
+            )
+            last = lastCandle(candle.symbol, timeFrame)
+            print(f"New: {candle} ----- last {last}")
+            session.add(spongebob)
+            session.commit()
+        else:
+            print("Allreadys exists!!!")
+
+
+def lastCandle(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        candle = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
+        #session.expunge_all()
+        return session.expunge(candle)
+
+#def lastCandle(symbol:str, timeFrame:TimeFrame):
+#    return session.query(CandlesEntity.SYMBOL,
+#                         CandlesEntity.TIMEFRAME,
+#                         CandlesEntity.DATETIME,
+#                         CandlesEntity.OPEN,
+#                         CandlesEntity.HIGH,
+#                         CandlesEntity.LOW,
+#                         CandlesEntity.CLOSE,
+#                         CandlesEntity.TICKVOL,
+#                         CandlesEntity.VOL,
+#                         CandlesEntity.SPREAD).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).first()
+
+
+def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        df = pd.read_sql_query(
+            sql = session.query(CandlesEntity.SYMBOL,
+                                CandlesEntity.TIMEFRAME,
+                                CandlesEntity.DATETIME,
+                                CandlesEntity.OPEN,
+                                CandlesEntity.HIGH,
+                                CandlesEntity.LOW,
+                                CandlesEntity.CLOSE,
+                                CandlesEntity.TICKVOL,
+                                CandlesEntity.VOL,
+                                CandlesEntity.SPREAD)
+            .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
+            .statement,
+            con = engine
+        )
+        print(len(df), " database entries loaded for ",timeFrame)
+        print("Last row: ")
+        print(df.iloc[-1])
+        return df
+
+def countEntries(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).count()
 
 def deleteSignalInDb(id:int):
-    storeSignal = session.query(Signal).filter(Signal.id == id).first()
-    if storeSignal is not None:
-        session.delete(storeSignal)
-        session.commit()
+    with Session.begin() as session:
+        storeSignal = session.query(Signal).filter(Signal.id == id).first()
+        if storeSignal is not None:
+            session.delete(storeSignal)
+            session.commit()
 
 def getIgnoredSignals():
-    return session.query(IgnoredSignal).all()
+    with Session.begin() as session:
+        signals = session.query(IgnoredSignal).all()
+        session.expunge_all()
+        return signals
 
 def getWaitingSignals():
-    return session.query(Signal.id,
-                         Signal.symbol,
-                         Signal.type,
-                         Signal.entry,
-                         Signal.sl,
-                         Signal.tp,
-                         Signal.lots,
-                         Signal.stamp,
-                         Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
+    with Session.begin() as session:
+        signals = session.query(Signal.id,
+                             Signal.symbol,
+                             Signal.type,
+                             Signal.entry,
+                             Signal.sl,
+                             Signal.tp,
+                             Signal.lots,
+                             Signal.stamp,
+                             Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
+        session.expunge_all()
+        return signals
 
 def getExecutedSignals():
-    return session.query(Signal.id,
-                         Signal.symbol,
-                         Signal.type,
-                         Signal.entry,
-                         Signal.sl,
-                         Signal.tp,
-                         Signal.lots,
-                         Signal.stamp,
-                         Signal.strategy,
-                         Signal.activated,
-                         Signal.openprice,
-                         Signal.profit,
-                         Signal.commision,
-                         Signal.swap,
-                         Signal.closed).filter(Signal.openprice > 0.0).all()
+    with Session.begin() as session:
+        signals = session.query(Signal.id,
+                             Signal.symbol,
+                             Signal.type,
+                             Signal.entry,
+                             Signal.sl,
+                             Signal.tp,
+                             Signal.lots,
+                             Signal.stamp,
+                             Signal.strategy,
+                             Signal.activated,
+                             Signal.openprice,
+                             Signal.profit,
+                             Signal.commision,
+                             Signal.swap,
+                             Signal.closed).filter(Signal.openprice > 0.0).all()
+        session.expunge_all()
+        return signals
 
 def signalStats():
-    return session.query(Signal.strategy,
-                         func.count(Signal.id).label("trades"),
-                         func.sum(Signal.profit).label("profit"),
-                         func.sum(Signal.commision).label("commission"),
-                         func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
+    with Session.begin() as session:
+        signalStats = session.query(Signal.strategy,
+                             func.count(Signal.id).label("trades"),
+                             func.sum(Signal.profit).label("profit"),
+                             func.sum(Signal.commision).label("commission"),
+                             func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
+        session.expunge_all()
+        return signalStats
 
 def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
-
-    storeSignal = session.query(Signal).filter(Signal.symbol == tradeActivationDto.symbol, Signal.id == tradeActivationDto.magic).first()
-    storeSignal.activated=tradeActivationDto.timestamp
-    storeSignal.openprice=tradeActivationDto.open_price
-    session.commit()
+    with Session.begin() as session:
+        storeSignal = session.query(Signal).filter(Signal.symbol == tradeActivationDto.symbol, Signal.id == tradeActivationDto.magic).first()
+        storeSignal.activated=tradeActivationDto.timestamp
+        storeSignal.openprice=tradeActivationDto.open_price
+        session.commit()
     #print("Trade Activated:", storeSignal.openprice)
 
 def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
     #print("Updating Trade", tradeUpdateDto)
 
-    storedSignal = session.query(Signal).filter(Signal.symbol == signalUpdateDto.symbol, Signal.id == signalUpdateDto.magic).first()
-    if storedSignal is not None:
-        storedSignal.swap = signalUpdateDto.swap
-        storedSignal.profit = signalUpdateDto.profit
-        storedSignal.commision = signalUpdateDto.commision
-        if signalUpdateDto.closed is not None and signalUpdateDto.closed != "" and signalUpdateDto.closed != "-":
-            storedSignal.closed = signalUpdateDto.closed
+    with Session.begin() as session:
+        storedSignal = session.query(Signal).filter(Signal.symbol == signalUpdateDto.symbol, Signal.id == signalUpdateDto.magic).first()
+        if storedSignal is not None:
+            storedSignal.swap = signalUpdateDto.swap
+            storedSignal.profit = signalUpdateDto.profit
+            storedSignal.commision = signalUpdateDto.commision
+            if signalUpdateDto.closed is not None and signalUpdateDto.closed != "" and signalUpdateDto.closed != "-":
+                storedSignal.closed = signalUpdateDto.closed
 
-        session.commit()
-    #print("Trade Updated:", storedSignal)
+            session.commit()
+        #print("Trade Updated:", storedSignal)
+
+def getLinesInfo(symbol, timeframeEnum):
+    with Session.begin() as session:
+        infos = session.query(Regressions).filter(
+            Regressions.symbol == symbol,
+            Regressions.timeFrame == timeframeEnum).all()
+        session.expunge_all()
+        return infos
 
 def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
     #print("Updating Trade", tradeUpdateDto)
     print(historyUpdateDto)
-    storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
-    if storedSignal is not None:
-        storedSignal.swap = historyUpdateDto.swap
-        storedSignal.profit = historyUpdateDto.profit
-        storedSignal.commision = historyUpdateDto.commision
-        if historyUpdateDto.closed is not None and historyUpdateDto.closed != "" and historyUpdateDto.closed != "-":
-            storedSignal.closed = historyUpdateDto.closed
+    with Session.begin() as session:
+        storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
+        if storedSignal is not None:
+            storedSignal.swap = historyUpdateDto.swap
+            storedSignal.profit = historyUpdateDto.profit
+            storedSignal.commision = historyUpdateDto.commision
+            if historyUpdateDto.closed is not None and historyUpdateDto.closed != "" and historyUpdateDto.closed != "-":
+                storedSignal.closed = historyUpdateDto.closed
 
+            session.commit()
+            print("Updated...")
+        else:
+            print("Not found...")
+
+def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
+
+    start = timer()
+
+    df = loadDfFromDb(symbol, timeFrame)
+    #print("Len before: ", len(df))
+    mask = (df['DATETIME'] >= startDate)
+    df = df.loc[mask]
+    #print("Len after: ", len(df))
+
+    #print("First row: ", df.iloc[0]['DATETIME'])
+    lsma_arr = []
+    dates_arr = []
+
+    for i in range(len(df) - 24):
+        input_reg = df[i:25+i]
+        x = pd.Series(range(len(input_reg.index))).values
+        y = input_reg.HIGH
+        model = sm.OLS(y, sm.add_constant(x)).fit()
+        pred = model.predict()[-1]
+        lsma_arr.append(pred)
+        dates_arr.append(input_reg.iloc[-1].name)
+
+    lsma_df = pd.DataFrame({'LSMA': lsma_arr}, index=dates_arr)
+
+    all_df = pd.concat([lsma_df,df], axis=1)
+    all_df.dropna(inplace=True)
+
+    #print("First row: ", all_df.iloc[0]['DATETIME'])
+    #print("Last row:  ", all_df.iloc[-1]['DATETIME'])
+    #print("###################################")
+
+    end = timer()
+    print("Regression took: ", timedelta(seconds=end-start))
+
+    deleteRegressionData(symbol, timeFrame)
+
+    with Session.begin() as session:
+
+        spongebob = Regressions(
+            symbol=symbol,
+            timeFrame= timeFrame.name,
+            #startTime= all_df.iloc[-lookback].DATETIME,
+            startTime= all_df.iloc[0].DATETIME,
+            endTime=all_df.iloc[-1].DATETIME,
+            #startValue=all_df.iloc[-lookback].LSMA,
+            startValue=all_df.iloc[0].LSMA,
+            endValue=all_df.iloc[-1].LSMA,
+        )
+
+        session.add_all([spongebob])
         session.commit()
-        print("Updated...")
-    else:
-        print("Not found...")
+
+        dfFromDb = pd.read_sql_query(
+            sql = session.query(Regressions.timeFrame,
+                                Regressions.startTime,
+                                Regressions.endTime,
+                                Regressions.startValue,
+                                Regressions.endValue).statement,
+            con = engine
+        )
+        #print(len(dfFromDb), " regression entries stored.")
+        #print("Last row: ")
+        #print(df.iloc[-1])
+
+def deleteRegressionData(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        try:
+            results = session.query(Regressions).filter(Regressions.symbol==symbol, Regressions.timeFrame==timeFrame).all()
+            #print(results)
+            #print("ToDelete:")
+            for r in results:
+                #print(r)
+                session.delete(r)
+            session.commit()
+        except Exception:
+            print("Exception while deleting Regressions:")
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+            session.rollback()
+
+def getSrLevels(symbol:str):
+    with Session.begin() as session:
+        levels = session.query(SupportResistance).filter(
+            SupportResistance.symbol == symbol
+        ).all()
+        session.expunge_all()
+        return levels
+
+def deleteSupportResistance(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        try:
+            results = session.query(SupportResistance).filter(
+                SupportResistance.symbol==symbol,
+                SupportResistance.timeframe==timeFrame).all()
+            for r in results:
+                session.delete(r)
+            session.commit()
+        except Exception:
+            print("Exception while deleting SupportResistance:")
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+            session.rollback()
+
+def storeSupportResistance(sr:SupportResistance):
+    # nur jeden Tage einmal löschen
+    #deleteSupportResistance(sr.symbol)
+
+    with Session.begin() as session:
+        session.add(sr)
+        session.commit()
+
+def loadSrs(symbol:str):
+    with Session.begin() as session:
+        return session.query(SupportResistance).filter(SupportResistance.symbol==symbol).all()
 
 def initTradingDb():
     #Trade.__table__.drop(engine)
