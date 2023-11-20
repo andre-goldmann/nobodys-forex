@@ -525,7 +525,27 @@ def insertFromFile(file:str):
     with open(file, 'r') as file:
         data_df = pd.read_csv(file)
         df2 = data_df.iloc[: , 1:]
-        df2.to_sql('Trades', con=engine, if_exists='append')
+        for index, row in df2.iterrows():
+
+            storeSignal(Signal(
+                symbol=row['symbol'],
+                type=row['type'],
+                entry=row['entry'],
+                sl=row['sl'],
+                tp=row['tp'],
+                lots=row['lots'],
+                spread=row['spread'],
+                tradeid=row['tradeid'],
+                stamp=row['stamp'],
+                activated=row['activated'],
+                openprice=row['openprice'],
+                swap=row['swap'],
+                profit=row['profit'],
+                closed=row['closed'],
+                commision=row['commision'],
+                strategy=row['strategy']
+            ))
+
         print("Trades stored")
 
 
