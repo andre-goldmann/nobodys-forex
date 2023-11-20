@@ -521,12 +521,11 @@ def loadSrs(symbol:str):
         return session.query(SupportResistance).filter(SupportResistance.symbol==symbol).all()
 
 def insertFromFile(file:str):
-    # Open the .sql file
-    sql_file = open(file,'r')
-
+    print("Inserting trades...")
     with open(file, 'r') as file:
         data_df = pd.read_csv(file)
         data_df.to_sql('Signal', con=engine, index=True, index_label='id', if_exists='replace')
+        print("Trades stored")
 
 
 def initTradingDb():
