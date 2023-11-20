@@ -290,6 +290,10 @@ def countEntries(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
         return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).count()
 
+def countTrades():
+    with Session.begin() as session:
+        return session.query(Signal).count()
+
 def deleteSignalInDb(id:int):
     with Session.begin() as session:
         storeSignal = session.query(Signal).filter(Signal.id == id).first()
@@ -520,7 +524,7 @@ def insertFromFile(file:str):
 
     with open(file, 'r') as file:
         data_df = pd.read_csv(file)
-        data_df.to_sql('Trades', con=engine, index=True, index_label='id', if_exists='replace')
+        data_df.to_sql('Signal', con=engine, index=True, index_label='id', if_exists='replace')
 
 
 def initTradingDb():

@@ -28,7 +28,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
-    dropAllTables, insertFromFile
+    dropAllTables, insertFromFile, countTrades
 from trendline_breakout import trendline_breakout
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -551,8 +551,10 @@ def job():
 if __name__ == "__main__":
     #dropAllTables()
     initTradingDb()
-
-    insertFromFile("sql/Trades.csv")
+    if countTrades() == 0:
+        insertFromFile("sql/Trades.csv")
+    else:
+        print(str(countTrades()) + " Trades stored!")
 
     # NUR wenn DB leer bzw. für Kombination aus Symbol + Timeframe kein Eintrag
     # gefunden wird
