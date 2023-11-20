@@ -524,7 +524,8 @@ def insertFromFile(file:str):
     print("Inserting trades...")
     with open(file, 'r') as file:
         data_df = pd.read_csv(file)
-        data_df.to_sql('public.Trades', con=engine, if_exists='append')
+        df2 = data_df.iloc[: , 1:]
+        df2.to_sql('Trades', con=engine, if_exists='append')
         print("Trades stored")
 
 

@@ -557,7 +557,7 @@ def job():
 
 
 if __name__ == "__main__":
-    #dropAllTables()
+    dropAllTables()
     initTradingDb()
     if countTrades() == 0:
         insertFromFile("sql/Trades.csv")
