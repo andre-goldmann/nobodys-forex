@@ -518,30 +518,10 @@ def insertFromFile(file:str):
     # Open the .sql file
     sql_file = open(file,'r')
 
-    # Create an empty command string
-    sql_command = ''
-    with Session.begin() as session:
-        # Iterate over all lines in the sql file
-        for line in sql_file:
-            # Ignore commented lines
-            if not line.startswith('--') and line.strip('\n'):
-                # Append line to the command string
-                sql_command += line.strip('\n')
+    with open(file, 'r') as file:
+        data_df = pd.read_csv(file)
+        data_df.to_sql('Trades', con=engine, index=True, index_label='id', if_exists='replace')
 
-                # If the command string ends with ';', it is a full statement
-                if sql_command.endswith(';'):
-                    # Try to execute statement and commit it
-                    try:
-                        session.execute(sql_command)
-                        session.commit()
-                        print("Data inserted...")
-                    # Assert in case of error
-                    except:
-                        print('Ops')
-
-                    # Finally, clear command string
-                    finally:
-                        sql_command = ''
 
 def initTradingDb():
     #Trade.__table__.drop(engine)
