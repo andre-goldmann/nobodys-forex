@@ -303,7 +303,7 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
     updateSignalByHistory(historyUpdateDto)
     #TODO send information to clients
 
-@app.post("/insertTrades")
+@app.get("/insertTrades")
 def insertTrades():
     if countTrades() == 0:
         insertFromFile("sql/Trades.csv")
