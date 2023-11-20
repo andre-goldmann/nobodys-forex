@@ -27,7 +27,8 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
-    getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance
+    getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
+    dropAllTables
 from trendline_breakout import trendline_breakout
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -548,6 +549,7 @@ def job():
     #TODO how to get end/start of the week?
 
 if __name__ == "__main__":
+    dropAllTables()
     initTradingDb()
 
     # NUR wenn DB leer bzw. für Kombination aus Symbol + Timeframe kein Eintrag

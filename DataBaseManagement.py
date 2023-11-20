@@ -517,3 +517,6 @@ def loadSrs(symbol:str):
 def initTradingDb():
     #Trade.__table__.drop(engine)
     Base.metadata.create_all(engine)
+
+def dropAllTables():
+    Base.metadata.drop_all(engine)   # all tables are deleted
