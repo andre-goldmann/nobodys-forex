@@ -552,7 +552,7 @@ if __name__ == "__main__":
     #dropAllTables()
     initTradingDb()
 
-    insertFromFile("sql/Trades.sql")
+    insertFromFile("sql/Trades.csv")
 
     # NUR wenn DB leer bzw. für Kombination aus Symbol + Timeframe kein Eintrag
     # gefunden wird
