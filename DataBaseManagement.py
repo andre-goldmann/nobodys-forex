@@ -524,7 +524,7 @@ def insertFromFile(file:str):
     print("Inserting trades...")
     with open(file, 'r') as file:
         data_df = pd.read_csv(file)
-        data_df.to_sql('Signal', con=engine, index=True, index_label='id', if_exists='replace')
+        data_df.to_sql('Signal', con=engine, if_exists='append')
         print("Trades stored")
 
 
