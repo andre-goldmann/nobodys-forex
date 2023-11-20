@@ -28,7 +28,25 @@ session = Session()
 app = FastAPI()
 
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
-strategies = ["NNR", "Super AI Trend", "70% Strategy", "SSL Hybrid", "AI Volume Supertrend", "SSL + Wave Trend Strategy", "VHMA", "T3Fvma", "SentimentRangeMa", "GaussianChannelTrendAI"]
+strategies = ["NNR",
+              "Super AI Trend",
+              "70% Strategy",
+              "SSL Hybrid",
+              "AI Volume Supertrend",
+              "SSL + Wave Trend Strategy",
+              "VHMA",
+              "T3Fvma",
+              "SentimentRangeMa",
+              "GaussianChannelTrendAI",
+              "T3-LocallyWeightedRegression",
+              "T3-HmaKahlman",
+              "T3-JMaCrossover",
+              "T3-MachineLearningLogisticRegression",
+              "T3-GapFilling",
+              "T3-EvwmaVwapMacd",
+              "T3-BollingerBandsPinbar",
+              "T3-TrendAI",
+              "T3-NNFX"]
 
 # does not work
 #app.add_middleware(
