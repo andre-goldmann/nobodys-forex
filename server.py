@@ -303,6 +303,14 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
     updateSignalByHistory(historyUpdateDto)
     #TODO send information to clients
 
+@app.post("/insertTrades")
+def insertTrades():
+    if countTrades() == 0:
+        insertFromFile("sql/Trades.csv")
+        return countTrades()
+    else:
+        return countTrades()
+
 @app.post("/signalactivated")
 async def signalActivated(signalActivation:SignalActivationDto):
     if signalActivation.symbol not in symbols:
@@ -324,7 +332,6 @@ async def storeCandle(candle:CandlesDto):
         storeCandleInDb(candle)
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))
-
 
 def autoDetectSupportAndResistance(symbol:str, sliceMax:int, peaksMax:int, timeFrame: TimeFrame):
 
@@ -547,6 +554,7 @@ def job():
                     defaultsr(symbol, 0.01, timeFrame)
 
     #TODO how to get end/start of the week?
+
 
 if __name__ == "__main__":
     #dropAllTables()
