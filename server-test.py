@@ -73,6 +73,6 @@ def instrumentstats():
 #2023-10-12 11:15:00.000000 +00:00
 
 #storecandle()
-lastCandle()
+#lastCandle()
 strategystats()
-instrumentstats()
+#instrumentstats()
