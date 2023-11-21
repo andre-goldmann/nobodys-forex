@@ -25,10 +25,10 @@ from typing_extensions import Annotated
 from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
     activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
-    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, signalStats, getIgnoredSignals, TimeFrame, \
+    getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, getStrategystats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
-    insertFromFile, countTrades
+    insertFromFile, countTrades, getInstrumentstats
 from trendline_breakout import trendline_breakout
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -152,18 +152,34 @@ async def waitingSignals():
 
     return result
 
-@app.get("/signalstats")
-async def getSignalStats():
-    stats = signalStats()
-    print(stats)
+@app.get("/strategystats")
+async def strategystats():
+    stats = getStrategystats()
     result = []
-    #print("###################################")
-    #print(f"IgnoredSignals from db loaded:{len(signals)}")
-    #print("###################################")
+
     for stat in stats:
         if "" != stat.strategy and stat.strategy is not None:
             result.append({'strategy': stat.strategy,
-                           'trades': stat.trades,
+                           'tradestotal': stat.alltrades,
+                           'tradesfailed': stat.failedtrades,
+                           'tradessuccess': stat.successtrades,
+                           'profit': stat.profit,
+                           'commission': stat.commission,
+                           'swap': stat.swap})
+
+    return result
+
+@app.get("/instrumentstats")
+async def instrumentstats(strategy:str):
+    stats = getInstrumentstats(strategy)
+    result = []
+
+    for stat in stats:
+        if "" != stat.symbol and stat.symbol is not None:
+            result.append({'symbol': stat.symbol,
+                           'tradestotal': stat.alltrades,
+                           'tradesfailed': stat.failedtrades,
+                           'tradessuccess': stat.successtrades,
                            'profit': stat.profit,
                            'commission': stat.commission,
                            'swap': stat.swap})
@@ -585,8 +601,6 @@ if __name__ == "__main__":
     #            autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
     #            defaultsr(symbol, 0.01, timeFrame)
     #            regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
-
-
 
     schedule.every().hour.do(job)
     #schedule.every().hour.do(runFirstStrategy)

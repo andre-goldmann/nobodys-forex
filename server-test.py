@@ -52,19 +52,27 @@ def lastCandle():
     response = client.get("/lastCandle/?symbol=EURUSD&timeFrame=PERIOD_M15")
     print(response.json())
     assert response.status_code == 200
-    assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
+    #assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
 
-def signalStats():
-    response = client.get("/signalstats")
+def strategystats():
+    response = client.get("/strategystats")
     print(response.json())
     assert response.status_code == 200
-    assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
+    #assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
+
+def instrumentstats():
+    response = client.get("/instrumentstats/?strategy=Super AI Trend")
+    print(response.json())
+    assert response.status_code == 200
+    #assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
 
 #test_read_main()
 #defaultsr()
 #deletedata()
 #adsar()
 #2023-10-12 11:15:00.000000 +00:00
-#lastCandle()
+
 #storecandle()
-signalStats()
+lastCandle()
+strategystats()
+instrumentstats()

@@ -196,24 +196,7 @@ def modifySignalInDb(id:int, type:str, entry:float, sl:float, tp:float, lots:flo
 
 def storeCandleInDb(candle:CandlesDto):
     with Session.begin() as session:
-        #producer.send('test:1:1', b'another_message')
-        #producer.send('test:1:1',
-        #              {"symbol": candle.symbol,
-        #                    "TIMEFRAME": candle.TIMEFRAME,
-        #                    "DATETIME": candle.DATETIME,
-        #                    "OPEN": candle.OPEN,
-        #                    "HIGH": candle.HIGH,
-        #                    "LOW": candle.LOW,
-        #                    "CLOSE": candle.CLOSE,
-        #                    "TICKVOL": candle.TICKVOL,
-        #                    "VOL": candle.VOL,
-        #                    "SPREAD": candle.SPREAD})
 
-        #producer.send('test:1:1',
-        #              {'foo': 'bar'})
-
-
-        #print("Entries: ", session.query(CandlesEntity.TIMEFRAME).count())
         timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
         count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
                                                     CandlesEntity.TIMEFRAME == timeFrame,
@@ -224,11 +207,7 @@ def storeCandleInDb(candle:CandlesDto):
             spongebob = CandlesEntity(
                 SYMBOL=candle.symbol,
                 TIMEFRAME= timeFrame,
-                # Falscher Datentyp hier wird ein String anstelle from sqlalchemy import DateTime gespeichert
-                # DATETIME= candle.DATETIME,
                 DATETIME=datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M"),
-                #DATETIME=candle.DATETIME.astype('datetime64[s]')
-                #DATETIME= #time.mktime(datetime.datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M:%S").timetuple()))
                 OPEN=candle.HIGH,
                 HIGH=candle.HIGH,
                 LOW=candle.LOW,
@@ -248,7 +227,6 @@ def storeCandleInDb(candle:CandlesDto):
 def lastCandle(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
         candle = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
-        #session.expunge_all()
         return session.expunge(candle)
 
 #def lastCandle(symbol:str, timeFrame:TimeFrame):
@@ -341,13 +319,28 @@ def getExecutedSignals():
         session.expunge_all()
         return signals
 
-def signalStats():
+def getStrategystats():
     with Session.begin() as session:
         signalStats = session.query(Signal.strategy,
-                             func.count(Signal.id).label("trades"),
+                             func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
+                             func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
+                             func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
                              func.sum(Signal.profit).label("profit"),
                              func.sum(Signal.commision).label("commission"),
                              func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
+        session.expunge_all()
+        return signalStats
+
+def getInstrumentstats(strategy:str):
+
+    with Session.begin() as session:
+        signalStats = session.query(Signal.symbol,
+                                    func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
+                                    func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
+                                    func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
+                                    func.sum(Signal.profit).label("profit"),
+                                    func.sum(Signal.commision).label("commission"),
+                                    func.sum(Signal.swap).label("swap")).filter(Signal.strategy == strategy).group_by(Signal.symbol).all()
         session.expunge_all()
         return signalStats
 
@@ -396,9 +389,9 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
                 storedSignal.closed = historyUpdateDto.closed
 
             session.commit()
-            print("Updated...")
+            print("Updated Signal")
         else:
-            print("Not found...")
+            print("No Signal found for: " + str(historyUpdateDto))
 
 def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
 
