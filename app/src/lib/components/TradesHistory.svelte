@@ -4,7 +4,7 @@
     import type {Strategy} from "$lib/model";
     const HOST = "http://85.215.32.163:6081";
     async function loadStats(){
-        await fetch(HOST + "/signalstats")
+        await fetch(HOST + "/strategystats")
             .then(response => response.json())
             .then(data => {
                 //console.info(data);
