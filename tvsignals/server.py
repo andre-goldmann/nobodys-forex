@@ -331,13 +331,21 @@ def proceedSignal(signal):
             sl = signal.entry - atrValue.iloc[-1]
             tp = signal.entry + atrValue.iloc[-1]
 
+        lots = 0.1
+        if ("T3-JMaCrossover" == signal.strategy
+                or "T3-MachineLearningLogisticRegression" == signal.strategy)\
+                or "T3-machineLearningLogisticRegression" == signal.strategy\
+                or "T3-NNFX" == signal.strategy\
+                or "T3-TrendAI" == signal.strategy:
+            lots = 0.01
+
         storeSignal(Signal(
             symbol=signal.symbol,
             type=signal.type,
             entry=signal.entry,
             sl=sl,
             tp=tp,
-            lots=0.1,
+            lots=lots,
             commision=0.0,
             strategy=signal.strategy
         ))
