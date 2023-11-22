@@ -11,6 +11,16 @@ export const ignoredSignalsApiData = writable([]);
 
 export const ignoredSignalSelected = writable();
 
+export const strategiesSelected = writable();
+
+export const strategies = derived(strategiesSelected, ($apiData) => {
+    if ($apiData){
+        //return $apiData.sort(e => e.level);
+        return $apiData.sort((a,b) => (a.profit < b.profit) ? 1 : ((b.profit < a.profit) ? -1 : 0))
+    }
+    return [];
+});
+
 export const symbols = derived(symbolsApiData, ($apiData) => {
     if ($apiData){
         //return $apiData.sort(e => e.level);

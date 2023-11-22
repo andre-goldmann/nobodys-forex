@@ -42,6 +42,8 @@ export interface Strategy {
     strategy:string,
     profit:number,
     swap:number,
-    trades:number,
+    tradesfailed:number,
+    tradessuccess:number,
+    tradestotal:number,
     commission:number
 }
