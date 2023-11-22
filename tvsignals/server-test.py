@@ -20,5 +20,9 @@ def resendsignal():
     #)
     print(response.json())
     assert response.status_code == 200
+def test_read_main():
+    response = client.get("/?strategy=Super AI Trend")
+    print(response.json())
 
-resendsignal()
+#resendsignal()
+test_read_main()

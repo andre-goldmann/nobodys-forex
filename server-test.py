@@ -48,6 +48,12 @@ def storecandle():
     print(response.json())
     assert response.status_code == 200
 
+def linesInfo():
+    response = client.get("/linesinfo/?symbol=EURUSD&timeframe=PERIOD_H4")
+    print(response.json())
+    assert response.status_code == 200
+    #assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
+
 def lastCandle():
     response = client.get("/lastCandle/?symbol=EURUSD&timeFrame=PERIOD_M15")
     print(response.json())
@@ -71,8 +77,8 @@ def instrumentstats():
 #deletedata()
 #adsar()
 #2023-10-12 11:15:00.000000 +00:00
-
+linesInfo()
 #storecandle()
-lastCandle()
+#lastCandle()
 #trategystats()
 #instrumentstats()

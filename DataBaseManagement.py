@@ -1,4 +1,5 @@
 import enum
+from enum import unique
 import os
 import sys
 import traceback
@@ -22,16 +23,18 @@ from utils import loadData
 load_dotenv()
 
 # Docker-Config
-engine = create_engine(os.environ['POSTGRES_URL'], pool_size=20, max_overflow=0)
+engine = create_engine(os.environ['POSTGRES_URL'], pool_size=10, max_overflow=0)
 Session = sessionmaker(bind=engine)
 
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
 tradeTypes = ["buy", "sell"]
 
+@unique
 class SupportResistanceType(enum.Enum):
     SUPPORT = 0
     RESISTANCE = 1
 
+@unique
 class TimeFrame(enum.Enum):
     PERIOD_M1 = 1
     PERIOD_M15 = 15
@@ -233,19 +236,6 @@ def lastCandle(symbol:str, timeFrame:TimeFrame):
         session.expunge(candle)
         session.close()
         return candle
-
-#def lastCandle(symbol:str, timeFrame:TimeFrame):
-#    return session.query(CandlesEntity.SYMBOL,
-#                         CandlesEntity.TIMEFRAME,
-#                         CandlesEntity.DATETIME,
-#                         CandlesEntity.OPEN,
-#                         CandlesEntity.HIGH,
-#                         CandlesEntity.LOW,
-#                         CandlesEntity.CLOSE,
-#                         CandlesEntity.TICKVOL,
-#                         CandlesEntity.VOL,
-#                         CandlesEntity.SPREAD).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).first()
-
 
 def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:

@@ -20,8 +20,7 @@ import os
 
 load_dotenv()
 
-#engine = create_engine('postgresql://nobodysforex:pwd@db:6432/trading-db')
-engine = create_engine(os.environ['POSTGRES_URL'], pool_size=20, max_overflow=0)
+engine = create_engine(os.environ['POSTGRES_URL'], pool_size=10, max_overflow=0)
 Session = sessionmaker(bind=engine)
 app = FastAPI()
 
@@ -141,8 +140,23 @@ class SignalDto(BaseModel):
     tp:float
     strategy: str
 
+def getSignalStats(strategy:str):
+    with Session.begin() as session:
+        signalStats = session.query(Signal.strategy,
+                                    func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
+                                    func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
+                                    func.sum(Signal.profit).label("profit")).filter(Signal.strategy == strategy).group_by(Signal.strategy).first()
+        session.expunge_all()
+        session.close()
+        return signalStats
+
 #@app.get("/")
-#async def read_root():
+#async def read_root(strategy:str):
+#    signalStats = getSignalStats(strategy)
+#    print("strategystats")
+#    print(signalStats.profit)
+#    print(signalStats.failedtrades)
+#    print(signalStats.successtrades)
 #    message = f"Hello world!"
 #    return {"message": message}
 
@@ -189,7 +203,9 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
 def lastCandle(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
         candle = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
-        return session.expunge(candle)
+        session.expunge(candle)
+        session.close()
+        return candle
 
 @app.get("/atr/")
 async def atrEndpoint(symbol:str, timeframe: str):
@@ -233,6 +249,7 @@ async def resendsignal(
         if signal is not None:
             session.delete(signal)
             session.commit()
+            session.close()
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
@@ -242,11 +259,13 @@ def storeSignal(signal: Signal):
     with Session.begin() as session:
         session.add(signal)
         session.commit()
+        session.close()
 
 def storeIgnoredSignal(signal: IgnoredSignal):
     with Session.begin() as session:
         session.add(signal)
         session.commit()
+        session.close()
 
 def proceedSignal(signal):
     # no need to check for trend in TradingView we send everything
@@ -332,11 +351,11 @@ def proceedSignal(signal):
             tp = signal.entry + atrValue.iloc[-1]
 
         lots = 0.1
-        if ("T3-JMaCrossover" == signal.strategy
-                or "T3-MachineLearningLogisticRegression" == signal.strategy)\
-                or "T3-machineLearningLogisticRegression" == signal.strategy\
-                or "T3-NNFX" == signal.strategy\
-                or "T3-TrendAI" == signal.strategy:
+        signalStats = getSignalStats(signal.strategy)
+        #print(signalStats.profit)
+        #print(signalStats.failedtrades)
+        #print(signalStats.successtrades)
+        if signalStats.profit < 0 or signalStats.failedtrades > signalStats.successtrades:
             lots = 0.01
 
         storeSignal(Signal(
