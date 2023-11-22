@@ -227,7 +227,7 @@ def storeCandleInDb(candle:CandlesDto):
             session.commit()
             session.close()
         else:
-            print("Allreadys exists!!!")
+            print("Allreadys exists:" + str(candle))
 
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
