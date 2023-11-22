@@ -263,11 +263,11 @@ async def linesInfo(symbol:str, timeframe: str):
         return
 
     timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
-    print("Loading linesinfo at %s for TF %s" % (datetime.datetime.now(), timeframeEnum))
 
     if TimeFrame.PERIOD_D1 is not timeframeEnum or TimeFrame.PERIOD_H4 is not timeframeEnum:
-        return f"For {timeframeEnum} no line information is greated!!!"
+        return f"For {timeframeEnum} no line information was greated!!!"
 
+    print("Loading linesinfo at %s for TF %s" % (datetime.datetime.now(), timeframeEnum))
     result = getLinesInfo(symbol, timeframeEnum)
 
     if len(result) > 0:

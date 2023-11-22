@@ -182,6 +182,7 @@ def storeSignal(signal: Signal):
     with Session.begin() as session:
         session.add(signal)
         session.commit()
+        session.close()
 
 def modifySignalInDb(id:int, type:str, entry:float, sl:float, tp:float, lots:float):
     with Session.begin() as session:
@@ -193,6 +194,7 @@ def modifySignalInDb(id:int, type:str, entry:float, sl:float, tp:float, lots:flo
             storeSignal.tp=tp
             storeSignal.lots=lots
             session.commit()
+            session.close()
 
 def storeCandleInDb(candle:CandlesDto):
     with Session.begin() as session:
@@ -220,6 +222,7 @@ def storeCandleInDb(candle:CandlesDto):
             print(f"New: {candle} ----- last {last}")
             session.add(spongebob)
             session.commit()
+            session.close()
         else:
             print("Allreadys exists!!!")
 
@@ -227,7 +230,9 @@ def storeCandleInDb(candle:CandlesDto):
 def lastCandle(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
         candle = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
-        return session.expunge(candle)
+        session.expunge(candle)
+        session.close()
+        return candle
 
 #def lastCandle(symbol:str, timeFrame:TimeFrame):
 #    return session.query(CandlesEntity.SYMBOL,
@@ -266,11 +271,15 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
 
 def countEntries(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
-        return session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).count()
+        count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).count()
+        session.close()
+        return count
 
 def countTrades():
     with Session.begin() as session:
-        return session.query(Signal).count()
+        count = session.query(Signal).count()
+        session.close()
+        return count
 
 def deleteSignalInDb(id:int):
     with Session.begin() as session:
@@ -278,11 +287,13 @@ def deleteSignalInDb(id:int):
         if storeSignal is not None:
             session.delete(storeSignal)
             session.commit()
+            session.close()
 
 def getIgnoredSignals():
     with Session.begin() as session:
         signals = session.query(IgnoredSignal).all()
         session.expunge_all()
+        session.close()
         return signals
 
 def getWaitingSignals():
@@ -297,6 +308,7 @@ def getWaitingSignals():
                              Signal.stamp,
                              Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
         session.expunge_all()
+        session.close()
         return signals
 
 def getExecutedSignals():
@@ -317,6 +329,7 @@ def getExecutedSignals():
                              Signal.swap,
                              Signal.closed).filter(Signal.openprice > 0.0).all()
         session.expunge_all()
+        session.close()
         return signals
 
 def getStrategystats():
@@ -329,6 +342,7 @@ def getStrategystats():
                              func.sum(Signal.commision).label("commission"),
                              func.sum(Signal.swap).label("swap")).group_by(Signal.strategy).all()
         session.expunge_all()
+        session.close()
         return signalStats
 
 def getInstrumentstats(strategy:str):
@@ -342,6 +356,7 @@ def getInstrumentstats(strategy:str):
                                     func.sum(Signal.commision).label("commission"),
                                     func.sum(Signal.swap).label("swap")).filter(Signal.strategy == strategy).group_by(Signal.symbol).all()
         session.expunge_all()
+        session.close()
         return signalStats
 
 def activateSignal(tradeActivationDto:SignalActivationDto):
@@ -351,6 +366,7 @@ def activateSignal(tradeActivationDto:SignalActivationDto):
         storeSignal.activated=tradeActivationDto.timestamp
         storeSignal.openprice=tradeActivationDto.open_price
         session.commit()
+        session.close()
     #print("Trade Activated:", storeSignal.openprice)
 
 def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
@@ -366,6 +382,7 @@ def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
                 storedSignal.closed = signalUpdateDto.closed
 
             session.commit()
+            session.close()
         #print("Trade Updated:", storedSignal)
 
 def getLinesInfo(symbol, timeframeEnum):
@@ -374,6 +391,7 @@ def getLinesInfo(symbol, timeframeEnum):
             Regressions.symbol == symbol,
             Regressions.timeFrame == timeframeEnum).all()
         session.expunge_all()
+        session.close()
         return infos
 
 def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
@@ -389,6 +407,7 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
                 storedSignal.closed = historyUpdateDto.closed
 
             session.commit()
+            session.close()
             print("Updated Signal")
         else:
             print("No Signal found for: " + str(historyUpdateDto))
@@ -445,15 +464,16 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
 
         session.add_all([spongebob])
         session.commit()
+        session.close()
 
-        dfFromDb = pd.read_sql_query(
-            sql = session.query(Regressions.timeFrame,
-                                Regressions.startTime,
-                                Regressions.endTime,
-                                Regressions.startValue,
-                                Regressions.endValue).statement,
-            con = engine
-        )
+        #dfFromDb = pd.read_sql_query(
+        #    sql = session.query(Regressions.timeFrame,
+        #                        Regressions.startTime,
+        #                        Regressions.endTime,
+        #                        Regressions.startValue,
+        #                        Regressions.endValue).statement,
+        #    con = engine
+        #)
         #print(len(dfFromDb), " regression entries stored.")
         #print("Last row: ")
         #print(df.iloc[-1])
@@ -468,12 +488,14 @@ def deleteRegressionData(symbol:str, timeFrame:TimeFrame):
                 #print(r)
                 session.delete(r)
             session.commit()
+            session.close()
         except Exception:
             print("Exception while deleting Regressions:")
             print("-"*60)
             traceback.print_exc(file=sys.stdout)
             print("-"*60)
             session.rollback()
+            session.close()
 
 def getSrLevels(symbol:str):
     with Session.begin() as session:
@@ -481,6 +503,7 @@ def getSrLevels(symbol:str):
             SupportResistance.symbol == symbol
         ).all()
         session.expunge_all()
+        session.close()
         return levels
 
 def deleteSupportResistance(symbol:str, timeFrame:TimeFrame):
@@ -492,12 +515,14 @@ def deleteSupportResistance(symbol:str, timeFrame:TimeFrame):
             for r in results:
                 session.delete(r)
             session.commit()
+            session.close()
         except Exception:
             print("Exception while deleting SupportResistance:")
             print("-"*60)
             traceback.print_exc(file=sys.stdout)
             print("-"*60)
             session.rollback()
+            session.close()
 
 def storeSupportResistance(sr:SupportResistance):
     # nur jeden Tage einmal löschen
@@ -506,10 +531,13 @@ def storeSupportResistance(sr:SupportResistance):
     with Session.begin() as session:
         session.add(sr)
         session.commit()
+        session.close()
 
 def loadSrs(symbol:str):
     with Session.begin() as session:
-        return session.query(SupportResistance).filter(SupportResistance.symbol==symbol).all()
+        count = session.query(SupportResistance).filter(SupportResistance.symbol==symbol).all()
+        session.close()
+        return count
 
 def insertFromFile(file:str):
     print("Inserting trades...")
