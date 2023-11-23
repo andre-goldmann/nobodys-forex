@@ -44,7 +44,10 @@ strategies = ["NNR",
               "T3-EvwmaVwapMacd",
               "T3-BollingerBandsPinbar",
               "T3-TrendAI",
-              "T3-NNFX"]
+              "T3-NNFX",
+              "T3-EfficientTrendStepMod",
+              "T3-AroonBased",
+              "T3-EmaStrategy"]
 
 # does not work
 #app.add_middleware(
