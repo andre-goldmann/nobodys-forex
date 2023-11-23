@@ -155,6 +155,9 @@ class CandlesDto(BaseModel):
     VOL:float
     SPREAD:int
 
+class SignalId(BaseModel):
+    id: int
+
 def storeData(symbol:str, timeFrame:TimeFrame):
     print(f"storeData for: {symbol}-{timeFrame}")
 
@@ -300,6 +303,12 @@ def getWaitingSignals():
         session.expunge_all()
         session.close()
         return signals
+
+def deleteSignalFromDb(id:SignalId):
+    with Session.begin() as session:
+        session.query(Signal).filter(Signal.id == id.id).delete()
+        session.commit()
+        session.close()
 
 def getExecutedSignals():
     with Session.begin() as session:

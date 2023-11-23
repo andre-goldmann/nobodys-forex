@@ -28,7 +28,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, getStrategystats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
-    insertFromFile, countTrades, getInstrumentstats
+    insertFromFile, countTrades, getInstrumentstats, deleteSignalFromDb, SignalId
 from trendline_breakout import trendline_breakout
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -146,6 +146,10 @@ async def waitingSignals():
                        'strategy': signal.strategy})
 
     return result
+
+@app.post("/deletesignal")
+async def deleteSignal(id:SignalId):
+    deleteSignalFromDb(id)
 
 @app.get("/strategystats")
 async def strategystats():

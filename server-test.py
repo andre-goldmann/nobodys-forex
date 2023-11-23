@@ -72,13 +72,23 @@ def instrumentstats():
     assert response.status_code == 200
     #assert response.json() == {'stamp': '2023-10-12T11:15:00+00:00'}
 
+def deleteSignal():
+    response = client.post(
+        "/deletesignal/",
+        headers={"X-Token": "coneofsilence"},
+        json={"id": 1},
+    )
+    print(response.json())
+    assert response.status_code == 200
+
 #test_read_main()
 #defaultsr()
 #deletedata()
 #adsar()
 #2023-10-12 11:15:00.000000 +00:00
-linesInfo()
+#linesInfo()
 #storecandle()
 #lastCandle()
 #trategystats()
 #instrumentstats()
+deleteSignal()
