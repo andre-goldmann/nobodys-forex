@@ -46,7 +46,8 @@ strategies = ["NNR",
               "T3-NNFX",
               "T3-EfficientTrendStepMod",
               "T3-AroonBased",
-              "T3-EmaStrategy"]
+              "T3-EmaStrategy",
+              "SOTT-Lorentzian"]
 
 # does not work
 #app.add_middleware(
