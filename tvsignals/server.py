@@ -142,12 +142,12 @@ class SignalDto(BaseModel):
     tp:float
     strategy: str
 
-def getSignalStats(strategy:str):
+def getSignalStats(strategy:str, symbol:str):
     with Session.begin() as session:
         signalStats = session.query(Signal.strategy,
                                     func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
                                     func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
-                                    func.sum(Signal.profit).label("profit")).filter(Signal.strategy == strategy).group_by(Signal.strategy).first()
+                                    func.sum(Signal.profit).label("profit")).filter(Signal.strategy == strategy, Signal.symbol == symbol).group_by(Signal.strategy).first()
         session.expunge_all()
         session.close()
         return signalStats
@@ -351,7 +351,7 @@ def proceedSignal(signal):
                 tp = signal.entry + atrValue.iloc[-1]
 
             lots = 0.1
-            signalStats = getSignalStats(signal.strategy)
+            signalStats = getSignalStats(signal.strategy, signal.symbol)
             #print(signalStats.profit)
             #print(signalStats.failedtrades)
             #print(signalStats.successtrades)
