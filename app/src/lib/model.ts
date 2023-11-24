@@ -47,3 +47,13 @@ export interface Strategy {
     tradestotal:number,
     commission:number
 }
+
+export interface InstrumentStat {
+    symbol:string,
+    profit:number,
+    swap:number,
+    tradesfailed:number,
+    tradessuccess:number,
+    tradestotal:number,
+    commission:number
+}

@@ -1,10 +1,14 @@
 <script lang="ts">
 
     import {onMount} from "svelte";
-    import type {Strategy} from "$lib/model";
-    import {strategies, strategiesSelected, strategySelected, tradeSelected} from "$lib/store";
-    // TODO load them from server
-    let symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
+    import type {InstrumentStat, Strategy} from "$lib/model";
+    import {
+        instrumentStats,
+        instrumentStatsSelected,
+        strategies,
+        strategiesSelected,
+        strategySelected
+    } from "$lib/store";
 
     const HOST = "http://85.215.32.163:6081";
     async function loadStats(){
@@ -24,57 +28,39 @@
         loadStats();
     });
 
-    function rowSelected(strategy:Strategy) {
+    function onStrategySelected(strategy:Strategy) {
         console.info(`Show details for: ${strategy.strategy}`);
         strategySelected.set(strategy);
+        loadInstrumentstats(strategy);
+    }
+
+    function onInstrumentSelected(stat:InstrumentStat) {
+        console.info(`Show details for: ${stat.symbol}`);
+        //strategySelected.set(strategy);
+        //loadInstrumentstats(strategy);
     }
 
     function roundNumber(num:number) {
         return Math.round((num + Number.EPSILON) * 100) / 100;
     }
 
+    function loadInstrumentstats(strategy:Strategy) {
+        console.info(`Load instrument stats for: ${strategy.strategy}`);
+        fetch(HOST + "/instrumentstats/?strategy=" + strategy.strategy)
+            .then(response => response.json())
+            .then(data => {
+                let InstrumentStatsData:InstrumentStat[] = data;
+                console.info(InstrumentStatsData);
+                instrumentStatsSelected.set(InstrumentStatsData);
+            }).catch(error => {
+            console.log(error);
+            instrumentStatsSelected.set([]);
+        });
+    }
+
 </script>
 
-<!--div class="flex flex-row">
 
-    <div class="w-full">
-        <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
-            <h1 class="mb-8 text-3xl text-center">Strategy-Details</h1>
-
-            <div class="overflow-x-auto">
-
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Strategy</th>
-                        <th>Trades Total</th>
-                        <th>Trades Failed</th>
-                        <th>Trades Success</th>
-                        <th>Profit</th>
-                        <th>Swap</th>
-                        <th>Commission</th>
-                    <tr/>
-                    </thead>
-                    {#each $strategies as strategy}
-                        <tr class="hover" on:click={() => rowSelected(strategy)}>
-                            <td>{strategy.strategy}</td>
-                            <td>{strategy.tradestotal}</td>
-                            <td>{strategy.tradesfailed}</td>
-                            <td>{strategy.tradessuccess}</td>
-                            <td>{strategy.profit}</td>
-                            <td>{strategy.swap}</td>
-                            <td>{strategy.commission}</td>
-
-                        <tr/>
-                    {/each}
-                </table>
-
-            </div>
-
-        </div>
-    </div>
-
-</div-->
 <div class="flex h-screen bg-transparent w-full text-primary">
     <div class="flex-1 flex flex-col overflow-hidden">
         <header class="flex justify-between items-center p-4">
@@ -88,7 +74,7 @@
                         <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
 
                             {#each $strategies as strategy}
-                                <li class="pb-3 sm:pb-4" on:click={() => rowSelected(strategy)}>
+                                <li class="pb-3 sm:pb-4 cursor-pointer" on:click={() => onStrategySelected(strategy)}>
                                     <div class="flex items-center space-x-4 rtl:space-x-reverse">
                                         <div class="flex-1 min-w-0">
                                             <p class="text-sm font-medium ">
@@ -137,24 +123,23 @@
             <nav class="flex w-38 h-full bg-transparent">
                 <div class="w-full flex mx-auto px-6 py-8">
                     <div class="w-full h-full flex items-start justify-start">
-
                         <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
-                            {#each symbols as symbol}
-                            <li class="pb-3 sm:pb-4">
-                                <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                    <div class="flex-1 min-w-0">
-                                        <p class="text-sm font-medium truncate dark:text-white">
-                                            {symbol}
-                                        </p>
-                                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                            Total: 96 Win: 64 Loss: 32
-                                        </p>
+                            {#each $instrumentStats as stat}
+                                <li class="pb-3 sm:pb-4 cursor-pointer" on:click={() => onInstrumentSelected(stat)}>
+                                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium truncate dark:text-white">
+                                                {stat.symbol}
+                                            </p>
+                                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                                                Total: {stat.tradestotal} Win: {stat.tradessuccess} Loss: {stat.tradesfailed}
+                                            </p>
+                                        </div>
+                                        <div class="inline-flex items-center text-base font-semibold dark:text-white">
+                                            {roundNumber(stat.profit)} €
+                                        </div>
                                     </div>
-                                    <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                        85%
-                                    </div>
-                                </div>
-                            </li>
+                                </li>
                             {/each}
                         </ul>
                     </div>
