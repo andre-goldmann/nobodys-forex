@@ -12,6 +12,7 @@ export const ignoredSignalsApiData = writable([]);
 export const ignoredSignalSelected = writable();
 
 export const strategiesSelected = writable();
+export const strategySelected = writable();
 
 export const strategies = derived(strategiesSelected, ($apiData) => {
     if ($apiData){

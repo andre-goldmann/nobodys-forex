@@ -1,22 +1,21 @@
+import enum
+import os
+
 import pandas as pd
+import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request, status, Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
-from fastapi.middleware.trustedhost import TrustedHostMiddleware
 # Bellow the import create a job that will be executed on background
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from sqlalchemy import String
-from sqlalchemy import create_engine, DateTime, func
-from sqlalchemy import String, Enum, DateTime, UniqueConstraint
+from sqlalchemy import Enum
+from sqlalchemy import String, DateTime, UniqueConstraint
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Enum
-import enum
-import uvicorn
 from typing_extensions import Annotated
-from dotenv import load_dotenv
-import os
 
 load_dotenv()
 
@@ -181,27 +180,27 @@ def atr(df, n=14):
     atr = wwma(tr, n)
     return atr
 
-def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
-    with Session.begin() as session:
-        df = pd.read_sql_query(
-            sql = session.query(CandlesEntity.SYMBOL,
-                                CandlesEntity.TIMEFRAME,
-                                CandlesEntity.DATETIME,
-                                CandlesEntity.OPEN,
-                                CandlesEntity.HIGH,
-                                CandlesEntity.LOW,
-                                CandlesEntity.CLOSE,
-                                CandlesEntity.TICKVOL,
-                                CandlesEntity.VOL,
-                                CandlesEntity.SPREAD)
-            .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
-            .statement,
-            con = engine
-        )
-        print(len(df), " database entries loaded for ",timeFrame)
-        #print("Last row: ")
-        #print(df.iloc[-1])
-        return df
+def loadDfFromDb(symbol:str, timeFrame:TimeFrame, session):
+
+    df = pd.read_sql_query(
+        sql = session.query(CandlesEntity.SYMBOL,
+                            CandlesEntity.TIMEFRAME,
+                            CandlesEntity.DATETIME,
+                            CandlesEntity.OPEN,
+                            CandlesEntity.HIGH,
+                            CandlesEntity.LOW,
+                            CandlesEntity.CLOSE,
+                            CandlesEntity.TICKVOL,
+                            CandlesEntity.VOL,
+                            CandlesEntity.SPREAD)
+        .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
+        .statement,
+        con = engine
+    )
+    print(len(df), " database entries loaded for ",timeFrame)
+    #print("Last row: ")
+    #print(df.iloc[-1])
+    return df
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
@@ -210,18 +209,18 @@ def lastCandle(symbol:str, timeFrame:TimeFrame):
         session.close()
         return candle
 
-@app.get("/atr/")
-async def atrEndpoint(symbol:str, timeframe: str):
-    timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
+#@app.get("/atr/")
+#async def atrEndpoint(symbol:str, timeframe: str):
+#    timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
 
-    df = loadDfFromDb(symbol, timeframeEnum)
-    atrValue = atr(df)
-    x = df.iloc[-1].CLOSE - atrValue.iloc[-1]
-    y  = df.iloc[-1].CLOSE + atrValue.iloc[-1]
-    return {'atr:': atrValue.iloc[-1],
-            'lastprice': df.iloc[-1].CLOSE,
-            'lastprice-atr': x,
-            'lastprice+atr': y}
+    #df = loadDfFromDb(symbol, timeframeEnum)
+    #atrValue = atr(df)
+    #x = df.iloc[-1].CLOSE - atrValue.iloc[-1]
+    #y  = df.iloc[-1].CLOSE + atrValue.iloc[-1]
+    #return {'atr:': atrValue.iloc[-1],
+    #        'lastprice': df.iloc[-1].CLOSE,
+    #        'lastprice-atr': x,
+    #        'lastprice+atr': y}
 
 
 @app.post("/resendsignal/")
@@ -258,17 +257,13 @@ async def resendsignal(
 async def signals(signal:SignalDto):
     proceedSignal(signal)
 
-def storeSignal(signal: Signal):
-    with Session.begin() as session:
-        session.add(signal)
-        session.commit()
-        session.close()
+def storeSignal(signal: Signal, session):
+    session.add(signal)
+    session.commit()
 
-def storeIgnoredSignal(signal: IgnoredSignal):
-    with Session.begin() as session:
-        session.add(signal)
-        session.commit()
-        session.close()
+def storeIgnoredSignal(signal: IgnoredSignal, session):
+    session.add(signal)
+    session.commit()
 
 def proceedSignal(signal):
     # no need to check for trend in TradingView we send everything
@@ -284,136 +279,143 @@ def proceedSignal(signal):
                      'tp': signal.tp,
                      'strategy': signal.strategy})
 
-    if signal.symbol not in symbols:
-        print(f"Ignore Signal because symbol is not handled yet: {signal}")
-        storeIgnoredSignal(IgnoredSignal(
-            json=jsonSignal,
-            reason=f"Ignore Signal because symbol is not handled yet: {signal}"
-        ))
-        return
+    with Session.begin() as session:
 
-    if signal.strategy not in strategies:
-        print(f"Ignore Signal because strategy is unknown: {signal.strategy}")
-        storeIgnoredSignal(IgnoredSignal(
-            json=jsonSignal,
-            reason=f"Ignore Signal because strategy is unknown: {signal.strategy}"
-        ))
-        return
-
-    #because of setting sl and tp here we can not check it here anymore
-    #if "buy" == signal.type and signal.sl > signal.tp:
-    #    print(f"Ignore (1. Condition) Buy-Signal: {signal}")
-    #    storeIgnoredSignal(IgnoredSignal(
-    #        json=jsonSignal,
-    #        reason=f"Ignore (1. Condition) Buy-Signal: {signal}"
-    #    ))
-    #    return
-
-    #if "sell" == signal.type and signal.sl < signal.tp:
-    #    print(f"Ignore (1. Condition) Sell-Signal: {signal}")
-    #    storeIgnoredSignal(IgnoredSignal(
-    #        json=jsonSignal,
-    #        reason=f"Ignore (1. Condition) Sell-Signal: {signal}"
-    #    ))
-    #    return
-
-    regressionLineD1 = Session().query(Regressions).filter(
-        Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
-
-    regressionLineH4 = Session().query(Regressions).filter(
-        Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
-
-    if len(regressionLineH4) > 0:
-
-        if "buy" == signal.type and signal.entry < regressionLineH4[0].endValue:
-            print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
-            #storeIgnoredSignal(IgnoredSignal(
-            #    json=jsonSignal,
-            #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
-            #))
+        if signal.symbol not in symbols:
+            print(f"Ignore Signal because symbol is not handled yet: {signal}")
+            storeIgnoredSignal(IgnoredSignal(
+                json=jsonSignal,
+                reason=f"Ignore Signal because symbol is not handled yet: {signal}"
+            ),session)
+            session.close()
             return
 
-        if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
-            print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
-            #storeIgnoredSignal(IgnoredSignal(
-            #    json=jsonSignal,
-            #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
-            #))
+        if signal.strategy not in strategies:
+            print(f"Ignore Signal because strategy is unknown: {signal.strategy}")
+            storeIgnoredSignal(IgnoredSignal(
+                json=jsonSignal,
+                reason=f"Ignore Signal because strategy is unknown: {signal.strategy}"
+            ),session)
+            session.close()
             return
 
-        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4)
-        atrValue = atr(df)
+        #because of setting sl and tp here we can not check it here anymore
+        #if "buy" == signal.type and signal.sl > signal.tp:
+        #    print(f"Ignore (1. Condition) Buy-Signal: {signal}")
+        #    storeIgnoredSignal(IgnoredSignal(
+        #        json=jsonSignal,
+        #        reason=f"Ignore (1. Condition) Buy-Signal: {signal}"
+        #    ))
+        #    return
 
-        sl = 0.0
-        tp = 0.0
-        if signal.type == "sell":
-            sl = signal.entry + atrValue.iloc[-1]
-            tp = signal.entry - atrValue.iloc[-1]
-        if signal.type == "buy":
-            sl = signal.entry - atrValue.iloc[-1]
-            tp = signal.entry + atrValue.iloc[-1]
+        #if "sell" == signal.type and signal.sl < signal.tp:
+        #    print(f"Ignore (1. Condition) Sell-Signal: {signal}")
+        #    storeIgnoredSignal(IgnoredSignal(
+        #        json=jsonSignal,
+        #        reason=f"Ignore (1. Condition) Sell-Signal: {signal}"
+        #    ))
+        #    return
 
-        lots = 0.1
-        signalStats = getSignalStats(signal.strategy)
-        #print(signalStats.profit)
-        #print(signalStats.failedtrades)
-        #print(signalStats.successtrades)
-        if signalStats is not None:
-            lots = 0.01
-        elif signalStats.profit < 0 or signalStats.failedtrades > signalStats.successtrades:
-            lots = 0.01
 
-        storeSignal(Signal(
-            symbol=signal.symbol,
-            type=signal.type,
-            entry=signal.entry,
-            sl=sl,
-            tp=tp,
-            lots=lots,
-            commision=0.0,
-            strategy=signal.strategy
-        ))
-    elif len(regressionLineD1) > 0:
-        if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
-            print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
-            #storeIgnoredSignal(IgnoredSignal(
-            #    json=jsonSignal,
-            #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
-            #))
-            return
+        regressionLineH4 = session.query(Regressions).filter(
+            Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
 
-        if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
-            print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
-            #storeIgnoredSignal(IgnoredSignal(
-            #    json=jsonSignal,
-            #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
-            #))
-            return
+        if len(regressionLineH4) > 0:
 
-        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1)
-        atrValue = atr(df)
+            if "buy" == signal.type and signal.entry < regressionLineH4[0].endValue:
+                print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
+                #storeIgnoredSignal(IgnoredSignal(
+                #    json=jsonSignal,
+                #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
+                #))
+                return
 
-        sl = 0.0
-        tp = 0.0
-        if signal.type == "sell":
-            sl = signal.entry + atrValue.iloc[-1]
-            tp = signal.entry - atrValue.iloc[-1]
-        if signal.type == "buy":
-            sl = signal.entry - atrValue.iloc[-1]
-            tp = signal.entry + atrValue.iloc[-1]
+            if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
+                print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
+                #storeIgnoredSignal(IgnoredSignal(
+                #    json=jsonSignal,
+                #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
+                #))
+                return
 
-        storeSignal(Signal(
-            symbol=signal.symbol,
-            type=signal.type,
-            entry=signal.entry,
-            sl=sl,
-            tp=tp,
-            lots=0.1,
-            commision=0.0,
-            strategy=signal.strategy
-        ))
-    else:
-        print(f"No Regression-Data found for {signal.symbol}")
+            df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4, session)
+            atrValue = atr(df)
+
+            sl = 0.0
+            tp = 0.0
+            if signal.type == "sell":
+                sl = signal.entry + atrValue.iloc[-1]
+                tp = signal.entry - atrValue.iloc[-1]
+            if signal.type == "buy":
+                sl = signal.entry - atrValue.iloc[-1]
+                tp = signal.entry + atrValue.iloc[-1]
+
+            lots = 0.1
+            signalStats = getSignalStats(signal.strategy)
+            #print(signalStats.profit)
+            #print(signalStats.failedtrades)
+            #print(signalStats.successtrades)
+            if signalStats is not None:
+                lots = 0.01
+            elif signalStats.profit < 0 or signalStats.failedtrades > signalStats.successtrades:
+                lots = 0.01
+
+            storeSignal(Signal(
+                symbol=signal.symbol,
+                type=signal.type,
+                entry=signal.entry,
+                sl=sl,
+                tp=tp,
+                lots=lots,
+                commision=0.0,
+                strategy=signal.strategy
+            ), session)
+            session.close()
+        else:
+            regressionLineD1 = session.query(Regressions).filter(
+                Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
+            if len(regressionLineD1) > 0:
+                if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
+                    print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
+                    #storeIgnoredSignal(IgnoredSignal(
+                    #    json=jsonSignal,
+                    #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
+                    #))
+                    return
+
+                if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
+                    print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
+                    #storeIgnoredSignal(IgnoredSignal(
+                    #    json=jsonSignal,
+                    #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
+                    #))
+                    return
+
+                df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session)
+                atrValue = atr(df)
+
+                sl = 0.0
+                tp = 0.0
+                if signal.type == "sell":
+                    sl = signal.entry + atrValue.iloc[-1]
+                    tp = signal.entry - atrValue.iloc[-1]
+                if signal.type == "buy":
+                    sl = signal.entry - atrValue.iloc[-1]
+                    tp = signal.entry + atrValue.iloc[-1]
+
+                storeSignal(Signal(
+                    symbol=signal.symbol,
+                    type=signal.type,
+                    entry=signal.entry,
+                    sl=sl,
+                    tp=tp,
+                    lots=0.1,
+                    commision=0.0,
+                    strategy=signal.strategy
+                ), session)
+                session.close()
+            else:
+                print(f"No Regression-Data found for {signal.symbol}")
 
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
