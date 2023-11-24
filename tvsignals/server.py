@@ -357,7 +357,7 @@ def proceedSignal(signal):
             #print(signalStats.successtrades)
             if signalStats is None:
                 lots = 0.01
-            elif signalStats.profit < 0 or signalStats.failedtrades > signalStats.successtrades:
+            elif signalStats.failedtrades > signalStats.successtrades:
                 lots = 0.01
 
             storeSignal(Signal(
