@@ -155,7 +155,8 @@
                                                 <th>Type</th>
                                                 <th>Entry/Lots/Exit</th>
                                                 <th>SL/TP</th>
-                                                <th>Stamp/Closed/Exit</th>
+                                                <th>Profit/Swap/Commission</th>
+                                                <th>Stamp/Closed</th>
                                             <tr/>
                                             </thead>
                                             {#each $executedsignals as trade}
@@ -163,8 +164,8 @@
                                                     <td>{trade.symbol}</td>
                                                     <td>{trade.type}</td>
                                                     <td>{trade.entry} <br/>{trade.lots} <br/>{trade.exit}</td>
-                                                    <td>{trade.sl}<br/>
-                                                        {trade.tp}</td>
+                                                    <td>{trade.sl}<br/> {trade.tp}</td>
+                                                    <td>{trade.profit}<br/> {trade.swap}<br/> {trade.commision}</td>
                                                     <td>{trade.stamp} <br/>{trade.closed}</td>
 
                                                 <tr/>

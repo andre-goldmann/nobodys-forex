@@ -53,12 +53,25 @@
     onMount(() => {
         loadIgnoredSignals();
     })
+
+    function deleteSignal(id:number) {
+        console.info(`Call delete action on: ${id}`);
+        /*fetch(HOST + ":6081/deletesignal/" + id)
+            .then(response => response.json())
+            .then(data => {
+                console.info(data);
+                loadIgnoredSignals();
+            }).catch(error => {
+            console.log(error);
+        });*/
+
+    }
 </script>
 
 <div class="flex flex-row">
+    <!--form class="flex items-center space-x-6" action="http://127.0.0.1:6081/createorder" on:submit|preventDefault={handleSubmit} method="POST"-->
+    <!--div class="basis-1/4">
 
-    <div class="basis-1/4">
-        <!--form class="flex items-center space-x-6" action="http://127.0.0.1:6081/createorder" on:submit|preventDefault={handleSubmit} method="POST"-->
         <form class="flex items-center space-x-6" action="http://85.215.32.163:6081/createorder" on:submit|preventDefault={handleSubmit} method="POST">
             <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
                 <h1 class="mb-8 text-3xl text-center">New Order</h1>
@@ -138,7 +151,7 @@
 
             </div>
         </form>
-    </div>
+    </div-->
     <div class="basis-1/4">
 
         <h1 class="mb-8 text-3xl text-center">Ignored Signals</h1>
@@ -170,17 +183,7 @@
         <div class="basis-1/4">
             <form class="flex items-center space-x-6" action="http://85.215.32.163/resendsignal" on:submit|preventDefault={handleSubmit} method="POST">
                 <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
-                    <h1 class="mb-8 text-3xl text-center">Update Order</h1>
-
-                    <!--div class="w-full max-w-xs">
-                        <input
-                                type="number"
-                                class="input input-bordered input-primary w-full max-w-xs mb-4"
-                                id="id"
-                                name="id"
-                                value={$ignoredSignalSelected.id}
-                                readonly/>
-                    </div-->
+                    <h1 class="mb-8 text-3xl text-center">Update Signal</h1>
 
                     <div class="w-full">
 
@@ -194,7 +197,7 @@
 
                     <div>
                         <button type="submit" class="btn btn-primary">Update</button>
-                        <button type="button" class="btn btn-primary">Delete</button>
+                        <button type="button" class="btn btn-primary" on:click={() => deleteSignal($ignoredSignalSelected.id)}>Delete</button>
                     </div>
 
                 </div>

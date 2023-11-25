@@ -312,6 +312,12 @@ def deleteSignalFromDb(id:SignalId):
         session.commit()
         session.close()
 
+def deleteIgnoredSignalFromDb(id:SignalId):
+    with Session.begin() as session:
+        session.query(Signal).filter(IgnoredSignal.id == id.id).delete()
+        session.commit()
+        session.close()
+
 def getExecutedSignals(strategy:str):
     with Session.begin() as session:
         signals = session.query(Signal.id,
