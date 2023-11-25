@@ -1,5 +1,6 @@
 import datetime
 import json
+import sys
 import threading
 import time
 from datetime import timedelta
@@ -19,6 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from scipy.signal import argrelextrema, find_peaks
 from sklearn.neighbors import KernelDensity
+from starlette.middleware import Middleware
 from typing_extensions import Annotated
 
 from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
@@ -34,6 +36,13 @@ from trendline_breakout import trendline_breakout
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 #this is changing, so need to update this
 #https://www.iplocation.net/
