@@ -108,7 +108,7 @@ class Signal(Base):
     profit: Mapped[float] = mapped_column(nullable=True, default=0.0)
     closed: Mapped[str] = mapped_column(nullable=True, default="")
     commision: Mapped[float] = mapped_column(nullable=True, default=0.0)
-    strategy: Mapped[str] = mapped_column(nullable=True, default=""),
+    strategy: Mapped[str] = mapped_column(nullable=True, default="")
     exit: Mapped[float] = mapped_column(nullable=True, default=0.0)
 
     def as_dict(self):
@@ -575,8 +575,8 @@ def add_column(engine, table_name, column):
 
 
 def initTradingDb():
-    column = Column('exit', float, primary_key=False, default=0.0, nullable=True)
-    add_column(engine, "Trades", column)
+    #column = Column('exit', float, primary_key=False, default=0.0, nullable=True)
+    #add_column(engine, "Trades", column)
     #Trade.__table__.drop(engine)
     Base.metadata.create_all(engine)
 
