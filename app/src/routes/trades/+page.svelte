@@ -6,15 +6,15 @@
     import TradesHistory from "$lib/components/TradesHistory.svelte";
 
 	let items = [
-		{ label: "Active-Trades",
+		{ label: "Waiting-Trades",
 			value: 1,
 			component: Trades
 		},
-		{ label: "Trade Action",
+		{ label: "Ignored-Signals",
 			value: 2,
 			component: TradeCreator
 		},
-        { label: "Trades-History",
+        { label: "Trades-Statistiks",
             value: 3,
             component: TradesHistory
         },

@@ -108,6 +108,49 @@
                             <!--button class="btn btn-neutral">Hello UI</button>
                             <button class="btn btn-neutral">Hello UI</button-->
                         </div>
+
+                        <div class="flex flex-row">
+
+                            <div class="w-full">
+                                <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
+                                    <h1 class="mb-8 text-3xl text-center">Strategy-Details</h1>
+
+                                    <div class="overflow-x-auto">
+
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th>Strategy</th>
+                                                <th>Trades Total</th>
+                                                <th>Trades Failed</th>
+                                                <th>Trades Success</th>
+                                                <th>Profit</th>
+                                                <th>Swap</th>
+                                                <th>Commission</th>
+                                            <tr/>
+                                            </thead>
+                                            {#each $strategies as strategy}
+                                                <tr class="hover" on:click={() => rowSelected(strategy)}>
+                                                    <td>{strategy.strategy}</td>
+                                                    <td>{strategy.tradestotal}</td>
+                                                    <td>{strategy.tradesfailed}</td>
+                                                    <td>{strategy.tradessuccess}</td>
+                                                    <td>{strategy.profit}</td>
+                                                    <td>{strategy.swap}</td>
+                                                    <td>{strategy.commission}</td>
+
+                                                <tr/>
+                                            {/each}
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
                         <!--div class="flex w-full max-w-xl h-60 items-center justify-center mx-auto bg-green-400 border-b border-gray-600">
 
                             <button class="btn btn-neutral">Hello UI</button>
