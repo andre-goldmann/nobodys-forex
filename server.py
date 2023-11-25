@@ -32,17 +32,17 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     insertFromFile, countTrades, getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb
 from trendline_breakout import trendline_breakout
 
-version = f"{sys.version_info.major}.{sys.version_info.minor}"
-middleware = [
-    Middleware(
-        CORSMiddleware,
-        allow_origins=['*'],
-        allow_credentials=True,
-        allow_methods=['*'],
-        allow_headers=['*']
-    )
-]
-app = FastAPI(middleware=middleware)
+#version = f"{sys.version_info.major}.{sys.version_info.minor}"
+
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=['*'],
+    allow_headers=['*']
+)
 
 #this is changing, so need to update this
 #https://www.iplocation.net/
