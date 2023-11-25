@@ -576,7 +576,7 @@ def add_column(engine, table_name, column):
 
 def initTradingDb():
     column = Column('exit', Float, primary_key=False, default=0.0, nullable=True)
-    add_column(engine, "Trades", column)
+    add_column(engine.connect() , "Trades", column)
     #Trade.__table__.drop(engine)
     Base.metadata.create_all(engine)
 
