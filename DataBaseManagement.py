@@ -109,7 +109,7 @@ class Signal(Base):
     closed: Mapped[str] = mapped_column(nullable=True, default="")
     commision: Mapped[float] = mapped_column(nullable=True, default=0.0)
     strategy: Mapped[str] = mapped_column(nullable=True, default="")
-    #exit: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    exit: Mapped[float] = mapped_column(nullable=True, default=0.0)
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
