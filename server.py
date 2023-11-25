@@ -186,8 +186,8 @@ async def instrumentstats(strategy:str):
     return result
 
 @app.get("/executedsignals")
-async def executedSignals():
-    signals = getExecutedSignals()
+async def executedSignals(strategy:str):
+    signals = getExecutedSignals(strategy)
     result = []
     for signal in signals:
         result.append({'id': signal.id,

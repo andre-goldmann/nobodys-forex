@@ -310,7 +310,7 @@ def deleteSignalFromDb(id:SignalId):
         session.commit()
         session.close()
 
-def getExecutedSignals():
+def getExecutedSignals(strategy:str):
     with Session.begin() as session:
         signals = session.query(Signal.id,
                              Signal.symbol,
@@ -326,7 +326,7 @@ def getExecutedSignals():
                              Signal.profit,
                              Signal.commision,
                              Signal.swap,
-                             Signal.closed).filter(Signal.openprice > 0.0).all()
+                             Signal.closed).filter(Signal.strategy == strategy, Signal.openprice > 0.0).all()
         session.expunge_all()
         session.close()
         return signals

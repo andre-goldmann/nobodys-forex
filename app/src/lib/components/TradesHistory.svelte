@@ -1,7 +1,7 @@
 <script lang="ts">
 
     import {onMount} from "svelte";
-    import type {InstrumentStat, Strategy} from "$lib/model";
+    import type {InstrumentStat, Strategy, Trade} from "$lib/model";
     import {
         instrumentStats,
         instrumentStatsSelected,
@@ -11,6 +11,14 @@
     } from "$lib/store";
 
     const HOST = "http://85.215.32.163:6081";
+
+    let trades:Trade[] = [
+        //generate sample data
+        {id: 1, strategy: "Strategy 1", symbol: "EURUSD", profit: 100, swap: 0, commission: 0, type: "buy", lots: 0.1, openTime: "2021-01-01 00:00:00", closeTime: "2021-01-01 00:00:00", openPrice: 1.2, closePrice: 1.3, stopLoss: 1.1, takeProfit: 1.4},
+        // one more with different strategy
+        {id: 2, strategy: "Strategy 2", symbol: "EURUSD", profit: 100, swap: 0, commission: 0, type: "buy", lots: 0.1, openTime: "2021-01-01 00:00:00", closeTime: "2021-01-01 00:00:00", openPrice: 1.2, closePrice: 1.3, stopLoss: 1.1, takeProfit: 1.4},
+    ];
+
     async function loadStats(){
         await fetch(HOST + "/strategystats")
             .then(response => response.json())
@@ -46,7 +54,7 @@
 
     function loadInstrumentstats(strategy:Strategy) {
         console.info(`Load instrument stats for: ${strategy.strategy}`);
-        fetch(HOST + "/instrumentstats/?strategy=" + strategy.strategy)
+        fetch(HOST + "/instrumentstats/?strategy=" + encodeURI(strategy.strategy))
             .then(response => response.json())
             .then(data => {
                 let InstrumentStatsData:InstrumentStat[] = data;
@@ -56,6 +64,10 @@
             console.log(error);
             instrumentStatsSelected.set([]);
         });
+    }
+
+    function onSelectTrade(trade:Trade) {
+
     }
 
 </script>
@@ -70,7 +82,7 @@
         <div class="flex h-full">
             <nav class="flex w-38 h-full">
                 <div class="w-full flex mx-auto px-6 py-8">
-                    <div class="w-full h-full flex items-start justify-start">
+                    <div class="w-full h-full flex items-start justify-start overflow-x-auto">
                         <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
 
                             {#each $strategies as strategy}
@@ -99,45 +111,91 @@
                 <div class="flex w-full mx-auto px-2 py-2">
                     <div class="flex flex-col w-full h-full text-gray-900">
                         <div class="flex w-full">
-                            {#if $strategySelected}
-                                <h3>{$strategySelected.strategy}-Instrument</h3>
-                            {:else}
-                                <h3>Select a Strategy</h3>
-                            {/if}
-
-                            <!--button class="btn btn-neutral">Hello UI</button>
-                            <button class="btn btn-neutral">Hello UI</button-->
+                            <h1 class=" text-3xl text-center">Strategy-Details</h1>
+                            (select an instrument to see details)
                         </div>
+                        {#if $strategySelected}
+                            ({$strategySelected.strategy}-Instrument)
+                        {:else}
+                            Select a Strategy
+                        {/if}
+                        <ul class="timeline">
+                            <li>
+                                <div class="timeline-start">1984</div>
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                                </div>
+                                <div class="timeline-end timeline-box">First Macintosh computer</div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <hr/>
+                                <div class="timeline-start">1998</div>
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                                </div>
+                                <div class="timeline-end timeline-box">iMac</div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <hr/>
+                                <div class="timeline-start">2001</div>
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                                </div>
+                                <div class="timeline-end timeline-box">iPod</div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <hr/>
+                                <div class="timeline-start">2007</div>
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                                </div>
+                                <div class="timeline-end timeline-box">iPhone</div>
+                                <hr/>
+                            </li>
+                            <li>
+                                <hr/>
+                                <div class="timeline-start">2015</div>
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+                                </div>
+                                <div class="timeline-end timeline-box">Apple Watch</div>
+                            </li>
+                        </ul>
+
+                        <!--button class="btn btn-neutral">Hello UI</button>
+                        <button class="btn btn-neutral">Hello UI</button-->
 
                         <div class="flex flex-row">
 
                             <div class="w-full">
                                 <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
-                                    <h1 class="mb-8 text-3xl text-center">Strategy-Details</h1>
 
                                     <div class="overflow-x-auto">
 
                                         <table class="table">
                                             <thead>
                                             <tr>
-                                                <th>Strategy</th>
-                                                <th>Trades Total</th>
-                                                <th>Trades Failed</th>
-                                                <th>Trades Success</th>
-                                                <th>Profit</th>
-                                                <th>Swap</th>
-                                                <th>Commission</th>
+                                                <th>symbol</th>
+                                                <th>Type</th>
+                                                <th>Entry</th>
+                                                <th>SL</th>
+                                                <th>TP</th>
+                                                <th>Lots</th>
+                                                <th>Stamp</th>
                                             <tr/>
                                             </thead>
-                                            {#each $strategies as strategy}
-                                                <tr class="hover" on:click={() => rowSelected(strategy)}>
-                                                    <td>{strategy.strategy}</td>
-                                                    <td>{strategy.tradestotal}</td>
-                                                    <td>{strategy.tradesfailed}</td>
-                                                    <td>{strategy.tradessuccess}</td>
-                                                    <td>{strategy.profit}</td>
-                                                    <td>{strategy.swap}</td>
-                                                    <td>{strategy.commission}</td>
+                                            {#each trades as trade}
+                                                <tr class="hover" on:click={() => onSelectTrade(trade)}>
+                                                    <td>{trade.symbol}</td>
+                                                    <td>{trade.type}</td>
+                                                    <td>{trade.entry}</td>
+                                                    <td>{trade.sl}</td>
+                                                    <td>{trade.tp}</td>
+                                                    <td>{trade.lots}</td>
+                                                    <td>{trade.stamp}</td>
 
                                                 <tr/>
                                             {/each}
@@ -165,7 +223,7 @@
             </main>
             <nav class="flex w-38 h-full bg-transparent">
                 <div class="w-full flex mx-auto px-6 py-8">
-                    <div class="w-full h-full flex items-start justify-start">
+                    <div class="w-full h-full flex items-start justify-start overflow-x-auto">
                         <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
                             {#each $instrumentStats as stat}
                                 <li class="pb-3 sm:pb-4 cursor-pointer" on:click={() => onInstrumentSelected(stat)}>
