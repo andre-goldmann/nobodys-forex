@@ -42,7 +42,7 @@ middleware = [
         allow_headers=['*']
     )
 ]
-app = FastAPI(middleware)
+app = FastAPI(middleware=middleware
 
 #this is changing, so need to update this
 #https://www.iplocation.net/
