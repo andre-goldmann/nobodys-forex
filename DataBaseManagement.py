@@ -571,12 +571,15 @@ def insertFromFile(file:str):
 def add_column(engine, table_name, column):
     column_name = column.compile(dialect=engine.dialect)
     column_type = column.type.compile(engine.dialect)
-    engine.execute('ALTER TABLE %s ADD COLUMN %s %s' % (table_name, column_name, column_type))
+    connection = engine.connect()
+    query = f'ALTER TABLE {table_name} ADD exit float;'
+    #connection.execute('ALTER TABLE %s ADD COLUMN %s %s' % (table_name, column_name, column_type))
+    connection.execute(query)
 
 
 def initTradingDb():
     column = Column('exit', Float, primary_key=False, default=0.0, nullable=True)
-    add_column(engine.connect() , "Trades", column)
+    add_column(engine, "Trades", column)
     #Trade.__table__.drop(engine)
     Base.metadata.create_all(engine)
 
