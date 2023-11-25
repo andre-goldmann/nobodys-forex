@@ -16,6 +16,16 @@ export const strategySelected = writable();
 
 export const instrumentStatsSelected = writable();
 
+export const executedsignalsSelected = writable();
+
+
+export const executedsignals = derived(executedsignalsSelected, ($apiData) => {
+    if ($apiData){
+        //return $apiData.sort(e => e.level);
+        return $apiData.sort((a,b) => (a.closed > b.closed) ? 1 : ((b.closed > a.closed) ? -1 : 0))
+    }
+    return [];
+});
 
 export const instrumentStats = derived(instrumentStatsSelected, ($apiData) => {
     if ($apiData){

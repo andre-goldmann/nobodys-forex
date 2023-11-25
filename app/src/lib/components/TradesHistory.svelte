@@ -1,8 +1,10 @@
 <script lang="ts">
 
     import {onMount} from "svelte";
-    import type {InstrumentStat, Strategy, Trade} from "$lib/model";
+    import type {Executedsignal, InstrumentStat, Strategy, Trade} from "$lib/model";
     import {
+        executedsignals,
+        executedsignalsSelected,
         instrumentStats,
         instrumentStatsSelected,
         strategies,
@@ -36,10 +38,25 @@
         loadStats();
     });
 
+    function loadExecutedSignals(strategy: Strategy) {
+        console.info(`Load loadExecutedSignals for: ${strategy.strategy}`);
+        fetch(HOST + "/executedsignals/?strategy=" + encodeURI(strategy.strategy))
+            .then(response => response.json())
+            .then(data => {
+                let executedsignals:Executedsignal[] = data;
+                console.info(executedsignals[executedsignals.length-1]);
+                executedsignalsSelected.set(executedsignals);
+            }).catch(error => {
+            console.log(error);
+            executedsignalsSelected.set([]);
+        });
+    }
+
     function onStrategySelected(strategy:Strategy) {
         console.info(`Show details for: ${strategy.strategy}`);
         strategySelected.set(strategy);
         loadInstrumentstats(strategy);
+        loadExecutedSignals(strategy);
     }
 
     function onInstrumentSelected(stat:InstrumentStat) {
@@ -53,12 +70,12 @@
     }
 
     function loadInstrumentstats(strategy:Strategy) {
-        console.info(`Load instrument stats for: ${strategy.strategy}`);
+        //console.info(`Load instrument stats for: ${strategy.strategy}`);
         fetch(HOST + "/instrumentstats/?strategy=" + encodeURI(strategy.strategy))
             .then(response => response.json())
             .then(data => {
                 let InstrumentStatsData:InstrumentStat[] = data;
-                console.info(InstrumentStatsData);
+                //console.info(InstrumentStatsData);
                 instrumentStatsSelected.set(InstrumentStatsData);
             }).catch(error => {
             console.log(error);
@@ -119,51 +136,7 @@
                         {:else}
                             Select a Strategy
                         {/if}
-                        <ul class="timeline">
-                            <li>
-                                <div class="timeline-start">1984</div>
-                                <div class="timeline-middle">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                </div>
-                                <div class="timeline-end timeline-box">First Macintosh computer</div>
-                                <hr/>
-                            </li>
-                            <li>
-                                <hr/>
-                                <div class="timeline-start">1998</div>
-                                <div class="timeline-middle">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                </div>
-                                <div class="timeline-end timeline-box">iMac</div>
-                                <hr/>
-                            </li>
-                            <li>
-                                <hr/>
-                                <div class="timeline-start">2001</div>
-                                <div class="timeline-middle">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                </div>
-                                <div class="timeline-end timeline-box">iPod</div>
-                                <hr/>
-                            </li>
-                            <li>
-                                <hr/>
-                                <div class="timeline-start">2007</div>
-                                <div class="timeline-middle">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                </div>
-                                <div class="timeline-end timeline-box">iPhone</div>
-                                <hr/>
-                            </li>
-                            <li>
-                                <hr/>
-                                <div class="timeline-start">2015</div>
-                                <div class="timeline-middle">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
-                                </div>
-                                <div class="timeline-end timeline-box">Apple Watch</div>
-                            </li>
-                        </ul>
+                        
 
                         <!--button class="btn btn-neutral">Hello UI</button>
                         <button class="btn btn-neutral">Hello UI</button-->
@@ -180,22 +153,19 @@
                                             <tr>
                                                 <th>symbol</th>
                                                 <th>Type</th>
-                                                <th>Entry</th>
-                                                <th>SL</th>
-                                                <th>TP</th>
-                                                <th>Lots</th>
-                                                <th>Stamp</th>
+                                                <th>Entry/Lots</th>
+                                                <th>SL/TP</th>
+                                                <th>Stamp/Closed</th>
                                             <tr/>
                                             </thead>
-                                            {#each trades as trade}
+                                            {#each $executedsignals as trade}
                                                 <tr class="hover" on:click={() => onSelectTrade(trade)}>
                                                     <td>{trade.symbol}</td>
                                                     <td>{trade.type}</td>
-                                                    <td>{trade.entry}</td>
-                                                    <td>{trade.sl}</td>
-                                                    <td>{trade.tp}</td>
-                                                    <td>{trade.lots}</td>
-                                                    <td>{trade.stamp}</td>
+                                                    <td>{trade.entry} <br/>{trade.lots}</td>
+                                                    <td>{trade.sl}<br/>
+                                                        {trade.tp}</td>
+                                                    <td>{trade.stamp} <br/>{trade.closed}</td>
 
                                                 <tr/>
                                             {/each}

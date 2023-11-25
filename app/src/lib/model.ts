@@ -38,6 +38,24 @@ export interface IgnoredSignal {
     reason: string
 }
 
+export interface Executedsignal {
+    id: number,
+    symbol: string,
+    type: string,
+    entry: number,
+    sl: number,
+    tp: number,
+    lots: number,
+    stamp: string,
+    strategy: string,
+    activated: string,
+    openprice: number,
+    profit: number,
+    commision: number,
+    swap: number,
+    closed: string
+}
+
 export interface Strategy {
     strategy:string,
     profit:number,
