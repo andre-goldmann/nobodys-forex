@@ -11,7 +11,7 @@ import pandas as pd
 import statsmodels.api as sm
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from sqlalchemy import Enum, Column
+from sqlalchemy import Enum, Column, Integer, Float
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy import create_engine, DateTime, func
@@ -575,8 +575,8 @@ def add_column(engine, table_name, column):
 
 
 def initTradingDb():
-    #column = Column('exit', float, primary_key=False, default=0.0, nullable=True)
-    #add_column(engine, "Trades", column)
+    column = Column('exit', Float, primary_key=False, default=0.0, nullable=True)
+    add_column(engine, "Trades", column)
     #Trade.__table__.drop(engine)
     Base.metadata.create_all(engine)
 
