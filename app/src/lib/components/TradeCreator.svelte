@@ -56,7 +56,7 @@
 
     function deleteSignal(id:number) {
         console.info(`Call delete action on: ${id}`);
-        /*fetch(HOST + ":6081/deletesignal/" + id)
+        /*fetch(HOST + ":6081/deleteignoredsignal/" + id)
             .then(response => response.json())
             .then(data => {
                 console.info(data);
@@ -64,6 +64,17 @@
             }).catch(error => {
             console.log(error);
         });*/
+        let data = {
+            id: id
+        };
+        fetch(HOST + ":6081/deleteignoredsignal", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
 
     }
 </script>

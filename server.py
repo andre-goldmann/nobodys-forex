@@ -20,6 +20,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from scipy.signal import argrelextrema, find_peaks
 from sklearn.neighbors import KernelDensity
+from starlette.middleware import Middleware
 from typing_extensions import Annotated
 
 from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
@@ -32,8 +33,16 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
 from trendline_breakout import trendline_breakout
 
 version = f"{sys.version_info.major}.{sys.version_info.minor}"
-
-app = FastAPI()
+middleware = [
+    Middleware(
+        CORSMiddleware,
+        allow_origins=['*'],
+        allow_credentials=True,
+        allow_methods=['*'],
+        allow_headers=['*']
+    )
+]
+app = FastAPI(middleware)
 
 #this is changing, so need to update this
 #https://www.iplocation.net/
