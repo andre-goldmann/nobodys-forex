@@ -104,8 +104,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
+    #volumes:
+    #  - pgadmin-data:/var/lib/pgadmin
 
     #pgadmin:
   #  container_name: pgadmin4_container
