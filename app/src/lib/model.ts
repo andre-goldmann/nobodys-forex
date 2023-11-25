@@ -53,7 +53,8 @@ export interface Executedsignal {
     profit: number,
     commision: number,
     swap: number,
-    closed: string
+    closed: string,
+    exit: number
 }
 
 export interface Strategy {

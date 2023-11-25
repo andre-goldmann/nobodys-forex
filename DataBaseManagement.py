@@ -328,7 +328,8 @@ def getExecutedSignals(strategy:str):
                              Signal.profit,
                              Signal.commision,
                              Signal.swap,
-                             Signal.closed).filter(Signal.strategy == strategy, Signal.openprice > 0.0).order_by(Signal.stamp.desc()).all()
+                             Signal.closed,
+                             Signal.exit).filter(Signal.strategy == strategy, Signal.openprice > 0.0).order_by(Signal.stamp.desc()).all()
         session.expunge_all()
         session.close()
         return signals

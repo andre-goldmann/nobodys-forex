@@ -204,7 +204,8 @@ async def executedSignals(strategy:str):
                        'profit': signal.profit,
                        'commision': signal.commision,
                        'swap': signal.swap,
-                       'closed': signal.closed})
+                       'closed': signal.closed,
+                       'exit': signal.exit})
 
     return result
 

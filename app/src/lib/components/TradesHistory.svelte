@@ -136,7 +136,7 @@
                         {:else}
                             Select a Strategy
                         {/if}
-                        
+
 
                         <!--button class="btn btn-neutral">Hello UI</button>
                         <button class="btn btn-neutral">Hello UI</button-->
@@ -153,16 +153,16 @@
                                             <tr>
                                                 <th>symbol</th>
                                                 <th>Type</th>
-                                                <th>Entry/Lots</th>
+                                                <th>Entry/Lots/Exit</th>
                                                 <th>SL/TP</th>
-                                                <th>Stamp/Closed</th>
+                                                <th>Stamp/Closed/Exit</th>
                                             <tr/>
                                             </thead>
                                             {#each $executedsignals as trade}
                                                 <tr class="hover" on:click={() => onSelectTrade(trade)}>
                                                     <td>{trade.symbol}</td>
                                                     <td>{trade.type}</td>
-                                                    <td>{trade.entry} <br/>{trade.lots}</td>
+                                                    <td>{trade.entry} <br/>{trade.lots} <br/>{trade.exit}</td>
                                                     <td>{trade.sl}<br/>
                                                         {trade.tp}</td>
                                                     <td>{trade.stamp} <br/>{trade.closed}</td>
