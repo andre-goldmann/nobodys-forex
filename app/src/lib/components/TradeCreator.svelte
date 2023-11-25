@@ -70,6 +70,8 @@
         fetch(HOST + ":6081/deleteignoredsignal", {
             method: 'POST',
             headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
