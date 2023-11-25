@@ -108,7 +108,8 @@ class Signal(Base):
     profit: Mapped[float] = mapped_column(nullable=True, default=0.0)
     closed: Mapped[str] = mapped_column(nullable=True, default="")
     commision: Mapped[float] = mapped_column(nullable=True, default=0.0)
-    strategy: Mapped[str] = mapped_column(nullable=True, default="")
+    strategy: Mapped[str] = mapped_column(nullable=True, default=""),
+    exit: Mapped[float] = mapped_column(nullable=True, default=0.0)
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
@@ -141,6 +142,7 @@ class HistoryUpdateDto(BaseModel):
     profit: float
     swap:float
     commision:float
+    exit:float
 
 class CandlesDto(BaseModel):
     #wird nicht gespeichert, für jedes Symbol ein DB
@@ -382,7 +384,6 @@ def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
 
             session.commit()
             session.close()
-        #print("Trade Updated:", storedSignal)
 
 def getLinesInfo(symbol, timeframeEnum):
     with Session.begin() as session:
@@ -402,6 +403,7 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
             storedSignal.swap = historyUpdateDto.swap
             storedSignal.profit = historyUpdateDto.profit
             storedSignal.commision = historyUpdateDto.commision
+            storedSignal.exit = historyUpdateDto.exit
             if historyUpdateDto.closed is not None and historyUpdateDto.closed != "" and historyUpdateDto.closed != "-":
                 storedSignal.closed = historyUpdateDto.closed
 
