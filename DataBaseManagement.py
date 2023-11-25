@@ -579,7 +579,7 @@ def add_column(table_name):
 
 def initTradingDb():
     #column = Column('exit', Float, primary_key=False, default=0.0, nullable=True)
-    add_column("Trades")
+    add_column("public.Trades")
     #Trade.__table__.drop(engine)
     Base.metadata.create_all(engine)
 
