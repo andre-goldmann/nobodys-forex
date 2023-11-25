@@ -44,7 +44,7 @@
             .then(response => response.json())
             .then(data => {
                 let executedsignals:Executedsignal[] = data;
-                console.info(executedsignals[executedsignals.length-1]);
+                //console.info(executedsignals[executedsignals.length-1]);
                 executedsignalsSelected.set(executedsignals);
             }).catch(error => {
             console.log(error);
