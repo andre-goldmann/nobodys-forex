@@ -11,7 +11,7 @@ import pandas as pd
 import statsmodels.api as sm
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from sqlalchemy import Enum, Column, Integer, Float
+from sqlalchemy import Enum, Column, Integer, Float, text
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy import create_engine, DateTime, func
@@ -568,18 +568,18 @@ def insertFromFile(file:str):
 
         print("Trades stored")
 
-def add_column(engine, table_name, column):
-    column_name = column.compile(dialect=engine.dialect)
-    column_type = column.type.compile(engine.dialect)
+def add_column(table_name):
+    #column_name = column.compile(dialect=engine.dialect)
+    #column_type = column.type.compile(engine.dialect)
     connection = engine.connect()
-    query = f'ALTER TABLE {table_name} ADD exit float;'
+    statement = text(f'ALTER TABLE {table_name} ADD exit float;')
     #connection.execute('ALTER TABLE %s ADD COLUMN %s %s' % (table_name, column_name, column_type))
-    connection.execute(query)
+    connection.execute(statement)
 
 
 def initTradingDb():
-    column = Column('exit', Float, primary_key=False, default=0.0, nullable=True)
-    add_column(engine, "Trades", column)
+    #column = Column('exit', Float, primary_key=False, default=0.0, nullable=True)
+    add_column("Trades")
     #Trade.__table__.drop(engine)
     Base.metadata.create_all(engine)
 
