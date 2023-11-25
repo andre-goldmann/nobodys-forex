@@ -571,9 +571,12 @@ def job():
     #TODO how to get end/start of the week?
 
 
+
+
 if __name__ == "__main__":
     #dropAllTables()
     initTradingDb()
+
     #if countTrades() == 0:
     #    insertFromFile("sql/Trades.csv")
     #else:
