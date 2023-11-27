@@ -32,6 +32,7 @@ from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
 
+startDate = "2023-07-01 00:00:00.000000"
 
 app = FastAPI()
 app.add_middleware(
@@ -565,7 +566,7 @@ def job():
             for timeFrame in TimeFrame:
                 if TimeFrame.PERIOD_H4 is timeFrame:
                     deleteSupportResistance(symbol, timeFrame)
-                    regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
+                    regressionCalculation(symbol,startDate, timeFrame)
                     trendlinebreakout(symbol, timeFrame)
                     autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
                     defaultsr(symbol, 0.01, timeFrame)
@@ -576,14 +577,12 @@ def job():
             for timeFrame in TimeFrame:
                 if TimeFrame.PERIOD_D1 is timeFrame:
                     deleteSupportResistance(symbol, timeFrame)
-                    regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
+                    regressionCalculation(symbol,startDate, timeFrame)
                     trendlinebreakout(symbol, timeFrame)
                     autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
                     defaultsr(symbol, 0.01, timeFrame)
 
     #TODO how to get end/start of the week?
-
-
 
 
 if __name__ == "__main__":
@@ -615,7 +614,7 @@ if __name__ == "__main__":
                 trendlinebreakout(symbol, timeFrame)
                 autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
                 defaultsr(symbol, 0.01, timeFrame)
-                regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
+                regressionCalculation(symbol,startDate, timeFrame)
 
     schedule.every().hour.do(job)
     #schedule.every().hour.do(runFirstStrategy)
