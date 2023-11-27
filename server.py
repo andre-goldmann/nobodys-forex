@@ -1,6 +1,5 @@
 import datetime
 import json
-import sys
 import threading
 import time
 from datetime import timedelta
@@ -20,7 +19,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from scipy.signal import argrelextrema, find_peaks
 from sklearn.neighbors import KernelDensity
-from starlette.middleware import Middleware
 from typing_extensions import Annotated
 
 from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
@@ -610,14 +608,14 @@ if __name__ == "__main__":
                         print(f"Inserted data for {symbol} + {timeFrame}")
 
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
-    #for symbol in symbols:
-    #    for timeFrame in TimeFrame:
-    #        if TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
-    #            deleteSupportResistance(symbol, timeFrame)
-    #            trendlinebreakout(symbol, timeFrame)
-    #            autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
-    #            defaultsr(symbol, 0.01, timeFrame)
-    #            regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
+    for symbol in symbols:
+       for timeFrame in TimeFrame:
+            if TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
+                deleteSupportResistance(symbol, timeFrame)
+                trendlinebreakout(symbol, timeFrame)
+                autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
+                defaultsr(symbol, 0.01, timeFrame)
+                regressionCalculation(symbol,"2023-01-01 00:00:00.000000", timeFrame)
 
     schedule.every().hour.do(job)
     #schedule.every().hour.do(runFirstStrategy)

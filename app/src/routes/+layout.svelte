@@ -8,8 +8,16 @@
 
     <Header />
 
-    <main class="container mx-auto">
+    <main class="px-8">
         <slot />
     </main>
 
 </div>
+
+<style>
+    .app {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+</style>
