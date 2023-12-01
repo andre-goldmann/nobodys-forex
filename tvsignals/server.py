@@ -280,7 +280,7 @@ def proceedSignal(signal):
                      'tp': signal.tp,
                      'strategy': signal.strategy
                     .replace("GaussianChannelTrendAi", "GaussianChannelTrendAI")
-                    .peplace("T3-machineLearningLogisticRegression","T3-MachineLearningLogisticRegression")})
+                    .replace("T3-machineLearningLogisticRegression","T3-MachineLearningLogisticRegression")})
 
     with Session.begin() as session:
 

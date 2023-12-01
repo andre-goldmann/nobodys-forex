@@ -1,3 +1,4 @@
+import logging
 import datetime
 import json
 import threading
@@ -586,6 +587,11 @@ def job():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level="INFO")
+    root = logging.getLogger()
+    hdlr = root.handlers[0]
+    json_format = logging.Formatter('{"time": "%(asctime)s", "level": "%(levelname)s", "message": "%(message)s"}')
+    hdlr.setFormatter(json_format)
     #dropAllTables()
     initTradingDb()
 
