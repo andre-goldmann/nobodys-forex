@@ -271,16 +271,15 @@ def proceedSignal(signal):
     # and do the check here
     # D-EMA200, H4-EMA, D-Regression, H4-Regression
     # Support Resistance
-
+    strategy = signal.strategy.replace("GaussianChannelTrendAi", "GaussianChannelTrendAI")
+    strategy = strategy.replace("T3-machineLearningLogisticRegression","T3-MachineLearningLogisticRegression")
     jsonSignal =str({'symbol': signal.symbol,
                      'timestamp': signal.timestamp,
                      'type': signal.type,
                      'entry': signal.entry,
                      'sl': signal.sl,
                      'tp': signal.tp,
-                     'strategy': signal.strategy
-                    .replace("GaussianChannelTrendAi", "GaussianChannelTrendAI")
-                    .replace("T3-machineLearningLogisticRegression","T3-MachineLearningLogisticRegression")})
+                     'strategy': strategy})
 
     with Session.begin() as session:
 
