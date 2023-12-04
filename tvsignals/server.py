@@ -292,32 +292,14 @@ def proceedSignal(signal):
             session.close()
             return
 
-        if signal.strategy not in strategies:
-            print(f"Ignore Signal because strategy is unknown: {signal.strategy}")
+        if strategy not in strategies:
+            print(f"Ignore Signal because strategy is unknown: {strategy}")
             storeIgnoredSignal(IgnoredSignal(
                 json=jsonSignal,
-                reason=f"Ignore Signal because strategy is unknown: {signal.strategy}"
+                reason=f"Ignore Signal because strategy is unknown: {strategy}"
             ),session)
             session.close()
             return
-
-        #because of setting sl and tp here we can not check it here anymore
-        #if "buy" == signal.type and signal.sl > signal.tp:
-        #    print(f"Ignore (1. Condition) Buy-Signal: {signal}")
-        #    storeIgnoredSignal(IgnoredSignal(
-        #        json=jsonSignal,
-        #        reason=f"Ignore (1. Condition) Buy-Signal: {signal}"
-        #    ))
-        #    return
-
-        #if "sell" == signal.type and signal.sl < signal.tp:
-        #    print(f"Ignore (1. Condition) Sell-Signal: {signal}")
-        #    storeIgnoredSignal(IgnoredSignal(
-        #        json=jsonSignal,
-        #        reason=f"Ignore (1. Condition) Sell-Signal: {signal}"
-        #    ))
-        #    return
-
 
         regressionLineH4 = session.query(Regressions).filter(
             Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
@@ -353,7 +335,7 @@ def proceedSignal(signal):
                 tp = signal.entry + atrValue.iloc[-1]
 
             lots = 0.1
-            signalStats = getSignalStats(signal.strategy, signal.symbol)
+            signalStats = getSignalStats(strategy, signal.symbol)
             #print(signalStats.profit)
             #print(signalStats.failedtrades)
             #print(signalStats.successtrades)
@@ -378,7 +360,7 @@ def proceedSignal(signal):
                 tp=tp,
                 lots=lots,
                 commision=0.0,
-                strategy=signal.strategy
+                strategy=strategy
             ), session)
             session.close()
         else:
@@ -421,7 +403,7 @@ def proceedSignal(signal):
                     tp=tp,
                     lots=0.1,
                     commision=0.0,
-                    strategy=signal.strategy
+                    strategy=strategy
                 ), session)
                 session.close()
             else:
