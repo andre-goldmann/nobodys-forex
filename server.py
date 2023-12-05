@@ -558,10 +558,9 @@ def job():
     # TODO needs timeframe
 
     now = datetime.datetime.now()
-    minute = now.minute
     hour = now.hour
 
-    if hour % 4 == 0 and minute == 0:
+    if hour % 4 == 0:
 
         for symbol in symbols:
             for timeFrame in TimeFrame:
@@ -572,7 +571,7 @@ def job():
                     autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
                     defaultsr(symbol, 0.01, timeFrame)
 
-    if hour == 0 and minute == 1:
+    if hour == 0:
 
         for symbol in symbols:
             for timeFrame in TimeFrame:
