@@ -624,7 +624,7 @@ if __name__ == "__main__":
     schedule.every().hour.do(job)
     #schedule.every().hour.do(runFirstStrategy)
     # Start the background thread
-    #stop_run_continuously = run_continuously()
+    stop_run_continuously = run_continuously()
     uvicorn.run(app, host="0.0.0.0", port=6081)
 
     #consumer.subscribe(['test:1:1'])

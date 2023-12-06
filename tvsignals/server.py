@@ -347,7 +347,7 @@ def proceedSignal(signal):
                 if signalStats.failedtrades > 100:
                     storeIgnoredSignal(IgnoredSignal(
                         json=jsonSignal,
-                        reason=f"Signal {signal} ignored, because it more than 100 failed Trades!"
+                        reason=f"Signal {signal} ignored, because it has more than 100 failed Trades!"
 
                     ), session)
                     return
