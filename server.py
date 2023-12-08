@@ -549,16 +549,14 @@ def job():
     now = datetime.datetime.now()
     hour = now.hour
 
-    if hour % 4 == 0:
-
-        for symbol in symbols:
-            for timeFrame in TimeFrame:
-                if TimeFrame.PERIOD_H4 is timeFrame:
-                    deleteSupportResistance(symbol, timeFrame)
-                    regressionCalculation(symbol,startDate, timeFrame)
-                    trendlinebreakout(symbol, timeFrame)
-                    autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
-                    defaultsr(symbol, 0.01, timeFrame)
+    for symbol in symbols:
+        for timeFrame in TimeFrame:
+            if TimeFrame.PERIOD_H1 is timeFrame or TimeFrame.PERIOD_H4 is timeFrame:
+                deleteSupportResistance(symbol, timeFrame)
+                regressionCalculation(symbol,startDate, timeFrame)
+                trendlinebreakout(symbol, timeFrame)
+                autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
+                defaultsr(symbol, 0.01, timeFrame)
 
     if hour == 0:
 
@@ -603,7 +601,7 @@ if __name__ == "__main__":
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
     for symbol in symbols:
        for timeFrame in TimeFrame:
-            if TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
+            if TimeFrame.PERIOD_H1 is timeFrame or TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
                 deleteSupportResistance(symbol, timeFrame)
                 trendlinebreakout(symbol, timeFrame)
                 autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
