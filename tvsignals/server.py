@@ -146,6 +146,7 @@ class SignalDto(BaseModel):
 def getSignalStats(strategy:str, symbol:str):
     with Session.begin() as session:
         signalStats = session.query(Signal.strategy,
+                                    func.count(Signal.id).label("alltrades"),
                                     func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
                                     func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
                                     func.sum(Signal.profit).label("profit")).filter(Signal.strategy == strategy, Signal.symbol == symbol).group_by(Signal.strategy).first()
@@ -343,11 +344,13 @@ def proceedSignal(signal):
                 lots = 0.01
             elif signalStats.failedtrades > signalStats.successtrades:
                 lots = 0.01
-                #ignore Signal
-                if signalStats.failedtrades > 100:
+
+            if signalStats.alltrades > 100:
+                percentage = (100 / signalStats.alltrades) * signalStats.successtrades
+                if percentage < 0.55:
                     storeIgnoredSignal(IgnoredSignal(
                         json=jsonSignal,
-                        reason=f"Signal {signal} ignored, because it has more than 100 failed Trades!"
+                        reason=f"Signal {signal} ignored, because it has more {signalStats.failedtrades} failed Trades and Win-Percentage is {percentage}!"
 
                     ), session)
                     return
