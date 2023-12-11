@@ -448,9 +448,9 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
     all_df = pd.concat([lsma_df,df], axis=1)
     all_df.dropna(inplace=True)
 
-    #print("First row: ", all_df.iloc[0]['DATETIME'])
-    #print("Last row:  ", all_df.iloc[-1]['DATETIME'])
-    #print("###################################")
+    print("StartTime: ", all_df.iloc[0]['DATETIME'])
+    print("endTime:  ", all_df.iloc[-1]['DATETIME'])
+    print("###################################")
 
     end = timer()
     print("Regression took: ", timedelta(seconds=end-start))
@@ -462,10 +462,8 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
         spongebob = Regressions(
             symbol=symbol,
             timeFrame= timeFrame.name,
-            #startTime= all_df.iloc[-lookback].DATETIME,
             startTime= all_df.iloc[0].DATETIME,
             endTime=all_df.iloc[-1].DATETIME,
-            #startValue=all_df.iloc[-lookback].LSMA,
             startValue=all_df.iloc[0].LSMA,
             endValue=all_df.iloc[-1].LSMA,
         )
@@ -474,26 +472,12 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
         session.commit()
         session.close()
 
-        #dfFromDb = pd.read_sql_query(
-        #    sql = session.query(Regressions.timeFrame,
-        #                        Regressions.startTime,
-        #                        Regressions.endTime,
-        #                        Regressions.startValue,
-        #                        Regressions.endValue).statement,
-        #    con = engine
-        #)
-        #print(len(dfFromDb), " regression entries stored.")
-        #print("Last row: ")
-        #print(df.iloc[-1])
-
 def deleteRegressionData(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
         try:
             results = session.query(Regressions).filter(Regressions.symbol==symbol, Regressions.timeFrame==timeFrame).all()
-            #print(results)
-            #print("ToDelete:")
+
             for r in results:
-                #print(r)
                 session.delete(r)
             session.commit()
             session.close()
