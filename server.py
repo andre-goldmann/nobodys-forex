@@ -28,7 +28,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, getStrategystats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
-    insertFromFile, countTrades, getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb
+    insertFromFile, countTrades, getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -144,6 +144,24 @@ async def waitingSignals():
                        'strategy': signal.strategy})
 
     return result
+
+@app.get("/waitingsignalsprod")
+async def waitingSignalsProd():
+    signals = getWaitingSignalsProd()
+    result = []
+    for signal in signals:
+        result.append({'id': signal.id,
+                       'symbol': signal.symbol,
+                       'type': signal.type,
+                       'entry': signal.entry,
+                       'sl': signal.sl,
+                       'tp': signal.tp,
+                       'lots': signal.lots,
+                       'stamp': signal.stamp,
+                       'strategy': signal.strategy})
+
+    return result
+
 
 @app.post("/deletesignal")
 async def deleteSignal(id:SignalId):
@@ -262,7 +280,6 @@ async def modifySignalIn(id: Annotated[int, Form()],
 
     return "Order modified"
 
-# TODO add symbol as param
 @app.get("/linesinfo/")
 async def linesInfo(symbol:str, timeframe: str):
 

@@ -113,6 +113,27 @@ class Signal(Base):
     commision: Mapped[float] = mapped_column(nullable=True, default="")
     strategy: Mapped[str] = mapped_column(nullable=True, default="")
 
+class ProdSignal(Base):
+    __tablename__ = "ProdTrades"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    type: Mapped[str] = mapped_column(String(6))
+    entry: Mapped[float]
+    sl: Mapped[float]
+    tp: Mapped[float]
+    lots: Mapped[float]
+    spread: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    tradeid: Mapped[int] = mapped_column(nullable=True, default=0)
+    stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
+    # werden erst nach der Erstellung des Trades gesetzt
+    activated: Mapped[str] = mapped_column(nullable=True, default="")
+    openprice: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    swap: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    profit: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    closed: Mapped[str] = mapped_column(nullable=True, default="")
+    commision: Mapped[float] = mapped_column(nullable=True, default="")
+    strategy: Mapped[str] = mapped_column(nullable=True, default="")
+
 class CandlesEntity(Base):
     __tablename__ = "Candles"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -259,6 +280,10 @@ async def resendsignal(
 async def signals(signal:SignalDto):
     proceedSignal(signal)
 
+def storeProdSignal(signal: ProdSignal, session):
+    session.add(signal)
+    session.commit()
+
 def storeSignal(signal: Signal, session):
     session.add(signal)
     session.commit()
@@ -354,6 +379,19 @@ def proceedSignal(signal):
 
                     ), session)
                     return
+                else:
+                    prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.tradeid == 0, ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
+                    if prodSignalsCount <= 5:
+                        storeProdSignal(ProdSignal(
+                            symbol=signal.symbol,
+                            type=signal.type,
+                            entry=signal.entry,
+                            sl=sl,
+                            tp=tp,
+                            lots=0.01,
+                            commision=0.0,
+                            strategy=strategy
+                        ), session)
 
             storeSignal(Signal(
                 symbol=signal.symbol,

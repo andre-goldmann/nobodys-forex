@@ -306,6 +306,21 @@ def getWaitingSignals():
         session.close()
         return signals
 
+def getWaitingSignalsProd():
+    with Session.begin() as session:
+        signals = session.query(Signal.id,
+                                Signal.symbol,
+                                Signal.type,
+                                Signal.entry,
+                                Signal.sl,
+                                Signal.tp,
+                                Signal.lots,
+                                Signal.stamp,
+                                Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
+        session.expunge_all()
+        session.close()
+        return signals
+
 def deleteSignalFromDb(id:SignalId):
     with Session.begin() as session:
         session.query(Signal).filter(Signal.id == id.id).delete()
