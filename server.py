@@ -24,7 +24,7 @@ from typing_extensions import Annotated
 
 from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
-    activateSignal, SignalUpdateDto, updateSignalInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
+    activateSignal, SignalUpdateDto, updateSignalInDb, updateSignalProdInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, getStrategystats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
@@ -330,6 +330,13 @@ async def updateSignal(signalUpdateDto:SignalUpdateDto):
     updateSignalInDb(signalUpdateDto)
     #TODO send information to clients
 
+@app.post("/updatesignalprod")
+async def updateSignalProd(signalUpdateDto:SignalUpdateDto):
+    if signalUpdateDto.symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
+        return
+    updateSignalProdInDb(signalUpdateDto)
+    #TODO send information to clients
 
 @app.post("/updatehistory")
 async def updateHistory(historyUpdateDto:HistoryUpdateDto):

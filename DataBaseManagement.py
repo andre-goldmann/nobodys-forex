@@ -114,6 +114,27 @@ class Signal(Base):
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
 
+class ProdSignal(Base):
+    __tablename__ = "ProdTrades"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    type: Mapped[str] = mapped_column(String(6))
+    entry: Mapped[float]
+    sl: Mapped[float]
+    tp: Mapped[float]
+    lots: Mapped[float]
+    spread: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    tradeid: Mapped[int] = mapped_column(nullable=True, default=0)
+    stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
+    # werden erst nach der Erstellung des Trades gesetzt
+    activated: Mapped[str] = mapped_column(nullable=True, default="")
+    openprice: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    swap: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    profit: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    closed: Mapped[str] = mapped_column(nullable=True, default="")
+    commision: Mapped[float] = mapped_column(nullable=True, default="")
+    strategy: Mapped[str] = mapped_column(nullable=True, default="")
+
 class IgnoredSignal(Base):
     __tablename__ = "IgnoredSignals"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -308,15 +329,15 @@ def getWaitingSignals():
 
 def getWaitingSignalsProd():
     with Session.begin() as session:
-        signals = session.query(Signal.id,
-                                Signal.symbol,
-                                Signal.type,
-                                Signal.entry,
-                                Signal.sl,
-                                Signal.tp,
-                                Signal.lots,
-                                Signal.stamp,
-                                Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
+        signals = session.query(ProdSignal.id,
+                                ProdSignal.symbol,
+                                ProdSignal.type,
+                                ProdSignal.entry,
+                                ProdSignal.sl,
+                                ProdSignal.tp,
+                                ProdSignal.lots,
+                                ProdSignal.stamp,
+                                ProdSignal.strategy).filter(ProdSignal.tradeid == 0, ProdSignal.activated == "", ProdSignal.openprice == 0.0).all()
         session.expunge_all()
         session.close()
         return signals
@@ -397,6 +418,21 @@ def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
 
     with Session.begin() as session:
         storedSignal = session.query(Signal).filter(Signal.symbol == signalUpdateDto.symbol, Signal.id == signalUpdateDto.magic).first()
+        if storedSignal is not None:
+            storedSignal.swap = signalUpdateDto.swap
+            storedSignal.profit = signalUpdateDto.profit
+            storedSignal.commision = signalUpdateDto.commision
+            if signalUpdateDto.closed is not None and signalUpdateDto.closed != "" and signalUpdateDto.closed != "-":
+                storedSignal.closed = signalUpdateDto.closed
+
+            session.commit()
+            session.close()
+
+def updateSignalProdInDb(signalUpdateDto:SignalUpdateDto):
+    #print("Updating Trade", tradeUpdateDto)
+
+    with Session.begin() as session:
+        storedSignal = session.query(ProdSignal).filter(ProdSignal.symbol == signalUpdateDto.symbol, ProdSignal.id == signalUpdateDto.magic).first()
         if storedSignal is not None:
             storedSignal.swap = signalUpdateDto.swap
             storedSignal.profit = signalUpdateDto.profit
