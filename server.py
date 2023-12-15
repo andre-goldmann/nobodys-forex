@@ -118,9 +118,6 @@ async def getLastCandleStamp(symbol:str, timeFrame:str):
 async def ignoredSignals():
     signals = getIgnoredSignals()
     result = []
-    #print("###################################")
-    #print(f"IgnoredSignals from db loaded:{len(signals)}")
-    #print("###################################")
     for signal in signals:
         result.append({'id': signal.id,
                        'json': signal.json,
@@ -346,13 +343,14 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
     updateSignalByHistory(historyUpdateDto)
     #TODO send information to clients
 
-@app.get("/insertTrades")
-def insertTrades():
-    if countTrades() == 0:
-        insertFromFile("sql/Trades.csv")
-        return countTrades()
-    else:
-        return countTrades()
+
+#@app.get("/insertTrades")
+#def insertTrades():
+#    if countTrades() == 0:
+#        insertFromFile("sql/Trades.csv")
+#        return countTrades()
+#    else:
+#        return countTrades()
 
 @app.post("/signalactivated")
 async def signalActivated(signalActivation:SignalActivationDto):
