@@ -411,6 +411,15 @@ def activateSignal(tradeActivationDto:SignalActivationDto):
         storeSignal.openprice=tradeActivationDto.open_price
         session.commit()
         session.close()
+
+def activateSignalProd(tradeActivationDto:SignalActivationDto):
+    #print("Activating Trade", tradeActivationDto)
+    with Session.begin() as session:
+        storeSignal = session.query(ProdSignal).filter(ProdSignal.symbol == tradeActivationDto.symbol, ProdSignal.id == tradeActivationDto.magic).first()
+        storeSignal.activated=tradeActivationDto.timestamp
+        storeSignal.openprice=tradeActivationDto.open_price
+        session.commit()
+        session.close()
     #print("Trade Activated:", storeSignal.openprice)
 
 def updateSignalInDb(signalUpdateDto:SignalUpdateDto):
