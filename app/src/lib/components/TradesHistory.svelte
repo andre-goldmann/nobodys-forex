@@ -13,7 +13,7 @@
     } from "$lib/store";
 
     const HOST = "http://85.215.32.163:6081";
-
+    let active:boolean = true;
     let trades:Trade[] = [
         //generate sample data
         {id: 1, strategy: "Strategy 1", symbol: "EURUSD", profit: 100, swap: 0, commission: 0, type: "buy", lots: 0.1, openTime: "2021-01-01 00:00:00", closeTime: "2021-01-01 00:00:00", openPrice: 1.2, closePrice: 1.3, stopLoss: 1.1, takeProfit: 1.4},
@@ -106,7 +106,7 @@
                                 <li class="pb-3 sm:pb-4 cursor-pointer" on:click={() => onStrategySelected(strategy)}>
                                     <div class="flex items-center space-x-4 rtl:space-x-reverse">
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium ">
+                                            <p class="text-sm font-medium">
                                                 {strategy.strategy}
                                             </p>
                                             <p class="text-sm text-gray-500 truncate dark:text-gray-400">
@@ -192,24 +192,33 @@
                     </div>
                 </div>
             </main>
-            <nav class="flex w-38 h-full bg-transparent">
+            <nav class="flex w-38 h-full">
                 <div class="w-full flex mx-auto px-6 py-8">
                     <div class="w-full h-full flex items-start justify-start overflow-x-auto">
                         <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
                             {#each $instrumentStats as stat}
+
                                 <li class="pb-3 sm:pb-4 cursor-pointer" on:click={() => onInstrumentSelected(stat)}>
-                                    <div class="flex items-center space-x-4 rtl:space-x-reverse">
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium truncate dark:text-white">
-                                                {stat.symbol}
-                                            </p>
-                                            <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                                Total: {stat.tradestotal} Win: {stat.tradessuccess} Loss: {stat.tradesfailed}
-                                            </p>
-                                        </div>
-                                        <div class="inline-flex items-center text-base font-semibold dark:text-white">
-                                            {roundNumber(stat.profit)} €
-                                        </div>
+                                    <!--
+                                    Python:
+                                    percentage = (100 / signalStats.alltrades) * signalStats.successtrades
+                                    if percentage < 60:
+                                    -->
+                                        <div class={(100 / stat.tradestotal) * stat.tradessuccess > 58.0 && stat.tradestotal > 100 ? "bg-green-400 flex items-center space-x-4 rtl:space-x-reverse": "bg-red-400 flex items-center space-x-4 rtl:space-x-reverse"}>
+                                         <!--div class="flex items-center space-x-4 rtl:space-x-reverse"-->
+                                          <div class="flex-1 min-w-0">
+                                              <p class="text-sm font-medium truncate text-black">
+                                                  {stat.symbol}
+                                              </p>
+                                              <p class="text-sm text-gray-500 truncate dark:text-black">
+                                                  Total: {stat.tradestotal} Win: {stat.tradessuccess} Loss: {stat.tradesfailed}
+                                              </p>
+                                          </div>
+                                          <div class="inline-flex items-center text-base font-semibold text-black">
+                                              <!--{roundNumber(stat.profit)} €-->
+                                              {(100 / stat.tradestotal) * stat.tradessuccess} %
+                                          </div>
+
                                     </div>
                                 </li>
                             {/each}
@@ -222,6 +231,12 @@
 </div>
 
 <style>
+    active{
+        color: red;
+    }
+    inactive{
+        color: green;
+    }
     ::-webkit-scrollbar {
         width: 5px;
         height: 5px;

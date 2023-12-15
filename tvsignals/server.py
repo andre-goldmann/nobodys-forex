@@ -372,11 +372,10 @@ def proceedSignal(signal):
 
             if signalStats.alltrades > 100:
                 percentage = (100 / signalStats.alltrades) * signalStats.successtrades
-                if percentage < 60:
+                if percentage < 58:
                     storeIgnoredSignal(IgnoredSignal(
                         json=jsonSignal,
                         reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
-
                     ), session)
                     return
                 else:
