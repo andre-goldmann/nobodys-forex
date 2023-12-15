@@ -167,7 +167,7 @@ class SignalDto(BaseModel):
 def getSignalStats(strategy:str, symbol:str):
     with Session.begin() as session:
         signalStats = session.query(Signal.strategy,
-                                    func.count(Signal.id).label("alltrades"),
+                                    func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
                                     func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
                                     func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
                                     func.sum(Signal.profit).label("profit")).filter(Signal.strategy == strategy, Signal.symbol == symbol).group_by(Signal.strategy).first()

@@ -379,7 +379,7 @@ def getExecutedSignals(strategy:str):
 def getStrategystats():
     with Session.begin() as session:
         signalStats = session.query(Signal.strategy,
-                             func.count(Signal.id).label("alltrades"),
+                             func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
                              func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
                              func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
                              func.sum(Signal.profit).label("profit"),
@@ -393,7 +393,7 @@ def getInstrumentstats(strategy:str):
 
     with Session.begin() as session:
         signalStats = session.query(Signal.symbol,
-                                    func.count(Signal.id).label("alltrades"),
+                                    func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
                                     func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
                                     func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
                                     func.sum(Signal.profit).label("profit"),
