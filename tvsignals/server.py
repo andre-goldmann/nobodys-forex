@@ -379,7 +379,7 @@ def proceedSignal(signal):
                     ), session)
                     return
                 else:
-                    prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.tradeid == 0, ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
+                    prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
                     if prodSignalsCount <= 5:
                         storeProdSignal(ProdSignal(
                             symbol=signal.symbol,
