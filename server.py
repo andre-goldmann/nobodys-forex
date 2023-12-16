@@ -307,20 +307,11 @@ async def redkslow(symbol:str, timeframe: str):
     LL = f_LazyLine(data['close'].tail(-1).tail(200), 15)
     LLPrev = f_LazyLine(data['close'].iloc[len(data)-200:len(data)-1], 15)
 
-    data['redkslow'] = data['close'].apply(lambda x: f_LazyLine(x, 15))
+    data['redkslow'] = data['close'].apply(lambda row: f_LazyLine(row, 15))
 
+    data['redkslowtrend'] = data.apply(lambda row: trendRedkslow(row['redkslow'], row['redkslow'].shift(1)))
 
-    #column_to_apply = 'B'
-
-    # Create a new column with the previous values of the specified column
-    #df[f'{column_to_apply}_previous'] = df[column_to_apply].shift(1)
-
-    # Apply the custom function using the current and previous values
-    #df[f'{column_to_apply}_processed'] = df.apply(lambda row: custom_function(row[column_to_apply], row[f'{column_to_apply}_previous']), axis=1)
-
-    data['redkslowtrend'] = data['redkslow'].apply(lambda x: trendRedkslow(x, x.shift(1)))
     print(data.tail(-1).tail(15))
-
     #print("++++++++++++++++++")
     #print(f"{LL}")
     #print(f"{LLPrev}")
