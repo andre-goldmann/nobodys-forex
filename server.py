@@ -29,6 +29,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
     insertFromFile, countTrades, getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd
+from pinescripts import f_LazyLine
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -276,6 +277,35 @@ async def modifySignalIn(id: Annotated[int, Form()],
     modifySignalInDb(id, type, entry, sl, tp, lots)
 
     return "Order modified"
+
+@app.get("/redkslow/")
+async def redkslow(symbol:str, timeframe: str):
+
+    if symbol not in symbols:
+        print(f"Ignore request because symbol is not handled yet: {symbol}")
+        return
+
+    timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
+
+    if TimeFrame.PERIOD_D1 is not timeframeEnum and TimeFrame.PERIOD_H4 is not timeframeEnum and TimeFrame.PERIOD_H1 is not timeframeEnum:
+        return f"For {timeframeEnum} no line information was greated!!!"
+
+    print("Calculating redkslow for %s-%s" % (symbol, timeframeEnum))
+    data = loadDfFromDb(symbol, timeFrame)
+
+    data = data.set_index('DATETIME')
+    data = data.dropna()
+    data['Open'] = data.OPEN
+    data['High'] = data.HIGH
+    data['Low'] = data.LOW
+    data['close'] = data.CLOSE
+    data['Volume'] = data.TICKVOL
+    result = f_LazyLine(data['close'].to_numpy(), 15)
+
+    #if len(result) > 0:
+    #    return {'startTime': result[0].startTime, 'endTime': result[0].endTime, 'startValue': result[0].startValue, 'endValue': result[0].endValue}
+
+    return result
 
 @app.get("/linesinfo/")
 async def linesInfo(symbol:str, timeframe: str):
