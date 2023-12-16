@@ -300,18 +300,18 @@ async def redkslow(symbol:str, timeframe: str):
     data['Low'] = data.LOW
     data['close'] = data.CLOSE
     data['Volume'] = data.TICKVOL
-    print("++++++++++++++++++")
+
     #print(data['close'].tail(-1).tail(200))
     #print(data['close'].iloc[len(data)-200:len(data)-1])
 
     LL = f_LazyLine(data['close'].tail(-1).tail(200), 15)
     LLPrev = f_LazyLine(data['close'].iloc[len(data)-200:len(data)-1], 15)
-
     data['redkslow'] = data['close'].apply(lambda row: f_LazyLine(row, 15))
 
+    print("++++++++++++++++++")
+    print(data.tail(-1).tail(15))
     data['redkslowtrend'] = data.apply(lambda row: trendRedkslow(row))
 
-    print(data.tail(-1).tail(15))
     #print("++++++++++++++++++")
     #print(f"{LL}")
     #print(f"{LLPrev}")
