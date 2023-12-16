@@ -309,7 +309,7 @@ async def redkslow(symbol:str, timeframe: str):
 
     data['redkslow'] = data['close'].apply(lambda row: f_LazyLine(row, 15))
 
-    data['redkslowtrend'] = data.apply(lambda row: trendRedkslow(row['redkslow'], row['redkslow'].shift(1)))
+    data['redkslowtrend'] = data.apply(lambda row: trendRedkslow(row['redkslow'], row['redkslow'].shift(1)), axis=1)
 
     print(data.tail(-1).tail(15))
     #print("++++++++++++++++++")
