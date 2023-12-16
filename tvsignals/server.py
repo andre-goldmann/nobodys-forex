@@ -47,7 +47,8 @@ strategies = ["NNR",
               "T3-EfficientTrendStepMod",
               "T3-AroonBased",
               "T3-EmaStrategy",
-              "SOTT-Lorentzian"]
+              "SOTT-Lorentzian",
+              "RSS_WMA"]
 
 # does not work
 #app.add_middleware(

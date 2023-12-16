@@ -300,12 +300,15 @@ async def redkslow(symbol:str, timeframe: str):
     data['Low'] = data.LOW
     data['close'] = data.CLOSE
     data['Volume'] = data.TICKVOL
-    result = f_LazyLine(data['close'].to_numpy(), 15)
-
+    print(data.tail(-1).tail(200))
+    print(data.iloc(-2).tail(200))
+    LL = f_LazyLine(data.tail(-1).tail(200), 15)
+    LLPrev = f_LazyLine(data.iloc(-2).tail(200), 15)
+    #uptrend     = LL > LL[1]
     #if len(result) > 0:
     #    return {'startTime': result[0].startTime, 'endTime': result[0].endTime, 'startValue': result[0].startValue, 'endValue': result[0].endValue}
 
-    return result
+    return {'ll': LL, 'llprev': LLPrev, 'uptrend': LL > LLPrev}
 
 @app.get("/linesinfo/")
 async def linesInfo(symbol:str, timeframe: str):
