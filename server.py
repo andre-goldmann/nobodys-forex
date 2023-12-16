@@ -29,7 +29,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
     insertFromFile, countTrades, getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd
-from pinescripts import f_LazyLine
+from pinescripts import f_LazyLine, trendRedkslow
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -308,6 +308,17 @@ async def redkslow(symbol:str, timeframe: str):
     LLPrev = f_LazyLine(data['close'].iloc[len(data)-200:len(data)-1], 15)
 
     data['redkslow'] = data['close'].apply(lambda x: f_LazyLine(x, 15))
+
+
+    #column_to_apply = 'B'
+
+    # Create a new column with the previous values of the specified column
+    #df[f'{column_to_apply}_previous'] = df[column_to_apply].shift(1)
+
+    # Apply the custom function using the current and previous values
+    #df[f'{column_to_apply}_processed'] = df.apply(lambda row: custom_function(row[column_to_apply], row[f'{column_to_apply}_previous']), axis=1)
+
+    data['redkslowtrend'] = data.apply(lambda x: trendRedkslow(x['redkslow'], x['redkslow'].shift(1)))
     print(data.tail(-1).tail(15))
 
     #print("++++++++++++++++++")
