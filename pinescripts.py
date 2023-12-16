@@ -25,9 +25,10 @@ def f_LazyLine(_data, _length):
         return L3
 
 def trendRedkslow(row):
+    print("##########trendRedkslow##################")
     print(row)
     actualValue = row['redkslow']
-    previousValue =row['redkslow'].shift(1)
+    previousValue = row['redkslow'].shift(1)
     if actualValue > previousValue:
         return "long"
     elif actualValue < previousValue:
