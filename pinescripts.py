@@ -29,4 +29,12 @@ if __name__ == "__main__":
     _data = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     _length = 9
     result = f_LazyLine(_data, _length)
-    print(result)
+    #print(result)
+    data = {'Date': pd.date_range(start='2022-01-01', periods=10),
+            'Value': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+
+    df = pd.DataFrame(data)
+
+    # Select the entry immediately preceding the last entry
+    previous_to_last_entry = df.loc[len(df)-5:len(df)-1]#df.tail(1).tail(2)#df.iloc[-2].tail(8)
+    print(previous_to_last_entry)
