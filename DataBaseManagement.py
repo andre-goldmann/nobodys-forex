@@ -229,7 +229,6 @@ def storeCandleInDb(candle:CandlesDto):
     with Session.begin() as session:
 
         timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
-        # TODO Einträge werden wieder doppelt gespeichert
         candleTime = datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M")
         count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
                                                     CandlesEntity.TIMEFRAME == timeFrame,
@@ -284,7 +283,8 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
         print(len(df), " database entries loaded for ",timeFrame)
         print("Last row: ")
         print(df.iloc[-1])
-        return df
+        #There are a lot of duplicates stored, thats why we need to remove them
+        return df.drop_duplicates()
 
 def countEntries(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
