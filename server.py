@@ -278,6 +278,9 @@ async def modifySignalIn(id: Annotated[int, Form()],
 
     return "Order modified"
 
+def process_row(index, row):
+    print(f"Processing row {index} - DATETIME: {row['DATETIME']}, Close: {row['close']}, TIMEFRAME: {row['TIMEFRAME']}")
+
 @app.get("/redkslow/")
 async def redkslow(symbol:str, timeframe: str):
 
@@ -300,6 +303,9 @@ async def redkslow(symbol:str, timeframe: str):
     #data['Low'] = data.LOW
     data['close'] = data.CLOSE
     #data['Volume'] = data.TICKVOL
+
+    for index, row in data.tail(-1).tail(25).iterrows():
+        process_row(index, row)
 
     LL = f_LazyLine(data['close'].tail(-1).tail(200), 15)
     LLPrev = f_LazyLine(data['close'].iloc[len(data)-200:len(data)-1], 15)
