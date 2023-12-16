@@ -309,11 +309,11 @@ async def redkslow(symbol:str, timeframe: str):
     data['redkslow'] = data['close'].apply(lambda row: f_LazyLine(row, 15))
 
     print("++++++++++++++++++")
-    print(data['redkslow'])
-    print(data['redkslow'].shift(1))
-    print(data.tail(-1).tail(15))
-    data['redkslowtrend'] = np.where(data['redkslow'] > data['redkslow'].shift(1), "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
+    #print(data['redkslow'])
+    #print(data['redkslow'].shift(1))
 
+    data['redkslowtrend'] = np.where(data['redkslow'] > data['redkslow'].shift(1), "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
+    print(data.tail(-1).tail(15))
     #print("++++++++++++++++++")
     #print(f"{LL}")
     #print(f"{LLPrev}")
