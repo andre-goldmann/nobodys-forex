@@ -311,7 +311,7 @@ async def redkslow(symbol:str, timeframe: str):
     print("++++++++++++++++++")
     print(data['redkslow'])
     print(data['redkslow'].shift(1))
-    print(data.tail(-1).tail(15))
+    print(data)
     data['redkslowtrend'] = data.apply(lambda row: trendRedkslow(row))
 
     #print("++++++++++++++++++")
