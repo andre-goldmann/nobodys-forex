@@ -222,9 +222,10 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame, session):
         con = engine
     )
     print(len(df), " database entries loaded for ",timeFrame)
-    #print("Last row: ")
-    #print(df.iloc[-1])
-    return df
+    print("Last row: ")
+    print(df.iloc[-1])
+    df_no_duplicates = df.drop_duplicates(subset=['DATETIME'])
+    return df_no_duplicates.drop_duplicates()
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:

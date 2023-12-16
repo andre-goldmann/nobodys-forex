@@ -284,7 +284,8 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
         print("Last row: ")
         print(df.iloc[-1])
         #There are a lot of duplicates stored, thats why we need to remove them
-        return df.drop_duplicates()
+        df_no_duplicates = df.drop_duplicates(subset=['DATETIME'])
+        return df_no_duplicates.drop_duplicates()
 
 def countEntries(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
