@@ -301,14 +301,14 @@ async def redkslow(symbol:str, timeframe: str):
     data['close'] = data.CLOSE
     data['Volume'] = data.TICKVOL
     print("++++++++++++++++++")
-    print(data['close'].tail(-1).tail(200))
-    print(data['close'].iloc[len(data)-200:len(data)-1])
+    #print(data['close'].tail(-1).tail(200))
+    #print(data['close'].iloc[len(data)-200:len(data)-1])
 
     LL = f_LazyLine(data['close'].tail(-1).tail(200), 15)
     LLPrev = f_LazyLine(data['close'].iloc[len(data)-200:len(data)-1], 15)
 
     data['redkslow'] = data['close'].apply(lambda x: f_LazyLine(x, 15))
-    print(data)
+    print(data.tail(-1).tail(15))
 
     #print("++++++++++++++++++")
     #print(f"{LL}")
