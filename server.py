@@ -318,7 +318,7 @@ async def redkslow(symbol:str, timeframe: str):
     # Apply the custom function using the current and previous values
     #df[f'{column_to_apply}_processed'] = df.apply(lambda row: custom_function(row[column_to_apply], row[f'{column_to_apply}_previous']), axis=1)
 
-    data['redkslowtrend'] = data.apply(lambda x: trendRedkslow(x['redkslow'], x['redkslow'].shift(1)))
+    data['redkslowtrend'] = data['redkslow'].apply(lambda x: trendRedkslow(x, x.shift(1)))
     print(data.tail(-1).tail(15))
 
     #print("++++++++++++++++++")
