@@ -295,29 +295,28 @@ async def redkslow(symbol:str, timeframe: str):
 
     data = data.set_index('DATETIME')
     data = data.dropna()
-    data['Open'] = data.OPEN
-    data['High'] = data.HIGH
-    data['Low'] = data.LOW
+    #data['Open'] = data.OPEN
+    #data['High'] = data.HIGH
+    #data['Low'] = data.LOW
     data['close'] = data.CLOSE
-    data['Volume'] = data.TICKVOL
-
-    #print(data['close'].tail(-1).tail(200))
-    #print(data['close'].iloc[len(data)-200:len(data)-1])
+    #data['Volume'] = data.TICKVOL
 
     LL = f_LazyLine(data['close'].tail(-1).tail(200), 15)
     LLPrev = f_LazyLine(data['close'].iloc[len(data)-200:len(data)-1], 15)
     data['redkslow'] = data['close'].apply(lambda row: f_LazyLine(row, 15))
-
-    print("++++++++++++++++++")
+    conditions  = [ data['redkslow'] > data['redkslow'].shift(1), data['redkslow'] < data['redkslow'].shift(1), data['redkslow'] == data['redkslow'].shift(1) ]
+    choices     = [ "Long", 'Short', 'Ranging' ]
+    data['redkslowtrend'] = np.select(conditions, choices)#np.where(, "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
+    print(data.tail(-1).tail(15))
+    #print("++++++++++++++++++")
     #print(data['redkslow'])
     #print(data['redkslow'].shift(1))
-
-    data['redkslowtrend'] = np.where(data['redkslow'] > data['redkslow'].shift(1), "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
-    print(data.tail(-1).tail(15))
+    #print(data['close'].tail(-1).tail(200))
+    #print(data['close'].iloc[len(data)-200:len(data)-1])
     #print("++++++++++++++++++")
     #print(f"{LL}")
     #print(f"{LLPrev}")
-    print("++++++++++++++++++")
+    #print("++++++++++++++++++")
 
     #uptrend     = LL > LL[1]
     #SwingDn = uptrend[1] and not uptrend
