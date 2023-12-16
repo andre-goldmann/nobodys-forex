@@ -229,16 +229,17 @@ def storeCandleInDb(candle:CandlesDto):
     with Session.begin() as session:
 
         timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
+        # TODO Einträge werden wieder doppelt gespeichert
+        candleTime = datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M")
         count = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == candle.symbol,
                                                     CandlesEntity.TIMEFRAME == timeFrame,
-                                                    CandlesEntity.CLOSE == candle.CLOSE,
-                                                    CandlesEntity.OPEN == candle.OPEN).count()
-
+                                                    CandlesEntity.DATETIME == candleTime).count()
+        #print(f"Found {count} for {candle}")
         if count == 0:
             spongebob = CandlesEntity(
                 SYMBOL=candle.symbol,
                 TIMEFRAME= timeFrame,
-                DATETIME=datetime.strptime(candle.DATETIME, "%Y.%m.%d %H:%M"),
+                DATETIME=candleTime,
                 OPEN=candle.HIGH,
                 HIGH=candle.HIGH,
                 LOW=candle.LOW,
