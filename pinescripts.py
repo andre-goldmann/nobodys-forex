@@ -15,8 +15,8 @@ def f_LazyLine(_data, _length):
         w1 = round((_length - w2) / 2)
         w3 = int((_length - w2) / 2)
 
-        L1 = pd.Series(_data).rolling(window=w1, min_periods=1).mean().values[-1]
-        L2 = pd.Series(L1).rolling(window=w2, min_periods=1).mean().values[-1]
+        L1 = pd.Series(_data).rolling(window=w1, min_periods=1).mean().values
+        L2 = pd.Series(L1).rolling(window=w2, min_periods=1).mean().values
         L3 = pd.Series(L2).rolling(window=w3, min_periods=1).mean().values[-1]
 
         return L3
