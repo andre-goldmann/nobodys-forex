@@ -291,7 +291,7 @@ async def redkslow(symbol:str, timeframe: str):
         return f"For {timeframeEnum} no line information was greated!!!"
 
     print("Calculating redkslow for %s-%s" % (symbol, timeframeEnum))
-    data = loadDfFromDb(symbol, timeFrame)
+    data = loadDfFromDb(symbol, timeframeEnum)
 
     data = data.set_index('DATETIME')
     data = data.dropna()
