@@ -311,8 +311,8 @@ async def redkslow(symbol:str, timeframe: str):
     print("++++++++++++++++++")
     print(data['redkslow'])
     print(data['redkslow'].shift(1))
-    print(data)
-    data['redkslowtrend'] = data.apply(lambda row: trendRedkslow(row))
+    print(data.tail(-1).tail(15))
+    data['redkslowtrend'] = np.where(data['redkslow'] > data['redkslow'].shift(1), "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
 
     #print("++++++++++++++++++")
     #print(f"{LL}")
