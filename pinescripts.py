@@ -15,7 +15,6 @@ def tThree(df, Length=5):
     c2 = 3*b*b+3*b*b*b
     c3 = -6*b*b-3*b-3*b*b*b
     c4 = 1+3*b+b*b*b+3*b*b
-    print(str(c1 * df['xe6'] + c2 * df['xe5'] + c3 * df['xe4'] + c4 * df['xe3']))
     df['nT3Average'] = c1 * df['xe6'] + c2 * df['xe5'] + c3 * df['xe4'] + c4 * df['xe3']
 
 
