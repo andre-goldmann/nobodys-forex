@@ -263,7 +263,7 @@ def lastCandle(symbol:str, timeFrame:TimeFrame):
         session.close()
         return candle
 
-def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
+def loadDfFromDb(symbol:str, timeFrame:TimeFrame, limit=250000):
     with Session.begin() as session:
         df = pd.read_sql_query(
             sql = session.query(CandlesEntity.SYMBOL,
@@ -277,6 +277,7 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame):
                                 CandlesEntity.VOL,
                                 CandlesEntity.SPREAD)
             .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
+            .limit(limit)
             .statement,
             con = engine
         )

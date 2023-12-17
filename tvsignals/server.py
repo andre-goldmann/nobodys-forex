@@ -372,7 +372,7 @@ def proceedSignal(signal):
             elif signalStats.failedtrades > signalStats.successtrades:
                 lots = 0.01
 
-            if signalStats.alltrades > 100:
+            if signalStats is not None and signalStats.alltrades > 100:
                 percentage = (100 / signalStats.alltrades) * signalStats.successtrades
                 if percentage < 58:
                     storeIgnoredSignal(IgnoredSignal(
