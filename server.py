@@ -316,7 +316,7 @@ async def redkslow(symbol:str, timeframe: str):
     print(data.tail(-1).tail(15))
 
     t3 = tThree(data, 300)
-    print(f"T3: {t3}")
+    print(f"T3: {data['nT3Average']}")
 
     #print("++++++++++++++++++")
     #print(data['redkslow'])
