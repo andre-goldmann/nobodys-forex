@@ -313,10 +313,9 @@ async def redkslow(symbol:str, timeframe: str):
     conditions  = [ data['redkslow'] > data['redkslow'].shift(1), data['redkslow'] < data['redkslow'].shift(1), data['redkslow'] == data['redkslow'].shift(1) ]
     choices     = [ "Long", 'Short', 'Ranging' ]
     data['redkslowtrend'] = np.select(conditions, choices)#np.where(, "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
-    print(data.tail(-1).tail(15))
 
     tThree(data, 300)
-    print(f"T3: {data}")
+    print(data.tail(-1).tail(15))
 
     #print("++++++++++++++++++")
     #print(data['redkslow'])
