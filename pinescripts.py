@@ -3,12 +3,12 @@ import pandas as pd
 import pandas_ta as ta
 
 def tThree(df, Length=5):
-    df['xe1'] = df['close'].ta.ema(length=Length)
-    df['xe2'] = df['xe1'].ta.ema(length=Length)
-    df['xe3'] = df['xe2'].ta.ema(length=Length)
-    df['xe4'] = df['xe3'].ta.ema(length=Length)
-    df['xe5'] = df['xe4'].ta.ema(length=Length)
-    df['xe6'] = df['xe5'].ta.ema(length=Length)
+    df['xe1'] = ta.ema(df['close'], length=Length)
+    df['xe2'] = ta.ema(df['xe1'], length=Length)
+    df['xe3'] = ta.ema(df['xe2'], length=Length)
+    df['xe4'] = ta.ema(df['xe3'], length=Length)
+    df['xe5'] = ta.ema(df['xe4'], length=Length)
+    df['xe6'] = ta.ema(df['xe5'], length=Length)
 
     b = 0.7
     c1 = -b*b*b
