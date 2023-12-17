@@ -1,5 +1,23 @@
 import math
 import pandas as pd
+import pandas_ta as ta
+
+def tThree(df, Length=5):
+    df['xe1'] = df['close'].ta.ema(length=Length)
+    df['xe2'] = df['xe1'].ta.ema(length=Length)
+    df['xe3'] = df['xe2'].ta.ema(length=Length)
+    df['xe4'] = df['xe3'].ta.ema(length=Length)
+    df['xe5'] = df['xe4'].ta.ema(length=Length)
+    df['xe6'] = df['xe5'].ta.ema(length=Length)
+
+    b = 0.7
+    c1 = -b*b*b
+    c2 = 3*b*b+3*b*b*b
+    c3 = -6*b*b-3*b-3*b*b*b
+    c4 = 1+3*b+b*b*b+3*b*b
+
+    df['nT3Average'] = c1 * df['xe6'] + c2 * df['xe5'] + c3 * df['xe4'] + c4 * df['xe3']
+
 
 def f_LazyLine(_data, _length):
     w1 = 0

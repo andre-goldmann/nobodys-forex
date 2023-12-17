@@ -29,7 +29,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
     getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd
-from pinescripts import f_LazyLine
+from pinescripts import f_LazyLine, tThree
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -314,6 +314,10 @@ async def redkslow(symbol:str, timeframe: str):
     choices     = [ "Long", 'Short', 'Ranging' ]
     data['redkslowtrend'] = np.select(conditions, choices)#np.where(, "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
     print(data.tail(-1).tail(15))
+
+    t3 = tThree(data, 300)
+    print(f"T3: {t3}")
+
     #print("++++++++++++++++++")
     #print(data['redkslow'])
     #print(data['redkslow'].shift(1))
