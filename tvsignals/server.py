@@ -382,7 +382,7 @@ def proceedSignal(signal):
                     return
                 else:
                     prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
-                    if prodSignalsCount <= 5:
+                    if prodSignalsCount <= 5 and signalStats.profit > 1:
                         storeProdSignal(ProdSignal(
                             symbol=signal.symbol,
                             type=signal.type,
