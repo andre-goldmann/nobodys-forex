@@ -644,34 +644,33 @@ async def storeCandle(candle:CandlesDto):
     if timeframeEnum != TimeFrame.PERIOD_M1:
         storeCandleInDb(candle)
         #Call strategies
-        for symbol in symbols:
-            for timeFrame in TimeFrame:
-                if timeFrame == timeframeEnum:
-                    df = loadDfFromDb(candle.symbol, timeFrame, 10000)
-                    df['open'] = df.OPEN
-                    df['high'] = df.HIGH
-                    df['low'] = df.LOW
-                    df['close'] = df.CLOSE
-                    df['volume'] = df.TICKVOL
-                    adx(df)
-                    adxEma14(df)
-                    #adxRsi(df)
-                    aroonAdx(df)
-                    aroonIndicator(df)
-                    awesomeOscillatorSaucer(df)
-                    awesomeOscillatorZeroCrossover(df)
-                    bladeRunner(df)
-                    bollingerBandsAndRSI(df)
-                    bollingerBandsAndRSI2(df)
-                    cciMacdPsar(df)
-                    cciMovingAverage(df)
-                    commodityChannelIndex(df)
-                    donchianATR(df)
-                    donchianBreakout(df)
-                    donchianMiddle(df)
-                    dpoCandlestick(df)
-                    elderRay(df)
-                    elderRayAlternative(df)
+        for timeFrame in TimeFrame:
+            if timeFrame == timeframeEnum:
+                df = loadDfFromDb(candle.symbol, timeFrame, 10000)
+                df['open'] = df.OPEN
+                df['high'] = df.HIGH
+                df['low'] = df.LOW
+                df['close'] = df.CLOSE
+                df['volume'] = df.TICKVOL
+                adx(df)
+                adxEma14(df)
+                #adxRsi(df)
+                aroonAdx(df)
+                aroonIndicator(df)
+                awesomeOscillatorSaucer(df)
+                awesomeOscillatorZeroCrossover(df)
+                bladeRunner(df)
+                bollingerBandsAndRSI(df)
+                bollingerBandsAndRSI2(df)
+                cciMacdPsar(df)
+                cciMovingAverage(df)
+                commodityChannelIndex(df)
+                donchianATR(df)
+                donchianBreakout(df)
+                donchianMiddle(df)
+                dpoCandlestick(df)
+                elderRay(df)
+                elderRayAlternative(df)
 
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))
