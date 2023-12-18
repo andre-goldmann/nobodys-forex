@@ -21,11 +21,11 @@ class AdxRsi:
 
 
     def calculate_adx(self):
-        adx_ind = ta.trend.ADXIndicator(self.df['high'], self.df['low'], self.df['close'], n = 20)
+        adx_ind = ta.trend.ADXIndicator(self.df['high'], self.df['low'], self.df['close'], window = 20)
         self.df['adx'] = adx_ind.adx()
 
     def calculate_rsi(self):
-        rsi_ind = ta.momentum.RSIIndicator(self.df['close'], n = 2)
+        rsi_ind = ta.momentum.RSIIndicator(self.df['close'], window = 2)
         self.df['rsi'] = rsi_ind.rsi()
 
     def determine_signal(self, dframe):

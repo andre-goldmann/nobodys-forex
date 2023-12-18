@@ -49,6 +49,18 @@ from trading_strategies.donchian_middle import DonchianMiddle
 from trading_strategies.dpo_candlestick import DpoCandlestick
 from trading_strategies.elder_ray import ElderRay
 from trading_strategies.elder_ray_alternative import ElderRayAlternative
+from trading_strategies.ema_3 import ThreeEma
+from trading_strategies.ema_3_alternative import ThreeEmaAlternative
+from trading_strategies.ema_crossover import EMACrossover
+from trading_strategies.ema_crossover_alternative import EMACrossoverAlternative
+from trading_strategies.ema_crossover_macd import EMACrossoverMACD
+from trading_strategies.ema_crossover_rsi import EMACrossoverRSI
+from trading_strategies.ema_crossover_rsi_alternative import EMACrossoverRSIAlternative
+from trading_strategies.ema_macd_rsi import EMAMACDRSI
+from trading_strategies.ema_mi import EMAMI
+from trading_strategies.force_index_ema import ForceIndexEMA
+from trading_strategies.k_stoch_adx import KeltnerStochasticAdx
+from trading_strategies.kama import KAMA
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -633,6 +645,126 @@ def elderRayAlternative(df):
         print("Short on ElderRayAlternative")
 
 
+def threeEma(df):
+    strategy = ThreeEma(df)
+    signal_lst, df = strategy.run_ema_3()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on ThreeEma")
+    elif signal == -1:
+        print("Short on ThreeEma")
+
+
+def threeEmaAlternative(df):
+    strategy = ThreeEmaAlternative(df)
+    signal_lst, df = strategy.run_ema_3()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on ThreeEmaAlternative")
+    elif signal == -1:
+        print("Short on ThreeEmaAlternative")
+
+
+def eMACrossover(df):
+    strategy = EMACrossover(df)
+    signal_lst, df = strategy.run_ema_crossover()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on EMACrossover")
+    elif signal == -1:
+        print("Short on EMACrossover")
+
+
+def eMACrossoverAlternative(df):
+    strategy = EMACrossoverAlternative(df)
+    signal_lst, df = strategy.run_ema_crossover()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on EMACrossoverAlternative")
+    elif signal == -1:
+        print("Short on EMACrossoverAlternative")
+
+
+def eMACrossoverMACD(df):
+    strategy = EMACrossoverMACD(df)
+    signal_lst, df = strategy.run_ema_crossover_macd()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on EMACrossoverMACD")
+    elif signal == -1:
+        print("Short on EMACrossoverMACD")
+
+
+def eMACrossoverRSI(df):
+    strategy = EMACrossoverRSI(df)
+    signal_lst, df = strategy.run_ema_crossover_rsi()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on EMACrossoverRSI")
+    elif signal == -1:
+        print("Short on EMACrossoverRSI")
+
+
+def eMACrossoverRSIAlternative(df):
+    strategy = EMACrossoverRSIAlternative(df)
+    signal_lst, df = strategy.run_ema_crossover_rsi()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on EMACrossoverRSIAlternative")
+    elif signal == -1:
+        print("Short on EMACrossoverRSIAlternative")
+
+
+def eMAMACDRSI(df):
+    strategy = EMAMACDRSI(df)
+    signal_lst, df = strategy.run_ema_macd_rsi()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on EMAMACDRSI")
+    elif signal == -1:
+        print("Short on EMAMACDRSI")
+
+
+def eMAMI(df):
+    strategy = EMAMI(df)
+    signal_lst, df = strategy.run()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on EMAMI")
+    elif signal == -1:
+        print("Short on EMAMI")
+
+
+def forceIndexEMA(df):
+    strategy = ForceIndexEMA(df)
+    signal_lst, df = strategy.run_force_index()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on ForceIndexEMA")
+    elif signal == -1:
+        print("Short on ForceIndexEMA")
+
+
+def keltnerStochasticAdx(df):
+    strategy = KeltnerStochasticAdx(df)
+    signal_lst, df = strategy.run_keltner_stochastic_adx()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on KeltnerStochasticAdx")
+    elif signal == -1:
+        print("Short on KeltnerStochasticAdx")
+
+
+def kAMA(df):
+    strategy = KAMA(df)
+    signal_lst, df = strategy.run_kama()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on KAMA")
+    elif signal == -1:
+        print("Short on KAMA")
+
+
 @app.post("/storecandle")
 async def storeCandle(candle:CandlesDto):
     if candle.symbol not in symbols:
@@ -642,7 +774,7 @@ async def storeCandle(candle:CandlesDto):
     timeframeEnum: TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
 
     if timeframeEnum != TimeFrame.PERIOD_M1:
-        storeCandleInDb(candle)
+        #storeCandleInDb(candle)
         #Call strategies
         for timeFrame in TimeFrame:
             if timeFrame == timeframeEnum:
@@ -654,23 +786,35 @@ async def storeCandle(candle:CandlesDto):
                 df['volume'] = df.TICKVOL
                 adx(df)
                 adxEma14(df)
-                #adxRsi(df)
+                adxRsi(df)
                 #aroonAdx(df)
                 #aroonIndicator(df)
-                #awesomeOscillatorSaucer(df)
-                #awesomeOscillatorZeroCrossover(df)
+                awesomeOscillatorSaucer(df)
+                awesomeOscillatorZeroCrossover(df)
                 bladeRunner(df)
-                #bollingerBandsAndRSI(df)
+                bollingerBandsAndRSI(df)
                 bollingerBandsAndRSI2(df)
                 cciMacdPsar(df)
                 cciMovingAverage(df)
                 commodityChannelIndex(df)
-                #donchianATR(df)
+                donchianATR(df)
                 donchianBreakout(df)
-                #donchianMiddle(df)
+                donchianMiddle(df)
                 dpoCandlestick(df)
                 #elderRay(df)
                 #elderRayAlternative(df)
+                threeEma(df)
+                threeEmaAlternative(df)
+                eMACrossover(df)
+                eMACrossoverAlternative(df)
+                eMACrossoverMACD(df)
+                eMACrossoverRSI(df)
+                eMACrossoverRSIAlternative(df)
+                eMAMACDRSI(df)
+                eMAMI(df)
+                #forceIndexEMA(df)
+                keltnerStochasticAdx(df)
+                kAMA(df)
 
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))

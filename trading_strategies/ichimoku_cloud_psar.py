@@ -9,9 +9,10 @@ Author: Cheryl
 '''
 
 class IchimokuCloudPsar:
-	def __init__(self, file_path):
+	#def __init__(self, file_path):
+	def __init__(self, df):
 		self.max_window = 180 # Set to 180 for graphing trend, MIN value: 78
-		self.df = pd.read_csv(file_path)[-self.max_window:]
+		self.df = df#pd.read_csv(file_path)[-self.max_window:]
 		self.high = self.df['high']
 		self.low = self.df['low']
 		self.close = self.df['close']

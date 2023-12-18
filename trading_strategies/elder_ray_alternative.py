@@ -21,7 +21,7 @@ class ElderRayAlternative:
    
     def calculate_ema(self):
         # initialise EMA indicator for 13 time periods
-        indicator_ema = ta.trend.EMAIndicator(close = self.close, n = 13)
+        indicator_ema = ta.trend.EMAIndicator(close = self.close, window = 13)
         # Calculate
         self.df['13_ema'] = indicator_ema.ema_indicator()
     

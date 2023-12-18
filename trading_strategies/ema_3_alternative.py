@@ -1,10 +1,11 @@
 import pandas as pd
 import trading_strategies.visualise as v
 # @author: vita
-class ThreeEma:
+class ThreeEmaAlternative:
 
-    def __init__(self, file_path):
-        self.df = pd.read_csv(file_path)
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.read_csv(file_path)
         # self.df = pd.DataFrame(inputs)
         self.close = self.df['close']
 

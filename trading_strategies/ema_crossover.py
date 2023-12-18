@@ -12,8 +12,9 @@ This strategy looks for crosses in the 50 and 20 ema and places a position based
 class EMACrossover:
 
     #constructor
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
 
     def add_20_ema(self):
         self.df['20ema'] = self.df['close'].ewm(span=20, adjust=False).mean()

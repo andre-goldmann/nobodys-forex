@@ -20,7 +20,7 @@ class DonchianMiddle:
 
 
     def calculate_donchian_middle(self):
-        donch_mid_ind = ta.volatility.DonchianChannel(high=self.high, low=self.low, close=self.close, n=20)
+        donch_mid_ind = ta.volatility.DonchianChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['donch_mid'] = donch_mid_ind.donchian_channel_mband()
 
 

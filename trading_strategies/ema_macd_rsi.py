@@ -11,8 +11,9 @@ signals respectively rather than a crossover below or above.
 '''
 class EMAMACDRSI:
 
-    def __init__(self, file_path):
-        self.df = pd.read_csv(file_path)
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.read_csv(file_path)
         # self.df = pd.DataFrame(inputs)
         self.close = self.df['close']
 
@@ -29,7 +30,7 @@ class EMAMACDRSI:
         self.df['distance'] = self.df['21ema'] - self.close
 
     def add_rsi(self):
-        rsi_ind = ta.momentum.RSIIndicator(close=self.close, n=14)
+        rsi_ind = ta.momentum.RSIIndicator(close=self.close, window=14)
         self.df['rsi'] = rsi_ind.rsi()
 
     def calculate_12_ema(self):

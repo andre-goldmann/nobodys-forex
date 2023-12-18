@@ -34,8 +34,8 @@ class BollingerBandsAndRSI:
 
     # add bollinger bands (bb) to indicate volatilty
     def add_bollinger_bands(self):
-        self.df['bb_high_band'] = ta.volatility.bollinger_hband(self.df['close'], n = 14, ndev = 2, fillna = False)
-        self.df['bb_low_band'] = ta.volatility.bollinger_lband(self.df['close'], n = 14, ndev = 2, fillna = False)
+        self.df['bb_high_band'] = ta.volatility.bollinger_hband(self.df['close'], window = 14, window_dev = 2, fillna = False)
+        self.df['bb_low_band'] = ta.volatility.bollinger_lband(self.df['close'], window = 14, window_dev = 2, fillna = False)
 
     # add bollinger spreads to indicate the volatility of the bb
     def add_bollinger_spread(self):
@@ -56,7 +56,7 @@ class BollingerBandsAndRSI:
 
     # add rsi to identify overbought/oversold conditions
     def add_rsi(self):
-        self.df['rsi'] = ta.momentum.rsi(self.df['close'], n = 14, fillna = False)
+        self.df['rsi'] = ta.momentum.rsi(self.df['close'], window = 14, fillna = False)
 
     # determine and signal for particular index
     def determine_signal(self, dframe):

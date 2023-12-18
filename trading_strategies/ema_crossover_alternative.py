@@ -9,11 +9,12 @@ This strategy looks for crosses in the 50 and 20 ema and places a position based
 
 '''
 
-class EMACrossover:
+class EMACrossoverAlternative:
 
     #constructor
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         # self.df = pd.DataFrame(inputs)
 
     def add_20_ema(self):

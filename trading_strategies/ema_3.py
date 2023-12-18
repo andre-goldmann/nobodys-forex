@@ -4,8 +4,9 @@ import trading_strategies.visualise as v
 # @author: vita
 class ThreeEma:
 
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         self.close = self.df['close']
 
     def exponential_moving_average_5(self):

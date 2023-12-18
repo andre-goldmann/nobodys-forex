@@ -11,20 +11,21 @@ import numpy as np
 
 class KeltnerStochasticAdx:
 
-    def __init__(self, inputs):
+    #def __init__(self, inputs):
+    def __init__(self, df):
         #self.max_window = 21  # set to 180 for better understanding of trend in graph. MIN value 99
         # self.df = pd.read_csv(file_path)[-self.max_window:]
-        self.df = pd.DataFrame(inputs)
+        self.df = df#pd.DataFrame(inputs)
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']
 
     def calculate_band_upper(self):
-        band_up_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, n=20)
+        band_up_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['k_band_upper'] = band_up_ind.keltner_channel_hband()
 
     def calculate_band_lower(self):
-        band_low_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, n=20)
+        band_low_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['k_band_lower'] = band_low_ind.keltner_channel_lband()
 
     def calculate_stochastic_signal_line(self):
@@ -32,7 +33,7 @@ class KeltnerStochasticAdx:
         self.df['stoch_signal'] = stoch_signal.stoch_signal()
 
     def calculate_adx(self):
-        adx_ind = ta.trend.ADXIndicator(self.df['high'], self.df['low'], self.df['close'], n = 20)
+        adx_ind = ta.trend.ADXIndicator(self.df['high'], self.df['low'], self.df['close'], window = 20)
         self.df['adx'] = adx_ind.adx()
 
     def determine_signal(self):
@@ -59,7 +60,7 @@ class KeltnerStochasticAdx:
         self.calculate_stochastic_signal_line()
         self.calculate_adx()
         signal = self.determine_signal()
-        return signal
+        return signal, self.df
 
     '''
     the following methods are for plotting

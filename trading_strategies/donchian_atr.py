@@ -20,16 +20,16 @@ class DonchianATR():
         self.close = self.df['close']
 
     def add_atr(self):
-        self.df['atr'] = ta.volatility.AverageTrueRange(high = self.high, low = self.low, close = self.close, n = 14).average_true_range()
+        self.df['atr'] = ta.volatility.AverageTrueRange(high = self.high, low = self.low, close = self.close, window = 14).average_true_range()
 
     def add_atr_two_year_low(self):
         self.df['atr_two_year_low'] = self.df['atr'].shift(1).rolling(window = 48).min()
 
     def add_donchian_high_band(self):
-        self.df['donchian_high_band'] = ta.volatility.DonchianChannel(high = self.high, low = self.low, close = self.close, n = 20).donchian_channel_hband()
+        self.df['donchian_high_band'] = ta.volatility.DonchianChannel(high = self.high, low = self.low, close = self.close, window = 20).donchian_channel_hband()
 
     def add_donchian_low_band(self):
-        self.df['donchian_low_band'] = ta.volatility.DonchianChannel(high = self.high, low = self.low, close = self.close, n = 20).donchian_channel_lband()
+        self.df['donchian_low_band'] = ta.volatility.DonchianChannel(high = self.high, low = self.low, close = self.close, window = 20).donchian_channel_lband()
 
     # determine and signal for particular index
     def determine_signal(self, dframe):

@@ -10,8 +10,9 @@ import trading_strategies.visualise as v
 
 class EMACrossoverMACD:
 
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
 
     def calculate_21_ema(self):
         self.df['21ema'] = self.df['close'].ewm(span=21, adjust=False).mean()

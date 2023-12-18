@@ -22,7 +22,7 @@ class AwesomeOscillatorZeroCrossover:
         # initialise Awesome Oscillator
         awes_osc = ta.momentum.AwesomeOscillatorIndicator(high = self.high, low = self.low)
         # Calculate
-        self.df['awesome_oscillator'] = awes_osc.ao()
+        self.df['awesome_oscillator'] = awes_osc.awesome_oscillator()
 
     def determine_signal(self, dframe):
         action = 0

@@ -13,8 +13,9 @@ import ta
 
 class EMACrossoverRSI:
 
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         self.close = self.df['close']
 
     def calculate_12_ema(self):

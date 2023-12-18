@@ -12,12 +12,13 @@ This strategy uses the KAMA indicator to analyze the behaviour of the market and
 
 class KAMA:
 
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.df = pd.DataFrame(file_path)
-        self.df = pd.read_csv(file_path)
+        self.df = df#pd.read_csv(file_path)
 
     def add_kama(self):
-        self.df['kama'] = ta.momentum.KAMAIndicator(close = self.df['close'], n = 10, pow1 = 2, pow2 = 30).kama()
+        self.df['kama'] = ta.momentum.KAMAIndicator(close = self.df['close'], window = 10, pow1 = 2, pow2 = 30).kama()
 
     # determine and signal for particular index
     def determine_signal(self, dframe):

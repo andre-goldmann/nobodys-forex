@@ -20,7 +20,7 @@ class AwesomeOscillatorSaucer:
         # initialise Awesome Oscillator
         awes_osc = ta.momentum.AwesomeOscillatorIndicator(high = self.df['high'], low = self.df['low'])
         # Calculate
-        self.df['awesome_oscillator'] = awes_osc.ao()
+        self.df['awesome_oscillator'] = awes_osc.awesome_oscillator()
 
     def calculate_ema(self):
         # initialise EMA indicator for 200 time periods

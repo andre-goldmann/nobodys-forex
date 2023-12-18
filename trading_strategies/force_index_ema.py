@@ -1,13 +1,13 @@
 #https://www.daytrading.com/force-index
 
 import pandas as pd
-import mplfinance as mpf
 import ta
-import numpy as np
+
 
 class ForceIndexEMA:
-    def __init__(self, file_path):
-        self.df = pd.read_csv(file_path)
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.read_csv(file_path)
         self.close = self.df['close']
         self.volume = self.df['volume']
 
@@ -38,4 +38,5 @@ class ForceIndexEMA:
         self.calculate_ema()
 
         signal = self.determine_signal()
-        return (signal, self.df['fi'].iloc[-1])
+        #return (signal, self.df['fi'].iloc[-1])
+        return signal, self.df
