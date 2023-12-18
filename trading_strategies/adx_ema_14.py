@@ -12,8 +12,9 @@ This strategy uses ADX and 14EMA for buy and sell signals
 
 class ADXEMA14:
     # constructor
-    def __init__(self, file_path):
-        self.df = pd.read_csv(file_path)
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.read_csv(file_path)
         self.close = self.df['close']
         self.high = self.df['high']
         self.low = self.df['low']
