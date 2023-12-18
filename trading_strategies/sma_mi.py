@@ -6,21 +6,22 @@ import trading_strategies.visualise as v
 
 
 class SMAMI:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.df = pd.DataFrame(file_path)
-        self.df = pd.read_csv(file_path)
+        self.df = df#pd.read_csv(file_path)
         self.high = self.df['high']
         self.low = self.df['low']
         self.close = self.df['close']
 
     # calculates the fast sma indicator (sma_fast) using ta library, period of 21
     def calculate_sma_fast(self):
-        self.df['sma_fast'] = ta.trend.SMAIndicator(close = self.close, n = 21 ).sma_indicator()
+        self.df['sma_fast'] = ta.trend.SMAIndicator(close = self.close, window = 21 ).sma_indicator()
 
 
     # calculates the slow sma indicator (sma_slow) using ta library, period of 50
     def calculate_sma_slow(self):
-        self.df['sma_slow'] = ta.trend.SMAIndicator(close = self.close, n = 50).sma_indicator()
+        self.df['sma_slow'] = ta.trend.SMAIndicator(close = self.close, window = 50).sma_indicator()
 
 
     # calculates the mass index (mi) using ta library

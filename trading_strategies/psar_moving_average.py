@@ -16,10 +16,11 @@ Author: Cheryl
 '''
 
 class PsarMovingAverage:
-	def __init__(self, file_path):
+	#def __init__(self, file_path):
+	def __init__(self, df):
 		self.waiting_period = 8 # How long you are willing to wait for a reversal parabolic SAR dot
 		self.max_window = 120 # set to 120 for plotting purposes (can see sma's through a 80 period timeline) - Min value = 42 + waiting_period
-		self.df = pd.read_csv(file_path)[-self.max_window:]
+		self.df = df#pd.read_csv(file_path)[-self.max_window:]
 
 	def calculate_psar(self):
 		indicator_psar = ta.trend.PSARIndicator(high = self.df["high"], low = self.df["low"], close = self.df["close"])

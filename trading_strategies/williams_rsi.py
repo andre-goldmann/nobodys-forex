@@ -18,9 +18,10 @@ import ta
 class WilliamsRsi:
 
     # loading the data in from file_path
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         # self.max_window = 150  #uncomment for graphing purposes
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         self.high = self.df['high']
         self.low = self.df['low']
         self.close = self.df['close']
@@ -28,7 +29,7 @@ class WilliamsRsi:
     # Calculate the williams indicator
     def calculate_williams_indicator(self):
         will_ind = ta.momentum.WilliamsRIndicator(high = self.high, low = self.low, close = self.close)
-        self.df['williams_indicator'] = will_ind.wr()
+        self.df['williams_indicator'] = will_ind.williams_r()
 
 
     def calculate_rsi(self):

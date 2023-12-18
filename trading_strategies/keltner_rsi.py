@@ -1,7 +1,5 @@
 import pandas as pd
 import ta
-import mplfinance as mpf
-import numpy as np
 
 '''
 @author: Caitlin
@@ -13,23 +11,24 @@ dipping below the lower channel indicate a buy signal
 '''
 
 class KeltnerRsi:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.max_window = 50 # uncomment for graphing purposes
-        self.df = pd.read_csv(file_path)
+        self.df =df#pd.read_csv(file_path)
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']
 
     def calculate_band_upper(self):
-        band_up_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, n=20)
+        band_up_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['k_band_upper'] = band_up_ind.keltner_channel_hband()
 
     def calculate_band_lower(self):
-        band_low_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, n=20)
+        band_low_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['k_band_lower'] = band_low_ind.keltner_channel_lband()
 
     def calculate_rsi2(self):
-        rsi2_ind = ta.momentum.RSIIndicator(close=self.close, n=2)
+        rsi2_ind = ta.momentum.RSIIndicator(close=self.close, window=2)
         self.df['rsi2'] = rsi2_ind.rsi()
 
     def determine_signal(self, dframe):

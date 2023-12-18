@@ -3,15 +3,15 @@
 @author: vita
 https://www.investopedia.com/terms/t/tsi.asp
 """
-import pandas as pd
 import ta
+
 import trading_strategies.visualise as v
 
 
-
 class TSICrossover:
-    def __init__(self, file_path):
-        self.df = pd.read_csv(file_path)
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.read_csv(file_path)
         # self.df = pd.DataFrame(inputs)
         self.close = self.df['close']
 

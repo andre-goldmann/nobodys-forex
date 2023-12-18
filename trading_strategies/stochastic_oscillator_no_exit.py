@@ -10,19 +10,16 @@ This strategy uses the stochastic oscillator to determine buy and sell signals.
 The indicator evaluates the market's momentum and determines overbought and oversold conditions.
 """
 
-import pandas as pd
-import mplfinance as mpf
-import numpy as np
 import trading_strategies.visualise as v
-
 
 
 class StochasticOscillatorNoExit:
 
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 50  # set to 50 for better understanding of trend in graph.
         #self.df = pd.read_csv(file_path)[-self.max_window:]
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']

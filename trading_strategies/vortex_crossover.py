@@ -5,8 +5,9 @@ import trading_strategies.visualise as v
 # Source: https://school.stockcharts.com/doku.php?id=technical_indicators:vortex_indicator
 
 class VortexCrossover:
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']

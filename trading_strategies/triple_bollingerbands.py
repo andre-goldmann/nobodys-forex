@@ -1,8 +1,6 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import mplfinance as mpf
 import ta
+
 import trading_strategies.visualise as v
 
 '''
@@ -23,8 +21,9 @@ Chart Set up:
 
 class TripleBollingerBands:
 
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         #self.df = pd.DataFrame(file_path)
 
     def add_bollinger_bands_2_dev(self):
@@ -77,7 +76,7 @@ class TripleBollingerBands:
         result.append(signal)
         result.append(additional_info)
 
-        return tuple(result)
+        return signal, self.df
 
     ''' The following methods are for plotting '''
 

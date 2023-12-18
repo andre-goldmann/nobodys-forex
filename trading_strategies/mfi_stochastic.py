@@ -6,9 +6,8 @@ Created on Sun Sep 27 10:19:23 2020
 """
 
 import pandas as pd
-import mplfinance as mpf
 import ta
-import numpy as np
+
 
 class MfiStochastic:
     def __init__(self, file_path):
@@ -42,4 +41,4 @@ class MfiStochastic:
         self.calculate_mfi()
         self.calculate_stochastic()
         signal = self.determine_signal()
-        return tuple(signal), self.df
+        return signal, self.df

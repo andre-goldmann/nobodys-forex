@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import pandas as pd
 import mplfinance as mpf
-import ta
 import numpy as np
-import trading_strategies.visualise as v
-
+import pandas as pd
+import ta
 
 file_path = r"C:\Uni\2020 Sem 2\INFO3600 Group Work\unit_tests\inputs\200_periods_in.csv"
 
 class MFI:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.df = pd.read_csv(file_path)
-        self.df = pd.DataFrame(file_path)
+        self.df = df#pd.DataFrame(file_path)
         self.high = self.df['high']
         self.low = self.df['low']
         self.close = self.df['close']
@@ -38,7 +37,7 @@ class MFI:
     def run(self):
         self.calculate_mfi()
         signal = self.determine_signal()
-        return (signal, self.df['mfi'].iloc[-1])
+        return signal, self.df
 
     ''' The following methods are for plotting '''
 

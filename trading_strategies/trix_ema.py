@@ -10,9 +10,10 @@ The criteria to sell is when TRIX crosses to below the signal line while positiv
 Author: Cheryl
 '''
 class TrixEma:
-	def __init__(self, file_path):
+	#def __init__(self, file_path):
+	def __init__(self, df):
 		self.max_window = 180 # set to 180 for better understanding of trend in graph. MIN value 99
-		self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+		self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
 	
 	def calculate_trix(self):
 		# initialise TRIX indicator for n = 30

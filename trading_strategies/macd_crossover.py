@@ -11,8 +11,9 @@ https://www.dailyfx.com/forex/education/trading_tips/daily_trading_lesson/2020/0
 
 class MACDCrossover:
 
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
 
     def add_macd_line(self):
         self.df['macd_line'] = ta.trend.MACD(close=self.df['close']).macd()

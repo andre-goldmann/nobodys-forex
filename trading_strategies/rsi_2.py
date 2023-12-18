@@ -9,9 +9,10 @@ When the price is below the 200 Moving Average, and 2-period RSI is above 90, th
 '''
 
 class Rsi2:
-	def __init__(self, file_path):
+	#def __init__(self, file_path):
+	def __init__(self, df):
 		self.max_window = 400 # set to 400 for better understanding (can see 200sma through a 200 candlestick period)
-		self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+		self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
 
 	def calculate_long_ma(self):
 		# initialise SMA indicator at 200 periods

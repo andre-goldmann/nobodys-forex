@@ -14,8 +14,9 @@ import mplfinance as mpf
 class OopsSignals:
     
     #loading the data in from file_path
-    def __init__(self, file_path):
-        self.df = pd.read_csv(file_path, parse_dates=['datetime'])
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.read_csv(file_path, parse_dates=['datetime'])
 
     # created is_yesterday column to mark all of yesterday's data        
     def mark_yesterday(self):

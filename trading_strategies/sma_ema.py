@@ -7,9 +7,10 @@ import trading_strategies.visualise as v
 # 144 period and 169 period exponential moving average (EMA) to determine trend direction
 
 class SimpleMAExponentialMA:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.df = pd.read_csv(file_path)
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         self.close = self.df['close']  # retrieves the most recent closing price
 
     def calculate_144ema(self):

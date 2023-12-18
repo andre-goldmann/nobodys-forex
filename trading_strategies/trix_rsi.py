@@ -1,7 +1,7 @@
 import pandas as pd
 import ta
+
 import trading_strategies.visualise as v
-import numpy as np
 
 '''
 author: Caitlin
@@ -12,9 +12,10 @@ The Relative Strength Index is a momentum indicator measuring speed and change o
 
 
 class TrixRsi:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.max_window = 200  # uncomment for graphing purposes
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']

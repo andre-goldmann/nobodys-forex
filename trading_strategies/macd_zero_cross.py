@@ -1,8 +1,6 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import mplfinance as mpf
 import ta
+
 import trading_strategies.visualise as v
 
 '''
@@ -14,8 +12,9 @@ https://www.ig.com/au/trading-strategies/macd-trading-strategy-190610#zerocrosse
 class MACDZeroCross:
 
 
-    def __init__(self, file_path):
-        self.df = pd.read_csv(file_path)
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.read_csv(file_path)
         #self.df = pd.DataFrame(file_path)
 
     def add_macd_line(self):

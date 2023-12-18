@@ -12,17 +12,18 @@ The 5 period simple moving average is good for short term trading.
 The goal of combining these indicators is to determine more accurate buy/sell signals than any provide by themselves.
 """
 
-import datetime
 import pandas as pd
 import ta
+
 import trading_strategies.visualise as v
 
 
 class MacdRsiSma:
 
     # loading the data in from file_path
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         self.close = self.df['close']
 
     # calculates the 5 period sma

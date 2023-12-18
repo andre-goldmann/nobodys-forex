@@ -13,9 +13,10 @@ than -35 for sell, and less than or equal to 35 on the stochastic signal line to
 
 
 class WilliamsStochastic:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 35  # comment out if issues with running unit tests
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']
@@ -23,7 +24,7 @@ class WilliamsStochastic:
     # Calculate the williams indicator
     def calculate_williams_indicator(self):
         will_ind = ta.momentum.WilliamsRIndicator(high=self.high, low=self.low, close=self.close)
-        self.df['williams_indicator'] = will_ind.wr()
+        self.df['williams_indicator'] = will_ind.williams_r()
 
     # Calculate the stochastic signal line
     def calculate_stochastic_signal_line(self):

@@ -11,9 +11,10 @@ Author: Cheryl
 '''
 
 class VortexSma:
-	def __init__(self, file_path):
+	#def __init__(self, file_path):
+	def __init__(self, df):
 		self.max_window = 150 # set to 100 for better understanding of trend in graph. MIN value 50
-		self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+		self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
 		self.high = self.df['high']
 		self.close = self.df['close']
 		self.low = self.df['low']

@@ -22,9 +22,9 @@ import ta
 class WilliamsIndicator:
 
     # loading the data in from file_path
-    def __init__(self, file_path):
+    def __init__(self, df):
         #self.max_window = 150
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))#[-self.max_window:]
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))#[-self.max_window:]
         #self.df = pd.DataFrame(inputs)
         self.high = self.df['high']
         self.low = self.df['low']
@@ -33,7 +33,7 @@ class WilliamsIndicator:
     # Calculate the williams indicator
     def calculate_williams_indicator(self):
         will_ind = ta.momentum.WilliamsRIndicator(high = self.high, low = self.low, close = self.close)
-        self.df['williams_indicator'] = will_ind.wr()
+        self.df['williams_indicator'] = will_ind.williams_r()
 
     # Calculate the simple moving average
     def calculate_sma(self):

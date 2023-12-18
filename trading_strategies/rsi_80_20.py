@@ -13,11 +13,12 @@ enter (sell) at the next candle which closes below our first identified high can
 '''
 
 class Rsi8020:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 100 # 100 for plotting purposes - to see general trend - minimum needed is 50 + waiting_period 
         self.waiting_period = 5 # how long you are willing to wait to enter after finding the lowest low in last 50 
         #self.df = pd.read_csv(file_path, index_col=0)[-self.max_window:]
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
 
     def calculate_rsi(self):
         # initiate rsi indicator

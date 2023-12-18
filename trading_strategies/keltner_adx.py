@@ -16,27 +16,28 @@ confirmed by an adx reading of at least 20.
 
 class KeltnerAdx:
 
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.max_window = 150 #uncomment for graphing purposes
-        self.df = pd.read_csv(file_path)
+        self.df = df#pd.read_csv(file_path)
         self.high = self.df['high']
         self.low = self.df['low']
         self.close = self.df['close']
 
     def calculate_band_upper(self):
-        band_up_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, n=20)
+        band_up_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['k_band_upper'] = band_up_ind.keltner_channel_hband()
 
     def calculate_band_lower(self):
-        band_low_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, n=20)
+        band_low_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['k_band_lower'] = band_low_ind.keltner_channel_lband()
 
     def calculate_band_width(self):
-        band_width = ta.volatility.KeltnerChannel(high = self.high, low = self.low, close = self.close, n=20)
+        band_width = ta.volatility.KeltnerChannel(high = self.high, low = self.low, close = self.close, window=20)
         self.df['band_width'] = band_width.keltner_channel_wband()
 
     def calculate_adx(self):
-        adx_ind = ta.trend.ADXIndicator(high=self.high, low=self.low, close=self.close, n=20)
+        adx_ind = ta.trend.ADXIndicator(high=self.high, low=self.low, close=self.close, window=20)
         self.df['adx'] = adx_ind.adx()
 
     def determine_signal(self, dframe):

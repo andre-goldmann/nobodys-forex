@@ -12,19 +12,20 @@ This strategy combines the keltner channels, with the stochastic signal line.
 
 class KeltnerStochastic:
 
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.max_window = 100  #uncomment for graphing purposes
-        self.df = pd.read_csv(file_path)
+        self.df = df#pd.read_csv(file_path)
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']
 
     def calculate_band_upper(self):
-        band_up_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, n=20)
+        band_up_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['k_band_upper'] = band_up_ind.keltner_channel_hband()
 
     def calculate_band_lower(self):
-        band_low_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, n=20)
+        band_low_ind = ta.volatility.KeltnerChannel(high=self.high, low=self.low, close=self.close, window=20)
         self.df['k_band_lower'] = band_low_ind.keltner_channel_lband()
 
     def calculate_stochastic_signal_line(self):
