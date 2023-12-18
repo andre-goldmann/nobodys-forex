@@ -12,9 +12,10 @@ Author: Cheryl
 '''
 
 class DpoCandlestick:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 100 # set to 100 for better understanding of trend in graph. MIN value 21
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+        self.df = df[-self.max_window:]#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
     
     def calculate_dpo(self):
         # initialise DPO indicator for n = 20

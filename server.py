@@ -45,6 +45,10 @@ from trading_strategies.cci_moving_average import CciMovingAverage
 from trading_strategies.commodity_channel_index import CommodityChannelIndex
 from trading_strategies.donchian_atr import DonchianATR
 from trading_strategies.donchian_breakout import DonchianBreakout
+from trading_strategies.donchian_middle import DonchianMiddle
+from trading_strategies.dpo_candlestick import DpoCandlestick
+from trading_strategies.elder_ray import ElderRay
+from trading_strategies.elder_ray_alternative import ElderRayAlternative
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -584,10 +588,49 @@ def donchianBreakout(df):
     signal_lst, df = strategy.run_donchian_breakout()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on DonchianATR")
+        print("Long on DonchianBreakout")
     elif signal == -1:
-        print("Short on DonchianATR")
+        print("Short on DonchianBreakout")
 
+
+def donchianMiddle(df):
+    strategy = DonchianMiddle(df)
+    signal_lst, df = strategy.run_donchian_middle()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on DonchianMiddle")
+    elif signal == -1:
+        print("Short on DonchianMiddle")
+
+
+def dpoCandlestick(df):
+    strategy = DpoCandlestick(df)
+    signal_lst, df = strategy.run_dpo_candlestick()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on DpoCandlestick")
+    elif signal == -1:
+        print("Short on DpoCandlestick")
+
+
+def elderRay(df):
+    strategy = ElderRay(df)
+    signal_lst, df = strategy.run_elder_ray()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on ElderRay")
+    elif signal == -1:
+        print("Short on ElderRay")
+
+
+def elderRayAlternative(df):
+    strategy = ElderRayAlternative(df)
+    signal_lst, df = strategy.run_elder_ray()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on ElderRayAlternative")
+    elif signal == -1:
+        print("Short on ElderRayAlternative")
 
 
 @app.post("/storecandle")
@@ -612,7 +655,7 @@ async def storeCandle(candle:CandlesDto):
                     df['volume'] = df.TICKVOL
                     adx(df)
                     adxEma14(df)
-                    adxRsi(df)
+                    #adxRsi(df)
                     aroonAdx(df)
                     aroonIndicator(df)
                     awesomeOscillatorSaucer(df)
@@ -625,6 +668,10 @@ async def storeCandle(candle:CandlesDto):
                     commodityChannelIndex(df)
                     donchianATR(df)
                     donchianBreakout(df)
+                    donchianMiddle(df)
+                    dpoCandlestick(df)
+                    elderRay(df)
+                    elderRayAlternative(df)
 
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))

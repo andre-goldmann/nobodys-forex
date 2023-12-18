@@ -11,9 +11,10 @@ We sell when price is below the 13 period exponential moving average, and both E
 Author: Cheryl
 '''
 class ElderRayAlternative:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 100 # set to 100 for better understanding of trend in graph. MIN value 14
-        self.df = pd.read_csv(file_path)[-self.max_window:]
+        self.df = df[-self.max_window:]#pd.read_csv(file_path)[-self.max_window:]
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']

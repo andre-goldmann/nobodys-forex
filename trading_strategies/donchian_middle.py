@@ -10,9 +10,10 @@ import ta
 
 class DonchianMiddle:
     # loading the data in from file_path
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 1001  # uncomment for graphing purposes
-        self.df = pd.read_csv(file_path)[-self.max_window:]
+        self.df = df#pd.read_csv(file_path)[-self.max_window:]
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']
