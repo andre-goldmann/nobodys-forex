@@ -87,8 +87,8 @@ def deleteSignal():
 #adsar()
 #2023-10-12 11:15:00.000000 +00:00
 #linesInfo()
-#storecandle()
+storecandle()
 #lastCandle()
 #trategystats()
 #instrumentstats()
-deleteSignal()
+#deleteSignal()
