@@ -32,6 +32,19 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
 from pinescripts import f_LazyLine, tThree
 from trading_strategies.adx_crossover import AdxCrossover
 from trading_strategies.adx_ema_14 import ADXEMA14
+from trading_strategies.adx_rsi import AdxRsi
+from trading_strategies.aroon_adx import AroonAdx
+from trading_strategies.aroon_indicator import AroonIndicator
+from trading_strategies.awesome_saucer import AwesomeOscillatorSaucer
+from trading_strategies.awesome_zero_crossover import AwesomeOscillatorZeroCrossover
+from trading_strategies.blade_runner import BladeRunner
+from trading_strategies.bollingerbands_rsi import BollingerBandsAndRSI
+from trading_strategies.bollingerbands_rsi_2 import BollingerBandsAndRSI2
+from trading_strategies.cci_macd_psar import CciMacdPsar
+from trading_strategies.cci_moving_average import CciMovingAverage
+from trading_strategies.commodity_channel_index import CommodityChannelIndex
+from trading_strategies.donchian_atr import DonchianATR
+from trading_strategies.donchian_breakout import DonchianBreakout
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -447,6 +460,136 @@ def adxEma14(df):
         print("Short on adxema14")
 
 
+def adxRsi(df):
+    strategy = AdxRsi(df)
+    signal_lst, df = strategy.run_adx_rsi()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on AdxRsi")
+    elif signal == -1:
+        print("Short on AdxRsi")
+
+
+def aroonAdx(df):
+    strategy = AroonAdx(df)
+    signal_lst, df = strategy.run_aroon_adx()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on AroonAdx")
+    elif signal == -1:
+        print("Short on AroonAdx")
+
+def aroonIndicator(df):
+    strategy = AroonIndicator(df)
+    signal_lst, df = strategy.run_aroon_indicator()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on AroonIndicator")
+    elif signal == -1:
+        print("Short on AroonIndicator")
+
+
+def awesomeOscillatorSaucer(df):
+    strategy = AwesomeOscillatorSaucer(df)
+    signal_lst, df = strategy.run_awesome_oscillator_saucer()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on AwesomeOscillatorSaucer")
+    elif signal == -1:
+        print("Short on AwesomeOscillatorSaucer")
+
+
+def awesomeOscillatorZeroCrossover(df):
+    strategy = AwesomeOscillatorZeroCrossover(df)
+    signal_lst, df = strategy.run_awesome_oscillator_zero_crossover()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on AwesomeOscillatorZeroCrossover")
+    elif signal == -1:
+        print("Short on AwesomeOscillatorZeroCrossover")
+
+
+def bladeRunner(df):
+    strategy = BladeRunner(df)
+    signal_lst, df = strategy.run_blade_runner()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on BladeRunner")
+    elif signal == -1:
+        print("Short on BladeRunner")
+
+
+def bollingerBandsAndRSI(df):
+    strategy = BollingerBandsAndRSI(df)
+    signal_lst, df = strategy.run_bollingerbands_rsi()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on BollingerBandsAndRSI")
+    elif signal == -1:
+        print("Short on BollingerBandsAndRSI")
+
+
+def bollingerBandsAndRSI2(df):
+    strategy = BollingerBandsAndRSI2(df)
+    signal_lst, df = strategy.run_bollingerbands_rsi_2()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on BollingerBandsAndRSI2")
+    elif signal == -1:
+        print("Short on BollingerBandsAndRSI2")
+
+
+def cciMacdPsar(df):
+    strategy = CciMacdPsar(df)
+    signal_lst, df = strategy.run()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on CciMacdPsar")
+    elif signal == -1:
+        print("Short on CciMacdPsar")
+
+
+def cciMovingAverage(df):
+    strategy = CciMovingAverage(df)
+    signal_lst, df = strategy.run()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on CciMovingAverage")
+    elif signal == -1:
+        print("Short on CciMovingAverage")
+
+
+def commodityChannelIndex(df):
+    strategy = CommodityChannelIndex(df)
+    signal_lst, df = strategy.run()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on CommodityChannelIndex")
+    elif signal == -1:
+        print("Short on CommodityChannelIndex")
+
+
+def donchianATR(df):
+    strategy = DonchianATR(df)
+    signal_lst, df = strategy.run_donchian_atr()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on DonchianATR")
+    elif signal == -1:
+        print("Short on DonchianATR")
+
+
+def donchianBreakout(df):
+    strategy = DonchianBreakout(df)
+    signal_lst, df = strategy.run_donchian_breakout()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on DonchianATR")
+    elif signal == -1:
+        print("Short on DonchianATR")
+
+
+
 @app.post("/storecandle")
 async def storeCandle(candle:CandlesDto):
     if candle.symbol not in symbols:
@@ -462,13 +605,26 @@ async def storeCandle(candle:CandlesDto):
             for timeFrame in TimeFrame:
                 if timeFrame == timeframeEnum:
                     df = loadDfFromDb(candle.symbol, timeFrame, 10000)
-                    df['opem'] = df.OPEN
+                    df['open'] = df.OPEN
                     df['high'] = df.HIGH
                     df['low'] = df.LOW
                     df['close'] = df.CLOSE
                     df['volume'] = df.TICKVOL
                     adx(df)
                     adxEma14(df)
+                    adxRsi(df)
+                    aroonAdx(df)
+                    aroonIndicator(df)
+                    awesomeOscillatorSaucer(df)
+                    awesomeOscillatorZeroCrossover(df)
+                    bladeRunner(df)
+                    bollingerBandsAndRSI(df)
+                    bollingerBandsAndRSI2(df)
+                    cciMacdPsar(df)
+                    cciMovingAverage(df)
+                    commodityChannelIndex(df)
+                    donchianATR(df)
+                    donchianBreakout(df)
 
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))

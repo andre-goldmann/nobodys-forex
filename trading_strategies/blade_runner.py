@@ -1,8 +1,5 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import mplfinance as mpf
-import ta
+
 import trading_strategies.visualise as v
 
 '''
@@ -18,8 +15,9 @@ Traders would place their open orders at this price level to take advantage of t
 
 class BladeRunner:
 
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         #self.df = pd.DataFrame(file_path)
 
     def add_ema(self):

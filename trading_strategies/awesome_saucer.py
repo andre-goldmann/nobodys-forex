@@ -11,9 +11,10 @@ Author: Cheryl
 '''
 
 class AwesomeOscillatorSaucer:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 300 # set to 300 for better understanding in plot (can see 200EMA through a 100 candlestick period). MIN value 200
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
 
     def calculate_awesome_oscillator(self):
         # initialise Awesome Oscillator

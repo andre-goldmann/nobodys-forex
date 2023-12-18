@@ -9,16 +9,18 @@ the PSAR value is checked if it is above or below the candlesticks showing a dow
  and the macd histogram is checked if it crosses the macd line from below or above indicating to buy or sell.
 """
 
-import datetime
 import pandas as pd
 import ta
+
 import trading_strategies.visualise as v
+
 
 class CciMacdPsar:
 
     #loading the data in from file_path
-    def __init__(self, file_path):
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
         self.high = self.df['high']
         self.low = self.df['low']
         self.close = self.df['close']

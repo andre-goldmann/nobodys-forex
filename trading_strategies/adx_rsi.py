@@ -1,7 +1,6 @@
-import pandas as pd
 import ta
+
 import trading_strategies.visualise as v
-import numpy as np
 
 '''
 This strategy uses the ADX indicator and RSI indicator to determine buy and sell signals.
@@ -14,9 +13,11 @@ lack of trend.
 '''
 
 class AdxRsi:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.max_window = 100 #uncomment for graphing purposes
-        self.df = pd.read_csv(file_path)
+        #self.df = pd.read_csv(file_path)
+        self.df = df
 
 
     def calculate_adx(self):

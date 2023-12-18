@@ -8,17 +8,18 @@ The CCI is a trend indicator that shows oversold and overbought conditions. Comb
 to attempt to filter some false signals.
 """
 
-import datetime
 import pandas as pd
 import ta
+
 import trading_strategies.visualise as v
 
 
 class CciMovingAverage:
 
     # loading the data in from file_path
-    def __init__(self, file_path):
-        self.df = pd.read_csv(file_path)
+    #def __init__(self, file_path):
+    def __init__(self, df):
+        self.df = df#pd.read_csv(file_path)
         self.high = self.df['high']
         self.low = self.df['low']
         self.close = self.df['close']

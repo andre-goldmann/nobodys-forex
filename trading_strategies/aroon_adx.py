@@ -17,9 +17,10 @@ import ta
 class AroonAdx:
 
     # loading the data in from file_path
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 100
-        self.df = self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+        self.df = self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']

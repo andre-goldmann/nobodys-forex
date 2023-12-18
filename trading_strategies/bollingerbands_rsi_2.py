@@ -1,8 +1,6 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import mplfinance as mpf
 import ta
+
 import trading_strategies.visualise as v
 
 '''
@@ -19,9 +17,10 @@ to ensure robustness of signals.
 class BollingerBandsAndRSI2:
 
     #constructor
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         #self.df = pd.DataFrame(file_path)
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))
 
     # add bollinger bands (bb) to indicate volatilty
     def add_bollinger_bands(self):

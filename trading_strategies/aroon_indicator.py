@@ -20,9 +20,10 @@ import ta
 class AroonIndicator:
 
     # loading the data in from file_path
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 100
-        self.df = pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
+        self.df = df#pd.DataFrame(file_path, columns=("time", "open", "high", "low", "close", "tick_volume","pos"))[-self.max_window:]
         self.high = self.df['high']
         self.low = self.df['low']
         self.close = self.df['close']

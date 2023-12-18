@@ -10,9 +10,10 @@ When the AO crosses below 0, we wait for 3 consecutive decreasing values of AO t
 Author: Cheryl
 '''
 class AwesomeOscillatorZeroCrossover:
-    def __init__(self, file_path):
+    #def __init__(self, file_path):
+    def __init__(self, df):
         self.max_window = 134 # set to 134 for graphing purposes. Need minimum 37
-        self.df = pd.read_csv(file_path)[-self.max_window:]
+        self.df = df#pd.read_csv(file_path)[-self.max_window:]
         self.high = self.df['high']
         self.close = self.df['close']
         self.low = self.df['low']
