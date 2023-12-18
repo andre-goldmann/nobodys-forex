@@ -61,6 +61,7 @@ from trading_strategies.ema_mi import EMAMI
 from trading_strategies.force_index_ema import ForceIndexEMA
 from trading_strategies.k_stoch_adx import KeltnerStochasticAdx
 from trading_strategies.kama import KAMA
+from trading_strategies.kama_crossover import KAMACrossover
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -765,6 +766,16 @@ def kAMA(df):
         print("Short on KAMA")
 
 
+def kAMACrossover(df):
+    strategy = KAMACrossover(df)
+    signal_lst, df = strategy.run()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on KAMACrossover")
+    elif signal == -1:
+        print("Short on KAMACrossover")
+
+
 @app.post("/storecandle")
 async def storeCandle(candle:CandlesDto):
     if candle.symbol not in symbols:
@@ -774,7 +785,7 @@ async def storeCandle(candle:CandlesDto):
     timeframeEnum: TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
 
     if timeframeEnum != TimeFrame.PERIOD_M1:
-        #storeCandleInDb(candle)
+        storeCandleInDb(candle)
         #Call strategies
         for timeFrame in TimeFrame:
             if timeFrame == timeframeEnum:
@@ -815,6 +826,7 @@ async def storeCandle(candle:CandlesDto):
                 #forceIndexEMA(df)
                 keltnerStochasticAdx(df)
                 kAMA(df)
+                kAMACrossover(df)
 
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))
