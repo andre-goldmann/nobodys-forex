@@ -12,3 +12,4 @@ schedule
 pandas_ta
 python-multipart
 python-dotenv
+ta

@@ -30,6 +30,8 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
     getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd
 from pinescripts import f_LazyLine, tThree
+from trading_strategies.adx_crossover import AdxCrossover
+from trading_strategies.adx_ema_14 import ADXEMA14
 from trendline_breakout import trendline_breakout
 
 #version = f"{sys.version_info.major}.{sys.version_info.minor}"
@@ -424,6 +426,27 @@ async def signalActivatedProd(signalActivation:SignalActivationDto):
 
     activateSignalProd(signalActivation)
 
+
+def adx(df):
+    strategy = AdxCrossover(df)
+    signal_lst, df = strategy.run()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on adx")
+    elif signal == -1:
+        print("Short on adx")
+
+
+def adxEma14(df):
+    strategy = ADXEMA14(df)
+    signal_lst, df = strategy.run_adx_ema_14()
+    signal = signal_lst[0]
+    if signal == 1:
+        print("Long on adxema14")
+    elif signal == -1:
+        print("Short on adxema14")
+
+
 @app.post("/storecandle")
 async def storeCandle(candle:CandlesDto):
     if candle.symbol not in symbols:
@@ -434,6 +457,19 @@ async def storeCandle(candle:CandlesDto):
 
     if timeframeEnum != TimeFrame.PERIOD_M1:
         storeCandleInDb(candle)
+        #Call strategies
+        for symbol in symbols:
+            for timeFrame in TimeFrame:
+                if timeFrame == timeframeEnum:
+                    df = loadDfFromDb(candle.symbol, timeFrame, 10000)
+                    df['opem'] = df.OPEN
+                    df['high'] = df.HIGH
+                    df['low'] = df.LOW
+                    df['close'] = df.CLOSE
+                    df['volume'] = df.TICKVOL
+                    adx(df)
+                    adxEma14(df)
+
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))
 
