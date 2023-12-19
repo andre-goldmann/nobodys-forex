@@ -434,7 +434,7 @@ def atr(df, n=14):
     atr = wwma(tr, n)
     return atr
 
-def loadDfFromDb(symbol:str, timeFrame:TimeFrame, session):
+def loadDfFromDb(symbol:str, timeFrame:TimeFrame, session, limit=250000):
 
     df = pd.read_sql_query(
         sql = session.query(CandlesEntity.SYMBOL,
@@ -448,13 +448,17 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame, session):
                             CandlesEntity.VOL,
                             CandlesEntity.SPREAD)
         .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
+        .order_by(CandlesEntity.id.desc())
+        .limit(limit)
         .statement,
         con = engine
     )
-    print(len(df), " database entries loaded for ",timeFrame)
-    print("Last row: ")
-    print(df.iloc[-1])
+    #print(len(df), " database entries loaded for ",timeFrame)
+    #print("Last row: ")
+    #print(df.iloc[-1])
     df_no_duplicates = df.drop_duplicates(subset=['DATETIME'])
+    session.expunge_all()
+    session.close()
     return df_no_duplicates.drop_duplicates()
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
@@ -580,7 +584,7 @@ def proceedSignal(signal):
                 #))
                 return
 
-            df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4, session)
+            df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4, session, 10000)
             atrValue = atr(df)
 
             sl = 0.0
