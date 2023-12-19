@@ -487,7 +487,7 @@ async def signalActivatedProd(signalActivation:SignalActivationDto):
 
 
 def postSignal(symbol, timeframeEnum, type, strategy, entry):
-    count = countSignals(strategy + str(timeframeEnum), symbol)
+    count = countSignals(strategy + str(timeframeEnum).replace("PERIOD", ""), symbol)
     if count == 0:
         #signal:SignalDto
         data = {"symbol": symbol,
@@ -496,12 +496,12 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
                 "entry": entry,
                 "sl": 0,
                 "tp": 0,
-                "strategy": strategy + str(timeframeEnum)}
+                "strategy": strategy + str(timeframeEnum).replace("PERIOD", "")}
         response = requests.post(
             "http://tvsignals:80/signal/",
             json=data,
         )
-        print(str(response))
+        print(str(response.status_code))
 
 def adx(df, symbol, timeframeEnum, entry):
     strategy = AdxCrossover(df)
@@ -948,7 +948,7 @@ def rsi8020(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "Rsi8020", entry)
     elif signal == -1:
-        print("Short on Rsi8020")
+        postSignal(symbol, timeframeEnum, "sell", "Rsi8020", entry)
 
 def simpleMAExponentialMA(df, symbol, timeframeEnum, entry):
     strategy = SimpleMAExponentialMA(df)
@@ -957,7 +957,7 @@ def simpleMAExponentialMA(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "SimpleMAExponentialMA", entry)
     elif signal == -1:
-        print("Short on SimpleMAExponentialMA")
+        postSignal(symbol, timeframeEnum, "sell", "SimpleMAExponentialMA", entry)
 
 
 def simpleMAExponentialMAAlternative(df, symbol, timeframeEnum, entry):
@@ -967,7 +967,7 @@ def simpleMAExponentialMAAlternative(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "SimpleMAExponentialMAAlternative", entry)
     elif signal == -1:
-        print("Short on SimpleMAExponentialMAAlternative")
+        postSignal(symbol, timeframeEnum, "sell", "SimpleMAExponentialMAAlternative", entry)
 
 
 def sMAMI(df, symbol, timeframeEnum, entry):
@@ -977,7 +977,7 @@ def sMAMI(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "SMAMI", entry)
     elif signal == -1:
-        print("Short on SMAMI")
+        postSignal(symbol, timeframeEnum, "sell", "SMAMI", entry)
 
 
 def stochasticOscillatorNoExit(df, symbol, timeframeEnum, entry):
@@ -987,7 +987,7 @@ def stochasticOscillatorNoExit(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "StochasticOscillatorNoExit", entry)
     elif signal == -1:
-        print("Short on StochasticOscillatorNoExit")
+        postSignal(symbol, timeframeEnum, "sell", "StochasticOscillatorNoExit", entry)
 
 
 def tripleBollingerBands(df, symbol, timeframeEnum, entry):
@@ -997,7 +997,7 @@ def tripleBollingerBands(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "TripleBollingerBands", entry)
     elif signal == -1:
-        print("Short on TripleBollingerBands")
+        postSignal(symbol, timeframeEnum, "sell", "TripleBollingerBands", entry)
 
 
 def trixEma(df, symbol, timeframeEnum, entry):
@@ -1007,7 +1007,7 @@ def trixEma(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "TrixEma", entry)
     elif signal == -1:
-        print("Short on TrixEma")
+        postSignal(symbol, timeframeEnum, "sell", "TrixEma", entry)
 
 
 def trixMI(df, symbol, timeframeEnum, entry):
@@ -1017,7 +1017,7 @@ def trixMI(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "TrixMI", entry)
     elif signal == -1:
-        print("Short on TrixMI")
+        postSignal(symbol, timeframeEnum, "sell", "TrixMI", entry)
 
 
 def trixRsi(df, symbol, timeframeEnum, entry):
@@ -1027,7 +1027,7 @@ def trixRsi(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "TrixRsi", entry)
     elif signal == -1:
-        print("Short on TrixRsi")
+        postSignal(symbol, timeframeEnum, "sell", "TrixRsi", entry)
 
 
 def tSICrossover(df, symbol, timeframeEnum, entry):
@@ -1037,7 +1037,7 @@ def tSICrossover(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "TSICrossover", entry)
     elif signal == -1:
-        print("Short on TSICrossover")
+        postSignal(symbol, timeframeEnum, "sell", "TSICrossover", entry)
 
 
 def vortexCrossover(df, symbol, timeframeEnum, entry):
