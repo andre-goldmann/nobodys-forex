@@ -1124,10 +1124,10 @@ async def storeCandle(candle:CandlesDto):
         df['vol'] = df.TICKVOL
         print("##################")
         print(str(df.iloc[0]))
-        print("#######")
-        print(str(df.iloc[-1]))
+        #print("#######")
+        #print(str(df.iloc[-1]))
         print("##################")
-        entry = df.iloc[-1].CLOSE
+        entry = df.iloc[0].CLOSE
         adx(df, symbol, timeframeEnum, entry)
         adxEma14(df, symbol, timeframeEnum, entry)
         # wird nicht als Strategy erkannt

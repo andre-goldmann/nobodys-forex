@@ -284,7 +284,7 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame, limit=250000):
         )
         print(len(df), " database entries loaded for ",timeFrame)
         print("Last row: ")
-        print(df.iloc[-1])
+        print(df.iloc[0])
         #There are a lot of duplicates stored, thats why we need to remove them
         df_no_duplicates = df.drop_duplicates(subset=['DATETIME'])
         return df_no_duplicates.drop_duplicates()
