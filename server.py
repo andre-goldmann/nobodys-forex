@@ -1047,7 +1047,7 @@ def vortexCrossover(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "VortexCrossover", entry)
     elif signal == -1:
-        print("Short on VortexCrossover")
+        postSignal(symbol, timeframeEnum, "sell", "VortexCrossover", entry)
 
 
 def vortexSma(df, symbol, timeframeEnum, entry):
@@ -1057,7 +1057,7 @@ def vortexSma(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "VortexSma", entry)
     elif signal == -1:
-        print("Short on VortexSma")
+        postSignal(symbol, timeframeEnum, "sell", "VortexSma", entry)
 
 
 def williamsIndicator(df, symbol, timeframeEnum, entry):
@@ -1067,7 +1067,7 @@ def williamsIndicator(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "WilliamsIndicator", entry)
     elif signal == -1:
-        print("Short on WilliamsIndicator")
+        postSignal(symbol, timeframeEnum, "sell", "WilliamsIndicator", entry)
 
 
 def williamsRsi(df, symbol, timeframeEnum, entry):
@@ -1077,7 +1077,7 @@ def williamsRsi(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "WilliamsRsi", entry)
     elif signal == -1:
-        print("Short on WilliamsRsi")
+        postSignal(symbol, timeframeEnum, "sell", "WilliamsRsi", entry)
 
 
 def williamsStochastic(df, symbol, timeframeEnum, entry):
@@ -1087,7 +1087,7 @@ def williamsStochastic(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "WilliamsStochastic", entry)
     elif signal == -1:
-        print("Short on WilliamsStochastic")
+        postSignal(symbol, timeframeEnum, "sell", "WilliamsStochastic", entry)
 
 
 def zigZag(df, symbol, timeframeEnum, entry):
@@ -1097,7 +1097,7 @@ def zigZag(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "ZigZag", entry)
     elif signal == -1:
-        print("Short on ZigZag")
+        postSignal(symbol, timeframeEnum, "sell", "ZigZag", entry)
 
 
 @app.post("/storecandle")
