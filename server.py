@@ -503,7 +503,8 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
             "http://tvsignals:80/signal/",
             json=data,
         )
-        print(str(response.status_code))
+        if response.status_code != 200:
+            print(str(response.status_code))
 
 def adx(df, symbol, timeframeEnum, entry):
     strategy = AdxCrossover(df)
