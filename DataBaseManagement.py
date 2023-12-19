@@ -277,7 +277,7 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame, limit=250000):
                                 CandlesEntity.VOL,
                                 CandlesEntity.SPREAD)
             .filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame)
-            .order_by(CandlesEntity.DATETIME.asc())
+            .order_by(CandlesEntity.DATETIME.desc())
             .limit(limit)
             .statement,
             con = engine
