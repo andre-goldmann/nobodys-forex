@@ -457,8 +457,6 @@ def loadDfFromDb(symbol:str, timeFrame:TimeFrame, session, limit=250000):
     #print("Last row: ")
     #print(df.iloc[-1])
     df_no_duplicates = df.drop_duplicates(subset=['DATETIME'])
-    session.expunge_all()
-    session.close()
     return df_no_duplicates.drop_duplicates()
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
