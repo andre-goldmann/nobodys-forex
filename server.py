@@ -6,7 +6,7 @@ import time
 from datetime import timedelta
 from timeit import default_timer as timer
 from typing import List
-
+import requests
 import numpy as np
 import pandas as pd
 import schedule
@@ -24,11 +24,12 @@ from typing_extensions import Annotated
 
 from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
     SignalActivationDto, \
-    activateSignal, activateSignalProd, SignalUpdateDto, updateSignalInDb, updateSignalProdInDb, modifySignalInDb, deleteSignalInDb, tradeTypes, \
+    activateSignal, activateSignalProd, SignalUpdateDto, updateSignalInDb, updateSignalProdInDb, modifySignalInDb, \
+    deleteSignalInDb, tradeTypes, \
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, getStrategystats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
-    getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd
+    getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd, countSignals
 from pinescripts import f_LazyLine, tThree
 from trading_strategies.adx_crossover import AdxCrossover
 from trading_strategies.adx_ema_14 import ADXEMA14
@@ -485,600 +486,616 @@ async def signalActivatedProd(signalActivation:SignalActivationDto):
     activateSignalProd(signalActivation)
 
 
-def adx(df, symbol, timeframeEnum):
+def postSignal(symbol, timeframeEnum, type, strategy, entry):
+    count = countSignals(strategy + str(timeframeEnum), symbol)
+    if count == 0:
+        #signal:SignalDto
+        data = {"symbol": symbol,
+                "timestamp": str(timeframeEnum),
+                "type": type,
+                "entry": entry,
+                "sl": 0,
+                "tp": 0,
+                "strategy": strategy + str(timeframeEnum)}
+        response = requests.post(
+            "http://tvsignals:80/signal/",
+            json=data,
+        )
+        print(str(response))
+
+def adx(df, symbol, timeframeEnum, entry):
     strategy = AdxCrossover(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on adx")
+        postSignal(symbol, timeframeEnum, "buy", "AdxCrossover", entry)
     elif signal == -1:
-        print("Short on adx")
+        postSignal(symbol, timeframeEnum, "sell", "AdxCrossover", entry)
 
 
-def adxEma14(df, symbol, timeframeEnum):
+def adxEma14(df, symbol, timeframeEnum, entry):
     strategy = ADXEMA14(df)
     signal_lst, df = strategy.run_adx_ema_14()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on adxema14")
+        postSignal(symbol, timeframeEnum, "buy", "ADXEMA14", entry)
     elif signal == -1:
-        print("Short on adxema14")
+        print("Short on ADXEMA14")
 
 
-def adxRsi(df, symbol, timeframeEnum):
+def adxRsi(df, symbol, timeframeEnum, entry):
     strategy = AdxRsi(df)
     signal_lst, df = strategy.run_adx_rsi()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on AdxRsi")
+        postSignal(symbol, timeframeEnum, "buy", "AdxRsi", entry)
     elif signal == -1:
         print("Short on AdxRsi")
 
 
-def aroonAdx(df, symbol, timeframeEnum):
+def aroonAdx(df, symbol, timeframeEnum, entry):
     strategy = AroonAdx(df)
     signal_lst, df = strategy.run_aroon_adx()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on AroonAdx")
+        postSignal(symbol, timeframeEnum, "buy", "AroonAdx", entry)
     elif signal == -1:
         print("Short on AroonAdx")
 
-def aroonIndicator(df, symbol, timeframeEnum):
+def aroonIndicator(df, symbol, timeframeEnum, entry):
     strategy = AroonIndicator(df)
     signal_lst, df = strategy.run_aroon_indicator()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on AroonIndicator")
+        postSignal(symbol, timeframeEnum, "buy", "AroonIndicator", entry)
     elif signal == -1:
         print("Short on AroonIndicator")
 
 
-def awesomeOscillatorSaucer(df, symbol, timeframeEnum):
+def awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry):
     strategy = AwesomeOscillatorSaucer(df)
     signal_lst, df = strategy.run_awesome_oscillator_saucer()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on AwesomeOscillatorSaucer")
+        postSignal(symbol, timeframeEnum, "buy", "AwesomeOscillatorSaucer", entry)
     elif signal == -1:
         print("Short on AwesomeOscillatorSaucer")
 
 
-def awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum):
+def awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry):
     strategy = AwesomeOscillatorZeroCrossover(df)
     signal_lst, df = strategy.run_awesome_oscillator_zero_crossover()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on AwesomeOscillatorZeroCrossover")
+        postSignal(symbol, timeframeEnum, "buy", "AwesomeOscillatorSaucer", entry)
     elif signal == -1:
         print("Short on AwesomeOscillatorZeroCrossover")
 
 
-def bladeRunner(df, symbol, timeframeEnum):
+def bladeRunner(df, symbol, timeframeEnum, entry):
     strategy = BladeRunner(df)
     signal_lst, df = strategy.run_blade_runner()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on BladeRunner")
+        postSignal(symbol, timeframeEnum, "buy", "BladeRunner", entry)
     elif signal == -1:
         print("Short on BladeRunner")
 
 
-def bollingerBandsAndRSI(df, symbol, timeframeEnum):
+def bollingerBandsAndRSI(df, symbol, timeframeEnum, entry):
     strategy = BollingerBandsAndRSI(df)
     signal_lst, df = strategy.run_bollingerbands_rsi()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on BollingerBandsAndRSI")
+        postSignal(symbol, timeframeEnum, "buy", "BollingerBandsAndRSI", entry)
     elif signal == -1:
         print("Short on BollingerBandsAndRSI")
 
 
-def bollingerBandsAndRSI2(df, symbol, timeframeEnum):
+def bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry):
     strategy = BollingerBandsAndRSI2(df)
     signal_lst, df = strategy.run_bollingerbands_rsi_2()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on BollingerBandsAndRSI2")
+        postSignal(symbol, timeframeEnum, "buy", "BollingerBandsAndRSI2", entry)
     elif signal == -1:
         print("Short on BollingerBandsAndRSI2")
 
 
-def cciMacdPsar(df, symbol, timeframeEnum):
+def cciMacdPsar(df, symbol, timeframeEnum, entry):
     strategy = CciMacdPsar(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on CciMacdPsar")
+        postSignal(symbol, timeframeEnum, "buy", "CciMacdPsar", entry)
     elif signal == -1:
         print("Short on CciMacdPsar")
 
 
-def cciMovingAverage(df, symbol, timeframeEnum):
+def cciMovingAverage(df, symbol, timeframeEnum, entry):
     strategy = CciMovingAverage(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on CciMovingAverage")
+        postSignal(symbol, timeframeEnum, "buy", "CciMovingAverage", entry)
     elif signal == -1:
         print("Short on CciMovingAverage")
 
 
-def commodityChannelIndex(df, symbol, timeframeEnum):
+def commodityChannelIndex(df, symbol, timeframeEnum, entry):
     strategy = CommodityChannelIndex(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on CommodityChannelIndex")
+        postSignal(symbol, timeframeEnum, "buy", "CommodityChannelIndex", entry)
     elif signal == -1:
         print("Short on CommodityChannelIndex")
 
-
-def donchianATR(df, symbol, timeframeEnum):
+def donchianATR(df, symbol, timeframeEnum, entry):
     strategy = DonchianATR(df)
     signal_lst, df = strategy.run_donchian_atr()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on DonchianATR")
+        postSignal(symbol, timeframeEnum, "buy", "DonchianATR", entry)
     elif signal == -1:
         print("Short on DonchianATR")
 
 
-def donchianBreakout(df, symbol, timeframeEnum):
+def donchianBreakout(df, symbol, timeframeEnum, entry):
     strategy = DonchianBreakout(df)
     signal_lst, df = strategy.run_donchian_breakout()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on DonchianBreakout")
+        postSignal(symbol, timeframeEnum, "buy", "DonchianBreakout", entry)
     elif signal == -1:
         print("Short on DonchianBreakout")
 
 
-def donchianMiddle(df, symbol, timeframeEnum):
+def donchianMiddle(df, symbol, timeframeEnum, entry):
     strategy = DonchianMiddle(df)
     signal_lst, df = strategy.run_donchian_middle()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on DonchianMiddle")
+        postSignal(symbol, timeframeEnum, "buy", "DonchianMiddle", entry)
     elif signal == -1:
         print("Short on DonchianMiddle")
 
 
-def dpoCandlestick(df, symbol, timeframeEnum):
+def dpoCandlestick(df, symbol, timeframeEnum, entry):
     strategy = DpoCandlestick(df)
     signal_lst, df = strategy.run_dpo_candlestick()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on DpoCandlestick")
+        postSignal(symbol, timeframeEnum, "buy", "DpoCandlestick", entry)
     elif signal == -1:
         print("Short on DpoCandlestick")
 
 
-def elderRay(df, symbol, timeframeEnum):
+def elderRay(df, symbol, timeframeEnum, entry):
     strategy = ElderRay(df)
     signal_lst, df = strategy.run_elder_ray()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on ElderRay")
+        postSignal(symbol, timeframeEnum, "buy", "ElderRay", entry)
     elif signal == -1:
         print("Short on ElderRay")
 
 
-def elderRayAlternative(df, symbol, timeframeEnum):
+def elderRayAlternative(df, symbol, timeframeEnum, entry):
     strategy = ElderRayAlternative(df)
     signal_lst, df = strategy.run_elder_ray()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on ElderRayAlternative")
+        postSignal(symbol, timeframeEnum, "buy", "ElderRayAlternative", entry)
     elif signal == -1:
         print("Short on ElderRayAlternative")
 
 
-def threeEma(df, symbol, timeframeEnum):
+def threeEma(df, symbol, timeframeEnum, entry):
     strategy = ThreeEma(df)
     signal_lst, df = strategy.run_ema_3()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on ThreeEma")
+        postSignal(symbol, timeframeEnum, "buy", "ThreeEma", entry)
     elif signal == -1:
         print("Short on ThreeEma")
 
 
-def threeEmaAlternative(df, symbol, timeframeEnum):
+def threeEmaAlternative(df, symbol, timeframeEnum, entry):
     strategy = ThreeEmaAlternative(df)
     signal_lst, df = strategy.run_ema_3()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on ThreeEmaAlternative")
+        postSignal(symbol, timeframeEnum, "buy", "ThreeEmaAlternative", entry)
     elif signal == -1:
         print("Short on ThreeEmaAlternative")
 
 
-def eMACrossover(df, symbol, timeframeEnum):
+def eMACrossover(df, symbol, timeframeEnum, entry):
     strategy = EMACrossover(df)
     signal_lst, df = strategy.run_ema_crossover()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on EMACrossover")
+        postSignal(symbol, timeframeEnum, "buy", "EMACrossover", entry)
     elif signal == -1:
         print("Short on EMACrossover")
 
 
-def eMACrossoverAlternative(df, symbol, timeframeEnum):
+def eMACrossoverAlternative(df, symbol, timeframeEnum, entry):
     strategy = EMACrossoverAlternative(df)
     signal_lst, df = strategy.run_ema_crossover()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on EMACrossoverAlternative")
+        postSignal(symbol, timeframeEnum, "buy", "EMACrossoverAlternative", entry)
     elif signal == -1:
         print("Short on EMACrossoverAlternative")
 
 
-def eMACrossoverMACD(df, symbol, timeframeEnum):
+def eMACrossoverMACD(df, symbol, timeframeEnum, entry):
     strategy = EMACrossoverMACD(df)
     signal_lst, df = strategy.run_ema_crossover_macd()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on EMACrossoverMACD")
+        postSignal(symbol, timeframeEnum, "buy", "EMACrossoverMACD", entry)
     elif signal == -1:
         print("Short on EMACrossoverMACD")
 
 
-def eMACrossoverRSI(df, symbol, timeframeEnum):
+def eMACrossoverRSI(df, symbol, timeframeEnum, entry):
     strategy = EMACrossoverRSI(df)
     signal_lst, df = strategy.run_ema_crossover_rsi()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on EMACrossoverRSI")
+        postSignal(symbol, timeframeEnum, "buy", "EMACrossoverRSI", entry)
     elif signal == -1:
         print("Short on EMACrossoverRSI")
 
 
-def eMACrossoverRSIAlternative(df, symbol, timeframeEnum):
+def eMACrossoverRSIAlternative(df, symbol, timeframeEnum, entry):
     strategy = EMACrossoverRSIAlternative(df)
     signal_lst, df = strategy.run_ema_crossover_rsi()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on EMACrossoverRSIAlternative")
+        postSignal(symbol, timeframeEnum, "buy", "EMACrossoverRSIAlternative", entry)
     elif signal == -1:
         print("Short on EMACrossoverRSIAlternative")
 
 
-def eMAMACDRSI(df, symbol, timeframeEnum):
+def eMAMACDRSI(df, symbol, timeframeEnum, entry):
     strategy = EMAMACDRSI(df)
     signal_lst, df = strategy.run_ema_macd_rsi()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on EMAMACDRSI")
+        postSignal(symbol, timeframeEnum, "buy", "EMAMACDRSI", entry)
     elif signal == -1:
         print("Short on EMAMACDRSI")
 
 
-def eMAMI(df, symbol, timeframeEnum):
+def eMAMI(df, symbol, timeframeEnum, entry):
     strategy = EMAMI(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on EMAMI")
+        postSignal(symbol, timeframeEnum, "buy", "EMAMI", entry)
     elif signal == -1:
         print("Short on EMAMI")
 
 
-def forceIndexEMA(df, symbol, timeframeEnum):
+def forceIndexEMA(df, symbol, timeframeEnum, entry):
     strategy = ForceIndexEMA(df)
     signal_lst, df = strategy.run_force_index()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on ForceIndexEMA")
+        postSignal(symbol, timeframeEnum, "buy", "ForceIndexEMA", entry)
     elif signal == -1:
         print("Short on ForceIndexEMA")
 
 
-def keltnerStochasticAdx(df, symbol, timeframeEnum):
+def keltnerStochasticAdx(df, symbol, timeframeEnum, entry):
     strategy = KeltnerStochasticAdx(df)
     signal_lst, df = strategy.run_keltner_stochastic_adx()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on KeltnerStochasticAdx")
+        postSignal(symbol, timeframeEnum, "buy", "KeltnerStochasticAdx", entry)
     elif signal == -1:
         print("Short on KeltnerStochasticAdx")
 
 
-def kAMA(df, symbol, timeframeEnum):
+def kAMA(df, symbol, timeframeEnum, entry):
     strategy = KAMA(df)
     signal_lst, df = strategy.run_kama()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on KAMA")
+        postSignal(symbol, timeframeEnum, "buy", "KAMA", entry)
     elif signal == -1:
         print("Short on KAMA")
 
 
-def kAMACrossover(df, symbol, timeframeEnum):
+def kAMACrossover(df, symbol, timeframeEnum, entry):
     strategy = KAMACrossover(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on KAMACrossover")
+        postSignal(symbol, timeframeEnum, "buy", "KAMACrossover", entry)
     elif signal == -1:
         print("Short on KAMACrossover")
 
 
-def keltnerAdx(df, symbol, timeframeEnum):
+def keltnerAdx(df, symbol, timeframeEnum, entry):
     strategy = KeltnerAdx(df)
     signal_lst, df = strategy.run_keltner_adx()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on KeltnerAdx")
+        postSignal(symbol, timeframeEnum, "buy", "KeltnerAdx", entry)
     elif signal == -1:
         print("Short on KeltnerAdx")
 
 
-def keltnerRsi(df, symbol, timeframeEnum):
+def keltnerRsi(df, symbol, timeframeEnum, entry):
     strategy = KeltnerRsi(df)
     signal_lst, df = strategy.run_keltner_rsi2()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on KeltnerRsi")
+        postSignal(symbol, timeframeEnum, "buy", "KeltnerRsi", entry)
     elif signal == -1:
         print("Short on KeltnerRsi")
 
 
-def keltnerStochastic(df, symbol, timeframeEnum):
+def keltnerStochastic(df, symbol, timeframeEnum, entry):
     strategy = KeltnerStochastic(df)
     signal_lst, df = strategy.run_keltner_stochastic()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on KeltnerStochastic")
+        postSignal(symbol, timeframeEnum, "buy", "KeltnerStochastic", entry)
     elif signal == -1:
         print("Short on KeltnerStochastic")
 
 
-def mACDCrossover(df, symbol, timeframeEnum):
+def mACDCrossover(df, symbol, timeframeEnum, entry):
     strategy = MACDCrossover(df)
     signal_lst, df = strategy.run_macd_crossover()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on MACDCrossover")
+        postSignal(symbol, timeframeEnum, "buy", "MACDCrossover", entry)
     elif signal == -1:
         print("Short on MACDCrossover")
 
 
-def mACDHistogramReversal(df, symbol, timeframeEnum):
+def mACDHistogramReversal(df, symbol, timeframeEnum, entry):
     strategy = MACDHistogramReversal(df)
     signal_lst, df = strategy.run_macd_histogram_reversal()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on MACDHistogramReversal")
+        postSignal(symbol, timeframeEnum, "buy", "MACDHistogramReversal", entry)
     elif signal == -1:
         print("Short on MACDHistogramReversal")
 
 
-def macdRsiSma(df, symbol, timeframeEnum):
+def macdRsiSma(df, symbol, timeframeEnum, entry):
     strategy = MacdRsiSma(df)
     signal_lst, df = strategy.run_macd_rsi_sma()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on MacdRsiSma")
+        postSignal(symbol, timeframeEnum, "buy", "MacdRsiSma", entry)
     elif signal == -1:
         print("Short on MacdRsiSma")
 
 
-def mACDStochasticCrossover(df, symbol, timeframeEnum):
+def mACDStochasticCrossover(df, symbol, timeframeEnum, entry):
     strategy = MACDStochasticCrossover(df)
     signal_lst, df = strategy.run_macd_stochastic_crossover()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on MACDStochasticCrossover")
+        postSignal(symbol, timeframeEnum, "buy", "MACDStochasticCrossover", entry)
     elif signal == -1:
         print("Short on MACDStochasticCrossover")
 
 
-def mACDZeroCross(df, symbol, timeframeEnum):
+def mACDZeroCross(df, symbol, timeframeEnum, entry):
     strategy = MACDZeroCross(df)
     signal_lst, df = strategy.run_macd_zero_cross()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on MACDZeroCross")
+        postSignal(symbol, timeframeEnum, "buy", "MACDZeroCross", entry)
     elif signal == -1:
         print("Short on MACDZeroCross")
 
 
-def mFI(df, symbol, timeframeEnum):
+def mFI(df, symbol, timeframeEnum, entry):
     strategy = MFI(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on MFI")
+        postSignal(symbol, timeframeEnum, "buy", "MFI", entry)
     elif signal == -1:
         print("Short on MFI")
 
 
-def oopsSignals(df, symbol, timeframeEnum):
+def oopsSignals(df, symbol, timeframeEnum, entry):
     strategy = OopsSignals(df)
     signal_lst, df = strategy.run_oops_signals()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on OopsSignals")
+        postSignal(symbol, timeframeEnum, "buy", "OopsSignals", entry)
     elif signal == -1:
         print("Short on OopsSignals")
 
 
-def psarMovingAverage(df, symbol, timeframeEnum):
+def psarMovingAverage(df, symbol, timeframeEnum, entry):
     strategy = PsarMovingAverage(df)
     signal_lst, df = strategy.run_psar_moving_average()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on PsarMovingAverage")
+        postSignal(symbol, timeframeEnum, "buy", "PsarMovingAverage", entry)
     elif signal == -1:
         print("Short on PsarMovingAverage")
 
 
-def rsi2(df, symbol, timeframeEnum):
+def rsi2(df, symbol, timeframeEnum, entry):
     strategy = Rsi2(df)
     signal_lst, df = strategy.run_rsi2()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on Rsi2")
+        postSignal(symbol, timeframeEnum, "buy", "Rsi2", entry)
     elif signal == -1:
         print("Short on Rsi2")
 
 
-def rsi8020(df, symbol, timeframeEnum):
+def rsi8020(df, symbol, timeframeEnum, entry):
     strategy = Rsi8020(df)
     signal_lst, df = strategy.run_rsi_80_20()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on Rsi8020")
+        postSignal(symbol, timeframeEnum, "buy", "Rsi8020", entry)
     elif signal == -1:
         print("Short on Rsi8020")
 
-def simpleMAExponentialMA(df, symbol, timeframeEnum):
+def simpleMAExponentialMA(df, symbol, timeframeEnum, entry):
     strategy = SimpleMAExponentialMA(df)
     signal_lst, df = strategy.run_sma_ema()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on SimpleMAExponentialMA")
+        postSignal(symbol, timeframeEnum, "buy", "SimpleMAExponentialMA", entry)
     elif signal == -1:
         print("Short on SimpleMAExponentialMA")
 
 
-def simpleMAExponentialMAAlternative(df, symbol, timeframeEnum):
+def simpleMAExponentialMAAlternative(df, symbol, timeframeEnum, entry):
     strategy = SimpleMAExponentialMAAlternative(df)
     signal_lst, df = strategy.run_sma_ema()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on SimpleMAExponentialMAAlternative")
+        postSignal(symbol, timeframeEnum, "buy", "SimpleMAExponentialMAAlternative", entry)
     elif signal == -1:
         print("Short on SimpleMAExponentialMAAlternative")
 
 
-def sMAMI(df, symbol, timeframeEnum):
+def sMAMI(df, symbol, timeframeEnum, entry):
     strategy = SMAMI(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on SMAMI")
+        postSignal(symbol, timeframeEnum, "buy", "SMAMI", entry)
     elif signal == -1:
         print("Short on SMAMI")
 
 
-def stochasticOscillatorNoExit(df, symbol, timeframeEnum):
+def stochasticOscillatorNoExit(df, symbol, timeframeEnum, entry):
     strategy = StochasticOscillatorNoExit(df)
     signal_lst, df = strategy.run_stochastic_oscillator_no_exit()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on StochasticOscillatorNoExit")
+        postSignal(symbol, timeframeEnum, "buy", "StochasticOscillatorNoExit", entry)
     elif signal == -1:
         print("Short on StochasticOscillatorNoExit")
 
 
-def tripleBollingerBands(df, symbol, timeframeEnum):
+def tripleBollingerBands(df, symbol, timeframeEnum, entry):
     strategy = TripleBollingerBands(df)
     signal_lst, df = strategy.run_triple_bollinger_bands()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on TripleBollingerBands")
+        postSignal(symbol, timeframeEnum, "buy", "TripleBollingerBands", entry)
     elif signal == -1:
         print("Short on TripleBollingerBands")
 
 
-def trixEma(df, symbol, timeframeEnum):
+def trixEma(df, symbol, timeframeEnum, entry):
     strategy = TrixEma(df)
     signal_lst, df = strategy.run_trix_ema()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on TrixEma")
+        postSignal(symbol, timeframeEnum, "buy", "TrixEma", entry)
     elif signal == -1:
         print("Short on TrixEma")
 
 
-def trixMI(df, symbol, timeframeEnum):
+def trixMI(df, symbol, timeframeEnum, entry):
     strategy = TrixMI(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on TrixMI")
+        postSignal(symbol, timeframeEnum, "buy", "TrixMI", entry)
     elif signal == -1:
         print("Short on TrixMI")
 
 
-def trixRsi(df, symbol, timeframeEnum):
+def trixRsi(df, symbol, timeframeEnum, entry):
     strategy = TrixRsi(df)
     signal_lst, df = strategy.run_trix_rsi()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on TrixRsi")
+        postSignal(symbol, timeframeEnum, "buy", "TrixRsi", entry)
     elif signal == -1:
         print("Short on TrixRsi")
 
 
-def tSICrossover(df, symbol, timeframeEnum):
+def tSICrossover(df, symbol, timeframeEnum, entry):
     strategy = TSICrossover(df)
     signal_lst, df = strategy.run_tsi_crossover()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on TSICrossover")
+        postSignal(symbol, timeframeEnum, "buy", "TSICrossover", entry)
     elif signal == -1:
         print("Short on TSICrossover")
 
 
-def vortexCrossover(df, symbol, timeframeEnum):
+def vortexCrossover(df, symbol, timeframeEnum, entry):
     strategy = VortexCrossover(df)
     signal_lst, df = strategy.run()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on VortexCrossover")
+        postSignal(symbol, timeframeEnum, "buy", "VortexCrossover", entry)
     elif signal == -1:
         print("Short on VortexCrossover")
 
 
-def vortexSma(df, symbol, timeframeEnum):
+def vortexSma(df, symbol, timeframeEnum, entry):
     strategy = VortexSma(df)
     signal_lst, df = strategy.run_vortex_sma()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on VortexSma")
+        postSignal(symbol, timeframeEnum, "buy", "VortexSma", entry)
     elif signal == -1:
         print("Short on VortexSma")
 
 
-def williamsIndicator(df, symbol, timeframeEnum):
+def williamsIndicator(df, symbol, timeframeEnum, entry):
     strategy = WilliamsIndicator(df)
     signal_lst, df = strategy.run_williams_indicator()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on WilliamsIndicator")
+        postSignal(symbol, timeframeEnum, "buy", "WilliamsIndicator", entry)
     elif signal == -1:
         print("Short on WilliamsIndicator")
 
 
-def williamsRsi(df, symbol, timeframeEnum):
+def williamsRsi(df, symbol, timeframeEnum, entry):
     strategy = WilliamsRsi(df)
     signal_lst, df = strategy.run_williams_indicator()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on WilliamsRsi")
+        postSignal(symbol, timeframeEnum, "buy", "WilliamsRsi", entry)
     elif signal == -1:
         print("Short on WilliamsRsi")
 
 
-def williamsStochastic(df, symbol, timeframeEnum):
+def williamsStochastic(df, symbol, timeframeEnum, entry):
     strategy = WilliamsStochastic(df)
     signal_lst, df = strategy.run_williams_stochastic()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on WilliamsStochastic")
+        postSignal(symbol, timeframeEnum, "buy", "WilliamsStochastic", entry)
     elif signal == -1:
         print("Short on WilliamsStochastic")
 
 
-def zigZag(df, symbol, timeframeEnum):
+def zigZag(df, symbol, timeframeEnum, entry):
     strategy = ZigZag(df)
     signal_lst, df = strategy.run_zigzag()
     signal = signal_lst[0]
     if signal == 1:
-        print("Long on ZigZag")
+        postSignal(symbol, timeframeEnum, "buy", "ZigZag", entry)
     elif signal == -1:
         print("Short on ZigZag")
 
@@ -1103,66 +1120,67 @@ async def storeCandle(candle:CandlesDto):
         df['close'] = df.CLOSE
         df['volume'] = df.TICKVOL
         df['vol'] = df.TICKVOL
-        adx(df, symbol, timeframeEnum)
-        adxEma14(df, symbol, timeframeEnum)
-        adxRsi(df, symbol, timeframeEnum)
+        entry = df.iloc[-1].CLOSE
+        adx(df, symbol, timeframeEnum, entry)
+        adxEma14(df, symbol, timeframeEnum, entry)
+        adxRsi(df, symbol, timeframeEnum, entry)
         #aroonAdx(df)
         #aroonIndicator(df)
-        awesomeOscillatorSaucer(df, symbol, timeframeEnum)
-        awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum)
-        bladeRunner(df, symbol, timeframeEnum)
-        bollingerBandsAndRSI(df, symbol, timeframeEnum)
-        bollingerBandsAndRSI2(df, symbol, timeframeEnum)
-        cciMacdPsar(df, symbol, timeframeEnum)
-        cciMovingAverage(df, symbol, timeframeEnum)
-        commodityChannelIndex(df, symbol, timeframeEnum)
-        donchianATR(df, symbol, timeframeEnum)
-        donchianBreakout(df, symbol, timeframeEnum)
-        donchianMiddle(df, symbol, timeframeEnum)
-        dpoCandlestick(df, symbol, timeframeEnum)
+        awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry)
+        awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry)
+        bladeRunner(df, symbol, timeframeEnum, entry)
+        bollingerBandsAndRSI(df, symbol, timeframeEnum, entry)
+        bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry)
+        cciMacdPsar(df, symbol, timeframeEnum, entry)
+        cciMovingAverage(df, symbol, timeframeEnum, entry)
+        commodityChannelIndex(df, symbol, timeframeEnum, entry)
+        donchianATR(df, symbol, timeframeEnum, entry)
+        donchianBreakout(df, symbol, timeframeEnum, entry)
+        donchianMiddle(df, symbol, timeframeEnum, entry)
+        dpoCandlestick(df, symbol, timeframeEnum, entry)
         #elderRay(df)
         #elderRayAlternative(df)
-        threeEma(df, symbol, timeframeEnum)
-        threeEmaAlternative(df, symbol, timeframeEnum)
-        eMACrossover(df, symbol, timeframeEnum)
-        eMACrossoverAlternative(df, symbol, timeframeEnum)
-        eMACrossoverMACD(df, symbol, timeframeEnum)
-        eMACrossoverRSI(df, symbol, timeframeEnum)
-        eMACrossoverRSIAlternative(df, symbol, timeframeEnum)
-        eMAMACDRSI(df, symbol, timeframeEnum)
-        eMAMI(df, symbol, timeframeEnum)
+        threeEma(df, symbol, timeframeEnum, entry)
+        threeEmaAlternative(df, symbol, timeframeEnum, entry)
+        eMACrossover(df, symbol, timeframeEnum, entry)
+        eMACrossoverAlternative(df, symbol, timeframeEnum, entry)
+        eMACrossoverMACD(df, symbol, timeframeEnum, entry)
+        eMACrossoverRSI(df, symbol, timeframeEnum, entry)
+        eMACrossoverRSIAlternative(df, symbol, timeframeEnum, entry)
+        eMAMACDRSI(df, symbol, timeframeEnum, entry)
+        eMAMI(df, symbol, timeframeEnum, entry)
         #forceIndexEMA(df)
-        keltnerStochasticAdx(df, symbol, timeframeEnum)
-        kAMA(df, symbol, timeframeEnum)
-        kAMACrossover(df, symbol, timeframeEnum)
-        keltnerAdx(df, symbol, timeframeEnum)
-        keltnerRsi(df, symbol, timeframeEnum)
-        keltnerStochastic(df, symbol, timeframeEnum)
-        mACDCrossover(df, symbol, timeframeEnum)
-        mACDHistogramReversal(df, symbol, timeframeEnum)
-        macdRsiSma(df, symbol, timeframeEnum)
-        mACDStochasticCrossover(df, symbol, timeframeEnum)
-        mACDZeroCross(df, symbol, timeframeEnum)
+        keltnerStochasticAdx(df, symbol, timeframeEnum, entry)
+        kAMA(df, symbol, timeframeEnum, entry)
+        kAMACrossover(df, symbol, timeframeEnum, entry)
+        keltnerAdx(df, symbol, timeframeEnum, entry)
+        keltnerRsi(df, symbol, timeframeEnum, entry)
+        keltnerStochastic(df, symbol, timeframeEnum, entry)
+        mACDCrossover(df, symbol, timeframeEnum, entry)
+        mACDHistogramReversal(df, symbol, timeframeEnum, entry)
+        macdRsiSma(df, symbol, timeframeEnum, entry)
+        mACDStochasticCrossover(df, symbol, timeframeEnum, entry)
+        mACDZeroCross(df, symbol, timeframeEnum, entry)
         #mFI(df, symbol, timeframeEnum)
         #oopsSignals(df, symbol, timeframeEnum)
-        psarMovingAverage(df, symbol, timeframeEnum)
-        rsi2(df, symbol, timeframeEnum)
-        rsi8020(df, symbol, timeframeEnum)
-        simpleMAExponentialMA(df, symbol, timeframeEnum)
-        simpleMAExponentialMAAlternative(df, symbol, timeframeEnum)
-        sMAMI(df, symbol, timeframeEnum)
-        stochasticOscillatorNoExit(df, symbol, timeframeEnum)
+        psarMovingAverage(df, symbol, timeframeEnum, entry)
+        rsi2(df, symbol, timeframeEnum, entry)
+        rsi8020(df, symbol, timeframeEnum, entry)
+        simpleMAExponentialMA(df, symbol, timeframeEnum, entry)
+        simpleMAExponentialMAAlternative(df, symbol, timeframeEnum, entry)
+        sMAMI(df, symbol, timeframeEnum, entry)
+        stochasticOscillatorNoExit(df, symbol, timeframeEnum, entry)
         #tripleBollingerBands(df, symbol, timeframeEnum)
-        trixEma(df, symbol, timeframeEnum)
-        trixMI(df, symbol, timeframeEnum)
+        trixEma(df, symbol, timeframeEnum, entry)
+        trixMI(df, symbol, timeframeEnum, entry)
         #trixRsi(df, symbol, timeframeEnum)
         #tSICrossover(df, symbol, timeframeEnum)
-        vortexCrossover(df, symbol, timeframeEnum)
-        vortexSma(df, symbol, timeframeEnum)
-        williamsIndicator(df, symbol, timeframeEnum)
-        williamsRsi(df, symbol, timeframeEnum)
-        williamsStochastic(df, symbol, timeframeEnum)
-        zigZag(df, symbol, timeframeEnum)
+        vortexCrossover(df, symbol, timeframeEnum, entry)
+        vortexSma(df, symbol, timeframeEnum, entry)
+        williamsIndicator(df, symbol, timeframeEnum, entry)
+        williamsRsi(df, symbol, timeframeEnum, entry)
+        williamsStochastic(df, symbol, timeframeEnum, entry)
+        zigZag(df, symbol, timeframeEnum, entry)
 
     json_compatible_item_data = jsonable_encoder(candle)
     await manager.broadcast(json.dumps(json_compatible_item_data))

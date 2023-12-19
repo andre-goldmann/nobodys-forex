@@ -176,16 +176,6 @@ def getSignalStats(strategy:str, symbol:str):
         session.close()
         return signalStats
 
-#@app.get("/")
-#async def read_root(strategy:str):
-#    signalStats = getSignalStats(strategy)
-#    print("strategystats")
-#    print(signalStats.profit)
-#    print(signalStats.failedtrades)
-#    print(signalStats.successtrades)
-#    message = f"Hello world!"
-#    return {"message": message}
-
 def wwma(values, n):
     """
      J. Welles Wilder's EMA
