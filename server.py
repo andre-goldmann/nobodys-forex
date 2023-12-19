@@ -1111,7 +1111,9 @@ async def storeCandle(candle:CandlesDto):
 
     timeframeEnum: TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
 
-    if timeframeEnum != TimeFrame.PERIOD_M1:
+    if (timeframeEnum != TimeFrame.PERIOD_M1
+            and timeframeEnum != TimeFrame.PERIOD_W1) \
+            and timeframeEnum != TimeFrame.PERIOD_D1:
         #storeCandleInDb(candle)
         #Call strategies
 
