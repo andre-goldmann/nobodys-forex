@@ -48,7 +48,243 @@ strategies = ["NNR",
               "T3-AroonBased",
               "T3-EmaStrategy",
               "SOTT-Lorentzian",
-              "RSS_WMA"]
+              "RSS_WMA",
+
+              "AdxCrossover_M15",
+              "AdxCrossover_H1",
+              "AdxCrossover_H4",
+
+              "ADXEMA14_M15",
+              "ADXEMA14_H1",
+              "ADXEMA14_H4"
+
+              "AdxRsi_M15",
+              "AdxRsi_H1",
+              "AdxRsi_H4",
+
+              "AroonAdx_M15",
+              "AroonAdx_H1",
+              "AroonAdx_H4",
+
+              "AroonIndicator_M15",
+              "AroonIndicator_H1",
+              "AroonIndicator_H4",
+
+              "AwesomeOscillator_M15",
+              "AwesomeOscillator_H1",
+              "AwesomeOscillator_H4",
+
+              "AwesomeOscillatorSaucer_M15",
+              "AwesomeOscillatorSaucer_H1",
+              "AwesomeOscillatorSaucer_H4",
+
+              "BladeRunner_M15",
+              "BladeRunner_H1",
+              "BladeRunner_H4",
+
+              "BollingerBandsAndRSI_M15",
+              "BollingerBandsAndRSI_H1",
+              "BollingerBandsAndRSI_H4",
+
+              "BollingerBandsAndRSI2_M15",
+              "BollingerBandsAndRSI2_H1",
+              "BollingerBandsAndRSI2_H4",
+
+              "CciMacdPsar_M15",
+              "CciMacdPsar_H1",
+              "CciMacdPsar_H4",
+
+              "CciMovingAverage_M15",
+              "CciMovingAverage_H1",
+              "CciMovingAverage_H4",
+
+              "CommodityChannelIndex_M15",
+              "CommodityChannelIndex_H1",
+              "CommodityChannelIndex_H4",
+
+              "DonchianATR_M15",
+              "DonchianATR_H1",
+              "DonchianATR_H4",
+
+              "DonchianBreakout_M15",
+              "DonchianBreakout_H1",
+              "DonchianBreakout_H4",
+
+              "DonchianMiddle_M15",
+              "DonchianMiddle_H1",
+              "DonchianMiddle_H4",
+
+              "DpoCandlestick_M15",
+              "DpoCandlestick_H1",
+              "DpoCandlestick_H4",
+
+              "ElderRay_M15",
+              "ElderRay_H1",
+              "ElderRay_H4",
+
+              "ElderRayAlternative_M15",
+              "ElderRayAlternative_H1",
+              "ElderRayAlternative_H4",
+
+              "ThreeEma_M15",
+              "ThreeEma_H1",
+              "ThreeEma_H4",
+
+              "ThreeEmaAlternative_M15",
+              "ThreeEmaAlternative_H1",
+              "ThreeEmaAlternative_H4",
+
+              "EMACrossover_M15",
+              "EMACrossover_H1",
+              "EMACrossover_H4",
+
+              "EMACrossoverAlternative_M15",
+              "EMACrossoverAlternative_H1",
+              "EMACrossoverAlternative_H4",
+
+              "EMACrossoverRSI_M15",
+              "EMACrossoverRSI_H1",
+              "EMACrossoverRSI_H4",
+
+              "EMACrossoverRSIAlternative_M15",
+              "EMACrossoverRSIAlternative_H1",
+              "EMACrossoverRSIAlternative_H4",
+
+              "EMAMACDRSI_M15",
+              "EMAMACDRSI_H1",
+              "EMAMACDRSI_H4",
+
+              "EMAMI_M15",
+              "EMAMI_H1",
+              "EMAMI_H4",
+
+              "ForceIndexEMA_M15",
+              "ForceIndexEMA_H1",
+              "ForceIndexEMA_H4",
+
+              "KeltnerStochasticAdx_M15",
+              "KeltnerStochasticAdx_H1",
+              "KeltnerStochasticAdx_H4",
+
+              "KAMA_M15",
+              "KAMA_H1",
+              "KAMA_H4",
+
+              "KAMACrossover_M15",
+              "KAMACrossover_H1",
+              "KAMACrossover_H4",
+
+              "KeltnerAdx_M15",
+              "KeltnerAdx_H1",
+              "KeltnerAdx_H4",
+
+              "KeltnerRsi_M15",
+              "KeltnerRsi_H1",
+              "KeltnerRsi_H4",
+
+              "KeltnerStochastic_M15",
+              "KeltnerStochastic_H1",
+              "KeltnerStochastic_H4",
+
+              "MACDCrossover_M15",
+              "MACDCrossover_H1",
+              "MACDCrossover_H4",
+
+              "MACDHistogramReversal_M15",
+              "MACDHistogramReversal_H1",
+              "MACDHistogramReversal_H4",
+
+              "MacdRsiSma_M15",
+              "MacdRsiSma_H1",
+              "MacdRsiSma_H4",
+
+              "MACDStochasticCrossover_M15",
+              "MACDStochasticCrossover_H1",
+              "MACDStochasticCrossover_H4",
+
+              "MACDZeroCross_M15",
+              "MACDZeroCross_H1",
+              "MACDZeroCross_H4",
+
+              "MFI_M15",
+              "MFI_H1",
+              "MFI_H4",
+
+              "OopsSignals_M15",
+              "OopsSignals_H1",
+              "OopsSignals_H4",
+
+              "PsarMovingAverage_M15",
+              "PsarMovingAverage_H1",
+              "PsarMovingAverage_H4",
+
+              "Rsi2_M15",
+              "Rsi2_H1",
+              "Rsi2_H4",
+
+              "Rsi8020_M15",
+              "Rsi8020_H1",
+              "Rsi8020_H4",
+
+              "SimpleMAExponentialMA_M15",
+              "SimpleMAExponentialMA_H1",
+              "SimpleMAExponentialMA_H4",
+
+              "SimpleMAExponentialMAAlternative_M15",
+              "SimpleMAExponentialMAAlternative_H1",
+              "SimpleMAExponentialMAAlternative_H4",
+
+              "SMAMI_M15",
+              "SMAMI_H1",
+              "SMAMI_H4",
+
+              "StochasticOscillatorNoExit_M15",
+              "StochasticOscillatorNoExit_H1",
+              "StochasticOscillatorNoExit_H4",
+
+              "TripleBollingerBands_M15",
+              "TripleBollingerBands_H1",
+              "TripleBollingerBands_H4",
+
+              "TrixEma_M15",
+              "TrixEma_H1",
+              "TrixEma_H4",
+
+              "TrixMI_M15",
+              "TrixMI_H1",
+              "TrixMI_H4",
+
+              "TrixRsi_M15",
+              "TrixRsi_H1",
+              "TrixRsi_H4",
+
+              "TSICrossover_M15",
+              "TSICrossover_H1",
+              "TSICrossover_H4",
+
+              "VortexCrossover_M15",
+              "VortexCrossover_H1",
+              "VortexCrossover_H4",
+
+              "VortexSma_M15",
+              "VortexSma_H1",
+              "VortexSma_H4",
+
+              "WilliamsIndicator_M15",
+              "WilliamsIndicator_H1",
+              "WilliamsIndicator_H4",
+
+              "WilliamsRsi_M15",
+              "WilliamsRsi_H1",
+              "WilliamsRsi_H4",
+
+              "WilliamsStochastic_M15",
+              "WilliamsStochastic_H1",
+              "WilliamsStochastic_H4",
+
+              "ZigZag_M15",
+              "ZigZag_H1",
+              "ZigZag_H4",]
 
 # does not work
 #app.add_middleware(

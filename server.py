@@ -520,7 +520,7 @@ def adxEma14(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "ADXEMA14", entry)
     elif signal == -1:
-        print("Short on ADXEMA14")
+        postSignal(symbol, timeframeEnum, "sell", "ADXEMA14", entry)
 
 
 def adxRsi(df, symbol, timeframeEnum, entry):
@@ -530,7 +530,7 @@ def adxRsi(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "AdxRsi", entry)
     elif signal == -1:
-        print("Short on AdxRsi")
+        postSignal(symbol, timeframeEnum, "sell", "AdxRsi", entry)
 
 
 def aroonAdx(df, symbol, timeframeEnum, entry):
@@ -540,7 +540,7 @@ def aroonAdx(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "AroonAdx", entry)
     elif signal == -1:
-        print("Short on AroonAdx")
+        postSignal(symbol, timeframeEnum, "sell", "AroonAdx", entry)
 
 def aroonIndicator(df, symbol, timeframeEnum, entry):
     strategy = AroonIndicator(df)
@@ -549,7 +549,7 @@ def aroonIndicator(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "AroonIndicator", entry)
     elif signal == -1:
-        print("Short on AroonIndicator")
+        postSignal(symbol, timeframeEnum, "sell", "AroonIndicator", entry)
 
 
 def awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry):
@@ -559,7 +559,7 @@ def awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "AwesomeOscillatorSaucer", entry)
     elif signal == -1:
-        print("Short on AwesomeOscillatorSaucer")
+        postSignal(symbol, timeframeEnum, "sell", "AwesomeOscillatorSaucer", entry)
 
 
 def awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry):
@@ -569,7 +569,7 @@ def awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "AwesomeOscillatorSaucer", entry)
     elif signal == -1:
-        print("Short on AwesomeOscillatorZeroCrossover")
+        postSignal(symbol, timeframeEnum, "sell", "AwesomeOscillatorSaucer", entry)
 
 
 def bladeRunner(df, symbol, timeframeEnum, entry):
@@ -579,7 +579,7 @@ def bladeRunner(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "BladeRunner", entry)
     elif signal == -1:
-        print("Short on BladeRunner")
+        postSignal(symbol, timeframeEnum, "sell", "BladeRunner", entry)
 
 
 def bollingerBandsAndRSI(df, symbol, timeframeEnum, entry):
@@ -589,7 +589,7 @@ def bollingerBandsAndRSI(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "BollingerBandsAndRSI", entry)
     elif signal == -1:
-        print("Short on BollingerBandsAndRSI")
+        postSignal(symbol, timeframeEnum, "sell", "BollingerBandsAndRSI", entry)
 
 
 def bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry):
@@ -599,7 +599,7 @@ def bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "BollingerBandsAndRSI2", entry)
     elif signal == -1:
-        print("Short on BollingerBandsAndRSI2")
+        postSignal(symbol, timeframeEnum, "sell", "BollingerBandsAndRSI2", entry)
 
 
 def cciMacdPsar(df, symbol, timeframeEnum, entry):
@@ -609,7 +609,7 @@ def cciMacdPsar(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "CciMacdPsar", entry)
     elif signal == -1:
-        print("Short on CciMacdPsar")
+        postSignal(symbol, timeframeEnum, "sell", "CciMacdPsar", entry)
 
 
 def cciMovingAverage(df, symbol, timeframeEnum, entry):
@@ -619,7 +619,7 @@ def cciMovingAverage(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "CciMovingAverage", entry)
     elif signal == -1:
-        print("Short on CciMovingAverage")
+        postSignal(symbol, timeframeEnum, "sell", "CciMovingAverage", entry)
 
 
 def commodityChannelIndex(df, symbol, timeframeEnum, entry):
@@ -629,7 +629,7 @@ def commodityChannelIndex(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "CommodityChannelIndex", entry)
     elif signal == -1:
-        print("Short on CommodityChannelIndex")
+        postSignal(symbol, timeframeEnum, "sell", "CommodityChannelIndex", entry)
 
 def donchianATR(df, symbol, timeframeEnum, entry):
     strategy = DonchianATR(df)
@@ -638,7 +638,7 @@ def donchianATR(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "DonchianATR", entry)
     elif signal == -1:
-        print("Short on DonchianATR")
+        postSignal(symbol, timeframeEnum, "sell", "DonchianATR", entry)
 
 
 def donchianBreakout(df, symbol, timeframeEnum, entry):
@@ -648,7 +648,7 @@ def donchianBreakout(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "DonchianBreakout", entry)
     elif signal == -1:
-        print("Short on DonchianBreakout")
+        postSignal(symbol, timeframeEnum, "sell", "DonchianBreakout", entry)
 
 
 def donchianMiddle(df, symbol, timeframeEnum, entry):
@@ -658,7 +658,7 @@ def donchianMiddle(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "DonchianMiddle", entry)
     elif signal == -1:
-        print("Short on DonchianMiddle")
+        postSignal(symbol, timeframeEnum, "sell", "DonchianMiddle", entry)
 
 
 def dpoCandlestick(df, symbol, timeframeEnum, entry):
@@ -668,7 +668,7 @@ def dpoCandlestick(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "DpoCandlestick", entry)
     elif signal == -1:
-        print("Short on DpoCandlestick")
+        postSignal(symbol, timeframeEnum, "sell", "DpoCandlestick", entry)
 
 
 def elderRay(df, symbol, timeframeEnum, entry):
@@ -678,7 +678,7 @@ def elderRay(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "ElderRay", entry)
     elif signal == -1:
-        print("Short on ElderRay")
+        postSignal(symbol, timeframeEnum, "sell", "ElderRay", entry)
 
 
 def elderRayAlternative(df, symbol, timeframeEnum, entry):
@@ -688,7 +688,7 @@ def elderRayAlternative(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "ElderRayAlternative", entry)
     elif signal == -1:
-        print("Short on ElderRayAlternative")
+        postSignal(symbol, timeframeEnum, "sell", "ElderRayAlternative", entry)
 
 
 def threeEma(df, symbol, timeframeEnum, entry):
@@ -698,7 +698,7 @@ def threeEma(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "ThreeEma", entry)
     elif signal == -1:
-        print("Short on ThreeEma")
+        postSignal(symbol, timeframeEnum, "sell", "ThreeEma", entry)
 
 
 def threeEmaAlternative(df, symbol, timeframeEnum, entry):
@@ -708,7 +708,7 @@ def threeEmaAlternative(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "ThreeEmaAlternative", entry)
     elif signal == -1:
-        print("Short on ThreeEmaAlternative")
+        postSignal(symbol, timeframeEnum, "sell", "ThreeEmaAlternative", entry)
 
 
 def eMACrossover(df, symbol, timeframeEnum, entry):
@@ -718,7 +718,7 @@ def eMACrossover(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "EMACrossover", entry)
     elif signal == -1:
-        print("Short on EMACrossover")
+        postSignal(symbol, timeframeEnum, "sell", "EMACrossover", entry)
 
 
 def eMACrossoverAlternative(df, symbol, timeframeEnum, entry):
@@ -728,7 +728,7 @@ def eMACrossoverAlternative(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "EMACrossoverAlternative", entry)
     elif signal == -1:
-        print("Short on EMACrossoverAlternative")
+        postSignal(symbol, timeframeEnum, "sell", "EMACrossoverAlternative", entry)
 
 
 def eMACrossoverMACD(df, symbol, timeframeEnum, entry):
@@ -738,7 +738,7 @@ def eMACrossoverMACD(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "EMACrossoverMACD", entry)
     elif signal == -1:
-        print("Short on EMACrossoverMACD")
+        postSignal(symbol, timeframeEnum, "sell", "EMACrossoverMACD", entry)
 
 
 def eMACrossoverRSI(df, symbol, timeframeEnum, entry):
@@ -748,7 +748,7 @@ def eMACrossoverRSI(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "EMACrossoverRSI", entry)
     elif signal == -1:
-        print("Short on EMACrossoverRSI")
+        postSignal(symbol, timeframeEnum, "sell", "EMACrossoverRSI", entry)
 
 
 def eMACrossoverRSIAlternative(df, symbol, timeframeEnum, entry):
@@ -758,7 +758,7 @@ def eMACrossoverRSIAlternative(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "EMACrossoverRSIAlternative", entry)
     elif signal == -1:
-        print("Short on EMACrossoverRSIAlternative")
+        postSignal(symbol, timeframeEnum, "sell", "EMACrossoverRSIAlternative", entry)
 
 
 def eMAMACDRSI(df, symbol, timeframeEnum, entry):
@@ -768,7 +768,7 @@ def eMAMACDRSI(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "EMAMACDRSI", entry)
     elif signal == -1:
-        print("Short on EMAMACDRSI")
+        postSignal(symbol, timeframeEnum, "sell", "EMAMACDRSI", entry)
 
 
 def eMAMI(df, symbol, timeframeEnum, entry):
@@ -778,7 +778,7 @@ def eMAMI(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "EMAMI", entry)
     elif signal == -1:
-        print("Short on EMAMI")
+        postSignal(symbol, timeframeEnum, "sell", "EMAMI", entry)
 
 
 def forceIndexEMA(df, symbol, timeframeEnum, entry):
@@ -788,7 +788,7 @@ def forceIndexEMA(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "ForceIndexEMA", entry)
     elif signal == -1:
-        print("Short on ForceIndexEMA")
+        postSignal(symbol, timeframeEnum, "sell", "ForceIndexEMA", entry)
 
 
 def keltnerStochasticAdx(df, symbol, timeframeEnum, entry):
@@ -798,7 +798,7 @@ def keltnerStochasticAdx(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "KeltnerStochasticAdx", entry)
     elif signal == -1:
-        print("Short on KeltnerStochasticAdx")
+        postSignal(symbol, timeframeEnum, "sell", "KeltnerStochasticAdx", entry)
 
 
 def kAMA(df, symbol, timeframeEnum, entry):
@@ -808,7 +808,7 @@ def kAMA(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "KAMA", entry)
     elif signal == -1:
-        print("Short on KAMA")
+        postSignal(symbol, timeframeEnum, "sell", "KAMA", entry)
 
 
 def kAMACrossover(df, symbol, timeframeEnum, entry):
@@ -818,7 +818,7 @@ def kAMACrossover(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "KAMACrossover", entry)
     elif signal == -1:
-        print("Short on KAMACrossover")
+        postSignal(symbol, timeframeEnum, "sell", "KAMACrossover", entry)
 
 
 def keltnerAdx(df, symbol, timeframeEnum, entry):
@@ -828,7 +828,7 @@ def keltnerAdx(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "KeltnerAdx", entry)
     elif signal == -1:
-        print("Short on KeltnerAdx")
+        postSignal(symbol, timeframeEnum, "sell", "KeltnerAdx", entry)
 
 
 def keltnerRsi(df, symbol, timeframeEnum, entry):
@@ -838,7 +838,7 @@ def keltnerRsi(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "KeltnerRsi", entry)
     elif signal == -1:
-        print("Short on KeltnerRsi")
+        postSignal(symbol, timeframeEnum, "sell", "KeltnerRsi", entry)
 
 
 def keltnerStochastic(df, symbol, timeframeEnum, entry):
@@ -848,7 +848,7 @@ def keltnerStochastic(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "KeltnerStochastic", entry)
     elif signal == -1:
-        print("Short on KeltnerStochastic")
+        postSignal(symbol, timeframeEnum, "sell", "KeltnerStochastic", entry)
 
 
 def mACDCrossover(df, symbol, timeframeEnum, entry):
@@ -858,7 +858,7 @@ def mACDCrossover(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "MACDCrossover", entry)
     elif signal == -1:
-        print("Short on MACDCrossover")
+        postSignal(symbol, timeframeEnum, "sell", "MACDCrossover", entry)
 
 
 def mACDHistogramReversal(df, symbol, timeframeEnum, entry):
@@ -868,7 +868,7 @@ def mACDHistogramReversal(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "MACDHistogramReversal", entry)
     elif signal == -1:
-        print("Short on MACDHistogramReversal")
+        postSignal(symbol, timeframeEnum, "sell", "MACDHistogramReversal", entry)
 
 
 def macdRsiSma(df, symbol, timeframeEnum, entry):
@@ -878,7 +878,7 @@ def macdRsiSma(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "MacdRsiSma", entry)
     elif signal == -1:
-        print("Short on MacdRsiSma")
+        postSignal(symbol, timeframeEnum, "sell", "MacdRsiSma", entry)
 
 
 def mACDStochasticCrossover(df, symbol, timeframeEnum, entry):
@@ -888,7 +888,7 @@ def mACDStochasticCrossover(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "MACDStochasticCrossover", entry)
     elif signal == -1:
-        print("Short on MACDStochasticCrossover")
+        postSignal(symbol, timeframeEnum, "sell", "MACDStochasticCrossover", entry)
 
 
 def mACDZeroCross(df, symbol, timeframeEnum, entry):
@@ -898,7 +898,7 @@ def mACDZeroCross(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "MACDZeroCross", entry)
     elif signal == -1:
-        print("Short on MACDZeroCross")
+        postSignal(symbol, timeframeEnum, "sell", "MACDZeroCross", entry)
 
 
 def mFI(df, symbol, timeframeEnum, entry):
@@ -908,7 +908,7 @@ def mFI(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "MFI", entry)
     elif signal == -1:
-        print("Short on MFI")
+        postSignal(symbol, timeframeEnum, "sell", "MFI", entry)
 
 
 def oopsSignals(df, symbol, timeframeEnum, entry):
@@ -918,7 +918,7 @@ def oopsSignals(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "OopsSignals", entry)
     elif signal == -1:
-        print("Short on OopsSignals")
+        postSignal(symbol, timeframeEnum, "sell", "OopsSignals", entry)
 
 
 def psarMovingAverage(df, symbol, timeframeEnum, entry):
@@ -928,7 +928,7 @@ def psarMovingAverage(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "PsarMovingAverage", entry)
     elif signal == -1:
-        print("Short on PsarMovingAverage")
+        postSignal(symbol, timeframeEnum, "sell", "PsarMovingAverage", entry)
 
 
 def rsi2(df, symbol, timeframeEnum, entry):
@@ -938,7 +938,7 @@ def rsi2(df, symbol, timeframeEnum, entry):
     if signal == 1:
         postSignal(symbol, timeframeEnum, "buy", "Rsi2", entry)
     elif signal == -1:
-        print("Short on Rsi2")
+        postSignal(symbol, timeframeEnum, "sell", "Rsi2", entry)
 
 
 def rsi8020(df, symbol, timeframeEnum, entry):
