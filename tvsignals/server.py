@@ -284,7 +284,11 @@ strategies = ["NNR",
 
               "ZigZag_M15",
               "ZigZag_H1",
-              "ZigZag_H4",]
+              "ZigZag_H4",
+
+              "EMACrossoverMACD_M15",
+              "EMACrossoverMACD_H1",
+              "EMACrossoverMACD_H4",]
 
 # does not work
 #app.add_middleware(
