@@ -1125,7 +1125,8 @@ async def storeCandle(candle:CandlesDto):
         entry = df.iloc[-1].CLOSE
         adx(df, symbol, timeframeEnum, entry)
         adxEma14(df, symbol, timeframeEnum, entry)
-        adxRsi(df, symbol, timeframeEnum, entry)
+        # wird nicht als Strategy erkannt
+        #adxRsi(df, symbol, timeframeEnum, entry)
         #aroonAdx(df)
         #aroonIndicator(df)
         awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry)
