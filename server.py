@@ -1122,8 +1122,11 @@ async def storeCandle(candle:CandlesDto):
         df['close'] = df.CLOSE
         df['volume'] = df.TICKVOL
         df['vol'] = df.TICKVOL
-        #print(str(df.iloc[0]))
+        print("##################")
+        print(str(df.iloc[0]))
+        print("#######")
         print(str(df.iloc[-1]))
+        print("##################")
         entry = df.iloc[-1].CLOSE
         adx(df, symbol, timeframeEnum, entry)
         adxEma14(df, symbol, timeframeEnum, entry)
