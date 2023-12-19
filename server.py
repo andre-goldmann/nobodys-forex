@@ -1130,6 +1130,11 @@ async def storeCandle(candle:CandlesDto):
         #print(str(df.iloc[-1]))
         print("##################")
         entry = df.iloc[0].CLOSE
+
+        if TimeFrame.PERIOD_H1 == timeframeEnum or TimeFrame.PERIOD_H4 == timeframeEnum:
+            dfM15 = loadDfFromDb(symbol, TimeFrame.PERIOD_M15, 10)
+            entry = dfM15.iloc[0].CLOSE
+
         adx(df, symbol, timeframeEnum, entry)
         adxEma14(df, symbol, timeframeEnum, entry)
         # wird nicht als Strategy erkannt
