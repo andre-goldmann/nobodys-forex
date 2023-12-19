@@ -1124,11 +1124,11 @@ async def storeCandle(candle:CandlesDto):
         df['close'] = df.CLOSE
         df['volume'] = df.TICKVOL
         df['vol'] = df.TICKVOL
-        print("##################")
-        print(str(df.iloc[0]))
+        #print("##################")
+        #print(str(df.iloc[0]))
         #print("#######")
         #print(str(df.iloc[-1]))
-        print("##################")
+        #print("##################")
         entry = df.iloc[0].CLOSE
 
         if TimeFrame.PERIOD_H1 == timeframeEnum or TimeFrame.PERIOD_H4 == timeframeEnum:
