@@ -537,6 +537,9 @@ async def signals(trendInfo:TrendInfoDto):
     print("########################################trendinfo########################################")
     #proceedSignal(signal)
     with Session.begin() as session:
+        storedInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == trendInfo.symbol).first()
+        if storedInfo is not None:
+            session.delete(storedInfo)
         info = TrendInfoEntity(
             symbol=trendInfo.symbol,
             trendscore=trendInfo.trendScore,
@@ -598,6 +601,17 @@ def proceedSignal(signal):
             ),session)
             session.close()
             return
+
+        trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
+        if trendInfo is not None:
+            if trendInfo.uptrend and signal.type == "sell":
+                print(f"Ignore Signal because signal {signal} is against trend: {trendInfo}")
+                storeIgnoredSignal(IgnoredSignal(
+                    json=jsonSignal,
+                    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo}"
+                ),session)
+                session.close()
+                return
 
         regressionLineH4 = session.query(Regressions).filter(
             Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()

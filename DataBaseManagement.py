@@ -472,7 +472,7 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
     with Session.begin() as session:
         storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
         if storedSignal is not None:
-            print(f"##############UPDATEHISTORY################## for {historyUpdateDto}")
+            #print(f"##############UPDATEHISTORY################## for {historyUpdateDto}")
             storedSignal.swap = historyUpdateDto.swap
             storedSignal.profit = historyUpdateDto.profit
             storedSignal.commision = historyUpdateDto.commision
@@ -484,6 +484,7 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
             session.close()
             print("Updated Signal")
         else:
+            session.close()
             print("No Signal found for: " + str(historyUpdateDto))
 
 def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
