@@ -491,10 +491,10 @@ async def signalActivatedProd(signalActivation:SignalActivationDto):
 
 def postSignal(symbol, timeframeEnum, type, strategy, entry):
     strategyStr = str(timeframeEnum).replace("PERIOD", "")
-    strategyStr = strategyStr.replace("TimeFrame.", "")
-    count = countSignals(strategy + strategyStr, symbol)
+    strategyStr = strategy + strategyStr.replace("TimeFrame.", "")
+    count = countSignals(strategyStr, symbol)
     print("+++++++++++++++ FOUND +++++++++++")
-    print(f"{count} signals for {symbol} + {strategy}")
+    print(f"{count} signals for {symbol} + {strategyStr}")
     print("++++++++++++++++++++++++++++++++")
     if count == 0:
         #signal:SignalDto
@@ -504,7 +504,7 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
                 "entry": entry,
                 "sl": 0,
                 "tp": 0,
-                "strategy": strategy + strategyStr}
+                "strategy": strategyStr}
         #response = requests.post(
         #    "http://tvsignals:80/signal/",
         #    json=data,
