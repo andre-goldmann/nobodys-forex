@@ -56,7 +56,7 @@ strategies = ["NNR",
 
               "ADXEMA14_M15",
               "ADXEMA14_H1",
-              "ADXEMA14_H4"
+              "ADXEMA14_H4",
 
               "AdxRsi_M15",
               "AdxRsi_H1",
@@ -396,6 +396,17 @@ class CandlesEntity(Base):
         return (f"Candles(id={self.id!r}, DATETIME={self.DATETIME!r}"
                 f", OPEN={self.OPEN!r}, CLOSE={self.CLOSE!r})")
 
+class TrendInfoEntity(Base):
+    __tablename__ = "TrendInfo"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
+    trendScore:Mapped[int]
+    uptrend:Mapped[bool]
+    r1: Mapped[float]
+    s1: Mapped[float]
+
+
 class SignalDto(BaseModel):
     symbol:str
     timestamp:str
@@ -525,6 +536,17 @@ async def signals(trendInfo:TrendInfoDto):
     print(str(trendInfo))
     print("########################################trendinfo########################################")
     #proceedSignal(signal)
+    with Session.begin() as session:
+        info = TrendInfoEntity(
+            symbol=trendInfo.symbol,
+            trendScore=trendInfo.trendScore,
+            uptrend=trendInfo.uptrend,
+            r1=trendInfo.r1,
+            s1=trendInfo.s1
+        )
+        session.add(info)
+        session.commit()
+        session.close()
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
