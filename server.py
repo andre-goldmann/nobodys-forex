@@ -458,7 +458,6 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
         print(f"Ignore request because symbol is not handled yet: {historyUpdateDto}")
         return
     updateSignalByHistory(historyUpdateDto)
-    #TODO send information to clients
 
 
 #@app.get("/insertTrades")

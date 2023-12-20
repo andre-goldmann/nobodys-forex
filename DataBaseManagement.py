@@ -468,12 +468,11 @@ def getLinesInfo(symbol, timeframeEnum):
         return infos
 
 def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
-    #print("Updating Trade", tradeUpdateDto)
     print(historyUpdateDto)
     with Session.begin() as session:
         storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
-        print(f"##############UPDATEHISTORY################## for {storedSignal}")
         if storedSignal is not None:
+            print(f"##############UPDATEHISTORY################## for {historyUpdateDto}")
             storedSignal.swap = historyUpdateDto.swap
             storedSignal.profit = historyUpdateDto.profit
             storedSignal.commision = historyUpdateDto.commision
