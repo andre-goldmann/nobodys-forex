@@ -512,6 +512,7 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
         if response.status_code != 200:
             print(str(response.status_code))
 
+
 def adx(df, symbol, timeframeEnum, entry):
     strategy = AdxCrossover(df)
     signal_lst, df = strategy.run()
