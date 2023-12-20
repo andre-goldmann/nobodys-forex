@@ -472,6 +472,7 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
     print(historyUpdateDto)
     with Session.begin() as session:
         storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
+        print(f"##############UPDATEHISTORY################## for {storedSignal}")
         if storedSignal is not None:
             storedSignal.swap = historyUpdateDto.swap
             storedSignal.profit = historyUpdateDto.profit
