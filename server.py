@@ -493,9 +493,9 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
     strategyStr = str(timeframeEnum).replace("PERIOD", "")
     strategyStr = strategy + strategyStr.replace("TimeFrame.", "")
     count = countSignals(strategyStr, symbol)
-    print("+++++++++++++++ FOUND +++++++++++")
-    print(f"{count} signals for {symbol} + {strategyStr}")
-    print("++++++++++++++++++++++++++++++++")
+    #print("+++++++++++++++ FOUND +++++++++++")
+    #print(f"{count} signals for {symbol}-{strategyStr}")
+    #print("++++++++++++++++++++++++++++++++")
     if count == 0:
         #signal:SignalDto
         data = {"symbol": symbol,
@@ -505,12 +505,12 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
                 "sl": 0,
                 "tp": 0,
                 "strategy": strategyStr}
-        #response = requests.post(
-        #    "http://tvsignals:80/signal/",
-        #    json=data,
-        #)
-        #if response.status_code != 200:
-        #    print(str(response.status_code))
+        response = requests.post(
+            "http://tvsignals:80/signal/",
+            json=data,
+        )
+        if response.status_code != 200:
+            print(str(response.status_code))
 
 def adx(df, symbol, timeframeEnum, entry):
     strategy = AdxCrossover(df)

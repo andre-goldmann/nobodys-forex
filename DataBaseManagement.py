@@ -645,6 +645,6 @@ def dropAllTables():
 
 def countSignals(strategy, symbol):
     with Session.begin() as session:
-        count = session.query(Signal).filter(Signal.openprice == 0.0, Signal.symbol == symbol, Signal.strategy == strategy).count()
+        count = session.query(Signal).filter(Signal.exit != 0.0, Signal.symbol == symbol, Signal.strategy == strategy).count()
         session.close()
         return count
