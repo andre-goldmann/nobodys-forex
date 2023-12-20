@@ -405,6 +405,13 @@ class SignalDto(BaseModel):
     tp:float
     strategy: str
 
+class TrendInfoDto(BaseModel):
+    symbol:str
+    timestamp:str
+    trendScore:int
+    uptrend:str
+    strategy: str
+
 def getSignalStats(strategy:str, symbol:str):
     with Session.begin() as session:
         signalStats = session.query(Signal.strategy,
@@ -509,6 +516,11 @@ async def resendsignal(
             session.delete(signal)
             session.commit()
             session.close()
+
+@app.post("/trendinfo")
+async def signals(trendInfo:TrendInfoDto):
+    print(str(trendInfo))
+    #proceedSignal(signal)
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
