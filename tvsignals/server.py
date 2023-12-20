@@ -401,7 +401,7 @@ class TrendInfoEntity(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     symbol: Mapped[str] = mapped_column(String(6))
     stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
-    trendScore:Mapped[int]
+    trendscore:Mapped[int]
     uptrend:Mapped[bool]
     r1: Mapped[float]
     s1: Mapped[float]
@@ -539,7 +539,7 @@ async def signals(trendInfo:TrendInfoDto):
     with Session.begin() as session:
         info = TrendInfoEntity(
             symbol=trendInfo.symbol,
-            trendScore=trendInfo.trendScore,
+            trendSsore=trendInfo.trendScore,
             uptrend=trendInfo.uptrend,
             r1=trendInfo.r1,
             s1=trendInfo.s1
