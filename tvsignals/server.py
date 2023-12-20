@@ -539,7 +539,7 @@ async def signals(trendInfo:TrendInfoDto):
     with Session.begin() as session:
         info = TrendInfoEntity(
             symbol=trendInfo.symbol,
-            trendSsore=trendInfo.trendScore,
+            trendssore=trendInfo.trendScore,
             uptrend=trendInfo.uptrend,
             r1=trendInfo.r1,
             s1=trendInfo.s1
