@@ -220,10 +220,27 @@
                                                   <!--{roundNumber(stat.profit)} €-->
                                                   {(100 / stat.tradestotal) * stat.tradessuccess} %
                                               </div>
+                                        </div>
+                                    </li>
+                                    {:else}
+                                    <li class="pb-3 sm:pb-4 cursor-pointer" on:click={() => onInstrumentSelected(stat)}>
 
+                                        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm font-medium truncate">
+                                                    {stat.symbol}
+                                                </p>
+                                                <p class="text-sm truncate w-fit">
+                                                    Total: {stat.tradestotal} Win: {stat.tradessuccess} Loss: {stat.tradesfailed}
+                                                </p>
+                                            </div>
+                                            <div class="inline-flex items-center text-base font-semibold">
+                                                {(100 / stat.tradestotal) * stat.tradessuccess} %
+                                            </div>
                                         </div>
                                     </li>
                                 {/if}
+
                             {/each}
                         </ul>
                     </div>

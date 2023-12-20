@@ -24,5 +24,17 @@ def test_read_main():
     response = client.get("/?strategy=Super AI Trend")
     print(response.json())
 
+def trendinfo():
+    data ={"symbol": "AUDCHF", "timestamp": "07:30:00 2023.12.20",  "trendScore":11,  "uptrend":"true",  "r1":0.58366,  "s1":0.58247, "strategy":"TrendInfo"}
+
+    response = client.post(
+        "/trendinfo",
+    #    headers={"X-Token": "coneofsilence"},
+        json=data,
+    )
+    print(response.json())
+    assert response.status_code == 200
+
 #resendsignal()
-test_read_main()
+#test_read_main()
+trendinfo()

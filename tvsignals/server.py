@@ -409,7 +409,9 @@ class TrendInfoDto(BaseModel):
     symbol:str
     timestamp:str
     trendScore:int
-    uptrend:str
+    uptrend:bool
+    r1: float
+    s1: float
     strategy: str
 
 def getSignalStats(strategy:str, symbol:str):
@@ -519,7 +521,9 @@ async def resendsignal(
 
 @app.post("/trendinfo")
 async def signals(trendInfo:TrendInfoDto):
+    print("########################################trendinfo########################################")
     print(str(trendInfo))
+    print("########################################trendinfo########################################")
     #proceedSignal(signal)
 
 @app.post("/signal")

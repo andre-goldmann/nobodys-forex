@@ -53,8 +53,10 @@
                     <table class="table">
                         <thead>
                         <tr>
+
                             <th>ID</th>
                             <th>SYMBOL</th>
+                            <th>STRATEGY</th>
                             <th>TYPE</th>
                             <th>ENTRY</th>
                             <th>SL</th>
@@ -68,6 +70,7 @@
                             <tr class="hover" on:click={() => rowSelected(trade)}>
                                 <td>{trade.id}</td>
                                 <td>{trade.symbol}</td>
+                                <td>{trade.strategy}</td>
                                 <td>{trade.type}</td>
                                 <td>{trade.entry}</td>
                                 <td>{trade.sl}</td>
