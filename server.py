@@ -486,10 +486,16 @@ async def signalActivatedProd(signalActivation:SignalActivationDto):
     activateSignalProd(signalActivation)
 
 
+#@app.post("/signalactivatedprod")
+#async def countSignals(signalActivation:SignalActivationDto):
+
 def postSignal(symbol, timeframeEnum, type, strategy, entry):
     strategyStr = str(timeframeEnum).replace("PERIOD", "")
     strategyStr = strategyStr.replace("TimeFrame.", "")
     count = countSignals(strategy + strategyStr, symbol)
+    print("+++++++++++++++ FOUND +++++++++++")
+    print(f"{count} signals for {symbol} + {strategy}")
+    print("++++++++++++++++++++++++++++++++")
     if count == 0:
         #signal:SignalDto
         data = {"symbol": symbol,
@@ -499,12 +505,12 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
                 "sl": 0,
                 "tp": 0,
                 "strategy": strategy + strategyStr}
-        response = requests.post(
-            "http://tvsignals:80/signal/",
-            json=data,
-        )
-        if response.status_code != 200:
-            print(str(response.status_code))
+        #response = requests.post(
+        #    "http://tvsignals:80/signal/",
+        #    json=data,
+        #)
+        #if response.status_code != 200:
+        #    print(str(response.status_code))
 
 def adx(df, symbol, timeframeEnum, entry):
     strategy = AdxCrossover(df)
@@ -1138,8 +1144,7 @@ async def storeCandle(candle:CandlesDto):
 
         adx(df, symbol, timeframeEnum, entry)
         adxEma14(df, symbol, timeframeEnum, entry)
-        # wird nicht als Strategy erkannt
-        #adxRsi(df, symbol, timeframeEnum, entry)
+        adxRsi(df, symbol, timeframeEnum, entry)
         #aroonAdx(df)
         #aroonIndicator(df)
         awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry)
