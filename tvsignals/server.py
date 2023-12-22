@@ -605,12 +605,12 @@ def proceedSignal(signal):
         trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
         if trendInfo is not None:
             if trendInfo.uptrend and signal.type == "sell":
-                print(f"Ignore Signal because signal {signal} is against trend: {trendInfo}")
-                storeIgnoredSignal(IgnoredSignal(
-                    json=jsonSignal,
-                    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo}"
-                ),session)
-                session.close()
+                print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
+                #storeIgnoredSignal(IgnoredSignal(
+                #    json=jsonSignal,
+                #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
+                #),session)
+                #session.close()
                 return
 
         regressionLineH4 = session.query(Regressions).filter(
