@@ -425,7 +425,7 @@ class TrendInfoDto(BaseModel):
     s1: float
     strategy: str
 
-def getSignalStats(strategy:str, symbol:str):
+def getSignalStats(strategy:str, symbol:str, session):
     with Session.begin() as session:
         signalStats = session.query(Signal.strategy,
                                     func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
@@ -433,7 +433,6 @@ def getSignalStats(strategy:str, symbol:str):
                                     func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
                                     func.sum(Signal.profit).label("profit")).filter(Signal.strategy == strategy, Signal.symbol == symbol).group_by(Signal.strategy).first()
         session.expunge_all()
-        session.close()
         return signalStats
 
 def wwma(values, n):
@@ -647,7 +646,7 @@ def proceedSignal(signal):
                 tp = signal.entry + atrValue.iloc[-1]
 
             lots = 0.1
-            signalStats = getSignalStats(strategy, signal.symbol)
+            signalStats = getSignalStats(strategy, signal.symbol, session)
             #print(signalStats.profit)
             #print(signalStats.failedtrades)
             #print(signalStats.successtrades)
