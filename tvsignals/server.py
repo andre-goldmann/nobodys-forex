@@ -610,6 +610,7 @@ def proceedSignal(signal):
                 #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
                 #),session)
                 #session.close()
+                session.close()
                 return
 
         regressionLineH4 = session.query(Regressions).filter(
@@ -623,6 +624,7 @@ def proceedSignal(signal):
                 #    json=jsonSignal,
                 #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
                 #))
+                session.close()
                 return
 
             if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
@@ -631,6 +633,7 @@ def proceedSignal(signal):
                 #    json=jsonSignal,
                 #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
                 #))
+                session.close()
                 return
 
             df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4, session, 10000)
@@ -662,6 +665,7 @@ def proceedSignal(signal):
                         json=jsonSignal,
                         reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
                     ), session)
+                    session.close()
                     return
                 else:
                     prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
