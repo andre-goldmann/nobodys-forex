@@ -259,6 +259,9 @@ def storeCandleInDb(candle:CandlesDto):
 def lastCandle(symbol:str, timeFrame:TimeFrame):
     with Session.begin() as session:
         candle = session.query(CandlesEntity).filter(CandlesEntity.SYMBOL == symbol, CandlesEntity.TIMEFRAME == timeFrame).order_by(CandlesEntity.DATETIME.desc()).first()
+        if candle is None:
+            session.close()
+            return None
         session.expunge(candle)
         session.close()
         return candle

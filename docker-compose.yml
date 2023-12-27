@@ -106,6 +106,8 @@ services:
       - "5050:80"
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - "db"
 
 volumes:
   db:
