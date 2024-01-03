@@ -426,7 +426,6 @@ class TrendInfoDto(BaseModel):
     strategy: str
 
 def getSignalStats(strategy:str, symbol:str, session):
-    with Session.begin() as session:
         signalStats = session.query(Signal.strategy,
                                     func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
                                     func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
