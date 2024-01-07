@@ -4,6 +4,7 @@
     import Trades from "$lib/components/Trades.svelte";
     import TradeCreator from "$lib/components/TradeCreator.svelte";
     import TradesHistory from "$lib/components/TradesHistory.svelte";
+    import TrendInfo from "$lib/components/TrendInfo.svelte";
 
 	let items = [
 		{ label: "Waiting-Trades",
@@ -17,6 +18,10 @@
         { label: "Trades-Statistiks",
             value: 3,
             component: TradesHistory
+        },
+        { label: "Trendinfos",
+            value: 4,
+            component: TrendInfo
         },
 	];
 

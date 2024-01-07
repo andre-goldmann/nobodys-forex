@@ -76,3 +76,12 @@ export interface InstrumentStat {
     tradestotal:number,
     commission:number
 }
+
+export interface TrendInfo{
+    symbol: string
+    stamp: string
+    trendscore:number
+    uptrend:boolean
+    r1: number
+    s1: number
+}

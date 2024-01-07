@@ -18,6 +18,17 @@ export const instrumentStatsSelected = writable();
 
 export const executedsignalsSelected = writable();
 
+export const trendInfoApiData = writable();
+
+
+export const trendinfos = derived(trendInfoApiData, ($apiData) => {
+    if ($apiData){
+        //return $apiData.sort(e => e.level);
+        return $apiData.sort((a,b) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0))
+    }
+    return [];
+});
+
 
 export const executedsignals = derived(executedsignalsSelected, ($apiData) => {
     if ($apiData){

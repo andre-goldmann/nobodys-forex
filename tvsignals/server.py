@@ -604,18 +604,18 @@ def proceedSignal(signal):
         if trendInfo is not None:
             if trendInfo.uptrend is True and signal.type == "sell":
                 print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
-                storeIgnoredSignal(IgnoredSignal(
-                    json=jsonSignal,
-                    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
-                ),session)
+                #storeIgnoredSignal(IgnoredSignal(
+                #    json=jsonSignal,
+                #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
+                #),session)
                 session.close()
                 return
             if trendInfo.uptrend is False and signal.type == "buy":
                 print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
-                storeIgnoredSignal(IgnoredSignal(
-                    json=jsonSignal,
-                    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
-                ),session)
+                #storeIgnoredSignal(IgnoredSignal(
+                #    json=jsonSignal,
+                #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
+                #),session)
                 session.close()
                 return
 
