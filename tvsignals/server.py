@@ -618,6 +618,14 @@ def proceedSignal(signal):
                 #),session)
                 session.close()
                 return
+        if trendInfo is None:
+            print(f"Ignore Signal {signal} because TrendInfo not found!")
+            storeIgnoredSignal(IgnoredSignal(
+                json=jsonSignal,
+                reason=f"Ignore Signal {signal} because TrendInfo not found!"
+            ),session)
+            session.close()
+            return
 
 
         regressionLineH4 = session.query(Regressions).filter(
