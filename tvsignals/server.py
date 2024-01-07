@@ -602,15 +602,23 @@ def proceedSignal(signal):
 
         trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
         if trendInfo is not None:
-            if trendInfo.uptrend and signal.type == "sell":
+            if trendInfo.uptrend is True and signal.type == "sell":
                 print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
-                #storeIgnoredSignal(IgnoredSignal(
-                #    json=jsonSignal,
-                #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
-                #),session)
-                #session.close()
+                storeIgnoredSignal(IgnoredSignal(
+                    json=jsonSignal,
+                    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
+                ),session)
                 session.close()
                 return
+            if trendInfo.uptrend is False and signal.type == "buy":
+                print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
+                storeIgnoredSignal(IgnoredSignal(
+                    json=jsonSignal,
+                    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
+                ),session)
+                session.close()
+                return
+
 
         regressionLineH4 = session.query(Regressions).filter(
             Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
@@ -625,6 +633,14 @@ def proceedSignal(signal):
                 #))
                 session.close()
                 return
+        elif trendInfo is None:
+            print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
+            storeIgnoredSignal(IgnoredSignal(
+                json=jsonSignal,
+                reason=f"Ignore Signal because signal {signal} is TrendInfo could not be found!"
+            ),session)
+            session.close()
+            return
 
             if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
                 print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")

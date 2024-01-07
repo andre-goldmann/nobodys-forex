@@ -29,7 +29,8 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getW
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, getStrategystats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
-    getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd, countSignals
+    getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd, countSignals, \
+    geTrendInfos
 from pinescripts import f_LazyLine, tThree
 from trading_strategies.adx_crossover import AdxCrossover
 from trading_strategies.adx_ema_14 import ADXEMA14
@@ -201,6 +202,20 @@ async def waitingSignals():
                        'lots': signal.lots,
                        'stamp': signal.stamp,
                        'strategy': signal.strategy})
+
+    return result
+
+@app.get("/trendinfos")
+async def trendinfos():
+    infos = geTrendInfos()
+    result = []
+    for info in infos:
+        result.append({'symbol': info.symbol,
+                       'stamp': info.stamp,
+                       'trendscore': info.trendscore,
+                       'uptrend': info.uptrend,
+                       'r1': info.r1,
+                       's1': info.s1})
 
     return result
 

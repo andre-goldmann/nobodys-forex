@@ -181,6 +181,16 @@ class CandlesDto(BaseModel):
 class SignalId(BaseModel):
     id: int
 
+class TrendInfoEntity(Base):
+    __tablename__ = "TrendInfo"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
+    trendscore:Mapped[int]
+    uptrend:Mapped[bool]
+    r1: Mapped[float]
+    s1: Mapped[float]
+
 def storeData(symbol:str, timeFrame:TimeFrame):
     print(f"storeData for: {symbol}-{timeFrame}")
 
@@ -317,6 +327,19 @@ def deleteSignalInDb(id:int):
 def getIgnoredSignals():
     with Session.begin() as session:
         signals = session.query(IgnoredSignal).all()
+        session.expunge_all()
+        session.close()
+        return signals
+
+
+def geTrendInfos():
+    with Session.begin() as session:
+        signals = session.query(TrendInfoEntity.symbol,
+                                TrendInfoEntity.stamp,
+                                TrendInfoEntity.trendscore,
+                                TrendInfoEntity.uptrend,
+                                TrendInfoEntity.r1,
+                                TrendInfoEntity.s1).all()
         session.expunge_all()
         session.close()
         return signals
