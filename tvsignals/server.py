@@ -603,9 +603,7 @@ def proceedSignal(signal):
         trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
         if trendInfo is not None:
             if trendInfo.uptrend is True and signal.type == "sell":
-                print("############################################################################")
-                print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
-                print("############################################################################")
+                print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend} \n")
                 #storeIgnoredSignal(IgnoredSignal(
                 #    json=jsonSignal,
                 #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
@@ -613,9 +611,7 @@ def proceedSignal(signal):
                 session.close()
                 return
             if trendInfo.uptrend is False and signal.type == "buy":
-                print("############################################################################")
-                print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
-                print("############################################################################")
+                print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend} \n")
                 #storeIgnoredSignal(IgnoredSignal(
                 #    json=jsonSignal,
                 #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
@@ -719,6 +715,7 @@ def proceedSignal(signal):
                 strategy=strategy
             ), session)
             session.close()
+            print(f"######## {signal} stored ########")
         else:
             regressionLineD1 = session.query(Regressions).filter(
                 Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
@@ -761,6 +758,7 @@ def proceedSignal(signal):
                     commision=0.0,
                     strategy=strategy
                 ), session)
+                print(f"######## {signal} stored ########")
                 session.close()
             else:
                 print(f"No Regression-Data found for {signal.symbol}")
