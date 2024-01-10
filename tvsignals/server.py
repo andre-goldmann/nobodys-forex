@@ -602,20 +602,22 @@ def proceedSignal(signal):
 
         trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
         if trendInfo is not None:
-            if trendInfo.trendscore > -7 and signal.type == "sell":
+            if trendInfo.trendscore >= -7 and signal.type == "sell":
                 print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.trendscore} \n")
-                #storeIgnoredSignal(IgnoredSignal(
-                #    json=jsonSignal,
-                #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
-                #),session)
+                if trendInfo.trendscore <= -7:
+                    storeIgnoredSignal(IgnoredSignal(
+                        json=jsonSignal,
+                        reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
+                    ),session)
                 session.close()
                 return
-            if trendInfo.trendscore < 7 and signal.type == "buy":
+            if trendInfo.trendscore <= 7 and signal.type == "buy":
                 print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.trendscore} \n")
-                #storeIgnoredSignal(IgnoredSignal(
-                #    json=jsonSignal,
-                #    reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
-                #),session)
+                if trendInfo.trendscore >= 7:
+                    storeIgnoredSignal(IgnoredSignal(
+                        json=jsonSignal,
+                        reason=f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}"
+                    ),session)
                 session.close()
                 return
         if trendInfo is None:
