@@ -604,20 +604,20 @@ def proceedSignal(signal):
         if trendInfo is not None:
             if trendInfo.trendscore > -7 and signal.type == "sell":
                 #print(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
-                if trendInfo.trendscore == -6:
-                    storeIgnoredSignal(IgnoredSignal(
-                        json=jsonSignal,
-                        reason=f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore}"
-                    ),session)
+                #if trendInfo.trendscore == -6:
+                #    storeIgnoredSignal(IgnoredSignal(
+                #        json=jsonSignal,
+                #        reason=f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore}"
+                #    ),session)
                 session.close()
                 return
             if trendInfo.trendscore < 7 and signal.type == "buy":
                 #print(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
-                if trendInfo.trendscore == 6:
-                    storeIgnoredSignal(IgnoredSignal(
-                        json=jsonSignal,
-                        reason=f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore}"
-                    ),session)
+                #if trendInfo.trendscore == 6:
+                #    storeIgnoredSignal(IgnoredSignal(
+                #        json=jsonSignal,
+                #        reason=f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore}"
+                #    ),session)
                 session.close()
                 return
         if trendInfo is None:
@@ -646,14 +646,6 @@ def proceedSignal(signal):
                 #))
                 session.close()
                 return
-        elif trendInfo is None:
-            print(f"Ignore Signal because signal {signal} is against trend: {trendInfo.uptrend}")
-            storeIgnoredSignal(IgnoredSignal(
-                json=jsonSignal,
-                reason=f"Ignore Signal because signal {signal} is TrendInfo could not be found!"
-            ),session)
-            session.close()
-            return
 
             if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
                 print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
