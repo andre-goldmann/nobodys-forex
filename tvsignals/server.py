@@ -629,9 +629,9 @@ def proceedSignal(signal):
             session.close()
             return
 
-        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
-        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
+        #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
         regressionLineH4 = session.query(Regressions).filter(
             Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
