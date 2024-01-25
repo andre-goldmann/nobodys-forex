@@ -28,12 +28,15 @@ strategies = ["NNR",
               "Super AI Trend",
               "Super AI Trend_WITHOUT_REG",
               "70% Strategy",
+              "SSL Hybrid",
               "SSL Hybrid_WITHOUT_REG",
               "AI Volume Supertrend",
               "SSL + Wave Trend Strategy",
+              "VHMA",
               "VHMA_WITHOUT_REG",
               "T3Fvma",
               "SentimentRangeMa",
+              "SentimentRangeMa_WITHOUT_REG",
               "GaussianChannelTrendAI",
               "T3-LocallyWeightedRegression",
               "T3-HmaKahlman",
@@ -49,6 +52,7 @@ strategies = ["NNR",
               "T3-AroonBased",
               "T3-EmaStrategy",
               "SOTT-Lorentzian",
+              "RSS_WMA"
               "RSS_WMA_WITHOUT_REG",
 
               "AdxCrossover_M15",
@@ -692,7 +696,7 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid":
+        if strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa":
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
 
