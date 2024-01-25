@@ -26,11 +26,12 @@ app = FastAPI()
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
 strategies = ["NNR",
               "Super AI Trend",
+              "Super AI Trend_WITHOUT_REG",
               "70% Strategy",
-              "SSL Hybrid",
+              "SSL Hybrid_WITHOUT_REG",
               "AI Volume Supertrend",
               "SSL + Wave Trend Strategy",
-              "VHMA",
+              "VHMA_WITHOUT_REG",
               "T3Fvma",
               "SentimentRangeMa",
               "GaussianChannelTrendAI",
@@ -48,7 +49,7 @@ strategies = ["NNR",
               "T3-AroonBased",
               "T3-EmaStrategy",
               "SOTT-Lorentzian",
-              "RSS_WMA",
+              "RSS_WMA_WITHOUT_REG",
 
               "AdxCrossover_M15",
               "AdxCrossover_H1",
@@ -565,6 +566,64 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
     session.add(signal)
     session.commit()
 
+
+def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
+    df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4, session, 10000)
+    atrValue = atr(df)
+
+    sl = 0.0
+    tp = 0.0
+    if signal.type == "sell":
+        sl = signal.entry + atrValue.iloc[-1]
+        tp = signal.entry - atrValue.iloc[-1]
+    if signal.type == "buy":
+        sl = signal.entry - atrValue.iloc[-1]
+        tp = signal.entry + atrValue.iloc[-1]
+
+    lots = 0.1
+    signalStats = getSignalStats(strategy, signal.symbol, session)
+
+    if signalStats is None:
+        lots = 0.01
+    elif signalStats.failedtrades > signalStats.successtrades:
+        lots = 0.01
+
+    if signalStats is not None and signalStats.alltrades > 100:
+        percentage = (100 / signalStats.alltrades) * signalStats.successtrades
+        if percentage < 58:
+            storeIgnoredSignal(IgnoredSignal(
+                json=jsonSignal,
+                reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
+            ), session)
+            session.close()
+            return
+        else:
+            prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
+            if prodSignalsCount <= 5 and signalStats.profit > 1:
+                storeProdSignal(ProdSignal(
+                    symbol=signal.symbol,
+                    type=signal.type,
+                    entry=signal.entry,
+                    sl=sl,
+                    tp=tp,
+                    lots=0.01,
+                    commision=0.0,
+                    strategy=strategy
+                ), session)
+
+    storeSignal(Signal(
+        symbol=signal.symbol,
+        type=signal.type,
+        entry=signal.entry,
+        sl=sl,
+        tp=tp,
+        lots=lots,
+        commision=0.0,
+        strategy=strategy
+    ), session)
+
+
+
 def proceedSignal(signal):
     # no need to check for trend in TradingView we send everything
     # and do the check here
@@ -633,6 +692,10 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
+        if strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid":
+            calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
+
+
         regressionLineH4 = session.query(Regressions).filter(
             Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
 
@@ -656,61 +719,7 @@ def proceedSignal(signal):
                 session.close()
                 return
 
-            df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4, session, 10000)
-            atrValue = atr(df)
-
-            sl = 0.0
-            tp = 0.0
-            if signal.type == "sell":
-                sl = signal.entry + atrValue.iloc[-1]
-                tp = signal.entry - atrValue.iloc[-1]
-            if signal.type == "buy":
-                sl = signal.entry - atrValue.iloc[-1]
-                tp = signal.entry + atrValue.iloc[-1]
-
-            lots = 0.1
-            signalStats = getSignalStats(strategy, signal.symbol, session)
-            #print(signalStats.profit)
-            #print(signalStats.failedtrades)
-            #print(signalStats.successtrades)
-            if signalStats is None:
-                lots = 0.01
-            elif signalStats.failedtrades > signalStats.successtrades:
-                lots = 0.01
-
-            if signalStats is not None and signalStats.alltrades > 100:
-                percentage = (100 / signalStats.alltrades) * signalStats.successtrades
-                if percentage < 58:
-                    storeIgnoredSignal(IgnoredSignal(
-                        json=jsonSignal,
-                        reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
-                    ), session)
-                    session.close()
-                    return
-                else:
-                    prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
-                    if prodSignalsCount <= 5 and signalStats.profit > 1:
-                        storeProdSignal(ProdSignal(
-                            symbol=signal.symbol,
-                            type=signal.type,
-                            entry=signal.entry,
-                            sl=sl,
-                            tp=tp,
-                            lots=0.01,
-                            commision=0.0,
-                            strategy=strategy
-                        ), session)
-
-            storeSignal(Signal(
-                symbol=signal.symbol,
-                type=signal.type,
-                entry=signal.entry,
-                sl=sl,
-                tp=tp,
-                lots=lots,
-                commision=0.0,
-                strategy=strategy
-            ), session)
+            calculateSlAndStoreSignal(signal, strategy, jsonSignal, session)
             session.close()
             print(f"######## {signal} stored ########")
         else:
