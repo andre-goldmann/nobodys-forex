@@ -52,7 +52,7 @@ strategies = ["NNR",
               "T3-AroonBased",
               "T3-EmaStrategy",
               "SOTT-Lorentzian",
-              "RSS_WMA"
+              "RSS_WMA",
               "RSS_WMA_WITHOUT_REG",
 
               "AdxCrossover_M15",
