@@ -50,7 +50,9 @@ strategies = ["NNR",
               "T3-NNFX",
               "T3-EfficientTrendStepMod",
               "T3-AroonBased",
+              "T3-AroonBased_WITHOUT_REG",
               "T3-EmaStrategy",
+              "T3-EmaStrategy_WITHOUT_REG",
               "SOTT-Lorentzian",
               "RSS_WMA",
               "RSS_WMA_WITHOUT_REG",
@@ -696,7 +698,7 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa":
+        if strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased":
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
 
