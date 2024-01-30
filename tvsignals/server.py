@@ -635,6 +635,11 @@ def proceedSignal(signal):
     # and do the check here
     # D-EMA200, H4-EMA, D-Regression, H4-Regression
     # Support Resistance
+
+    #ignored XRPUSD
+    if signal.symbol == "XRPUSD":
+        return
+
     strategy = signal.strategy.replace("GaussianChannelTrendAi", "GaussianChannelTrendAI")
     strategy = strategy.replace("T3-machineLearningLogisticRegression","T3-MachineLearningLogisticRegression")
     jsonSignal =str({'symbol': signal.symbol,
