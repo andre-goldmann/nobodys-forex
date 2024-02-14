@@ -1185,7 +1185,7 @@ async def storeCandle(candle:CandlesDto):
         keltnerStochasticAdx(df, symbol, timeframeEnum, entry)
         kAMA(df, symbol, timeframeEnum, entry)
         kAMACrossover(df, symbol, timeframeEnum, entry)
-        keltnerAdx(df, symbol, timeframeEnum, entry)
+        #keltnerAdx(df, symbol, timeframeEnum, entry)
         #keltnerRsi(df, symbol, timeframeEnum, entry)
         #keltnerStochastic(df, symbol, timeframeEnum, entry)
         #mACDCrossover(df, symbol, timeframeEnum, entry)
