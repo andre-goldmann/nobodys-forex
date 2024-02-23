@@ -603,7 +603,7 @@ def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
         percentage = (100 / signalStats.alltrades) * signalStats.successtrades
         if percentage < 58:
             storeIgnoredSignal(IgnoredSignal(
-                json=jsonSignal,
+                json=signal + "-" + strategy + ": "+ jsonSignal,
                 reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
             ), session)
             session.close()
@@ -712,9 +712,9 @@ def proceedSignal(signal):
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
         #Extra-Rule because of the one before
-        if (strategy == "VHMA" and signal.symbol == "CHFJPY") or (strategy == "Super AI Trend" and signal.symbol== "XAGUSD") or (strategy == "Super AI Trend" and signal.symbol== "USDCAD") or (strategy == "T3-EmaStrategy" and signal.symbol== "USDCAD") or (strategy == "RSS_WMA" and signal.symbol== "AUDUSD"):
-            session.close()
-            return
+        #if (strategy == "VHMA" and signal.symbol == "GBPUSD") or (strategy == "VHMA" and signal.symbol == "CHFJPY") or (strategy == "Super AI Trend" and signal.symbol== "XAGUSD") or (strategy == "Super AI Trend" and signal.symbol== "USDCAD") or (strategy == "T3-EmaStrategy" and signal.symbol== "USDCAD") or (strategy == "RSS_WMA" and signal.symbol== "AUDUSD"):
+        #    session.close()
+        #    return
 
 
         regressionLineH4 = session.query(Regressions).filter(
