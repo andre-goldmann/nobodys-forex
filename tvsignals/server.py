@@ -35,19 +35,24 @@ strategies = ["NNR",
               "VHMA",
               "VHMA_WITHOUT_REG",
               "T3Fvma",
+              "T3Fvma_WITHOUT_REG",
               "SentimentRangeMa",
               "SentimentRangeMa_WITHOUT_REG",
               "GaussianChannelTrendAI",
               "T3-LocallyWeightedRegression",
               "T3-HmaKahlman",
               "T3-JMaCrossover",
+              "T3-JMaCrossover_WITHOUT_REG",
               "T3-MachineLearningLogisticRegression",
               "T3-machineLearningLogisticRegression",
               "T3-GapFilling",
+              "T3-GapFilling_WITHOUT_REG",
               "T3-EvwmaVwapMacd",
               "T3-BollingerBandsPinbar",
+              "T3-BollingerBandsPinbar_WITHOUT_REG",
               "T3-TrendAI",
               "T3-NNFX",
+              "T3-NNFX_WITHOUT_REG",
               "T3-EfficientTrendStepMod",
               "T3-AroonBased",
               "T3-AroonBased_WITHOUT_REG",
@@ -703,7 +708,7 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased":
+        if strategy == "T3-BollingerBandsPinbar" or strategy == "T3-NNFX" or strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased" or strategy == "T3Fvma" or strategy == "T3-JMaCrossover" or strategy == "T3-GapFilling":
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
         #Extra-Rule because of the one before
