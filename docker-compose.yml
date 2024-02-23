@@ -95,19 +95,19 @@ services:
       - db:/var/lib/postgresql/data
     command: -p 6432
 
-  pgadmin:
-    container_name: pgadmin4_container
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: goldi@goldi.com
-      PGADMIN_DEFAULT_PASSWORD: r[MZ42\3dm^\
-    ports:
-      - "5050:5050"
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    depends_on:
-      - "db"
+  #pgadmin:
+  #  container_name: pgadmin4_container
+  #  image: dpage/pgadmin4
+  #  restart: always
+  #  environment:
+  #    PGADMIN_DEFAULT_EMAIL: goldi@goldi.com
+  #    PGADMIN_DEFAULT_PASSWORD: r[MZ42\3dm^\
+  #  ports:
+  #    - "5050:5050"
+  #  volumes:
+  #    - pgadmin-data:/var/lib/pgadmin
+  #  depends_on:
+  #    - "db"
 
 volumes:
   db:

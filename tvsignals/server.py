@@ -706,6 +706,11 @@ def proceedSignal(signal):
         if strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased":
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
+        #Extra-Rule because of the one before
+        if (strategy == "VHMA" and signal.symbol == "CHFJPY") or (strategy == "Super AI Trend" and signal.symbol== "XAGUSD") or (strategy == "Super AI Trend" and signal.symbol== "USDCAD") or (strategy == "T3-EmaStrategy" and signal.symbol== "USDCAD") or (strategy == "RSS_WMA" and signal.symbol== "AUDUSD"):
+            session.close()
+            return
+
 
         regressionLineH4 = session.query(Regressions).filter(
             Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
