@@ -496,20 +496,6 @@ def lastCandle(symbol:str, timeFrame:TimeFrame):
         session.close()
         return candle
 
-#@app.get("/atr/")
-#async def atrEndpoint(symbol:str, timeframe: str):
-#    timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
-
-    #df = loadDfFromDb(symbol, timeframeEnum)
-    #atrValue = atr(df)
-    #x = df.iloc[-1].CLOSE - atrValue.iloc[-1]
-    #y  = df.iloc[-1].CLOSE + atrValue.iloc[-1]
-    #return {'atr:': atrValue.iloc[-1],
-    #        'lastprice': df.iloc[-1].CLOSE,
-    #        'lastprice-atr': x,
-    #        'lastprice+atr': y}
-
-
 @app.post("/resendsignal/")
 async def resendsignal(
         id: Annotated[int, Form()],
