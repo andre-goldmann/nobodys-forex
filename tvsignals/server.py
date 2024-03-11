@@ -25,49 +25,81 @@ app = FastAPI()
 
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
 strategies = ["NNR",
+              "NNR_WITHOUT_REG",
+
               "Super AI Trend",
               "Super AI Trend_WITHOUT_REG",
+
               "70% Strategy",
+
               "SSL Hybrid",
               "SSL Hybrid_WITHOUT_REG",
+
               "AI Volume Supertrend",
               "SSL + Wave Trend Strategy",
+
               "VHMA",
               "VHMA_WITHOUT_REG",
+
               "T3Fvma",
               "T3Fvma_WITHOUT_REG",
+
               "SentimentRangeMa",
               "SentimentRangeMa_WITHOUT_REG",
+
               "GaussianChannelTrendAI",
+              "GaussianChannelTrendAI_WITHOUT_REG",
+
               "T3-LocallyWeightedRegression",
+              "T3-LocallyWeightedRegression_WITHOUT_REG",
+
               "T3-HmaKahlman",
+              "T3-HmaKahlman_WITHOUT_REG",
+
               "T3-JMaCrossover",
               "T3-JMaCrossover_WITHOUT_REG",
+
               "T3-MachineLearningLogisticRegression",
               "T3-machineLearningLogisticRegression",
+
               "T3-GapFilling",
               "T3-GapFilling_WITHOUT_REG",
+
               "T3-EvwmaVwapMacd",
+              "T3-EvwmaVwapMacd_WITHOUT_REG",
+
               "T3-BollingerBandsPinbar",
               "T3-BollingerBandsPinbar_WITHOUT_REG",
+
               "T3-TrendAI",
+              "T3-TrendAI_WITHOUT_REG",
+
               "T3-NNFX",
               "T3-NNFX_WITHOUT_REG",
+
               "T3-EfficientTrendStepMod",
+              "T3-EfficientTrendStepMod_WITHOUT_REG",
+
               "T3-AroonBased",
               "T3-AroonBased_WITHOUT_REG",
+
               "T3-EmaStrategy",
               "T3-EmaStrategy_WITHOUT_REG",
+
               "SOTT-Lorentzian",
+              "SOTT-Lorentzian_WITHOUT_REG",
 
               "RSS_WMA",
-              "RSS_WMA_WITHOUT_REG",
+              "RSS_WMA_WITHOUT_WITHOUT_REG",
 
               "T3-MesaPhasor",
-              "T3-MesaPhasor_REG",
+              "T3-MesaPhasor_WITHOUT_REG",
 
               "T3-SupportAndResistanceLevels",
-              "T3-SupportAndResistanceLevels_REG",
+              "T3-SupportAndResistanceLevels_WITHOUT_REG",
+
+              "T3-Eams",
+              "T3-Eams_WITHOUT_REG"
 
               "AdxCrossover_M15",
               "AdxCrossover_H1",
@@ -700,7 +732,7 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "T3-SupportAndResistanceLevels" or strategy == "T3-MesaPhasor" or strategy == "T3-BollingerBandsPinbar" or strategy == "T3-NNFX" or strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased" or strategy == "T3Fvma" or strategy == "T3-JMaCrossover" or strategy == "T3-GapFilling":
+        if strategy == "NNR" or strategy == "T3-LocallyWeightedRegression" or strategy == "T3-HmaKahlman" or strategy == "T3-EvwmaVwapMacd" or strategy == "T3-EfficientTrendStepMod" or strategy == "SOTT-Lorentzian" or strategy == "T3-Eams" or strategy == "T3-SupportAndResistanceLevels" or strategy == "T3-MesaPhasor" or strategy == "T3-BollingerBandsPinbar" or strategy == "T3-NNFX" or strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased" or strategy == "T3Fvma" or strategy == "T3-JMaCrossover" or strategy == "T3-GapFilling":
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
         #Extra-Rule because of the one before
