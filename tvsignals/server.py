@@ -59,8 +59,15 @@ strategies = ["NNR",
               "T3-EmaStrategy",
               "T3-EmaStrategy_WITHOUT_REG",
               "SOTT-Lorentzian",
+
               "RSS_WMA",
               "RSS_WMA_WITHOUT_REG",
+
+              "T3-MesaPhasor",
+              "T3-MesaPhasor_REG",
+
+              "T3-SupportAndResistanceLevels",
+              "T3-SupportAndResistanceLevels_REG",
 
               "AdxCrossover_M15",
               "AdxCrossover_H1",
@@ -693,7 +700,7 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "T3-BollingerBandsPinbar" or strategy == "T3-NNFX" or strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased" or strategy == "T3Fvma" or strategy == "T3-JMaCrossover" or strategy == "T3-GapFilling":
+        if strategy == "T3-SupportAndResistanceLevels" or strategy == "T3-MesaPhasor" or strategy == "T3-BollingerBandsPinbar" or strategy == "T3-NNFX" or strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased" or strategy == "T3Fvma" or strategy == "T3-JMaCrossover" or strategy == "T3-GapFilling":
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
         #Extra-Rule because of the one before
