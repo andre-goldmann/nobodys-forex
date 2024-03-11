@@ -592,9 +592,9 @@ def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
     elif signalStats.failedtrades > signalStats.successtrades:
         lots = 0.01
 
-    if signalStats is not None and signalStats.alltrades > 100:
+    if signalStats is not None and signalStats.alltrades > 110:
         percentage = (100 / signalStats.alltrades) * signalStats.successtrades
-        if percentage < 58:
+        if percentage < 60:
             storeIgnoredSignal(IgnoredSignal(
                 json=signal + "-" + strategy,
                 reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
