@@ -592,7 +592,6 @@ def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
                 json=signal + "-" + strategy,
                 reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
             ), session)
-            session.close()
             return
         else:
             prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
