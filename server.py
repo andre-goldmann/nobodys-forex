@@ -1165,7 +1165,7 @@ async def storeCandle(candle:CandlesDto):
         awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry)
         bladeRunner(df, symbol, timeframeEnum, entry)
         bollingerBandsAndRSI(df, symbol, timeframeEnum, entry)
-        bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry)
+        #bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry)
         #cciMacdPsar(df, symbol, timeframeEnum, entry)
         #cciMovingAverage(df, symbol, timeframeEnum, entry)
         #commodityChannelIndex(df, symbol, timeframeEnum, entry)
