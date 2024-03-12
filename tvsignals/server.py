@@ -122,6 +122,12 @@ strategies = ["NNR",
               "T3-UtBot",
               "T3-UtBot_WITHOUT_REG",
 
+              "T3-PivotPointSuperTrend",
+              "T3-PivotPointSuperTrend_WITHOUT_REG",
+
+              "T3-AntiBreakout",
+              "T3-AntiBreakout_WITHOUT_REG",
+
               "AdxCrossover_M15",
               "AdxCrossover_H1",
               "AdxCrossover_H4",
@@ -753,7 +759,7 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "T3-LinearTrend" or strategy == "T3-UtBot" or strategy == "T3-HalfTrend" or strategy == "T3-BernoulliEntropyFunction" or strategy == "T3-DiCrossingDaily" or strategy == "T3-MacdScalp" or strategy == "T3-VolumeDifferenceDeltaCycleOscillator" or strategy == "NNR" or strategy == "T3-LocallyWeightedRegression" or strategy == "T3-HmaKahlman" or strategy == "T3-EvwmaVwapMacd" or strategy == "T3-EfficientTrendStepMod" or strategy == "SOTT-Lorentzian" or strategy == "T3-Eams" or strategy == "T3-SupportAndResistanceLevels" or strategy == "T3-MesaPhasor" or strategy == "T3-BollingerBandsPinbar" or strategy == "T3-NNFX" or strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased" or strategy == "T3Fvma" or strategy == "T3-JMaCrossover" or strategy == "T3-GapFilling":
+        if strategy == "T3-AntiBreakout" or strategy == "T3-PivotPointSuperTrend" or strategy == "T3-LinearTrend" or strategy == "T3-UtBot" or strategy == "T3-HalfTrend" or strategy == "T3-BernoulliEntropyFunction" or strategy == "T3-DiCrossingDaily" or strategy == "T3-MacdScalp" or strategy == "T3-VolumeDifferenceDeltaCycleOscillator" or strategy == "NNR" or strategy == "T3-LocallyWeightedRegression" or strategy == "T3-HmaKahlman" or strategy == "T3-EvwmaVwapMacd" or strategy == "T3-EfficientTrendStepMod" or strategy == "SOTT-Lorentzian" or strategy == "T3-Eams" or strategy == "T3-SupportAndResistanceLevels" or strategy == "T3-MesaPhasor" or strategy == "T3-BollingerBandsPinbar" or strategy == "T3-NNFX" or strategy == "VHMA" or strategy == "RSS_WMA" or strategy == "Super AI Trend" or strategy == "SSL Hybrid" or strategy == "SentimentRangeMa" or strategy == "T3-EmaStrategy" or strategy == "T3-AroonBased" or strategy == "T3Fvma" or strategy == "T3-JMaCrossover" or strategy == "T3-GapFilling":
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
         #Extra-Rule because of the one before
