@@ -1,0 +1,11 @@
+annotated-types
+sqlalchemy
+uvicorn[standard]
+fastapi
+pydantic
+python-multipart
+pandas
+python-dotenv
+pyarrow
+xgboost
+openpyxl
