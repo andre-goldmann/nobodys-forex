@@ -718,6 +718,8 @@ def proceedSignal(signal):
                      'tp': signal.tp,
                      'strategy': strategy})
 
+    print(f"Received: {signal}")
+
     with Session.begin() as session:
 
         if signal.symbol not in symbols:
@@ -770,9 +772,9 @@ def proceedSignal(signal):
             session.close()
             return
 
-        #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
-        #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
+        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
         if strategy == "T3-ReversalFinder" \
                 or strategy == "T3-PinBarStrategy" \
@@ -884,9 +886,9 @@ def proceedSignal(signal):
                     commision=0.0,
                     strategy=strategy
                 ), session)
-                print(f"######## {signal} stored ########")
                 session.commit()
                 session.close()
+                print(f"######## {signal} stored ########")
             else:
                 session.commit()
                 session.close()
