@@ -629,17 +629,7 @@ async def signals(trendInfo:TrendInfoDto):
 async def signals(signal:SignalDto):
     proceedSignal(signal)
 
-def storeProdSignal(signal: ProdSignal, session):
-    session.add(signal)
-    session.commit()
 
-def storeSignal(signal: Signal, session):
-    session.add(signal)
-    session.commit()
-
-def storeIgnoredSignal(signal: IgnoredSignal, session):
-    session.add(signal)
-    session.commit()
 
 
 def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
@@ -810,11 +800,6 @@ def proceedSignal(signal):
                 or strategy == "T3-GapFilling":
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
 
-        #Extra-Rule because of the one before
-        #if (strategy == "VHMA" and signal.symbol == "GBPUSD") or (strategy == "VHMA" and signal.symbol == "CHFJPY") or (strategy == "Super AI Trend" and signal.symbol== "XAGUSD") or (strategy == "Super AI Trend" and signal.symbol== "USDCAD") or (strategy == "T3-EmaStrategy" and signal.symbol== "USDCAD") or (strategy == "RSS_WMA" and signal.symbol== "AUDUSD"):
-        #    session.close()
-        #    return
-
 
         regressionLineH4 = session.query(Regressions).filter(
             Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_H4).all()
@@ -827,6 +812,7 @@ def proceedSignal(signal):
                 #    json=jsonSignal,
                 #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
                 #))
+                session.commit()
                 session.close()
                 return
 
@@ -836,6 +822,7 @@ def proceedSignal(signal):
                 #    json=jsonSignal,
                 #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
                 #))
+                session.commit()
                 session.close()
                 return
 
@@ -853,6 +840,8 @@ def proceedSignal(signal):
                     #    json=jsonSignal,
                     #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
                     #))
+                    session.commit()
+                    session.close()
                     return
 
                 if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
@@ -861,6 +850,8 @@ def proceedSignal(signal):
                     #    json=jsonSignal,
                     #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
                     #))
+                    session.commit()
+                    session.close()
                     return
 
                 df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session)
@@ -892,6 +883,15 @@ def proceedSignal(signal):
                 session.commit()
                 session.close()
                 print(f"No Regression-Data found for {signal.symbol}")
+
+def storeProdSignal(signal: ProdSignal, session):
+    session.add(signal)
+
+def storeSignal(signal: Signal, session):
+    session.add(signal)
+
+def storeIgnoredSignal(signal: IgnoredSignal, session):
+    session.add(signal)
 
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
