@@ -631,15 +631,15 @@ async def signals(signal:SignalDto):
 
 def storeProdSignal(signal: ProdSignal, session):
     session.add(signal)
-    session.commit()
+    #session.commit()
 
 def storeSignal(signal: Signal, session):
     session.add(signal)
-    session.commit()
+    #session.commit()
 
 def storeIgnoredSignal(signal: IgnoredSignal, session):
     session.add(signal)
-    session.commit()
+    #session.commit()
 
 
 def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
@@ -726,6 +726,7 @@ def proceedSignal(signal):
                 json=jsonSignal,
                 reason=f"Ignore Signal because symbol is not handled yet: {signal}"
             ),session)
+            session.commit()
             session.close()
             return
 
@@ -735,6 +736,7 @@ def proceedSignal(signal):
                 json=jsonSignal,
                 reason=f"Ignore Signal because strategy is unknown: {strategy}"
             ),session)
+            session.commit()
             session.close()
             return
 
@@ -764,6 +766,7 @@ def proceedSignal(signal):
                 json=jsonSignal,
                 reason=f"Ignore Signal {signal} because TrendInfo not found!"
             ),session)
+            session.commit()
             session.close()
             return
 
@@ -836,6 +839,7 @@ def proceedSignal(signal):
                 return
 
             calculateSlAndStoreSignal(signal, strategy, jsonSignal, session)
+            session.commit()
             session.close()
             print(f"######## {signal} stored ########")
         else:
@@ -881,8 +885,11 @@ def proceedSignal(signal):
                     strategy=strategy
                 ), session)
                 print(f"######## {signal} stored ########")
+                session.commit()
                 session.close()
             else:
+                session.commit()
+                session.close()
                 print(f"No Regression-Data found for {signal.symbol}")
 
 if __name__ == "__main__":
