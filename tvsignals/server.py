@@ -114,7 +114,7 @@ strategies = ["NNR",
               "T3-HalfTrend_WITHOUT_REG",
 
               "T3-BernoulliEntropyFunction",
-              "T3-BernoulliEntropyFunction_WITHOUT_REG"
+              "T3-BernoulliEntropyFunction_WITHOUT_REG",
 
               "T3-LinearTrend",
               "T3-LinearTrend_WITHOUT_REG",
