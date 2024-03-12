@@ -631,15 +631,15 @@ async def signals(signal:SignalDto):
 
 def storeProdSignal(signal: ProdSignal, session):
     session.add(signal)
-    #session.commit()
+    session.commit()
 
 def storeSignal(signal: Signal, session):
     session.add(signal)
-    #session.commit()
+    session.commit()
 
 def storeIgnoredSignal(signal: IgnoredSignal, session):
     session.add(signal)
-    #session.commit()
+    session.commit()
 
 
 def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
@@ -718,7 +718,6 @@ def proceedSignal(signal):
                      'tp': signal.tp,
                      'strategy': strategy})
 
-    print(f"Received: {signal}")
 
     with Session.begin() as session:
 
@@ -772,9 +771,9 @@ def proceedSignal(signal):
             session.close()
             return
 
-        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
-        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
+        #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
         if strategy == "T3-ReversalFinder" \
                 or strategy == "T3-PinBarStrategy" \
