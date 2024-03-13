@@ -140,6 +140,75 @@ strategies = ["NNR",
               "T3-ReversalFinder",
               "T3-ReversalFinder_WITHOUT_REG",
 
+              "T3-MacdHistogram-LLTDEMA",
+              "T3-MacdHistogram-LLTDEMA_WITHOUT_REG",
+
+              "T3-MacdHistogram-TDEMA",
+              "T3-MacdHistogram-TDEMA_WITHOUT_REG"
+              
+              "T3-MacdHistogram-DEMA",
+              "T3-MacdHistogram-DEMA_WITHOUT_REG",
+
+              "T3-MacdHistogram-EMA",
+              "T3-MacdHistogram-EMA_WITHOUT_REG",
+
+              "T3-MacdHistogram-THMA",
+              "T3-MacdHistogram-THMA_WITHOUT_REG",
+
+              "T3-MacdHistogram-ZLEMA",
+              "T3-MacdHistogram-ZLEMA_WITHOUT_REG",
+
+              "T3-MacdHistogram-ZLTEMA",
+              "T3-MacdHistogram-ZLTEMA_WITHOUT_REG",
+
+              "T3-NeutronixAi",
+              "T3-NeutronixAi_WITHOUT_REG",
+
+              "T3-NeutronixScalping",
+              "T3-NeutronixScalping_WITHOUT_REG",
+
+              "T3-ThreeCommasBotStrategy-EMA",
+              "T3-ThreeCommasBotStrategy-EMA_WITHOUT_REG",
+
+              "T3-ThreeCommasBotStrategy-HEMA",
+              "T3-ThreeCommasBotStrategy-HEMA_WITHOUT_REG",
+
+              "T3-ThreeCommasBotStrategy-SMA",
+              "T3-ThreeCommasBotStrategy-SMA_WITHOUT_REG",
+
+              "T3-ThreeCommasBotStrategy-HMA",
+              "T3-ThreeCommasBotStrategy-HMA_WITHOUT_REG",
+
+              "T3-ThreeCommasBotStrategy-WMA",
+              "T3-ThreeCommasBotStrategy-WMA_WITHOUT_REG",
+
+              "T3-ThreeCommasBotStrategy-DEMA",
+              "T3-ThreeCommasBotStrategy-DEMA_WITHOUT_REG"
+              
+              "T3-ThreeCommasBotStrategy-VWMA",
+              "T3-ThreeCommasBotStrategy-VWMA_WITHOUT_REG",
+
+              "T3-ThreeCommasBotStrategy-VWAP",
+              "T3-ThreeCommasBotStrategy-VWAP_WITHOUT_REG",
+
+              "T3-ThreeCommasBotStrategy-T3",
+              "T3-ThreeCommasBotStrategy-T3_WITHOUT_REG",
+
+              "T3-MomentumBasedZigZag",
+              "T3-MomentumBasedZigZag_WITHOUT_REG",
+
+              "T3-DekidakaAshiSignals",
+              "T3-DekidakaAshiSignals_WITHOUT_REG",
+
+              "T3-SuperTrendCleaned",
+              "T3-SuperTrendCleaned_WITHOUT_REG",
+
+              "T3-ScaledNormalizedVector",
+              "T3-ScaledNormalizedVector_WITHOUT_REG",
+
+              "T3-RangeFilters",
+              "T3-RangeFilters_WITHOUT_REG",
+
               "AdxCrossover_M15",
               "AdxCrossover_H1",
               "AdxCrossover_H4",
@@ -709,7 +778,7 @@ def proceedSignal(signal):
                      'strategy': strategy})
 
 
-    with Session.begin() as session:
+    with (Session.begin() as session):
 
         if signal.symbol not in symbols:
             #print(f"Ignore Signal because symbol is not handled yet: {signal}")
@@ -765,7 +834,30 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "T3-ReversalFinder" \
+        if strategy == "T3-MacdHistogram-LLTDEMA" \
+                or strategy == "T3-MacdHistogram-TDEMA" \
+                or strategy == "T3-MacdHistogram-DEMA" \
+                or strategy == "T3-MacdHistogram-EMA" \
+                or strategy == "T3-MacdHistogram-THMA" \
+                or strategy == "T3-MacdHistogram-ZLEMA" \
+                or strategy == "T3-MacdHistogram-ZLTEMA" \
+                or strategy == "T3-NeutronixAi" \
+                or strategy == "T3-NeutronixScalping" \
+                or strategy == "T3-ThreeCommasBotStrategy-EMA" \
+                or strategy == "T3-ThreeCommasBotStrategy-HEMA" \
+                or strategy == "T3-ThreeCommasBotStrategy-SMA" \
+                or strategy == "T3-ThreeCommasBotStrategy-HMA" \
+                or strategy == "T3-ThreeCommasBotStrategy-WMA" \
+                or strategy == "T3-ThreeCommasBotStrategy-DEMA" \
+                or strategy == "T3-ThreeCommasBotStrategy-VWMA" \
+                or strategy == "T3-ThreeCommasBotStrategy-VWAP" \
+                or strategy == "T3-ThreeCommasBotStrategy-T3" \
+                or strategy == "T3-MomentumBasedZigZag" \
+                or strategy == "T3-DekidakaAshiSignals" \
+                or strategy == "T3-SuperTrendCleaned" \
+                or strategy == "T3-ScaledNormalizedVector" \
+                or strategy == "T3-RangeFilters" \
+                or strategy == "T3-ReversalFinder" \
                 or strategy == "T3-PinBarStrategy" \
                 or strategy == "T3-ThirdWave" \
                 or strategy == "T3-Lube" \
