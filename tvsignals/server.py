@@ -209,6 +209,12 @@ strategies = ["NNR",
               "T3-RangeFilters",
               "T3-RangeFilters_WITHOUT_REG",
 
+              "T3-NeutronixDCAemu",
+              "T3-NeutronixDCAemu_WITHOUT_REG",
+
+              "T3-UhlMASystem",
+              "T3-UhlMASystem_WITHOUT_REG",
+
               "AdxCrossover_M15",
               "AdxCrossover_H1",
               "AdxCrossover_H4",
@@ -834,7 +840,9 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "T3-MacdHistogram-LLTDEMA" \
+        if strategy =="T3-UhlMASystem" \
+                or strategy == "T3-NeutronixDCAemu" \
+                or strategy == "T3-MacdHistogram-LLTDEMA" \
                 or strategy == "T3-MacdHistogram-TDEMA" \
                 or strategy == "T3-MacdHistogram-DEMA" \
                 or strategy == "T3-MacdHistogram-EMA" \
