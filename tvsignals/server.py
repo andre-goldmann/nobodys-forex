@@ -164,6 +164,9 @@ strategies = ["NNR",
               "T3-NeutronixAi",
               "T3-NeutronixAi_WITHOUT_REG",
 
+              "T3-NeutronixSwing",
+              "T3-NeutronixSwing_WITHOUT_REG",
+
               "T3-NeutronixScalping",
               "T3-NeutronixScalping_WITHOUT_REG",
 
@@ -214,6 +217,9 @@ strategies = ["NNR",
 
               "T3-UhlMASystem",
               "T3-UhlMASystem_WITHOUT_REG",
+
+              "T3-LlorensActivator",
+              "T3-LlorensActivator_WITHOUT_REG",
 
               "AdxCrossover_M15",
               "AdxCrossover_H1",
@@ -784,7 +790,7 @@ def proceedSignal(signal):
                      'strategy': strategy})
 
 
-    with (Session.begin() as session):
+    with ((Session.begin() as session)):
 
         if signal.symbol not in symbols:
             #print(f"Ignore Signal because symbol is not handled yet: {signal}")
@@ -840,7 +846,8 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy =="T3-UhlMASystem" \
+        if strategy == "T3-LlorensActivator" \
+                or strategy =="T3-UhlMASystem" \
                 or strategy == "T3-NeutronixDCAemu" \
                 or strategy == "T3-MacdHistogram-LLTDEMA" \
                 or strategy == "T3-MacdHistogram-TDEMA" \
@@ -849,6 +856,7 @@ def proceedSignal(signal):
                 or strategy == "T3-MacdHistogram-THMA" \
                 or strategy == "T3-MacdHistogram-ZLEMA" \
                 or strategy == "T3-MacdHistogram-ZLTEMA" \
+                or strategy == "T3-NeutronixSwing" \
                 or strategy == "T3-NeutronixAi" \
                 or strategy == "T3-NeutronixScalping" \
                 or strategy == "T3-ThreeCommasBotStrategy-EMA" \
