@@ -3,7 +3,7 @@
   <component name="Black">
     <option name="sdkName" value="3.10 @ Ubuntu-22.04" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_20" project-jdk-name="3.11 @ Ubuntu-22.04" project-jdk-type="Python SDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_20" project-jdk-name="Python 3.11 (chat-bot)" project-jdk-type="Python SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
