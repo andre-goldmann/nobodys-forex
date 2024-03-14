@@ -186,7 +186,7 @@ strategies = ["NNR",
               "T3-ThreeCommasBotStrategy-WMA_WITHOUT_REG",
 
               "T3-ThreeCommasBotStrategy-DEMA",
-              "T3-ThreeCommasBotStrategy-DEMA_WITHOUT_REG"
+              "T3-ThreeCommasBotStrategy-DEMA_WITHOUT_REG",
               
               "T3-ThreeCommasBotStrategy-VWMA",
               "T3-ThreeCommasBotStrategy-VWMA_WITHOUT_REG",
