@@ -144,7 +144,7 @@ strategies = ["NNR",
               "T3-MacdHistogram-LLTDEMA_WITHOUT_REG",
 
               "T3-MacdHistogram-TDEMA",
-              "T3-MacdHistogram-TDEMA_WITHOUT_REG"
+              "T3-MacdHistogram-TDEMA_WITHOUT_REG",
               
               "T3-MacdHistogram-DEMA",
               "T3-MacdHistogram-DEMA_WITHOUT_REG",
