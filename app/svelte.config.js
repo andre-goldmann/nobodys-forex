@@ -9,15 +9,15 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapterMulti([
-			adapterStatic({ pages: 'build-static', assets: 'build-static', precompress: false }),
-			adapterNode({ out: 'build-node', precompress: false })
-		]),
-
-		// Override http methods in the Todo forms
-		methodOverride: {
-			allowed: ['PATCH', 'DELETE']
-		}
+		adapter: adapter({
+			// default options are shown. On some platforms
+			// these options are set automatically — see below
+			pages: 'build',
+			assets: 'build',
+			fallback: undefined,
+			precompress: false,
+			strict: true
+		})
 	}
 };
 
