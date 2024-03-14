@@ -92,7 +92,7 @@ services:
     container_name: tvsignals
     build: ./tvsignals
     ports:
-      - "80:80"
+      - "1080:1080"
     volumes:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
     #env_file:
