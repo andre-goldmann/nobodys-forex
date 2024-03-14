@@ -13,6 +13,4 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 #
 COPY ./ /code/
 
-#
-#CMD ["uvicorn", "server:app",  "--proxy-headers", "--host", "0.0.0.0", "--port", "6081"]
 CMD ["python", "./server.py"]
