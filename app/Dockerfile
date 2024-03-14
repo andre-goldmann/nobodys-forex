@@ -5,8 +5,8 @@ COPY ./package.json /app/
 RUN npm install
 COPY ./ /app/
 
-RUN npm run build --output-path=/dist/out --output-hashing=all
+RUN npm run build --output-path=./dist/out
 
 # Stage 2: Serve it using Ngnix
 FROM nginx:stable-alpine
-COPY --from=build-stage /app/dist/out/browser /usr/share/nginx/html
+COPY --from=build-stage /app/.svelte-kit/output/server /usr/share/nginx/html
