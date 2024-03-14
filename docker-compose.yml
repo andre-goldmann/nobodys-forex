@@ -54,26 +54,26 @@ services:
     #  - DB_ROOT_PWD
     #  - MYSQL_PWD
 
-  nginx:
-    container_name: middlenginx
-    image: nginx:stable-alpine
-    expose:
-      - "80"
-    ports:
-      - "80:80"
-    volumes:
+  #nginx:
+  #  container_name: middlenginx
+  #  image: nginx:stable-alpine
+  #  expose:
+  #    - "80"
+  #  ports:
+  #    - "80:80"
+  #  volumes:
       #- ./matomo:/var/www/html:z,ro
-      - ./nginx.middle.conf:/etc/nginx/conf.d/default.conf:rw
+   #   - ./nginx.middle.conf:/etc/nginx/conf.d/default.conf:rw
       #- ./matomo.conf:/etc/nginx/conf.d/default.conf:z,ro
 
-  forexapp:
-    container_name: forexapp
-    build:
-      context: ./app
-      dockerfile: ./Dockerfile
-    volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
+  #forexapp:
+  #  container_name: forexapp
+  #  build:
+  #    context: ./app
+  #    dockerfile: ./Dockerfile
+  #  volumes:
+  #    - .:/usr/app/
+  #    - /usr/app/node_modules
 
 
   backend:
