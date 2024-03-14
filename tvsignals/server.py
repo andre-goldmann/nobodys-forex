@@ -790,7 +790,7 @@ def proceedSignal(signal):
                      'strategy': strategy})
 
 
-    with ((Session.begin() as session)):
+    with (Session.begin() as session):
 
         if signal.symbol not in symbols:
             #print(f"Ignore Signal because symbol is not handled yet: {signal}")
