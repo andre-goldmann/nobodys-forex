@@ -1004,4 +1004,4 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
 if __name__ == "__main__":
     Base.metadata.create_all(engine)
     #port can only be 80 see tradingview
-    uvicorn.run(app, host="0.0.0.0", port=1080)
+    uvicorn.run(app, host="0.0.0.0", port=80)
