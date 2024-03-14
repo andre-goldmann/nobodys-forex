@@ -9,4 +9,4 @@ RUN npm run build --output-path=./dist/out --output-hashing=all
 
 # Stage 2: Serve it using Ngnix
 FROM nginx:stable-alpine
-COPY --from=build-stage /app/dist/out/browser /usr/share/nginx/html
+COPY --from=build-stage ./dist/out/browser /usr/share/nginx/html
