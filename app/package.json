@@ -15,6 +15,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^1.20.4",
 		"@types/uuid": "^9.0.4",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
@@ -35,14 +36,14 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"daisyui": "^3.8.3",
-		"uuid": "^9.0.1",
-		"ws-reqonet": "^1.0.0",
-		"sass": "^1.66.1",
-		"svelte-routing": "^2.0.0",
 		"@popperjs/core": "^2.11.8",
 		"@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
+		"daisyui": "^3.8.3",
 		"postcss-import": "^15.1.0",
-		"postcss-nested": "^6.0.1"
+		"postcss-nested": "^6.0.1",
+		"sass": "^1.66.1",
+		"svelte-routing": "^2.0.0",
+		"uuid": "^9.0.1",
+		"ws-reqonet": "^1.0.0"
 	}
 }
