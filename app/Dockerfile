@@ -1,12 +1,29 @@
-# Stage 1: Build frontend
-FROM node:latest as build-stage
-WORKDIR ./app
-COPY ./package.json /app/
-RUN npm install
-COPY ./ /app/
+FROM node:18.9-alpine
 
-RUN npm run build --output-path=./dist/out
+ENV NODE_ENV development
 
-# Stage 2: Serve it using Ngnix
-FROM nginx:stable-alpine
-COPY --from=build-stage /app/.svelte-kit/output/server /usr/share/nginx/html
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+COPY package*.json pnpm-lock.yaml* ./
+
+RUN pnpm i
+
+COPY . .
+
+ENV NODE_ENV production
+
+RUN pnpm run build
+
+FROM node:18.9-slim
+
+WORKDIR /app
+
+COPY --from=0 /app .
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["node", "./build"]
