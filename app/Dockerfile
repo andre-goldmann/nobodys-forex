@@ -1,15 +1,21 @@
-# Stage 1: Build frontend
-FROM node:latest as build-stage
-WORKDIR ./app
-COPY ./package.json /app/
-RUN npm install
-COPY ./ /app/
+FROM node:18-alpine AS build
 
-EXPOSE 3000
+WORKDIR /app
+COPY . .
+RUN yarn
+RUN yarn build
 
-RUN npm run build --output-path=./dist/out
-RUN npm run dev
+FROM nginx:1.23.3-alpine-slim AS deploy-static
 
-# Stage 2: Serve it using Ngnix
-#FROM nginx:stable-alpine
-#COPY --from=build-stage /app/.svelte-kit/output/server /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY --from=build /app/build-static .
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+FROM node:18-alpine AS deploy-node
+
+WORKDIR /app
+RUN rm -rf ./*
+COPY --from=build /app/package.json .
+COPY --from=build /app/build-node .
+CMD ["node", "index.js"]
