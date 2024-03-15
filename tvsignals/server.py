@@ -224,6 +224,9 @@ strategies = ["NNR",
               "T3-CustomSuperTrendCleaned",
               "T3-CustomSuperTrendCleaned_WITHOUT_REG",
 
+              "T3-BilateralStochasticOscillator",
+              "T3-BilateralStochasticOscillator_WITHOUT_REG",
+
               "AdxCrossover_M15",
               "AdxCrossover_H1",
               "AdxCrossover_H4",
@@ -849,7 +852,8 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy == "T3-CustomSuperTrendCleaned" \
+        if strategy == "T3-BilateralStochasticOscillator" \
+                or strategy == "T3-CustomSuperTrendCleaned" \
                 or strategy == "T3-LlorensActivator" \
                 or strategy =="T3-UhlMASystem" \
                 or strategy == "T3-NeutronixDCAemu" \
