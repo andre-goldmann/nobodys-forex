@@ -717,8 +717,6 @@ async def signals(signal:SignalDto):
     proceedSignal(signal)
 
 
-
-
 def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
     df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4, session, 10000)
     atrValue = atr(df)
@@ -784,7 +782,9 @@ def proceedSignal(signal):
     #ignored XRPUSD
     if signal.symbol == "XRPUSD":
         return
-
+    #generates too much signals
+    if "T3-MesaPhasor" == signal.strategy:
+        return
     strategy = signal.strategy.replace("GaussianChannelTrendAi", "GaussianChannelTrendAI")
     strategy = strategy.replace("T3-machineLearningLogisticRegression","T3-MachineLearningLogisticRegression")
     jsonSignal =str({'symbol': signal.symbol,
