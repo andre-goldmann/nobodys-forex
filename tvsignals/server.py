@@ -783,7 +783,7 @@ def proceedSignal(signal):
     if signal.symbol == "XRPUSD":
         return
     #generates too much signals
-    if "T3-MesaPhasor" == signal.strategy:
+    if "T3-MesaPhasor" == signal.strategy or "T3-VolumeDifferenceDeltaCycleOscillator" == signal.strategy:
         return
     strategy = signal.strategy.replace("GaussianChannelTrendAi", "GaussianChannelTrendAI")
     strategy = strategy.replace("T3-machineLearningLogisticRegression","T3-MachineLearningLogisticRegression")
