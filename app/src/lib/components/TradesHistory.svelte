@@ -11,7 +11,9 @@
         strategiesSelected,
         strategySelected
     } from "$lib/store";
-
+    const mindSucessPercentage = 65;
+    const mindSucessTrades = 150;
+    const allTradesPerStrategyCount = 300;
     const HOST = "http://85.215.32.163:6081";
     let active:boolean = true;
     let trades:Trade[] = [
@@ -103,7 +105,7 @@
                         <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
 
                             {#each $strategies as strategy}
-                                {#if strategy.tradestotal > 100}
+                                {#if strategy.tradestotal >= allTradesPerStrategyCount}
                                     <li class="pb-3 sm:pb-4 cursor-pointer" on:click={() => onStrategySelected(strategy)}>
                                         <div class="flex items-center space-x-4 rtl:space-x-reverse">
                                             <div class="flex-1 min-w-0">
@@ -199,14 +201,14 @@
                     <div class="w-full h-full flex items-start justify-start overflow-x-auto">
                         <ul class="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
                             {#each $instrumentStats as stat}
-                                {#if stat.tradestotal > 100}
+                                {#if stat.tradestotal > mindSucessTrades}
                                     <li class="pb-3 sm:pb-4 cursor-pointer" on:click={() => onInstrumentSelected(stat)}>
                                         <!--
                                         Python:
                                         percentage = (100 / signalStats.alltrades) * signalStats.successtrades
                                         if percentage < 60:
                                         -->
-                                            <div class={(100 / stat.tradestotal) * stat.tradessuccess > 58.0 && stat.tradestotal > 100 ? "bg-green-400 flex items-center space-x-4 rtl:space-x-reverse": "bg-red-400 flex items-center space-x-4 rtl:space-x-reverse"}>
+                                            <div class={(100 / stat.tradestotal) * stat.tradessuccess > mindSucessPercentage && stat.tradestotal >= mindSucessTrades ? "bg-green-400 flex items-center space-x-4 rtl:space-x-reverse": "bg-red-400 flex items-center space-x-4 rtl:space-x-reverse"}>
                                              <!--div class="flex items-center space-x-4 rtl:space-x-reverse"-->
                                               <div class="flex-1 min-w-0">
                                                   <p class="text-sm font-medium truncate text-black">
