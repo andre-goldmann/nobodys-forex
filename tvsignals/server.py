@@ -227,8 +227,8 @@ strategies = ["NNR",
               "T3-BilateralStochasticOscillator",
               "T3-BilateralStochasticOscillator_WITHOUT_REG",
 
-              "3-NickRypockTrailingReverse",
-              "3-NickRypockTrailingReverse_WITHOUT_REG",
+              "T3-NickRypockTrailingReverse",
+              "T3-NickRypockTrailingReverse_WITHOUT_REG",
 
               "AdxCrossover_M15",
               "AdxCrossover_H1",
@@ -786,8 +786,11 @@ def proceedSignal(signal):
     if signal.symbol == "XRPUSD":
         return
     #generates too much signals
-    if "T3-MesaPhasor" == signal.strategy or "T3-VolumeDifferenceDeltaCycleOscillator" == signal.strategy:
+    if "T3-MesaPhasor" == signal.strategy \
+            or "T3-VolumeDifferenceDeltaCycleOscillator" == signal.strategy \
+            or "T3-ScaledNormalizedVector" == signal.strategy:
         return
+
     strategy = signal.strategy.replace("GaussianChannelTrendAi", "GaussianChannelTrendAI")
     strategy = strategy.replace("T3-machineLearningLogisticRegression","T3-MachineLearningLogisticRegression")
     jsonSignal =str({'symbol': signal.symbol,
@@ -855,7 +858,7 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy== "3-NickRypockTrailingReverse" \
+        if strategy== "T3-NickRypockTrailingReverse" \
                 or strategy == "T3-BilateralStochasticOscillator" \
                 or strategy == "T3-CustomSuperTrendCleaned" \
                 or strategy == "T3-LlorensActivator" \
