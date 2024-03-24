@@ -230,6 +230,9 @@ strategies = ["NNR",
               "T3-NickRypockTrailingReverse",
               "T3-NickRypockTrailingReverse_WITHOUT_REG",
 
+              "T3-GridLike",
+              "T3-GridLike_WITHOUT_REG",
+
               "AdxCrossover_M15",
               "AdxCrossover_H1",
               "AdxCrossover_H4",
@@ -858,7 +861,8 @@ def proceedSignal(signal):
         #print("++++++++++++++++++++++++FIRST CHECKS PASSED++++++++++++++++++++++++")
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
-        if strategy== "T3-NickRypockTrailingReverse" \
+        if strategy == "T3-GridLike" \
+                or strategy== "T3-NickRypockTrailingReverse" \
                 or strategy == "T3-BilateralStochasticOscillator" \
                 or strategy == "T3-CustomSuperTrendCleaned" \
                 or strategy == "T3-LlorensActivator" \
