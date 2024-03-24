@@ -116,14 +116,14 @@ services:
       - db:/var/lib/postgresql/data
     command: -p 6432
 
-  forexfrontend:
-    container_name: forexfrontend
-    build:
-      context: ./forex-frontend
-      dockerfile: ./Dockerfile
-    volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
+  #forexfrontend:
+  #  container_name: forexfrontend
+  #  build:
+  #    context: ./forex-frontend
+  #    dockerfile: ./Dockerfile
+  #  volumes:
+  #    - .:/usr/app/
+  #    - /usr/app/node_modules
 
 
 volumes:
