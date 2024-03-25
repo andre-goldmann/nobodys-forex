@@ -11,4 +11,4 @@ RUN npm run build -- --output-path=./dist/out --output-hashing=all
 FROM nginx:stable-alpine
 COPY --from=build-stage /app/dist/out/browser /usr/share/nginx/html
 
-EXPOSE 4200
+
