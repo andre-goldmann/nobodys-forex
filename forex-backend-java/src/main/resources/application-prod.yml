@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db:6432/trading-db
+    username: nobodysforex
+    password: pwd
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: TRACE
