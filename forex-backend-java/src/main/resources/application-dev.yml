@@ -9,8 +9,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://172.26.181.56/:8180/auth/realms/school_admininstrator
-          jwk-set-uri: http://172.26.181.56:8180/auth/realms/school_admininstrator/protocol/openid-connect/certs
+          issuer-uri: http://172.31.189.25:8180/auth/realms/forex_admininstrator
+          jwk-set-uri: http://172.31.189.25:8180/auth/realms/forex_admininstrator/protocol/openid-connect/certs
   datasource:
     url: jdbc:postgresql://172.31.189.25:6432/trading-db
     username: nobodysforex

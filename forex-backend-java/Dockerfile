@@ -32,6 +32,5 @@ COPY --from=builder /app/target/forex-backend-java-0.0.1-SNAPSHOT.jar .
 # Expose the port that the application runs on
 EXPOSE 8080
 
-# mvn spring-boot:run -Dspring-boot.run.profiles=prod
 # Define the command to run the application when the container starts
-CMD ["java", "-jar", "forex-backend-java-0.0.1-SNAPSHOT.jar", "--spring-boot.run.profiles=prod"]
+CMD ["java", "-jar", "-Dspring.profiles.active=dev", "forex-backend-java-0.0.1-SNAPSHOT.jar"]

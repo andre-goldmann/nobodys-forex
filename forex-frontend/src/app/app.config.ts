@@ -13,7 +13,7 @@ import {authenticationInterceptor} from "./guards/auth.interceptor";
 
 export const NODE_HOST = 'http://nodebackend';
 
-export const SPRING_HOST = 'http://localhost:5000/resource-server';
+export const SPRING_HOST = 'http://172.31.189.25:5000/resource-server';
 
 //export const HOST_HOST = 'http://172.17.134.138:3000';
 // Muss ggf. in Keycloak siehe "Valid redirect URIs" geändert werden
@@ -23,9 +23,9 @@ export const WEB_HOST = 'http://localhost:4200';
 
 export  const KEYCLOACK_HOST = "http://172.31.189.25:8180:8180/auth/realms/forex_admininstrator";
 
-export const CLIENT_ID = 'school-admininstrator-client';
+export const CLIENT_ID = 'forex_admininstrator-client';
 // das ist Mist, wie geht das anders?
-export const CLIENT_SECRET='PfQER9b4JBjMXOvESdqHFctrJeDll20z';
+export const CLIENT_SECRET='YMXIIP3j7PVKmqNvOdDHaANWLUk2KThB';
 
 const useSilentRefreshForCodeFlow = false;
 

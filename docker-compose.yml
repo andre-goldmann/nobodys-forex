@@ -20,7 +20,7 @@ services:
     container_name: keycloak
     #image: quay.io/keycloak/keycloak:legacy
     image: quay.io/keycloak/keycloak:23.0.3
-    restart: always
+    restart: on-failure
     env_file:
       - ./keycloak.dev.env
     volumes:
@@ -34,6 +34,20 @@ services:
       - "8180"
     depends_on:
       - "db"
+
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    env_file:
+      - ./database.dev.env
+    expose:
+      - "6432" # Publishes 5433 to other containers but NOT to host machine
+    ports:
+      - '6432:6432'
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./init-multi-postgres-databases.sh:/docker-entrypoint-initdb.d/init-multi-postgres-databases.sh
+    command: -p 6432
 
   backend:
     container_name: backend
@@ -49,7 +63,7 @@ services:
   javabackend:
     container_name: javabackend
     build: ./forex-backend-java
-    restart: on-failure
+    restart: always
     expose:
       - '8080'
     ports:
@@ -57,6 +71,7 @@ services:
     #volumes:
     #  - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/backend
     depends_on:
+      - "db"
       - "keycloak"
 
   tvsignals:
@@ -66,20 +81,6 @@ services:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
     depends_on:
       - "keycloak"
-
-  db:
-    image: postgres:14.1-alpine
-    restart: always
-    env_file:
-        - ./database.dev.env
-    expose:
-      - "6432" # Publishes 5433 to other containers but NOT to host machine
-    ports:
-      - '6432:6432'
-    volumes:
-      - db:/var/lib/postgresql/data
-      - ./init-multi-postgres-databases.sh:/docker-entrypoint-initdb.d/init-multi-postgres-databases.sh
-    command: -p 6432
 
   forexfrontend:
     container_name: forexfrontend
@@ -91,7 +92,6 @@ services:
       - /usr/app/node_modules
     depends_on:
       - "keycloak"
-
 
 volumes:
   db:
