@@ -1,8 +1,9 @@
-package jdg.digital.forexbackend.model;
+package jdg.digital.forexbackend.domain.model;
 
-import org.goldmann.backend.interfaces.users.UserDto;
+import jdg.digital.forexbackend.interfaces.users.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import jdg.digital.forexbackend.model.UserEntity;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

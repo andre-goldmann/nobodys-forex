@@ -1,13 +1,12 @@
 package jdg.digital.forexbackend.interfaces.users;
 
 import jakarta.validation.Valid;
+import jdg.digital.forexbackend.domain.model.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import jdg.digital.forexbackend.domain.UserService;
-import jdg.digital.forexbackend.domain.model.UserMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 import java.util.UUID;
 

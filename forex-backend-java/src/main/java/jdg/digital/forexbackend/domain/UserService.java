@@ -1,10 +1,11 @@
 package jdg.digital.forexbackend.domain;
 
+import jdg.digital.forexbackend.domain.model.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import jdg.digital.forexbackend.model.UserEntity;
 import jdg.digital.forexbackend.model.UserEntityRepository;
-import jdg.digital.forexbackend.model.UserMapper;
+
 import jdg.digital.forexbackend.interfaces.users.UserDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
