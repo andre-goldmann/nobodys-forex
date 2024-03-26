@@ -1,19 +1,29 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import {HttpClient} from "@angular/common/http";
+import {SidenavComponent} from "./components/sidenav/sidenav.component";
+import {BodyComponent} from "./components/body/body.component";
+
+interface SideNavToggle {
+  screenWidth: number;
+  collapsed: boolean;
+}
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [CommonModule, RouterOutlet, SidenavComponent, BodyComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'forex-frontend';
-  constructor(private http:HttpClient) {
-    this.http.get("http://localhost:8080/trades").subscribe(e => {
-      console.info(e);
-    });
+  title = 'sidenav';
+
+  isSideNavCollapsed = false;
+  screenWidth = 0;
+
+  onToggleSideNav(data: SideNavToggle): void {
+    this.screenWidth = data.screenWidth;
+    this.isSideNavCollapsed = data.collapsed;
   }
 }

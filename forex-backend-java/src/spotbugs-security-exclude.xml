@@ -1,0 +1,10 @@
+<FindBugsFilter>
+    <!--https://github.com/wso2/identity-api-server/blob/master/findbugs-exclude-filter.xml-->
+    <!-- No idea how to avoid this -->
+    <Match>
+        <Bug pattern="SPRING_ENDPOINT" />
+    </Match>
+    <Match>
+        <Bug pattern="CRLF_INJECTION_LOGS"/>
+    </Match>
+</FindBugsFilter>
