@@ -5,9 +5,12 @@ WORKDIR /app
 
 # Copy the Maven project file
 COPY pom.xml .
+COPY spotbugs-security-exclude.xml .
+COPY spotbugs-security-include.xml .
 
 # Copy the source code
 COPY src ./src
+
 
 # Build the application with Maven
 RUN mvn clean install -DskipTests

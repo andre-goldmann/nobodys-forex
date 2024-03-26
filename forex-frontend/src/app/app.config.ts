@@ -21,7 +21,7 @@ export const WEB_HOST = 'http://localhost:4200';
 // How to get IP from docker?
 //export const WEB_HOST = 'http://172.26.187.22';
 
-export  const KEYCLOACK_HOST = "http://172.26.181.56:8180/auth/realms/school_admininstrator";
+export  const KEYCLOACK_HOST = "http://172.31.189.25:8180:8180/auth/realms/forex_admininstrator";
 
 export const CLIENT_ID = 'school-admininstrator-client';
 // das ist Mist, wie geht das anders?
