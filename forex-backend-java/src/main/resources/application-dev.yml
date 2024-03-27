@@ -1,5 +1,5 @@
 server:
-  port: 5000
+  port: 5080
   forward-headers-strategy: framework
   servlet:
     context-path: /resource-server
@@ -9,10 +9,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://172.31.189.25:8180/auth/realms/forex_admininstrator
-          jwk-set-uri: http://172.31.189.25:8180/auth/realms/forex_admininstrator/protocol/openid-connect/certs
+          issuer-uri: http://172.31.138.212:8180/auth/realms/forex_admininstrator
+          jwk-set-uri: http://172.31.138.212:8180/auth/realms/forex_admininstrator/protocol/openid-connect/certs
   datasource:
-    url: jdbc:postgresql://172.31.189.25:6432/trading-db
+    url: jdbc:postgresql://172.31.138.212:6432/trading-db
     username: nobodysforex
     password: pwd
   jpa:

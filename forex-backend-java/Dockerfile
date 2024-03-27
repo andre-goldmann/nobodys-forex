@@ -30,7 +30,7 @@ COPY --from=builder /app/target/forex-backend-java-0.0.1-SNAPSHOT.jar .
 #COPY src/main/resources/application-prod.yml /app/application-prod.yml
 
 # Expose the port that the application runs on
-EXPOSE 8080
+EXPOSE 5080
 
 # Define the command to run the application when the container starts
-CMD ["java", "-jar", "-Dspring.profiles.active=dev", "forex-backend-java-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "forex-backend-java-0.0.1-SNAPSHOT.jar"]
