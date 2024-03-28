@@ -82,9 +82,8 @@ export class AuthService {
     params.append('client_secret', CLIENT_SECRET);
     params.append('redirect_uri', WEB_HOST);
     params.append('code',code);
-    let headers =
-      new HttpHeaders({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'});
-    this.oauthService.fetchTokenUsingGrant('authorization_code', params, headers)
+
+    this.oauthService.fetchTokenUsingGrant('authorization_code', params)
       .then(e => {
         console.info("Got token");
         console.info(e);
