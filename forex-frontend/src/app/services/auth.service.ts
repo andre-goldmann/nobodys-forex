@@ -89,7 +89,6 @@ export class AuthService {
       //.pipe(filter((e) => e.type === 'token_received'))
       .subscribe((value) => {
         console.info("Event from oauthService" + value.type);
-        console.info("token_received: " + this.oauthService.getAccessToken());
 
         const scopes = this.oauthService.getGrantedScopes();
         console.info('scopes', scopes);
@@ -122,27 +121,6 @@ export class AuthService {
           sessionStorage.setItem("user_id", userProfile.sub);
         });
       }
-      /*this.oauthService.loadUserProfile().then(profile => {
-        console.info(profile);
-        let userProfile = profile as UserProfile;
-
-        sessionStorage.setItem("user_id", userProfile.info.sid);
-        this.user.set({
-          id: userProfile.info.sid,
-          fullName: userProfile.info.full_name,
-          age: 0,
-          email: userProfile.info.email,
-          password: "string",
-          posts: [],
-          createdAt: "string",
-          updatedAt: "string",
-          deletedAt: "string"
-        });
-        console.info(this.user());
-
-      }).catch(err => {
-        console.error(err);
-      });*/
     }
   }
 
@@ -156,21 +134,6 @@ export class AuthService {
 
   getAccessToken() {
     return this.oauthService.hasValidAccessToken() ? this.oauthService.getAccessToken() : null;
-  }
-
-  processIdToken(c: any) {
-    //API :
-    //https://github.com/manfredsteyer/angular-oauth2-oidc/blob/master/projects/lib/src/oauth-service.ts
-    this.oauthService.processIdToken(c.id_token, c.access_token).then(h=>{
-      this.storeIdToken(h)
-    });
-  }
-
-  storeIdToken(t:any) {
-      sessionStorage.setItem("id_token", t.idToken);
-      sessionStorage.setItem("id_token_claims_obj", t.idTokenClaimsJson);
-      sessionStorage.setItem("id_token_expires_at", "" + t.idTokenExpiresAt * 100000000);
-      sessionStorage.setItem("id_token_stored_at", "" + new Date().getTime())
   }
 
 }

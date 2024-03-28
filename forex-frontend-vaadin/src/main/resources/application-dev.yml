@@ -1,0 +1,26 @@
+server:
+  port: 5080
+  forward-headers-strategy: framework
+  servlet:
+    context-path: /resource-server
+
+spring:
+  datasource:
+    url: jdbc:postgresql://172.31.138.212:6432/trading-db
+    username: nobodysforex
+    password: pwd
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    root: INFO
+    org:
+      hibernate:
+        SQL: DEBUG
+        type.descriptor.sql.BasicBinder: TRACE
