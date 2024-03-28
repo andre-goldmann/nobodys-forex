@@ -70,6 +70,22 @@ export class AuthService {
     return EMPTY;
   }
 
+  fetchToken(code:string){
+    let params = new URLSearchParams();
+    params.append('grant_type','authorization_code');
+    params.append('client_id', CLIENT_ID);
+    params.append('client_secret', CLIENT_SECRET);
+    params.append('redirect_uri', WEB_HOST);
+    params.append('code',code);
+    let headers =
+      new HttpHeaders({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'});
+    this.oauthService.fetchTokenUsingGrant('authorization_code', params, headers)
+      .then(e => {
+        console.info("Got token");
+        console.info(e);
+      });
+  }
+
   init() {
     console.info(this.oauthService.getAccessToken());
     console.info("state: " + this.oauthService.state);

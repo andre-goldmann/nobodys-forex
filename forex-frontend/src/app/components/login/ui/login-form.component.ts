@@ -41,7 +41,8 @@ export class LoginFormComponent implements OnInit {
     if(i != -1) {
 
       let code = window.location.href.substring(i + 5);
-      this.retrieveToken(code);
+      this.authService.fetchToken(code);
+      //this.retrieveToken(code);
 
     }
   }
