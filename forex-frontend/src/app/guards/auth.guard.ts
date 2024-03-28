@@ -8,10 +8,6 @@ export const isAuthenticatedGuard = (): CanActivateFn => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    console.info("hasValidAccessToken:" + authService.hasValidAccessToken());
-    console.info("hasValidIdToken:" + authService.hasValidIdToken());
-    console.info("getAccessToken:" + authService.getAccessToken());
-    //console.info("getAccessToken from session-storage:" + sessionStorage.getItem("access_token"));
 
     if(authService.hasValidAccessToken()
       && authService.hasValidIdToken()){

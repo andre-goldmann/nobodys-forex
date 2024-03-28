@@ -1,13 +1,12 @@
-import {Injectable, signal} from '@angular/core';
+import {Injectable} from '@angular/core';
 
-import {EMPTY, filter, Observable} from "rxjs";
-import {Post, User, UserProfile} from "../models/models";
+import {EMPTY, Observable} from "rxjs";
+import {UserProfile} from "../models/models";
 import {Credentials} from "../models/credentials";
 import {Router} from "@angular/router";
 import {OAuthService} from "angular-oauth2-oidc";
-import {AUTH_CONFIG, CLIENT_ID, CLIENT_SECRET, KEYCLOACK_HOST, WEB_HOST} from "../app.config";
-import {JwksValidationHandler} from "angular-oauth2-oidc-jwks";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {AUTH_CONFIG, CLIENT_ID, CLIENT_SECRET, WEB_HOST} from "../app.config";
+import {HttpClient} from "@angular/common/http";
 
 type LoginEventType = 'token_received';
 export class LoginEvent {
@@ -18,16 +17,13 @@ export class LoginEvent {
   providedIn: 'root',
 })
 export class AuthService {
-  //user = signal({} as User);
+
 
   constructor(private router: Router,
               private oauthService: OAuthService,
               private http:HttpClient) {
   }
 
-  //public getUser():User{
-  //return this.user();
-  //}
 
   createAccount(credentials: Credentials):Observable<void> {
     return EMPTY;
@@ -41,12 +37,9 @@ export class AuthService {
         console.info("then loadDiscoveryDocumentAndLogin executed");
         this.oauthService.setupAutomaticSilentRefresh();
 
-        //this.initialized$.next(void 0);
-        //this.initialized$.complete();
       }, () => {
         console.info("loadDiscoveryDocumentAndLogin executed");
-        //this.initialized$.next();
-        ////this.initialized$.complete();
+
       });
 
     this.oauthService.discoveryDocumentLoaded$.subscribe(e =>{
@@ -60,9 +53,6 @@ export class AuthService {
         console.info("Event from oauthService: " + value.type);
 
         console.info("token_received: " + this.oauthService.getAccessToken());
-        /*this.oauthService.loadUserProfile().then(profile => {
-          console.info(profile);
-        });*/
 
         const scopes = this.oauthService.getGrantedScopes();
         console.info('scopes', scopes);
@@ -71,10 +61,6 @@ export class AuthService {
   }
 
   fetchToken(code:string){
-    console.info("I am using:")
-    console.info(KEYCLOACK_HOST + '/protocol/openid-connect/token');
-    console.info("Impl uses:");
-    console.info(this.oauthService.tokenEndpoint);
 
     const parameters: { [key: string]: any } = {
       client_id: CLIENT_ID,
@@ -95,14 +81,8 @@ export class AuthService {
   }
 
   init() {
-    console.info(this.oauthService.getAccessToken());
-    console.info("state: " + this.oauthService.state);
-    console.info("scope: " + this.oauthService.scope);
-    this.configureCodeFlow();
 
-    console.info("using-flow: " + sessionStorage.getItem('flow'));
-    console.info("redirectUri: " + this.oauthService.redirectUri);
-    console.info("logoutUrl: " + this.oauthService.logoutUrl);
+    this.configureCodeFlow();
 
     // Automatically load user profile
     this.oauthService.events
@@ -110,9 +90,6 @@ export class AuthService {
       .subscribe((value) => {
         console.info("Event from oauthService" + value.type);
         console.info("token_received: " + this.oauthService.getAccessToken());
-        /*this.oauthService.loadUserProfile().then(profile => {
-          console.info(profile);
-        });*/
 
         const scopes = this.oauthService.getGrantedScopes();
         console.info('scopes', scopes);
@@ -120,49 +97,9 @@ export class AuthService {
   }
 
   private configureCodeFlow() {
-
     this.oauthService.configure(AUTH_CONFIG);
-
-    //this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    /*this.oauthService.loadDiscoveryDocumentAndTryLogin()
-    // das führt nach Start der Seite gleich zum Login
-    //this.oauthService.loadDiscoveryDocumentAndLogin()
-      .then(() => {
-        this.oauthService.setupAutomaticSilentRefresh();
-        //this.initialized$.next(void 0);
-        //this.initialized$.complete();
-      }, () => {
-        //this.initialized$.next();
-        ////this.initialized$.complete();
-      });*/
   }
 
-  private configureImplicitFlow() {
-    this.oauthService.configure(AUTH_CONFIG);
-    //this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-
-    this.oauthService.loadDiscoveryDocumentAndTryLogin().then((_) => {
-      //if (useHash) {
-        //  this.router.navigate(['/']);
-      //}
-    });
-
-    // Optional
-    // this.oauthService.setupAutomaticSilentRefresh();
-
-    // Display all events
-    /*this.oauthService.events.subscribe((e) => {
-      // tslint:disable-next-line:no-console
-      console.info('oauth/oidc event', e);
-    });
-
-    this.oauthService.events
-      .pipe(filter((e) => e.type === 'session_terminated'))
-      .subscribe((e) => {
-        // tslint:disable-next-line:no-console
-        console.info('Your session has been terminated!');
-      });*/
-  }
 
   logout() {
     this.oauthService.logOut();
