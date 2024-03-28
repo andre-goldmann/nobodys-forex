@@ -41,8 +41,10 @@ export class LoginFormComponent implements OnInit {
     if(i != -1) {
 
       let code = window.location.href.substring(i + 5);
+      console.info("Fetch token using oauthService");
       this.authService.fetchToken(code);
-      //this.retrieveToken(code);
+      console.info("Fetch token using own Impl");
+      this.retrieveToken(code);
 
     }
   }

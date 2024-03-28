@@ -73,7 +73,7 @@ export class AuthService {
   fetchToken(code:string){
     console.info("I am using:")
     console.info(KEYCLOACK_HOST + '/protocol/openid-connect/token');
-    console.info("Impl used:");
+    console.info("Impl uses:");
     console.info(this.oauthService.tokenEndpoint);
 
     let params = new URLSearchParams();
