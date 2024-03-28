@@ -75,8 +75,7 @@ export class AuthService {
 
     this.oauthService.fetchTokenUsingGrant('authorization_code', parameters)
       .then(e => {
-        console.info("Got token");
-        console.info(e);
+        console.info("Got token...");
         this.router.navigate(["/dashboard"]);
       });
   }
