@@ -34,27 +34,61 @@ export class AuthService {
   }
 
   login() {
-    this.oauthService.initLoginFlow();
+    console.info("Start login...");
+
+    this.oauthService.loadDiscoveryDocumentAndLogin()
+      .then(() => {
+        console.info("then loadDiscoveryDocumentAndLogin executed");
+        this.oauthService.setupAutomaticSilentRefresh();
+
+        //this.initialized$.next(void 0);
+        //this.initialized$.complete();
+      }, () => {
+        console.info("loadDiscoveryDocumentAndLogin executed");
+        //this.initialized$.next();
+        ////this.initialized$.complete();
+      });
+
+    this.oauthService.discoveryDocumentLoaded$.subscribe(e =>{
+      console.info(e);
+    });
+
+
+    this.oauthService.events
+      //.pipe(filter((e) => e.type === 'token_received'))
+      .subscribe((value) => {
+        console.info("Event from oauthService: " + value.type);
+
+        console.info("token_received: " + this.oauthService.getAccessToken());
+        /*this.oauthService.loadUserProfile().then(profile => {
+          console.info(profile);
+        });*/
+
+        const scopes = this.oauthService.getGrantedScopes();
+        console.info('scopes', scopes);
+      });
     return EMPTY;
   }
 
   init() {
+    console.info(this.oauthService.getAccessToken());
+    console.info("state: " + this.oauthService.state);
+    console.info("scope: " + this.oauthService.scope);
+    this.configureCodeFlow();
+
     console.info("using-flow: " + sessionStorage.getItem('flow'));
     console.info("redirectUri: " + this.oauthService.redirectUri);
     console.info("logoutUrl: " + this.oauthService.logoutUrl);
 
-    this.configureCodeFlow();
-
-
     // Automatically load user profile
     this.oauthService.events
-      .pipe(filter((e) => e.type === 'token_received'))
-      .subscribe((_) => {
-        console.info("######################");
-        console.info("token_received: " + this.oauthService.state);
-        this.oauthService.loadUserProfile().then(profile => {
+      //.pipe(filter((e) => e.type === 'token_received'))
+      .subscribe((value) => {
+        console.info("Event from oauthService" + value.type);
+        console.info("token_received: " + this.oauthService.getAccessToken());
+        /*this.oauthService.loadUserProfile().then(profile => {
           console.info(profile);
-        });
+        });*/
 
         const scopes = this.oauthService.getGrantedScopes();
         console.info('scopes', scopes);
@@ -66,7 +100,9 @@ export class AuthService {
     this.oauthService.configure(AUTH_CONFIG);
 
     //this.oauthService.tokenValidationHandler = new JwksValidationHandler();
-    this.oauthService.loadDiscoveryDocumentAndTryLogin()
+    /*this.oauthService.loadDiscoveryDocumentAndTryLogin()
+    // das führt nach Start der Seite gleich zum Login
+    //this.oauthService.loadDiscoveryDocumentAndLogin()
       .then(() => {
         this.oauthService.setupAutomaticSilentRefresh();
         //this.initialized$.next(void 0);
@@ -74,7 +110,7 @@ export class AuthService {
       }, () => {
         //this.initialized$.next();
         ////this.initialized$.complete();
-      });
+      });*/
   }
 
   private configureImplicitFlow() {
@@ -118,6 +154,7 @@ export class AuthService {
     //console.info(sessionStorage.getItem("user_id"));
     if(sessionStorage.getItem("user_id") === null) {
       if(AUTH_CONFIG.userinfoEndpoint) {
+        console.info("Loading user profile from " + AUTH_CONFIG.userinfoEndpoint);
         this.http.get(AUTH_CONFIG.userinfoEndpoint).subscribe(profile => {
           let userProfile = profile as UserProfile;
           console.info(profile);
@@ -161,6 +198,8 @@ export class AuthService {
   }
 
   processIdToken(c: any) {
+    //API :
+    //https://github.com/manfredsteyer/angular-oauth2-oidc/blob/master/projects/lib/src/oauth-service.ts
     this.oauthService.processIdToken(c.id_token, c.access_token).then(h=>{
       this.storeIdToken(h)
     });
@@ -170,7 +209,7 @@ export class AuthService {
       sessionStorage.setItem("id_token", t.idToken);
       sessionStorage.setItem("id_token_claims_obj", t.idTokenClaimsJson);
       sessionStorage.setItem("id_token_expires_at", "" + t.idTokenExpiresAt * 100000000);
-      sessionStorage.setItem("id_token_stored_at", "" + Date.now())
+      sessionStorage.setItem("id_token_stored_at", "" + new Date().getTime())
   }
 
 }

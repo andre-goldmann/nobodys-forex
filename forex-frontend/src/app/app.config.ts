@@ -13,19 +13,19 @@ import {authenticationInterceptor} from "./guards/auth.interceptor";
 
 export const NODE_HOST = 'http://nodebackend';
 
-export const SPRING_HOST = 'http://172.31.189.25:5000/resource-server';
+export const SPRING_HOST = 'http://localhost:5000/resource-server';
 
 //export const HOST_HOST = 'http://172.17.134.138:3000';
 // Muss ggf. in Keycloak siehe "Valid redirect URIs" geändert werden
-export const WEB_HOST = 'http://localhost:4200';
+export const WEB_HOST = window.location.origin;//'http://172.31.138.212';
 // How to get IP from docker?
 //export const WEB_HOST = 'http://172.26.187.22';
-
-export  const KEYCLOACK_HOST = "http://172.31.189.25:8180:8180/auth/realms/forex_admininstrator";
+//http://localhost:4200/login/oauth2/code/keycloak
+export  const KEYCLOACK_HOST = "http://172.31.138.212:8180/realms/forex_admininstrator";
 
 export const CLIENT_ID = 'forex_admininstrator-client';
 // das ist Mist, wie geht das anders?
-export const CLIENT_SECRET='YMXIIP3j7PVKmqNvOdDHaANWLUk2KThB';
+export const CLIENT_SECRET='BlKohOFr9BF2iUDOYDfpJ60lFtbEhVLh';
 
 const useSilentRefreshForCodeFlow = false;
 
@@ -36,7 +36,7 @@ export const AUTH_CONFIG: AuthConfig = {
   issuer: KEYCLOACK_HOST,
 
   // URL of the SPA to redirect the user to after login
-  redirectUri: window.location.origin,
+  redirectUri: WEB_HOST,
 
 
   // The SPA's id. The SPA is registerd with this id at the auth-server
@@ -89,7 +89,7 @@ export const AUTH_CONFIG: AuthConfig = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-   // { provide: OAuthStorage, useFactory: storageFactory },
+    // { provide: OAuthStorage, useFactory: storageFactory },
     provideMatomo(
       {
         siteId: 1,

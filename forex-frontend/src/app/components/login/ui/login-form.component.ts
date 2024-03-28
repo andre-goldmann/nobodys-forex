@@ -24,9 +24,15 @@ import {Cookie} from "ng2-cookies";
 export class LoginFormComponent implements OnInit {
   @Input({ required: true }) loginStatus!: LoginStatus;
 
+  private router:Router = inject(Router);
   private authService = inject(AuthService);
+  keycloakUrl: string = KEYCLOACK_HOST;
+  keycloakSecret: string = CLIENT_SECRET;
+  keycloakClient: string = CLIENT_ID;
+  redirectUr: string = WEB_HOST;
 
   constructor(private _http:HttpClient) {
+    console.info("LoginFormComponent constructor called!!");
   }
   ngOnInit() {
     this.authService.init();
@@ -50,7 +56,7 @@ export class LoginFormComponent implements OnInit {
 
     let headers =
       new HttpHeaders({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'});
-
+    console.info("Calling " + KEYCLOACK_HOST + '/protocol/openid-connect/token');
     this._http.post(KEYCLOACK_HOST + '/protocol/openid-connect/token',
       params.toString(), { headers: headers })
       .subscribe(
@@ -67,12 +73,15 @@ export class LoginFormComponent implements OnInit {
   }
 
   saveToken(token:any) {
-
-    var expireDate = new Date().getTime() + (100000000 * token.expires_in);
+    const expiresInMilliSeconds = token.expires_in * 1000;
+    const now = new Date().getTime();
+    const expiresAt = now + expiresInMilliSeconds;
     sessionStorage.setItem("access_token", token.access_token);
     sessionStorage.setItem("refresh_token", token.refresh_token);
-    sessionStorage.setItem("access_token_stored_at", "" + Date.now());
-    sessionStorage.setItem("expires_at", "" + expireDate);
+    sessionStorage.setItem("access_token_stored_at", "" + now);
+    sessionStorage.setItem("expires_at", "" + expiresAt);
+    //console.info("expireDate:" + new Date(expireDate));
+    //console.info("token.expires_in:" + new Date(token.expires_in));
     this.authService.processIdToken(token);
 
     /*console.info("hasValidAccessToken:" + this.authService.hasValidAccessToken());
@@ -81,7 +90,13 @@ export class LoginFormComponent implements OnInit {
     console.info("getIdToken:" + this.authService.getIdToken());
     console.info("getRefreshToken:" + this.authService.getRefreshToken());*/
 
-    window.location.href = WEB_HOST + "/dashboard";
+    console.info("Route to dashboard ... ")
+
+    //window.location.href = WEB_HOST + "/dashboard";
+
+    //this.router.parseUrl("/dashboard");
+    this.router.navigate(['/dashboard']);
+
   }
 
   public login(){
