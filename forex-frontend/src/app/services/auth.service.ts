@@ -5,7 +5,7 @@ import {Post, User, UserProfile} from "../models/models";
 import {Credentials} from "../models/credentials";
 import {Router} from "@angular/router";
 import {OAuthService} from "angular-oauth2-oidc";
-import {AUTH_CONFIG, CLIENT_ID, CLIENT_SECRET, WEB_HOST} from "../app.config";
+import {AUTH_CONFIG, CLIENT_ID, CLIENT_SECRET, KEYCLOACK_HOST, WEB_HOST} from "../app.config";
 import {JwksValidationHandler} from "angular-oauth2-oidc-jwks";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 
@@ -71,8 +71,13 @@ export class AuthService {
   }
 
   fetchToken(code:string){
+    console.info("I am using:")
+    console.info(KEYCLOACK_HOST + '/protocol/openid-connect/token');
+    console.info("Impl used:");
+    console.info(this.oauthService.tokenEndpoint);
+
     let params = new URLSearchParams();
-    params.append('grant_type','authorization_code');
+    //params.append('grant_type','authorization_code');
     params.append('client_id', CLIENT_ID);
     params.append('client_secret', CLIENT_SECRET);
     params.append('redirect_uri', WEB_HOST);
