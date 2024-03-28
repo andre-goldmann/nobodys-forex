@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 
 import {EMPTY, Observable} from "rxjs";
 import {UserProfile} from "../models/models";
@@ -18,9 +18,9 @@ export class LoginEvent {
 })
 export class AuthService {
 
+  private router:Router = inject(Router);
 
-  constructor(private router: Router,
-              private oauthService: OAuthService,
+  constructor(private oauthService: OAuthService,
               private http:HttpClient) {
   }
 
@@ -77,6 +77,7 @@ export class AuthService {
       .then(e => {
         console.info("Got token");
         console.info(e);
+        this.router.navigate(["/dashboard"]);
       });
   }
 

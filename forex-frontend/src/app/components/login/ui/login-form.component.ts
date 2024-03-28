@@ -19,7 +19,6 @@ import {HttpClient} from "@angular/common/http";
 export class LoginFormComponent implements OnInit {
   @Input({ required: true }) loginStatus!: LoginStatus;
 
-  private router:Router = inject(Router);
   private authService = inject(AuthService);
   keycloakUrl: string = KEYCLOACK_HOST;
   keycloakSecret: string = CLIENT_SECRET;
