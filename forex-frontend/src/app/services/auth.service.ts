@@ -76,14 +76,18 @@ export class AuthService {
     console.info("Impl uses:");
     console.info(this.oauthService.tokenEndpoint);
 
-    let params = new URLSearchParams();
-    //params.append('grant_type','authorization_code');
-    params.append('client_id', CLIENT_ID);
-    params.append('client_secret', CLIENT_SECRET);
-    params.append('redirect_uri', WEB_HOST);
-    params.append('code',code);
+    const parameters: { [key: string]: any } = {
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      redirect_uri: WEB_HOST,
+      code: code
+    };
 
-    this.oauthService.fetchTokenUsingGrant('authorization_code', params)
+    for (const key of Object.keys(parameters)) {
+      console.info(key + ": " + parameters[key]);
+    }
+
+    this.oauthService.fetchTokenUsingGrant('authorization_code', parameters)
       .then(e => {
         console.info("Got token");
         console.info(e);
