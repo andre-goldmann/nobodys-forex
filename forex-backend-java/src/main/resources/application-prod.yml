@@ -9,10 +9,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://172.31.138.212:8180/auth/realms/forex_admininstrator
-          jwk-set-uri: http://172.31.138.212:8180/auth/realms/forex_admininstrator/protocol/openid-connect/certs
+          issuer-uri: http://85.215.32.163:8180/auth/realms/forex_admininstrator
+          jwk-set-uri: http://85.215.32.163:8180/auth/realms/forex_admininstrator/protocol/openid-connect/certs
   datasource:
-    url: jdbc:postgresql://172.31.138.212:6432/trading-db
+    url: jdbc:postgresql://db:6432/trading-db
     username: nobodysforex
     password: pwd
   jpa:

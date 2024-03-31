@@ -13,7 +13,7 @@ import {authenticationInterceptor} from "./guards/auth.interceptor";
 
 export const NODE_HOST = 'http://nodebackend';
 
-export const SPRING_HOST = 'http://localhost:5000/resource-server';
+export const SPRING_HOST = 'http://javabackend:5080/resource-server';
 
 //export const HOST_HOST = 'http://172.17.134.138:3000';
 // Muss ggf. in Keycloak siehe "Valid redirect URIs" geändert werden
@@ -21,7 +21,7 @@ export const WEB_HOST = window.location.origin;//'http://172.31.138.212';
 // How to get IP from docker?
 //export const WEB_HOST = 'http://172.26.187.22';
 //http://localhost:4200/login/oauth2/code/keycloak
-export  const KEYCLOACK_HOST = "http://172.31.179.59:8180/realms/forex_admininstrator";
+export  const KEYCLOACK_HOST = "http://85.215.32.163:8180/realms/forex_admininstrator";
 
 export const CLIENT_ID = 'forex_admininstrator_client';
 // das ist Mist, wie geht das anders?
