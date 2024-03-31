@@ -790,8 +790,7 @@ def proceedSignal(signal):
         return
     #generates too much signals
     if "T3-MesaPhasor" == signal.strategy \
-            or "T3-VolumeDifferenceDeltaCycleOscillator" == signal.strategy \
-            or "T3-ScaledNormalizedVector" == signal.strategy:
+            or "T3-VolumeDifferenceDeltaCycleOscillator" == signal.strategy:
         return
 
     strategy = signal.strategy.replace("GaussianChannelTrendAi", "GaussianChannelTrendAI")
