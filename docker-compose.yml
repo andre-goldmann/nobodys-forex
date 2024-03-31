@@ -106,6 +106,4 @@ volumes:
   pgadmin-data:
 
 networks:
-  default:
-    external:
-      name: nginx-certbot
+  nginx-certbot:
