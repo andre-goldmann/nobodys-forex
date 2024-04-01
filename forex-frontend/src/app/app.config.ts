@@ -25,7 +25,7 @@ export  const KEYCLOACK_HOST = "http://85.215.32.163:8180/realms/forex_admininst
 
 export const CLIENT_ID = 'forex_admininstrator_client';
 // das ist Mist, wie geht das anders?
-export const CLIENT_SECRET='hfihxJHqKCzDA3jRFUdrCEM7hQhVUNFz';
+export const CLIENT_SECRET='UQctnZkK93deambTYC2mC3tySYsB2IoW';
 
 const useSilentRefreshForCodeFlow = false;
 
