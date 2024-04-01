@@ -3,9 +3,10 @@ services:
   nginx:
     container_name: middlenginx
     image: nginx:stable-alpine
-    #expose:
-    #  - "80"
-    #  - "443:443"
+    restart: on-failure
+    expose:
+      - "80"
+      - "443:443"
     ports:
       - "80:80"
       - "443:443"
