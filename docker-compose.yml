@@ -30,7 +30,7 @@ services:
   keycloak:
     container_name: keycloak
     image: quay.io/keycloak/keycloak:23.0.3
-    restart: on-failure
+    #restart: on-failure
     env_file:
       - ./keycloak.dev.env
     volumes:
