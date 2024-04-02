@@ -4,9 +4,6 @@ ARG KEYCLOAK_VERSION
 
 FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION as builder
 
-# Configure mysql database vendor
-ENV KC_DB=mysql
-
 ENV KC_FEATURES="token-exchange,scripts,preview"
 
 WORKDIR /opt/keycloak
