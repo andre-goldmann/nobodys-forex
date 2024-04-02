@@ -439,7 +439,7 @@ def activateSignal(tradeActivationDto:SignalActivationDto):
     #print("Activating Trade", tradeActivationDto)
     with Session.begin() as session:
         storeSignal = session.query(Signal).filter(Signal.symbol == tradeActivationDto.symbol, Signal.id == tradeActivationDto.magic).first()
-        if storeSignal is not None
+        if storeSignal is not None:
             storeSignal.activated=tradeActivationDto.timestamp
             storeSignal.openprice=tradeActivationDto.open_price
             session.commit()
