@@ -40,7 +40,7 @@ services:
       #- /certs/keycloak-server.key.pem:/opt/keycloak/conf/server.key
       - /certs/:/etc/x509/https"
     command: |
-      start-dev --http-port 8180
+      start --http-port 8180
     ports:
       - "8180:8180"
       - "8443:8443"
