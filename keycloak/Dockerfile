@@ -5,8 +5,6 @@ ARG KEYCLOAK_VERSION
 FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION as builder
 
 ENV KC_FEATURES="token-exchange,scripts,preview"
-ENV KC_HTTPS_CERTIFICATE_FILE = "/opt/jboss/keycloak/conf/server.crt"
-ENV KC_HTTPS_CERTIFICATE_KEY_FILE = "/opt/jboss/keycloak/conf/server.key"
 
 WORKDIR /opt/keycloak
 
