@@ -36,11 +36,11 @@ services:
     volumes:
       - ./keycloak-themes/school/:/opt/jboss/keycloak/themes/school/
       - ./keycloak-themes/keywind/:/opt/jboss/keycloak/themes/keywind/
-      - /certs/keycloak-server.crt.pem:/opt/keycloak/conf/keycloak-server.crt.pem
-      - /certs/keycloak-server.key.pem:/opt/keycloak/conf/keycloak-server.key.pem
+      - ./certs/server.crt:/opt/keycloak/conf/server.crt
+      - ./certs/server.key:/opt/keycloak/conf/server.key
       #- /certs/:/etc/x509/https"
     command: |
-      start --optimized --http-port 8180 --log-level=ERROR --hostname-strict-https=false --hostname-url="https://85.215.32.163:8180/realms/master" --https-certificate-key-file="/opt/keycloak/conf/keycloak-server.key.pem" --https-certificate-file="/opt/keycloak/conf/keycloak-server.crt.pem"
+      start --optimized --http-port 8180 --log-level=ERROR --hostname-strict-https=false --hostname-url="https://85.215.32.163:8180/realms/master" --https-certificate-key-file="/opt/keycloak/conf/server.key" --https-certificate-file="/opt/keycloak/conf/server.crt"
     ports:
       - "8180:8180"
       - "8443:8443"
