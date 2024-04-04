@@ -5,6 +5,8 @@ ARG KEYCLOAK_VERSION
 FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION as builder
 
 ENV KC_FEATURES="token-exchange,scripts,preview"
+ENV KEYCLOAK_ADMIN="admin"
+ENV KEYCLOAK_ADMIN_PASSWORD="pwd"
 
 WORKDIR /opt/keycloak
 
