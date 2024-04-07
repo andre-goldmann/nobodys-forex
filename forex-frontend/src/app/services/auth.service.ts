@@ -8,10 +8,6 @@ import {OAuthService} from "angular-oauth2-oidc";
 import {AUTH_CONFIG, CLIENT_ID, CLIENT_SECRET, WEB_HOST} from "../app.config";
 import {HttpClient} from "@angular/common/http";
 
-type LoginEventType = 'token_received';
-export class LoginEvent {
-  constructor(readonly type: LoginEventType) { }
-}
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +43,7 @@ export class AuthService {
     });
 
 
-    this.oauthService.events
+    /*this.oauthService.events
       //.pipe(filter((e) => e.type === 'token_received'))
       .subscribe((value) => {
         console.info("Event from oauthService: " + value.type);
@@ -56,7 +52,7 @@ export class AuthService {
 
         const scopes = this.oauthService.getGrantedScopes();
         console.info('scopes', scopes);
-      });
+      });*/
     return EMPTY;
   }
 
@@ -68,10 +64,6 @@ export class AuthService {
       redirect_uri: WEB_HOST,
       code: code
     };
-
-    for (const key of Object.keys(parameters)) {
-      console.info(key + ": " + parameters[key]);
-    }
 
     this.oauthService.fetchTokenUsingGrant('authorization_code', parameters)
       .then(e => {

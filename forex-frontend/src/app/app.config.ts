@@ -15,7 +15,6 @@ export const NODE_HOST = 'http://nodebackend';
 
 export const SPRING_HOST = 'http://javabackend:5080/resource-server';
 
-//export const HOST_HOST = 'http://172.17.134.138:3000';
 // Muss ggf. in Keycloak siehe "Valid redirect URIs" geändert werden
 export const WEB_HOST = window.location.origin;//'http://172.31.138.212';
 // How to get IP from docker?
@@ -37,7 +36,6 @@ export const AUTH_CONFIG: AuthConfig = {
 
   // URL of the SPA to redirect the user to after login
   redirectUri: WEB_HOST,
-
 
   // The SPA's id. The SPA is registerd with this id at the auth-server
   // clientId: 'server.code',

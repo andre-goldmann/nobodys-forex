@@ -166,3 +166,4 @@ letsencrypt/
 mysql/
 
 certs
+./forex-frontend/package-lock.json

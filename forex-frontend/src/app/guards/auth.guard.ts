@@ -8,7 +8,6 @@ export const isAuthenticatedGuard = (): CanActivateFn => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-
     if(authService.hasValidAccessToken()
       && authService.hasValidIdToken()){
       console.info("User logged in!");

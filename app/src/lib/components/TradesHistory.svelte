@@ -14,6 +14,7 @@
     const minSucessPercentage = 65;
     const minSucessTrades = 150;
     const allTradesPerStrategyCount = 300;
+    const minProfit = 10;
     const HOST = "http://85.215.32.163:6081";
     let active:boolean = true;
     let trades:Trade[] = [
@@ -99,6 +100,7 @@
             <div>
                 <p>Min-Win-Percentage: {minSucessPercentage}</p>
                 <p>Min-Trades: {minSucessTrades}</p>
+                <p>Min-Profit: {minProfit}</p>
             </div>
             <div class="flex">Instruments</div>
         </header>
@@ -212,7 +214,7 @@
                                         percentage = (100 / signalStats.alltrades) * signalStats.successtrades
                                         if percentage < 60:
                                         -->
-                                            <div class={(100 / stat.tradestotal) * stat.tradessuccess > minSucessPercentage && stat.tradestotal >= minSucessTrades ? "bg-green-400 flex items-center space-x-4 rtl:space-x-reverse": "bg-red-400 flex items-center space-x-4 rtl:space-x-reverse"}>
+                                            <div class={(100 / stat.tradestotal) * stat.tradessuccess > minSucessPercentage && stat.tradestotal >= minSucessTrades && stat.profit > minProfit ? "bg-green-400 flex items-center space-x-4 rtl:space-x-reverse": "bg-red-400 flex items-center space-x-4 rtl:space-x-reverse"}>
                                              <!--div class="flex items-center space-x-4 rtl:space-x-reverse"-->
                                               <div class="flex-1 min-w-0">
                                                   <p class="text-sm font-medium truncate text-black">
