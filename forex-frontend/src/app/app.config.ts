@@ -21,11 +21,11 @@ export const WEB_HOST = window.location.origin;//'http://172.31.138.212';
 // How to get IP from docker?
 //export const WEB_HOST = 'http://172.26.187.22';
 //http://localhost:4200/login/oauth2/code/keycloak
-export  const KEYCLOACK_HOST = "http://85.215.32.163:8180/realms/forex_admininstrator";
+export  const KEYCLOACK_HOST = "https://85.215.32.163:8443/realms/forex_admininstrator";
 
 export const CLIENT_ID = 'forex_admininstrator_client';
 // das ist Mist, wie geht das anders?
-export const CLIENT_SECRET='Gk1bRBfMew1FQts6AsOEkA9CQEnYEGCT';
+export const CLIENT_SECRET='L7YFcYYKDDpIG6dvBtISskp40O8RiyXd';
 
 const useSilentRefreshForCodeFlow = false;
 
