@@ -21,12 +21,6 @@ services:
       #- certbot
       - keycloak
 
-  #certbot:
-  #  image: certbot/certbot
-  #  volumes:
-  #    - ./nginx/certbot:/etc/letsencrypt
-  #  entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
   keycloak:
     container_name: keycloak
     restart: on-failure
@@ -34,11 +28,6 @@ services:
       context: ./keycloak
       args:
         KEYCLOAK_VERSION: 23.0.3
-    #command: [ "start", "--optimized", "--http-port 8180", "--log-level=ERROR",  "--hostname-strict-https=false", "--hostname-url='https://85.215.32.163:8180/realms/master'" ]
-    #
-    #start-dev --http-port 8180 --log-level=ERROR
-    #command: |
-    #  start --optimized --http-port 8180 --log-level=INFO --hostname-url="https://85.215.32.163:8443" --https-certificate-file=/opt/keycloak/conf/server.crt --https-certificate-key-file=/opt/keycloak/conf/server.key
     env_file:
       - ./keycloak.dev.env
     ports:

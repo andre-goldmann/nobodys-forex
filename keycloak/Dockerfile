@@ -18,9 +18,12 @@ FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION
 LABEL image.version=$KEYCLOAK_VERSION
 
 #https://www.keycloak.org/server/all-config
-ENV KC_LOG_LEVEL=DEBUG
+ENV KC_LOG_LEVEL=INFO
 ENV KC_DB=postgres
 ENV KC_DB_SCHEMA=${KC_DB_SCHEMA}
+ENV KC_DB_URL_DATABASE=${KC_DB_SCHEMA}
+ENV DB_USER=${DB_USER}
+ENV DB_PASSWORD=${DB_PASSWORD}
 ENV KC_DB_URL_HOST=${KC_DB_URL_HOST}
 ENV KC_DB_URL_PORT=${KC_DB_URL_PORT}
 ENV KC_DB_USERNAME=${DB_USER}
@@ -46,4 +49,5 @@ USER keycloak
 
 RUN /opt/keycloak/bin/kc.sh show-config
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized", "--db-url=${KC_DB_URL}", "--db-username=${DB_USER}", "--db-password=${DB_PASSWORD}"]
+#ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start"]
