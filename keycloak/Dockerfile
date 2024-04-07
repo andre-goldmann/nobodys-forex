@@ -17,8 +17,7 @@ FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION
 LABEL image.version=$KEYCLOAK_VERSION
 
 #https://www.keycloak.org/server/all-config
-ENV KC_DB=${DB_VENDOR}
-ENV KC_DB_URL_PORT=${DB_PORT}
+ENV KC_DB_URL=${KC_DB_URL}
 ENV KC_DB_SCHEMA=${DB_DATABASE}
 ENV KC_DB_USERNAME=${DB_USER}
 ENV KC_DB_PASSWORD=${DB_PASSWORD}
