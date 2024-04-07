@@ -5,6 +5,7 @@ ARG KEYCLOAK_VERSION
 FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION as builder
 
 ENV KC_FEATURES="token-exchange,scripts,preview"
+ENV KC_DB=postgres
 
 WORKDIR /opt/keycloak
 
@@ -17,8 +18,11 @@ FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION
 LABEL image.version=$KEYCLOAK_VERSION
 
 #https://www.keycloak.org/server/all-config
-ENV KC_DB_URL=${KC_DB_URL}
-ENV KC_DB_SCHEMA=${DB_DATABASE}
+ENV KC_LOG_LEVEL=DEBUG
+ENV KC_DB=postgres
+ENV KC_DB_SCHEMA=${KC_DB_SCHEMA}
+ENV KC_DB_URL_HOST=${KC_DB_URL_HOST}
+ENV KC_DB_URL_PORT=${KC_DB_URL_PORT}
 ENV KC_DB_USERNAME=${DB_USER}
 ENV KC_DB_PASSWORD=${DB_PASSWORD}
 ENV KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}

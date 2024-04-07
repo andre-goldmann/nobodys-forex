@@ -57,6 +57,7 @@ services:
 
   db:
     image: postgres:14.1-alpine
+    container_name: db
     restart: on-failure
     env_file:
       - ./database.dev.env
