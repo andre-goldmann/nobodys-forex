@@ -609,11 +609,12 @@ class TrendInfoDto(BaseModel):
     strategy: str
 
 def getSignalStats(strategy:str, symbol:str, session):
-        signalStats = session.query(Signal.strategy,
+        signalStats = (session.query(Signal.strategy,
                                     func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
                                     func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
                                     func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
-                                    func.sum(Signal.profit).label("profit")).filter(Signal.strategy == strategy, Signal.symbol == symbol).group_by(Signal.strategy).first()
+                                    func.sum(Signal.profit).label("profit"))
+                       .filter(Signal.strategy == strategy, Signal.symbol == symbol).group_by(Signal.strategy).first())
         session.expunge_all()
         return signalStats
 
@@ -723,8 +724,8 @@ async def signals(signal:SignalDto):
     proceedSignal(signal)
 
 
-def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
-    df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_H4, session, 10000)
+def calculateSlAndStoreSignal(signal, strategy, session):
+    df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
     atrValue = atr(df)
 
     sl = 0.0
@@ -746,7 +747,7 @@ def calculateSlAndStoreSignal(signal, strategy, jsonSignal, session):
 
     if signalStats is not None and signalStats.alltrades > 150:
         percentage = (100 / signalStats.alltrades) * signalStats.successtrades
-        if percentage < 65:
+        if percentage < 65 and signalStats.profit < 10:
             storeIgnoredSignal(IgnoredSignal(
                 json=signal + "-" + strategy,
                 reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
@@ -924,7 +925,7 @@ def proceedSignal(signal):
                 or strategy == "T3Fvma" \
                 or strategy == "T3-JMaCrossover" \
                 or strategy == "T3-GapFilling":
-            calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", jsonSignal, session)
+            calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", session)
 
 
         regressionLineH4 = session.query(Regressions).filter(
@@ -952,7 +953,7 @@ def proceedSignal(signal):
                 session.close()
                 return
 
-            calculateSlAndStoreSignal(signal, strategy, jsonSignal, session)
+            calculateSlAndStoreSignal(signal, strategy, session)
             session.commit()
             session.close()
             print(f"######## {signal} stored ########")

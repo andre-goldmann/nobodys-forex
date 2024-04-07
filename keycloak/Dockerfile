@@ -5,8 +5,6 @@ ARG KEYCLOAK_VERSION
 FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION as builder
 
 ENV KC_FEATURES="token-exchange,scripts,preview"
-ENV KEYCLOAK_ADMIN="admin"
-ENV KEYCLOAK_ADMIN_PASSWORD="pwd"
 
 WORKDIR /opt/keycloak
 
@@ -19,9 +17,19 @@ FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION
 LABEL image.version=$KEYCLOAK_VERSION
 
 # Set MySQL database connection parameters
-# ENV KC_DB_URL=jdbc:mysql://localhost:3306/keycloak
-# ENV KC_DB_USERNAME=root
-# ENV KC_DB_PASSWORD=root
+
+ENV KC_DB_VENDOR=POSTGRES
+ENV KC_DB_ADDR=postgres
+ENV KC_DB_PORT=6432
+ENV KC_DB_DATABASE=keycloak
+ENV KC_DB_USER=nobodysforex
+ENV KC_DB_PASSWORD=pwd
+
+#ENV KC_DB_URL=jdbc:mysql://localhost:3306/keycloak
+#ENV KC_DB_USERNAME=root
+#ENV KC_DB_PASSWORD=root
+ENV KEYCLOAK_ADMIN="admin"
+ENV KEYCLOAK_ADMIN_PASSWORD="pwd"
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
