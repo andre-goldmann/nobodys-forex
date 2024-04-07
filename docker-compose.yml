@@ -40,7 +40,7 @@ services:
       start --optimized --http-port 8180 --log-level=INFO --hostname-url="https://85.215.32.163:8443" --https-certificate-file=/opt/keycloak/conf/server.crt --https-certificate-key-file=/opt/keycloak/conf/server.key
     depends_on:
       - db
-    environment:
+    env_file:
       - ./keycloak.dev.env
     ports:
       - "8180:8180"
@@ -53,29 +53,6 @@ services:
       - ./backup/keycloak/keycloak_data:/opt/jboss/keycloak/standalone/data
       - ./certs/server.crt:/opt/keycloak/conf/server.crt
       - ./certs/server.key:/opt/keycloak/conf/server.key
-
-  #keycloak:
-  #  container_name: keycloak
-  #  image: quay.io/keycloak/keycloak:23.0.3
-  #  #restart: on-failure
-  #  env_file:
-  #    - ./keycloak.dev.env
-  #  volumes:
-  #    - ./keycloak-themes/school/:/opt/jboss/keycloak/themes/school/
-  #    - ./keycloak-themes/keywind/:/opt/jboss/keycloak/themes/keywind/
-  #    - ./certs/server.crt:/opt/jboss/keycloak/conf/server.crt
-  #    - ./certs/server.key:/opt/jboss/keycloak/conf/server.key
-  #    #- /certs/:/etc/x509/https"
-  #  command: |
-  #    start --optimized --http-port 8180 --log-level=ERROR --hostname-strict-https=false --hostname-url="https://85.215.32.163:8180/realms/master"
-  #  ports:
-  #    - "8180:8180"
-  #    - "8443:8443"
-  #  expose:
-  #    - "8180"
-  #    - "8443"
-  #  depends_on:
-  #    - "db"
 
   db:
     image: postgres:14.1-alpine
