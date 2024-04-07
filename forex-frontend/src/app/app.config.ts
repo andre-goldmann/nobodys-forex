@@ -13,6 +13,7 @@ import {authenticationInterceptor} from "./guards/auth.interceptor";
 
 export const NODE_HOST = 'http://nodebackend';
 
+//export const SPRING_HOST = 'http://127.0.01:5080/resource-server';
 export const SPRING_HOST = 'http://javabackend:5080/resource-server';
 
 // Muss ggf. in Keycloak siehe "Valid redirect URIs" geändert werden
