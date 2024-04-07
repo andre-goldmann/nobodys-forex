@@ -16,8 +16,6 @@ FROM quay.io/keycloak/keycloak:$KEYCLOAK_VERSION
 
 LABEL image.version=$KEYCLOAK_VERSION
 
-# Set MySQL database connection parameters
-
 ENV KC_DB_VENDOR=POSTGRES
 ENV KC_DB_ADDR=postgres
 ENV KC_DB_PORT=6432
