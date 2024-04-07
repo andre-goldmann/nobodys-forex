@@ -24,6 +24,10 @@ ENV KC_DB_USER=nobodysforex
 ENV KC_DB_PASSWORD=pwd
 ENV KEYCLOAK_ADMIN="admin"
 ENV KEYCLOAK_ADMIN_PASSWORD="pwd"
+ENV KC_PROXY: edge
+ENV KC_PROXY_ADDRESS_FORWARDING: 'true'
+ENV KC_HOSTNAME_STRICT_HTTPS: 'false'
+ENV KC_HTTP_ENABLED: 'true'
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 
