@@ -3,10 +3,10 @@ server:
   forward-headers-strategy: framework
   servlet:
     context-path: /resource-server
-  ssl:
-    certificate-private-key: file:/opt/javabackend/conf/server.key
-    enabled: true
-    trust-certificate: file:/opt/javabackend/conf/server.crt
+  #ssl:
+  #  certificate-private-key: file:/opt/javabackend/conf/server.key
+  #  enabled: true
+  #  trust-certificate: file:/opt/javabackend/conf/server.crt
 
 spring:
   security:
