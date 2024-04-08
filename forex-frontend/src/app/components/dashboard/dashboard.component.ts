@@ -22,7 +22,7 @@ export class DashboardComponent {
   getUser() {
     let userId = this.authService.getUserId();
     if(userId != null) {
-      this.usersService.getUserById(userId).subscribe(user => {
+      this.usersService.getUserById(encodeURI(userId)).subscribe(user => {
         console.info(`Loaded ${user}`)
         this.user.set(user);
       });

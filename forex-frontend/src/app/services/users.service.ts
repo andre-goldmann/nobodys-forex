@@ -12,8 +12,7 @@ export class UsersService {
 
   constructor(
     private httpClient: HttpClient,
-    private storeService: StoreService
-  ) {}
+    private storeService: StoreService) {}
 
   public getUserById(id:string): Observable<User> {
     return this.httpClient.get<User>(SPRING_HOST + `/api/users/${id}`);
