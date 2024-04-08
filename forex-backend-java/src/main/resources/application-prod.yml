@@ -4,9 +4,9 @@ server:
   servlet:
     context-path: /resource-server
   ssl:
-    certificate-private-key: file:/root/development/nobodys-forex/certs/server.key
+    certificate-private-key: file:/opt/javabackend/conf/server.key
     enabled: true
-    trust-certificate: file:/root/development/nobodys-forex/certs/server.crt
+    trust-certificate: file:/opt/javabackend/conf/server.crt
 
 spring:
   security:
@@ -18,7 +18,7 @@ spring:
           issuer-uri: https://keycloak:8443/realms/forex_admininstrator
           jwk-set-uri: https://keycloak:8443/realms/forex_admininstrator/protocol/openid-connect/certs
           # TODO set the correct path to the key file
-          public-key-location: file:///root/development/nobodys-forex/certs/server.key
+          public-key-location: file://opt/javabackend/conf/server.key
   datasource:
     url: jdbc:postgresql://db:6432/trading-db
     username: nobodysforex

@@ -67,8 +67,9 @@ services:
       - '5080'
     ports:
       - "5080:5080"
-    #volumes:
-    #  - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/backend
+    volumes:
+      - ./certs/server.crt:/opt/javabackend/conf/server.crt
+      - ./certs/server.key:/opt/javabackend/conf/server.key
     depends_on:
       - "keycloak"
 
