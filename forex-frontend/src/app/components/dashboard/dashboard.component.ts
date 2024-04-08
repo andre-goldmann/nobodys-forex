@@ -26,6 +26,8 @@ export class DashboardComponent {
         console.info(`Loaded ${user}`)
         this.user.set(user);
       });*/
+      // gleicher Fehler:
+      //java.lang.IllegalArgumentException: Invalid character found in method name  HTTP method names must be tokens
       this.usersService.getUsers().subscribe(user => {
         console.info(`Loaded ${user}`)
         //this.user.set(user);

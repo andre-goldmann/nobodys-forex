@@ -3,6 +3,10 @@ server:
   forward-headers-strategy: framework
   servlet:
     context-path: /resource-server
+  ssl:
+    certificate-private-key: file:///root/development/nobodys-forex/certs/server.key
+    enabled: true
+    trust-certificate: file:///root/development/nobodys-forex/certs/server.crt
 
 spring:
   security:
