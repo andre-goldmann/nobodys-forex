@@ -11,8 +11,8 @@ server:
 spring:
   security:
     oauth2:
-      #resourceserver:
-        #jwt:
+      resourceserver:
+        jwt:
           # Namensaufläsung funktioniert
           # TODO https funktioniert nicht
           issuer-uri: https://keycloak:8443/realms/forex_admininstrator
