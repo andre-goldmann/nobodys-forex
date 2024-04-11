@@ -59,6 +59,20 @@ services:
       #- ./init-multi-postgres-databases.sh:/docker-entrypoint-initdb.d/init-multi-postgres-databases.sh
     command: -p 6432
 
+  apigateway:
+    container_name: apigateway
+    build: ./api-gateway
+    restart: always
+    expose:
+      - '1180'
+    ports:
+      - "1180:1880"
+    volumes:
+      - ./certs/server.crt:/opt/apigateway/conf/server.crt
+      - ./certs/server.key:/opt/apigateway/conf/server.key
+    depends_on:
+      - "keycloak"
+
   javabackend:
     container_name: javabackend
     build: ./forex-backend-java

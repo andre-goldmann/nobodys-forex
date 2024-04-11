@@ -5,8 +5,6 @@ import jdg.digital.forexbackend.domain.model.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import jdg.digital.forexbackend.domain.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -20,7 +18,6 @@ import java.util.*;
 @Slf4j
 public class UserController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     private final UserMapper mapper;
