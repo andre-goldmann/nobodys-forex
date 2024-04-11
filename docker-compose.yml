@@ -15,8 +15,8 @@ services:
       - ./nginx.middle.conf:/etc/nginx/conf.d/default.conf:rw
       #- ./matomo.conf:/etc/nginx/conf.d/default.conf:z,ro
       #- ./nginx/certbot:/etc/letsencrypt
-      - ./certs/services.crt:/opt/nginx/conf/server.crt
-      - ./certs/services.key:/opt/nginx/conf/server.key
+      - ./certs/server.crt:/opt/nginx/conf/server.crt
+      - ./certs/server.key:/opt/nginx/conf/server.key
     depends_on:
       #- certbot
       - keycloak
@@ -39,8 +39,8 @@ services:
     volumes:
       - ./backup/keycloak/changelog.xml:/liquibase/changelog/changelog.xml
       - ./backup/keycloak/keycloak_data:/opt/jboss/keycloak/standalone/data
-      - ./certs/services.crt:/opt/keycloak/conf/server.crt
-      - ./certs/services.key:/opt/keycloak/conf/server.key
+      - ./certs/server.crt:/opt/keycloak/conf/server.crt
+      - ./certs/server.key:/opt/keycloak/conf/server.key
     depends_on:
       - db
 
@@ -68,8 +68,8 @@ services:
     ports:
       - "9080:9080"
     volumes:
-      - ./certs/services.crt:/opt/apigateway/conf/server.crt
-      - ./certs/services.key:/opt/apigateway/conf/server.key
+      - ./certs/server.crt:/opt/apigateway/conf/server.crt
+      - ./certs/server.key:/opt/apigateway/conf/server.key
     depends_on:
       - "keycloak"
 
@@ -82,8 +82,8 @@ services:
     ports:
       - "5080:5080"
     volumes:
-      - ./certs/services.crt:/opt/javabackend/conf/server.crt
-      - ./certs/services.key:/opt/javabackend/conf/server.key
+      - ./certs/server.crt:/opt/javabackend/conf/server.crt
+      - ./certs/server.key:/opt/javabackend/conf/server.key
     depends_on:
       - "keycloak"
 
