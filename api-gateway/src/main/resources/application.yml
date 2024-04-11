@@ -5,6 +5,8 @@ server:
     include-stacktrace: ON_PARAM
   cors:
     allowOrigins
+  servlet:
+    context-path: /api
 
 logging:
   level:

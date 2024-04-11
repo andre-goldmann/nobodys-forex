@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/models';
 import { StoreService } from '../store/store.service';
-import {NODE_HOST, SPRING_HOST} from "../app.config";
+import {SPRING_HOST} from "../app.config";
 
 @Injectable({
   providedIn: 'root',

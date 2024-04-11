@@ -3,6 +3,7 @@ import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/models";
 import {JsonPipe} from "@angular/common";
 import {UsersService} from "../../services/users.service";
+import {ForexService} from "../../services/forex.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +18,12 @@ export class DashboardComponent {
 
   private authService:AuthService = inject(AuthService);
   private usersService = inject(UsersService);
+  private  forexService = inject(ForexService)
   user = signal({} as User);
+
+  getSymbols(){
+    this.forexService.getSymbols();
+  }
 
   getUser() {
     let userId = this.authService.getUserId();
