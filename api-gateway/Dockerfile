@@ -30,7 +30,7 @@ COPY --from=builder /app/target/api-gateway-0.0.1-SNAPSHOT.jar .
 #COPY src/main/resources/application-prod.yml /app/application-prod.yml
 
 # Expose the port that the application runs on
-EXPOSE 1180
+EXPOSE 9080
 
 # Define the command to run the application when the container starts
 CMD ["java", "-jar", "-Dspring.profiles.active=prod", "api-gateway-0.0.1-SNAPSHOT.jar"]

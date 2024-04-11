@@ -64,9 +64,9 @@ services:
     build: ./api-gateway
     restart: always
     expose:
-      - '1180'
+      - '9080'
     ports:
-      - "1180:1880"
+      - "9080:9080"
     volumes:
       - ./certs/server.crt:/opt/apigateway/conf/server.crt
       - ./certs/server.key:/opt/apigateway/conf/server.key
