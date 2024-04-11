@@ -16,13 +16,7 @@
     const allTradesPerStrategyCount = 300;
     const minProfit = 50;
     const HOST = "http://85.215.32.163:6081";
-    let active:boolean = true;
-    let trades:Trade[] = [
-        //generate sample data
-        {id: 1, strategy: "Strategy 1", symbol: "EURUSD", profit: 100, swap: 0, commission: 0, type: "buy", lots: 0.1, openTime: "2021-01-01 00:00:00", closeTime: "2021-01-01 00:00:00", openPrice: 1.2, closePrice: 1.3, stopLoss: 1.1, takeProfit: 1.4},
-        // one more with different strategy
-        {id: 2, strategy: "Strategy 2", symbol: "EURUSD", profit: 100, swap: 0, commission: 0, type: "buy", lots: 0.1, openTime: "2021-01-01 00:00:00", closeTime: "2021-01-01 00:00:00", openPrice: 1.2, closePrice: 1.3, stopLoss: 1.1, takeProfit: 1.4},
-    ];
+
 
     async function loadStats(){
         await fetch(HOST + "/strategystats")
