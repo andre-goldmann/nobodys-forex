@@ -7,6 +7,12 @@ server:
     allowOrigins
   servlet:
     context-path: /api
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:keystore/services.p12
+    key-store-password: Blade1708
+    key-alias: services
 
 logging:
   level:
