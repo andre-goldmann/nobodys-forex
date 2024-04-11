@@ -167,3 +167,6 @@ mysql/
 
 certs
 ./forex-frontend/package-lock.json
+
+api-gateway/src/main/resources/keystore
+forex-backend-java/src/main/resources/keystore
