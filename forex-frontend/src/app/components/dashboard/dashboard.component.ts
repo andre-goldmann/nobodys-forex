@@ -22,7 +22,9 @@ export class DashboardComponent {
   user = signal({} as User);
 
   getSymbols(){
-    this.forexService.getSymbols();
+    this.forexService.getSymbols().subscribe(e => {
+      console.info(e);
+    });
   }
 
   getUser() {
