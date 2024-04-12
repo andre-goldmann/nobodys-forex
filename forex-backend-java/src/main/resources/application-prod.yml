@@ -7,7 +7,8 @@ server:
     enabled: true
     key-store-type: PKCS12
     key-store: classpath:keystore/jdg.digital.p12
-    key-store-password: 
+    #TODO can not checkin pwd
+    key-store-password: Blade1708
     key-alias: jdg.digital
 
 spring:
@@ -19,8 +20,7 @@ spring:
           # TODO https funktioniert nicht
           issuer-uri: https://keycloak:8443/realms/forex_admininstrator
           jwk-set-uri: https://keycloak:8443/realms/forex_admininstrator/protocol/openid-connect/certs
-          # TODO set the correct path to the key file
-          public-key-location: file://opt/javabackend/conf/server.key
+          public-key-location: file://opt/javabackend/conf/jdg.digital.pem
   datasource:
     url: jdbc:postgresql://db:6432/trading-db
     username: nobodysforex
