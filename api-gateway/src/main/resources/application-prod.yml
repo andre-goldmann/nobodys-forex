@@ -10,7 +10,7 @@ server:
     key-store-type: PKCS12
     key-store: classpath:keystore/jdg.digital.p12
     #TODO can not checkin pwd
-    key-store-password: Blade1708
+    key-store-password:
     key-alias: jdg.digital
 
 logging:
