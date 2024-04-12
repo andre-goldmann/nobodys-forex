@@ -10,9 +10,9 @@ server:
   ssl:
     enabled: true
     key-store-type: PKCS12
-    key-store: classpath:keystore/services.p12
+    key-store: classpath:keystore/jdg.digital.p12
     key-store-password: Blade1708
-    key-alias: services
+    key-alias: jdg.digital
 
 logging:
   level:
