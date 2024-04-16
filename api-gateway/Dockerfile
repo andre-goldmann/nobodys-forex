@@ -10,6 +10,7 @@ COPY spotbugs-security-include.xml .
 
 # Copy the source code
 COPY src ./src
+COPY interface ./interface
 
 
 # Build the application with Maven

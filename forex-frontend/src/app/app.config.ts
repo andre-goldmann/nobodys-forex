@@ -17,7 +17,8 @@ export const NODE_HOST = 'http://nodebackend';
 export const SPRING_HOST = 'https://85.215.32.163:5080/resource-server';
 // Prod
 //export const API_GATEWAY = 'https://85.215.32.163:9080/api';
-export const API_GATEWAY = 'https://192.168.2.183:9080/api';
+//export const API_GATEWAY = 'https://172.25.138.181:9080/api';
+export const API_GATEWAY = 'http://localhost:9080/api';
 
 // Muss ggf. in Keycloak siehe "Valid redirect URIs" geändert werden
 export const WEB_HOST = window.location.origin;//'http://172.31.138.212';
@@ -26,7 +27,7 @@ export const WEB_HOST = window.location.origin;//'http://172.31.138.212';
 //http://localhost:4200/login/oauth2/code/keycloak
 // Prod
 //export  const KEYCLOACK_HOST = "https://85.215.32.163:8443/realms/forex_admininstrator";
-export  const KEYCLOACK_HOST = "https://192.168.2.183:8443/realms/forex_admininstrator";
+export  const KEYCLOACK_HOST = "https://172.25.138.181:8443/realms/forex_admininstrator";
 
 export const CLIENT_ID = 'forex_admininstrator_client';
 // das ist Mist, wie geht das anders?

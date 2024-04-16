@@ -14,6 +14,6 @@ export const authenticationInterceptor: HttpInterceptorFn = (req: HttpRequest<un
     //console.info(req);
     return (next(modifiedReq));
   }
-  console.error("########Invalid AccessToken ##########");
+  console.error("######## Invalid AccessToken ##########");
   return (next(req));
 };

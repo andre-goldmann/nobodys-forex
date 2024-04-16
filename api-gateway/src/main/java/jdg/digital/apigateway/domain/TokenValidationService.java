@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class TokenValidationService {
-    private final String KEYCLOAK_URL = "https://192.168.2.183:8443/realms/forex_admininstrator/protocol/openid-connect/token/introspect";
+    private final String KEYCLOAK_URL = "https://172.25.128.161:8443/realms/forex_admininstrator/protocol/openid-connect/token/introspect";
     private final String CLIENT_ID = "forex_admininstrator_client";
     private final String CLIENT_SECRET = "1qFzfPvMEei1ksMIbnC9vkDyxihxtc5P";
 

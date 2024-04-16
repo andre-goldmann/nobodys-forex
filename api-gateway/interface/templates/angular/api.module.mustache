@@ -1,0 +1,20 @@
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {Configuration} from './configuration';
+
+
+@NgModule({
+    imports:      [],
+    declarations: [],
+    exports:      [],
+    providers:    []
+})
+export class ApiModule {
+    public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {
+        return {
+            ngModule: ApiModule,
+            providers: [ { provide: Configuration, useFactory: configurationFactory } ]
+        };
+    }
+
+    constructor() {}
+}

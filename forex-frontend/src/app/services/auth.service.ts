@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 
-import {EMPTY, Observable} from "rxjs";
+import {EMPTY, Observable, of} from "rxjs";
 import {UserProfile} from "../models/models";
 import {Credentials} from "../models/credentials";
 import {Router} from "@angular/router";
@@ -94,14 +94,9 @@ export class AuthService {
 
   logout() {
     this.oauthService.logOut();
-    sessionStorage.removeItem("user_id");
   }
 
-  getUserId(){
-    return sessionStorage.getItem("user_id");
-  }
-
-  userProfile(){
+  /*userProfile(){
     //maybe store this to localstorage
     //console.info(sessionStorage.getItem("user_id"));
     if(sessionStorage.getItem("user_id") === null) {
@@ -114,7 +109,7 @@ export class AuthService {
         });
       }
     }
-  }
+  }*/
 
   hasValidAccessToken() {
     return this.oauthService.hasValidIdToken();

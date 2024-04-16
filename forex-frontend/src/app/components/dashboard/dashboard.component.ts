@@ -22,14 +22,20 @@ export class DashboardComponent {
   user = signal({} as User);
 
   getSymbols(){
+
+    let accessToken = this.authService.getAccessToken();
+    if(accessToken === null || !this.authService.hasValidAccessToken()){
+      return;
+    }
+
+    //this.authService.userProfile();
     this.forexService.getSymbols().subscribe(e => {
       console.info(e);
     });
   }
 
   getUser() {
-    let userId = this.authService.getUserId();
-    if(userId != null) {
+    if(this.authService.hasValidAccessToken()) {
       /*this.usersService.getUserById(encodeURI(userId)).subscribe(user => {
         console.info(`Loaded ${user}`)
         this.user.set(user);
@@ -42,7 +48,7 @@ export class DashboardComponent {
       });
     }
   }
-  saveUser(){
+  /*saveUser(){
     let userId = this.authService.getUserId();
     if(userId != null) {
       this.usersService.saveUser({
@@ -60,5 +66,5 @@ export class DashboardComponent {
         this.user.set(user);
       });
     }
-  }
+  }*/
 }

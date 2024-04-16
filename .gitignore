@@ -170,3 +170,5 @@ certs
 
 api-gateway/src/main/resources/keystore
 forex-backend-java/src/main/resources/keystore
+
+api-gateway/interface/angular

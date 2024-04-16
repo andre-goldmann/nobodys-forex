@@ -3,11 +3,19 @@ server:
   forward-headers-strategy: framework
   error:
     include-stacktrace: ON_PARAM
-  cors:
-    allowOrigins
   servlet:
     context-path: /api
 
 logging:
   level:
-    root: info
+    root: debug
+
+
+      #spring:
+      # security:
+      #  oauth2:
+      #   resourceserver:
+      #    jwt:
+      #     issuer-uri: https://keycloak:8443/realms/forex_admininstrator
+      #    jwk-set-uri: https://keycloak:8443/realms/forex_admininstrator/protocol/openid-connect/certs
+    #   public-key-location: file://opt/apigateway/conf/jdg.digital.pem

@@ -23,3 +23,9 @@ openssl pkcs12 -export -out jdg.digital.p12 -inkey jdg.digital.key -in jdg.digit
 
 keytool -importkeystore -deststorepass password -destkeypass password -destkeystore keystore.jks -srckeystore keyStore.p12 -srcstoretype PKCS12 -srcstorepass password -alias 1
 
+# thiis seems to be working
+openssl pkcs12 -in jdg.digital.p12 -out jdg.digital.pem -nodes
+
+
+# Need always/sometimes
+sudo service docker start

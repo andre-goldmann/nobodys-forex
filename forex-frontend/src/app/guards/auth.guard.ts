@@ -11,7 +11,7 @@ export const isAuthenticatedGuard = (): CanActivateFn => {
     if(authService.hasValidAccessToken()
       && authService.hasValidIdToken()){
       console.info("User logged in!");
-      authService.userProfile();
+      //authService.userProfile();
       return true;
     }
 
