@@ -1,26 +1,32 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../models/models";
-import {JsonPipe} from "@angular/common";
+import {JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {UsersService} from "../../services/users.service";
 import {ForexService} from "../../services/forex.service";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {BrowserModule} from "@angular/platform-browser";
+import {navbarData} from "../sidenav/nav-data";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.component.html',
   imports: [
-    JsonPipe
+    JsonPipe,
+    ReactiveFormsModule,
+    NgForOf,
+    NgIf
   ],
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
 
   private authService:AuthService = inject(AuthService);
   private usersService = inject(UsersService);
   private  forexService = inject(ForexService)
   user = signal({} as User);
-
+  public symbols = signal<string[]>([]);
   getSymbols(){
 
     let accessToken = this.authService.getAccessToken();
@@ -29,9 +35,7 @@ export class DashboardComponent {
     }
 
     //this.authService.userProfile();
-    this.forexService.getSymbols().subscribe(e => {
-      console.info(e);
-    });
+
   }
 
   getUser() {
@@ -67,4 +71,11 @@ export class DashboardComponent {
       });
     }
   }*/
+  protected readonly navData = navbarData;
+
+  ngOnInit(): void {
+    this.forexService.getSymbols().subscribe(e => {
+      this.symbols.set(e);
+    });
+  }
 }

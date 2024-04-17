@@ -2,7 +2,7 @@ package jdg.digital.apigateway.interfaces;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockserver.springtest.MockServerTest;
+//import org.mockserver.springtest.MockServerTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,14 +16,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockJwt;
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient(timeout = "PT5M")
 //@TiImsTestPropertySource
-@MockServerTest
+//@MockServerTest
 class ForexControllerTest {
 
    // private MockServerClient mockServerClient;

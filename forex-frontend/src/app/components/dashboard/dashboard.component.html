@@ -19,6 +19,16 @@
   Load Symbols
 </button>
 
+<!--ul>
+  <li *ngFor="let data of symbols()">
+    <span >{{data}}</span>
+  </li>
+</ul-->
+<select>
+<option *ngFor="let symbol of symbols()" [ngValue]="symbol">{{symbol}}</option>
+>
+</select>
+
 <!--button type="button"
         (click)="saveUser()"
         class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">

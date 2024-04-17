@@ -10,6 +10,8 @@ server:
     #TODO can not checkin pwd
     key-store-password:
     key-alias: jdg.digital
+    certificate-private-key: file:/opt/javabackend/conf/private.key
+    trust-certificate: file:/opt/javabackend/conf/certificate.pem
 
 spring:
   security:

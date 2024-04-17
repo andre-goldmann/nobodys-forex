@@ -27,13 +27,14 @@ export const WEB_HOST = window.location.origin;//'http://172.31.138.212';
 //http://localhost:4200/login/oauth2/code/keycloak
 // Prod
 //export  const KEYCLOACK_HOST = "https://85.215.32.163:8443/realms/forex_admininstrator";
-export  const KEYCLOACK_HOST = "https://172.25.138.181:8443/realms/forex_admininstrator";
+export  const KEYCLOACK_HOST = "https://172.31.138.212:8443/realms/forex_admininstrator";
 
 export const CLIENT_ID = 'forex_admininstrator_client';
 // das ist Mist, wie geht das anders?
 // Prod
 //export const CLIENT_SECRET='L7YFcYYKDDpIG6dvBtISskp40O8RiyXd';
-export const CLIENT_SECRET='1qFzfPvMEei1ksMIbnC9vkDyxihxtc5P';
+//export const CLIENT_SECRET='1qFzfPvMEei1ksMIbnC9vkDyxihxtc5P';
+export const CLIENT_SECRET='8vTq7ox97BGant6XzgUmeME36v79M8kG';
 
 const useSilentRefreshForCodeFlow = false;
 

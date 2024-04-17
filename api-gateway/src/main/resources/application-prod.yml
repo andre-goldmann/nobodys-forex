@@ -12,6 +12,8 @@ server:
     #TODO can not checkin pwd
     key-store-password:
     key-alias: jdg.digital
+    certificate-private-key: file:/opt/apigateway/conf/private.key
+    trust-certificate: file:/opt/apigateway/conf/certificate.pem
 
 logging:
   level:

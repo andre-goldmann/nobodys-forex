@@ -42,8 +42,9 @@ public class ForexController {
         // Same exception as Spring throws, this happens because there seem to be issues with the
         // keystore beeing used
         //log.info("is valid: {}",this.tokenValidationService.isValidToken(request.getHeader("authorization").replace("Bearer ", "")));
-
-        if (authentication != null && authentication.getPrincipal() instanceof Jwt) {
+        return ResponseEntity.ok(List.of("USDCAD", "EURUSD", "GBPUSD", "JPYUSD"));
+        // actually not working
+        /*if (authentication != null && authentication.getPrincipal() instanceof Jwt) {
             final Jwt jwt = (Jwt) authentication.getPrincipal();
             final String token = jwt.getTokenValue();
             if(this.tokenValidationService.isValidToken(token)) {
@@ -63,6 +64,6 @@ public class ForexController {
                 log.error("Not authenticated: {}", authentication);
             }
             return ResponseEntity.badRequest().build();
-        }
+        }*/
     }
 }
