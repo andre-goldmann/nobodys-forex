@@ -169,10 +169,12 @@ certs
 ./forex-frontend/package-lock.json
 
 api-gateway/src/main/resources/keystore
-forex-backend-java/src/main/resources/keystore
-
+api-gateway/src/main/resources/application-prod.yml
 api-gateway/interface/angular
 
+forex-backend-java/src/main/resources/keystore
+forex-backend-java/src/main/resources/application-prod.yml
 
 keycloak.dev.env
 database.dev.env
+
