@@ -19,6 +19,7 @@ logging:
   level:
     root: info
 
+
 #spring:
  # security:
   #  oauth2:

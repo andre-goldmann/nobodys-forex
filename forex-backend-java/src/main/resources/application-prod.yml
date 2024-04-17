@@ -22,7 +22,7 @@ spring:
           # TODO https funktioniert nicht
           issuer-uri: https://keycloak:8443/realms/forex_admininstrator
           jwk-set-uri: https://keycloak:8443/realms/forex_admininstrator/protocol/openid-connect/certs
-          public-key-location: file://opt/javabackend/conf/jdg.digital.pem
+          #public-key-location: file://opt/javabackend/conf/jdg.digital.pem
   datasource:
     url: jdbc:postgresql://db:6432/trading-db
     username: nobodysforex

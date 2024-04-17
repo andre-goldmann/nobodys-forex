@@ -12,7 +12,9 @@ services:
       - "443:443"
     volumes:
       - ./nginx.middle.conf:/etc/nginx/conf.d/default.conf:rw
-      - ./certs/jdg.digital.pem:/opt/nginx/conf/jdg.digital.pem
+      - ./certs/certificate.pem:/etc/nginx/certificate.pem
+      - ./certs/private.key:/etc/nginx/private.key
+      - ./certs/passphrase.txt:/etc/nginx/passphrase.txt
     depends_on:
       - keycloak
 
@@ -33,7 +35,8 @@ services:
       - ./backup/keycloak/changelog.xml:/liquibase/changelog/changelog.xml
       - ./backup/keycloak/keycloak_data:/opt/jboss/keycloak/standalone/data
       - ./certs/jdg.digital.p12:/opt/jboss/keycloak/conf/jdg.digital.p12
-      - ./certs/jdg.digital.p12:/etc/keystore/jdg.digital.p12
+      - ./certs/certificate.pem:/opt/jboss/keycloak/conf/certificate.pem
+      - ./certs/private.key:/opt/jboss/keycloak/conf/private.key
     depends_on:
       - db
 
@@ -59,7 +62,8 @@ services:
     ports:
       - "9080:9080"
     volumes:
-      - ./certs/jdg.digital.pem:/opt/apigateway/conf/jjdg.digital.pem
+      - ./certs/certificate.pem:/opt/apigateway/conf/certificate.pem
+      - ./certs/private.key:/opt/apigateway/conf/private.key
     depends_on:
       - keycloak
 
@@ -70,7 +74,8 @@ services:
     ports:
       - "5080:5080"
     volumes:
-      - ./certs/jdg.digital.pem:/opt/javabackend/conf/jdg.digital.pem
+      - ./certs/certificate.pem:/opt/javabackend/conf/certificate.pem
+      - ./certs/private.key:/opt/javabackend/conf/private.key
     depends_on:
       - keycloak
 
