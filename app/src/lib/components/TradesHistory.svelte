@@ -14,7 +14,7 @@
     const minSucessPercentage = 65;
     const minSucessTrades = 150;
     const allTradesPerStrategyCount = 300;
-    const minProfit = 50;
+    const minProfit = 75;
     const HOST = "http://85.215.32.163:6081";
 
 
