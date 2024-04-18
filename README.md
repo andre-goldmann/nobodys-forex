@@ -18,5 +18,6 @@ nano api-gateway/src/main/resources/application-prod.yml
 nano forex-backend-java/src/main/resources/application-prod.yml
 nano keycloak.dev.env
 
+cd development/nobodys-forex/
 docker compose down
 docker compose up --build -d
