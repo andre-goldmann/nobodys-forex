@@ -2,9 +2,3 @@
 
 server.host: "0.0.0.0"
 elasticsearch.hosts: ["http://elasticsearch:9200"]
-xpack.security.authc.providers:
-  anonymous.anonymous1:
-    order: 0
-    credentials:
-      username: "anonymous_service_account"
-      password: "anonymous_service_account_password"
