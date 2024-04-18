@@ -178,3 +178,5 @@ forex-backend-java/src/main/resources/application-prod.yml
 keycloak.dev.env
 database.dev.env
 
+elasticsearch/data
+
