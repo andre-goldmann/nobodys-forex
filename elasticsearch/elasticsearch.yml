@@ -1,9 +1,0 @@
-# Elasticsearch Configuration
-
-network.host: 0.0.0.0
-http.port: 9200
-#xpack.security.enabled: true
-#xpack.security.authc:
-#  anonymous:
-#    username: anonymous_user
-xpack.license.self_generated.type: basic
