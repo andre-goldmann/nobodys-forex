@@ -7,7 +7,7 @@
         trendInfoApiData, trendinfos
     } from "$lib/store";
 
-    const HOST = "http://85.215.32.163:6081";
+    const HOST = "https://85.215.32.163:6081";
 
     async function loadTrendInfos(){
         await fetch(HOST + "/trendinfos")

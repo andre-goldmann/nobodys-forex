@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
     let symbol:string = 'EURUSD';
     let type:string = '';
-    const HOST = "http://85.215.32.163";
+    const HOST = "https://85.215.32.163";
     import {ignoredSignalsApiData, ignoredSignals, ignoredSignalSelected} from '$lib/store.ts';
     import type {IgnoredSignal} from "$lib/model";
 
@@ -194,7 +194,7 @@
     </div>
     {#if $ignoredSignalSelected}
         <div class="basis-1/4">
-            <form class="flex items-center space-x-6" action="http://85.215.32.163/resendsignal" on:submit|preventDefault={handleSubmit} method="POST">
+            <form class="flex items-center space-x-6" action="https://85.215.32.163/resendsignal" on:submit|preventDefault={handleSubmit} method="POST">
                 <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
                     <h1 class="mb-8 text-3xl text-center">Update Signal</h1>
 

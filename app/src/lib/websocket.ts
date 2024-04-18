@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 // Mock
 //const API_URL = 'http://127.0.0.1:6081';
 // Prod:
-const API_URL = 'http://85.215.32.163:6081';
+const API_URL = 'https://85.215.32.163:6081';
 
 export default function websocket(): WSReqonet {
     const id: string = uuid();

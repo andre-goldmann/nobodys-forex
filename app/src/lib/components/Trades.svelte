@@ -1,7 +1,7 @@
 <script lang="ts">
     import type {Trade} from "$lib/model";
     import {onMount} from "svelte";
-    const HOST = "http://85.215.32.163:6081";
+    const HOST = "https://85.215.32.163:6081";
     import {tradesApiData, tradeSelected} from '$lib/store.ts';
     import {trades} from "$lib/store";
 
@@ -92,7 +92,7 @@
     {#if $tradeSelected}
         <div class="basis-1/4">
             <!--form class="flex items-center space-x-6" action="http://127.0.0.1:6081/createorder" on:submit|preventDefault={handleSubmit} method="POST"-->
-            <form class="flex items-center space-x-6" action="http://85.215.32.163:6081/modifyorder" on:submit|preventDefault={handleSubmit} method="POST">
+            <form class="flex items-center space-x-6" action="https://85.215.32.163:6081/modifyorder" on:submit|preventDefault={handleSubmit} method="POST">
                 <div class="bg-transparent px-6 py-8 rounded shadow-md text-primary w-full">
                     <h1 class="mb-8 text-3xl text-center">Update Order</h1>
 
