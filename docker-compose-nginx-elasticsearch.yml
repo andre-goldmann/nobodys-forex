@@ -19,7 +19,7 @@ services:
       - ./certs/private.key:/etc/nginx/private.key
       - ./certs/passphrase.txt:/etc/nginx/passphrase.txt
     depends_on:
-      #- keycloak
+      - keycloak
       - es01
       - kibana
 

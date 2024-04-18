@@ -6,3 +6,4 @@ http.port: 9200
 #xpack.security.authc:
 #  anonymous:
 #    username: anonymous_user
+xpack.license.self_generated.type: basic
