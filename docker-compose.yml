@@ -228,7 +228,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+          "curl -s --cacert config/certs/ca/ca.crt https://85.215.32.163:9200 | grep -q 'missing authentication credentials'",
         ]
       interval: 10s
       timeout: 10s
@@ -261,7 +261,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+          "curl -s -I http://85.215.32.163:5601 | grep -q 'HTTP/1.1 302 Found'",
         ]
       interval: 10s
       timeout: 10s
@@ -309,8 +309,8 @@ services:
       - ELASTIC_USER=elastic
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - ELASTIC_HOSTS=https://85.215.32.163:9200
-      - KIBANA_HOSTS=http://kibana:5601
-      - LOGSTASH_HOSTS=http://logstash01:9600
+      - KIBANA_HOSTS=http://85.215.32.163:5601
+      - LOGSTASH_HOSTS=http://85.215.32.163:9600
     command:
       - --strict.perms=false
 
