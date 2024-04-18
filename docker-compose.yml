@@ -245,6 +245,8 @@ services:
       - certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
       - ./certs/certificate.pem:/etc/kibana/certificate.pem
+    expose:
+      - ${KIBANA_PORT}
     ports:
       - ${KIBANA_PORT}:5601
     environment:
