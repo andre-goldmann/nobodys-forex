@@ -75,7 +75,7 @@ services:
       - ./certs/passphrase.txt:/etc/nginx/passphrase.txt
     depends_on:
       - keycloak
-      - es01
+      - kibana
 
   keycloak:
     container_name: keycloak
