@@ -249,6 +249,7 @@ services:
       - ${KIBANA_PORT}:5601
     environment:
       - SERVERNAME=kibana
+      - SERVER_PUBLICBASEURL=http://85.215.32.163:5601
       - ELASTICSEARCH_HOSTS=https://85.215.32.163:9200
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
