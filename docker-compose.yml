@@ -237,6 +237,7 @@ services:
       kibana:
         condition: service_healthy
     image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
+    restart: on-failure
     user: root
     volumes:
       #- certs:/usr/share/metricbeat/certs
@@ -260,6 +261,7 @@ services:
       es01:
         condition: service_healthy
     image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+    restart: on-failure
     user: root
     volumes:
       #- certs:/usr/share/filebeat/certs
