@@ -1,0 +1,58 @@
+server:
+  port: 5080
+  forward-headers-strategy: framework
+  servlet:
+    context-path: /resource-server
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:keystore/jdg.digital.p12
+    #TODO can not checkin pwd
+    key-store-password:
+    key-alias: jdg.digital
+    certificate-private-key: file:/opt/javabackend/conf/private.key
+    trust-certificate: file:/opt/javabackend/conf/certificate.pem
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Namensaufläsung funktioniert
+          # TODO https funktioniert nicht
+          issuer-uri: https://keycloak:8443/realms/forex_admininstrator
+          jwk-set-uri: https://keycloak:8443/realms/forex_admininstrator/protocol/openid-connect/certs
+          #public-key-location: file://opt/javabackend/conf/jdg.digital.pem
+  datasource:
+    url: jdbc:postgresql://db:6432/trading-db
+    username: nobodysforex
+    password: pwd
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+logging:
+  level:
+    root: INFO
+    org:
+      hibernate:
+        SQL: DEBUG
+        type.descriptor.sql.BasicBinder: TRACE
+
+matomo:
+  tracker:
+    api-endpoint: http://172.17.134.42:8080/matomo.php
+    default-site-id: 2
+    enabled: true
+    connect-timeout: 10s
+    socket-timeout: 30s
+    user-agent: MatomoJavaClient
+    log-failed-tracking: true
+    disable-ssl-cert-validation: true
+    disable-ssl-host-verification: false
+    thread-pool-size: 2
