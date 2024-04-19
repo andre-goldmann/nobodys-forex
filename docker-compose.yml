@@ -285,10 +285,12 @@ services:
 
   logstash01:
     depends_on:
-      es01:
-        condition: service_healthy
-      kibana:
-        condition: service_healthy
+      - es01
+      - kibana
+      #es01:
+      #  condition: service_healthy
+      #kibana:
+      #  condition: service_healthy
     image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
     labels:
       co.elastic.logs/module: logstash
