@@ -27,7 +27,22 @@ filebeat.autodiscover:
                     target: ""
                     overwrite_keys: true
 
-output.logstash:
-  hosts: "logstash:5044"
+#output.logstash:
+#  hosts: "logstash:5044"
 
 logging.metrics.enabled: false
+
+processors:
+  - add_docker_metadata: ~
+
+setup.kibana:
+  host: ${KIBANA_HOSTS}
+  username: ${ELASTIC_USER}
+  password: ${ELASTIC_PASSWORD}
+
+output.elasticsearch:
+  hosts: ${ELASTIC_HOSTS}
+  username: ${ELASTIC_USER}
+  password: ${ELASTIC_PASSWORD}
+  ssl.enabled: false
+  #ssl.certificate_authorities: "certs/ca/ca.crt"
