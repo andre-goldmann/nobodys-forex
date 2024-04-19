@@ -9,7 +9,7 @@ metricbeat.modules:
     hosts: ${ELASTIC_HOSTS}
     #ssl.certificate_authorities: "certs/ca/ca.crt"
     #ssl.certificate: "certs/es01/es01.crt"
-    ssl.key: "certs/es01/es01.key"
+    #ssl.key: "certs/es01/es01.key"
     username: ${ELASTIC_USER}
     password: ${ELASTIC_PASSWORD}
     ssl.enabled: false
