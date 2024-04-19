@@ -18,6 +18,7 @@ nano api-gateway/src/main/resources/application-prod.yml
 nano forex-backend-java/src/main/resources/application-prod.yml
 nano keycloak.dev.env
 
+apt-get update && apt-get upgrade && apt-get autoremove
 cd development/nobodys-forex/
 docker compose down
 docker compose up --build -d

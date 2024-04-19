@@ -13,7 +13,7 @@
     import '$lib/global.css';
     let wsClient;
 
-    const HOST = "https://85.215.32.163:6081";
+    const HOST = "http://85.215.32.163:6081";
 
     // TODO read find the biggest daily candle this is then the diff here
     let diff:number = 0.02194;
