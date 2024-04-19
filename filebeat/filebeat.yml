@@ -1,29 +1,8 @@
-#filebeat.inputs:
-#  - type: filestream
-#    enabled: true
-#    paths:
-#      - /var/log/nginx/*.log
-#    fields:
-#      type: nginx
 filebeat.inputs:
-
-  - type: log
-
-    # Change to true to enable this input configuration.
-    enabled: true
-
-    # Paths that should be crawled and fetched. Glob based paths.
-    paths:
-      - /var/log/nginx/access.log
-      - /var/log/nginx/error.log
-    exclude_files: ['.gz$']
-    harvester_buffer_size: 131072
-
-    # Optional additional fields. These fields can be freely picked
-    # to add additional information to the crawled log files for filtering
-    fields_under_root: true
-    fields:
-      log_type: access_test
+  - type: docker
+    containers.ids: '*'
+    processors:
+        - add_docker_metadata: ~
 
 #filebeat.autodiscover:
 #  providers:
@@ -49,7 +28,7 @@ filebeat.inputs:
 #output.logstash:
 #  hosts: "logstash:5044"
 
-logging.metrics.enabled: false
+#logging.metrics.enabled: false
 
 processors:
   - add_docker_metadata: ~
