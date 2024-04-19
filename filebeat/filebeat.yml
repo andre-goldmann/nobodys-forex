@@ -1,31 +1,49 @@
+#filebeat.inputs:
+#  - type: filestream
+#    enabled: true
+#    paths:
+#      - /var/log/nginx/*.log
+#    fields:
+#      type: nginx
 filebeat.inputs:
-  - type: filestream
-    enabled: true
-    paths:
-      - /var/log/nginx/*.log
-    fields:
-      type: nginx
 
-filebeat.autodiscover:
-  providers:
-    - type: docker
-      labels.dedot: true
-      templates:
-        - condition:
-            contains:
-              container.labels.collect_logs_with_filebeat: "true"
-          config:
-            - type: container
-              format: docker
-              paths:
-                - "/var/lib/docker/containers/${data.docker.container.id}/*.log"
-              processors:
-                - decode_json_fields:
-                    when.equals:
-                      docker.container.labels.decode_log_event_to_json_object: "true"
-                    fields: ["message"]
-                    target: ""
-                    overwrite_keys: true
+  - type: log
+
+    # Change to true to enable this input configuration.
+    enabled: true
+
+    # Paths that should be crawled and fetched. Glob based paths.
+    paths:
+      - /var/log/nginx/access.log
+    exclude_files: ['.gz$']
+    harvester_buffer_size: 131072
+
+    # Optional additional fields. These fields can be freely picked
+    # to add additional information to the crawled log files for filtering
+    fields_under_root: true
+    fields:
+      log_type: access_test
+
+#filebeat.autodiscover:
+#  providers:
+#    - type: docker
+#      labels.dedot: true
+#      templates:
+#        - condition:
+#            contains:
+#              container.labels.collect_logs_with_filebeat: "true"
+#          config:
+#            - type: container
+#              format: docker
+#              paths:
+#                - "/var/lib/docker/containers/${data.docker.container.id}/*.log"
+#              processors:
+#                - decode_json_fields:
+#                    when.equals:
+#                      docker.container.labels.decode_log_event_to_json_object: "true"
+#                    fields: ["message"]
+#                    target: ""
+#                    overwrite_keys: true
 
 #output.logstash:
 #  hosts: "logstash:5044"
