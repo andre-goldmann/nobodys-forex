@@ -180,3 +180,4 @@ database.dev.env
 
 elasticsearch/data
 
+prodconfig
