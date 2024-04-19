@@ -1,0 +1,30 @@
+server:
+  port: 9080
+  forward-headers-strategy: framework
+  error:
+    include-stacktrace: ON_PARAM
+  servlet:
+    context-path: /api
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:keystore/jdg.digital.p12
+    #TODO can not checkin pwd
+    key-store-password:
+    key-alias: jdg.digital
+    certificate-private-key: file:/opt/apigateway/conf/private.key
+    trust-certificate: file:/opt/apigateway/conf/certificate.pem
+
+logging:
+  level:
+    root: info
+
+
+#spring:
+ # security:
+  #  oauth2:
+   #   resourceserver:
+    #    jwt:
+     #     issuer-uri: https://keycloak:8443/realms/forex_admininstrator
+      #    jwk-set-uri: https://keycloak:8443/realms/forex_admininstrator/protocol/openid-connect/certs
+       #   public-key-location: file://opt/apigateway/conf/jdg.digital.pem
