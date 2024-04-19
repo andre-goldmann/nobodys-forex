@@ -15,6 +15,7 @@ filebeat.inputs:
     # Paths that should be crawled and fetched. Glob based paths.
     paths:
       - /var/log/nginx/access.log
+      - /var/log/nginx/error.log
     exclude_files: ['.gz$']
     harvester_buffer_size: 131072
 
