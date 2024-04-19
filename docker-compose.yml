@@ -23,10 +23,10 @@ services:
         condition: service_healthy
       kibana:
         condition: service_healthy
-      keycloak:
-        condition: service_healthy
-      forexfrontend:
-        condition: service_healthy
+      #keycloak:
+      #  condition: service_healthy
+      #forexfrontend:
+      #  condition: service_healthy
 
   keycloak:
     container_name: keycloak
@@ -52,11 +52,11 @@ services:
       - ./certs/private.key:/opt/jboss/keycloak/conf/private.key
     depends_on:
       - db
-    healthcheck:
-      test: [ "CMD", "curl", "-kf", "https://keycloak:8443/realms/master" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    #healthcheck:
+    #  test: [ "CMD", "curl", "-kf", "https://keycloak:8443/realms/master" ]
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 3
 
   db:
     image: postgres:14.1-alpine
@@ -119,11 +119,11 @@ services:
       - /usr/app/node_modules
     depends_on:
       - keycloak
-    healthcheck:
-      test: [ "CMD", "curl", "-kf", "https://forexfrontend" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    #healthcheck:
+    #  test: [ "CMD", "curl", "-kf", "https://forexfrontend" ]
+    #  interval: 30s
+    #  timeout: 10s
+    #  retries: 3
 
   backend:
     container_name: backend
