@@ -179,3 +179,5 @@ keycloak.dev.env
 database.dev.env
 
 elasticsearch/data
+
+prodconfig
