@@ -180,5 +180,3 @@ database.dev.env
 
 elasticsearch/data
 
-.env
-
