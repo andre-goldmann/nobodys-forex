@@ -218,6 +218,7 @@ services:
       #- XPACK_SECURITY_ENCRYPTIONKEY=${ENCRYPTION_KEY}
       #- XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${ENCRYPTION_KEY}
       #- XPACK_REPORTING_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+      - xpack.license.self_generated.type=${LICENSE}
     mem_limit: ${KB_MEM_LIMIT}
     healthcheck:
       test:
