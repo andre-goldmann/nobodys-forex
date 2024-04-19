@@ -202,9 +202,9 @@ services:
     labels:
       co.elastic.logs/module: kibana
     volumes:
-      - certs:/usr/share/kibana/config/certs
+      #- certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
-      - ./certs/certificate.pem:/etc/kibana/certificate.pem
+      #- ./certs/certificate.pem:/etc/kibana/certificate.pem
     expose:
       - ${KIBANA_PORT}
     ports:
@@ -301,6 +301,8 @@ services:
       - ELASTIC_HOSTS=http://es01:9200
 
 volumes:
+  #certs:
+  #  driver: local
   esdata01:
     driver: local
   kibanadata:
