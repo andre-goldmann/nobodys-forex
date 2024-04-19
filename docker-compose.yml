@@ -5,8 +5,7 @@ services:
     image: nginx:stable-alpine
     restart: on-failure
     labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
+      co.elastic.logs/module: nginx
     expose:
       - "80"
       - "443:443"
@@ -32,8 +31,7 @@ services:
     container_name: keycloak
     restart: on-failure
     labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
+      co.elastic.logs/module: keycloak
     build:
       context: ./keycloak
       args:
@@ -63,8 +61,7 @@ services:
     container_name: db
     restart: on-failure
     labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
+      co.elastic.logs/module: db
     env_file:
       - ./database.dev.env
     expose:
@@ -81,8 +78,7 @@ services:
     build: ./api-gateway
     restart: always
     labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
+      co.elastic.logs/module: api-gateway
     ports:
       - "9080:9080"
     volumes:
@@ -96,8 +92,7 @@ services:
     build: ./forex-backend-java
     restart: always
     labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
+      co.elastic.logs/module: javabackend
     ports:
       - "5080:5080"
     volumes:
@@ -112,8 +107,7 @@ services:
       context: ./forex-frontend
       dockerfile: ./Dockerfile
     labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
+      co.elastic.logs/module: forexfrontend
     volumes:
       - .:/usr/app/
       - /usr/app/node_modules

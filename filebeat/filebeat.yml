@@ -1,34 +1,13 @@
 filebeat.inputs:
-  - type: docker
-    containers.ids: '*'
-    processors:
-        - add_docker_metadata: ~
+  - type: filestream
+    id: default-filestream
+    paths:
+      - ingest_data/*.log
 
-#filebeat.autodiscover:
-#  providers:
-#    - type: docker
-#      labels.dedot: true
-#      templates:
-#        - condition:
-#            contains:
-#              container.labels.collect_logs_with_filebeat: "true"
-#          config:
-#            - type: container
-#              format: docker
-#              paths:
-#                - "/var/lib/docker/containers/${data.docker.container.id}/*.log"
-#              processors:
-#                - decode_json_fields:
-#                    when.equals:
-#                      docker.container.labels.decode_log_event_to_json_object: "true"
-#                    fields: ["message"]
-#                    target: ""
-#                    overwrite_keys: true
-
-#output.logstash:
-#  hosts: "logstash:5044"
-
-#logging.metrics.enabled: false
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
 
 processors:
   - add_docker_metadata: ~
@@ -43,4 +22,3 @@ output.elasticsearch:
   username: ${ELASTIC_USER}
   password: ${ELASTIC_PASSWORD}
   ssl.enabled: false
-  #ssl.certificate_authorities: "certs/ca/ca.crt"
