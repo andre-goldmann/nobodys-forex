@@ -278,8 +278,8 @@ services:
       kibana:
         condition: service_healthy
     image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
-    labels:
-      co.elastic.logs/module: logstash
+    #labels:
+    #  co.elastic.logs/module: logstash
     user: root
     volumes:
       #- certs:/usr/share/logstash/certs
