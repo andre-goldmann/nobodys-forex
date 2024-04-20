@@ -1,3 +1,5 @@
+import logging
+import ecs_logging
 import enum
 import os
 
@@ -1022,6 +1024,11 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
     session.add(signal)
 
 if __name__ == "__main__":
+    logger = logging.getLogger("app")
+    logger.setLevel(logging.DEBUG)
+    handler = logging.FileHandler('elvis.json')
+    handler.setFormatter(ecs_logging.StdlibFormatter())
+    logger.addHandler(handler)
     Base.metadata.create_all(engine)
     #port can only be 80 see tradingview
     uvicorn.run(app, host="0.0.0.0", port=80)

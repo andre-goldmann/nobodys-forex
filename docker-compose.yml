@@ -124,8 +124,7 @@ services:
     build: ./
     restart: always
     labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
+      co.elastic.logs/module: backend
     ports:
       - "6081:6081"
     volumes:
@@ -138,8 +137,7 @@ services:
     build: ./tvsignals
     restart: always
     labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
+      co.elastic.logs/module: tvsignals
     volumes:
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
     depends_on:
@@ -193,8 +191,8 @@ services:
       es01:
         condition: service_healthy
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
-    labels:
-      co.elastic.logs/module: kibana
+    #labels:
+    #  co.elastic.logs/module: kibana
     volumes:
       #- certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
