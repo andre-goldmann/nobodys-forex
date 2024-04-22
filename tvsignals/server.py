@@ -1024,7 +1024,7 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
     session.add(signal)
 
 if __name__ == "__main__":
-    logger = logging.getLogger("app")
+    logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler('elvis.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
