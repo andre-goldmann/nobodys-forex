@@ -22,3 +22,11 @@ apt-get update && apt-get upgrade && apt-get autoremove
 cd development/nobodys-forex/
 docker compose down
 docker compose up --build -d
+
+#Nmap-Scans
+* sudo nmap -sT IP
+* sudo nmap -sT IP
+* sudo nmap -sS IP
+* sudo nmap -O IP
+* sudo nmap -A IP
+* sudo nmap --script vuln IP

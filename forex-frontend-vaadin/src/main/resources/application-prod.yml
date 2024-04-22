@@ -1,12 +1,21 @@
 server:
-  port: 5080
+  port: 7080
   forward-headers-strategy: framework
-  servlet:
-    context-path: /resource-server
+  #servlet:
+  #  context-path: /resource-server
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:keystore/jdg.digital.p12
+    #TODO can not checkin pwd
+    key-store-password: Blade1708
+    key-alias: jdg.digital
+    certificate-private-key: file:/opt/forexvaadinfrontend/conf/private.key
+    trust-certificate: file:/opt/forexvaadinfrontend/conf/certificate.pem
 
 spring:
   datasource:
-    url: jdbc:postgresql://172.31.138.212:6432/trading-db
+    url: jdbc:postgresql://db:6432/vaadin
     username: nobodysforex
     password: pwd
   jpa:
@@ -16,7 +25,21 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http:/keycloak:8443/realms/webinar
+        registration:
+          keycloak:
+            client-id: webinar-sample-app
+            client-secret: se8wtanzEr3g13vJVLBF8MOhW6JSzaQl
+            scope:
+              - profile
+              - email
+              - openid
+              - roles
 
 logging:
   level:

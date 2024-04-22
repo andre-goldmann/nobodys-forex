@@ -34,3 +34,5 @@ build/
 .vscode/
 
 frontend
+/src/main/resources/keystore
+/src/main/resources/application-prod.yml

@@ -1,12 +1,15 @@
 server:
-  port: 5080
+  port: 9080
   forward-headers-strategy: framework
+  #servlet:
+  #  context-path: /resource-server
   servlet:
-    context-path: /resource-server
+    session:
+      timeout: 1m
 
 spring:
   datasource:
-    url: jdbc:postgresql://172.31.138.212:6432/trading-db
+    url: jdbc:postgresql://172.31.138.212:6432/vaadin
     username: nobodysforex
     password: pwd
   jpa:
@@ -16,6 +19,22 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://172.31.138.212:8443/realms/webinar
+        registration:
+          keycloak:
+            client-id: webinar-sample-app
+            client-secret: se8wtanzEr3g13vJVLBF8MOhW6JSzaQl
+            scope:
+              - profile
+              - email
+              - openid
+              - roles
+
 
 logging:
   level:
@@ -24,3 +43,9 @@ logging:
       hibernate:
         SQL: DEBUG
         type.descriptor.sql.BasicBinder: TRACE
+
+vaadin:
+  # Reduce the heartbeat interval so that we get multiple ones before the session times out
+  heartbeatInterval: 10
+  # Don't let the heartbeat keep the sessions alive indefinitely
+  closeIdleSessions: true
