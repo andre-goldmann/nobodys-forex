@@ -1,5 +1,6 @@
 package jdg.digital.forexfrontend.security.keycloak;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  * them into <code>ROLE_</code> {@link GrantedAuthority authorities} that can be used directly by Spring Security.
  */
 @Component
+@Slf4j
 class KeycloakAuthoritiesMapper implements GrantedAuthoritiesMapper {
 
     private final String clientId;
@@ -38,7 +40,7 @@ class KeycloakAuthoritiesMapper implements GrantedAuthoritiesMapper {
     }
 
     @SuppressWarnings("unchecked")
-    private Collection<? extends GrantedAuthority> extractClientRoles(OAuth2UserAuthority oauthAuthority) {
+    private Collection<? extends GrantedAuthority> extractClientRoles(final OAuth2UserAuthority oauthAuthority) {
         //https://github.com/kesaven8/resourceServer-spring-boot
 
         var resourceAccess = (Map<String, Object>) oauthAuthority.getAttributes().getOrDefault("realm_access", Collections.emptyMap());
@@ -48,6 +50,7 @@ class KeycloakAuthoritiesMapper implements GrantedAuthoritiesMapper {
         //Client scopes -> Client scope details -> Mapper details
 
         var clientAccess = (Map<String, Object>) oauthAuthority.getAttributes().getOrDefault("resource_access", Collections.emptyMap());
+        log.info("client access: {}", clientAccess);
         List<String> s = (List<String>) resourceAccess.get("roles");
 
         if(s == null || s.isEmpty()){

@@ -1,0 +1,91 @@
+{
+  "name": "financial-data-analysis",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/financial-data-analysis/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/financial-data-analysis",
+        "index": "apps/financial-data-analysis/src/index.html",
+        "main": "apps/financial-data-analysis/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/financial-data-analysis/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/financial-data-analysis/src/assets",
+          {
+            "glob": "_redirects",
+            "input": "apps/financial-data-analysis/src",
+            "output": "/"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/web/shared/assets/src/assets",
+            "output": "assets"
+          }
+        ],
+        "styles": ["apps/financial-data-analysis/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "financial-data-analysis:build:production"
+        },
+        "development": {
+          "buildTarget": "financial-data-analysis:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "financial-data-analysis:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/financial-data-analysis/jest.config.ts"
+      }
+    }
+  }
+}

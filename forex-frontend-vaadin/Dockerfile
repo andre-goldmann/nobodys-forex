@@ -11,7 +11,6 @@ COPY spotbugs-security-include.xml .
 # Copy the source code
 COPY src ./src
 
-
 # Build the application with Maven
 RUN mvn clean install -DskipTests -Pprod
 
@@ -21,13 +20,14 @@ FROM eclipse-temurin:17.0.10_7-jre-alpine
 # Set the working directory in the container
 WORKDIR /app
 
+COPY certs/certificate.pem /usr/local/share/ca-certificates/
+
+RUN update-ca-certificates
+
+# Import the CA certificate(s) into the Java truststore
+RUN keytool -importcert -alias jdg.digital -keystore -cacerts -storepass Blade1708 -file /usr/local/share/ca-certificates/certificate.pem -noprompt
 
 COPY --from=builder /app/target/forex-frontend-vaadin-0.0.1-SNAPSHOT.jar .
-# Copy the packaged JAR file into the container
-#COPY target/forex-backend-java-0.0.1-SNAPSHOT.jar /app/forex-backend-java.jar
-
-# Copy the application-prod.yml file into the container
-#COPY src/main/resources/application-prod.yml /app/application-prod.yml
 
 # Expose the port that the application runs on
 EXPOSE 7080

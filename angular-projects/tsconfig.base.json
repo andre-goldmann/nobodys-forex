@@ -1,0 +1,76 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@angular-projects/app-config": [
+        "libs/web/shared/app-config/src/index.ts"
+      ],
+      "@angular-projects/auth_routes": ["libs/web/shared/auth/index.ts"],
+      "@angular-projects/fda-dashboard-ui": [
+        "libs/web/fda/ui/dashboard/ui/src/index.ts"
+      ],
+      "@angular-projects/forex-app-dashboard-ui": [
+        "libs/web/forex-app/dashboard/ui/src/index.ts"
+      ],
+      "@angular-projects/forgot-password": [
+        "libs/web/shared/auth/forgot-password/ui/src/index.ts"
+      ],
+      "@angular-projects/icon-component": [
+        "libs/web/shared/ui/icon/src/index.ts"
+      ],
+      "@angular-projects/input-component": [
+        "libs/web/shared/ui/input/src/index.ts"
+      ],
+      "@angular-projects/login": ["libs/web/shared/auth/login/ui/src/index.ts"],
+      "@angular-projects/login-data-access": [
+        "libs/web/shared/auth/login/data-access/src/index.ts"
+      ],
+      "@angular-projects/nav-body": [
+        "libs/web/shared/ui/nav/body/ui/src/index.ts"
+      ],
+      "@angular-projects/nav-data-access": [
+        "libs/web/shared/ui/nav/data-access/src/index.ts"
+      ],
+      "@angular-projects/nav-ui": ["libs/web/shared/ui/nav/ui/src/index.ts"],
+      "@angular-projects/register": [
+        "libs/web/shared/auth/register/ui/src/index.ts"
+      ],
+      "@angular-projects/sidenav-body": [
+        "libs/web/shared/ui/sidenav/body/ui/src/index.ts"
+      ],
+      "@angular-projects/sidenav-data-access": [
+        "libs/web/shared/ui/sidenav/data-access/src/index.ts"
+      ],
+      "@angular-projects/sidenav-models": [
+        "libs/web/shared/ui/sidenav/models/src/index.ts"
+      ],
+      "@angular-projects/sidenav-ui": [
+        "libs/web/shared/ui/sidenav/ui/src/index.ts"
+      ],
+      "@angular-projects/spinner-component": [
+        "libs/web/shared/ui/spinner/src/index.ts"
+      ],
+      "@angular-projects/ui-data-access-api": [
+        "libs/web/shared/ui/data-access/api/src/index.ts"
+      ],
+      "@angular-projects/ui-data-access-models": [
+        "libs/web/shared/ui/data-access/models/src/index.ts"
+      ],
+      "@angular-projects/utils": ["libs/web/shared/utils/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

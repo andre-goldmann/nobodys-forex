@@ -175,6 +175,9 @@ api-gateway/interface/angular
 forex-backend-java/src/main/resources/keystore
 forex-backend-java/src/main/resources/application-prod.yml
 
+forex-frontend-vaadin/src/main/resources/keystore
+forex-frontend-vaadin/src/main/resources/application-prod.yml
+
 keycloak.dev.env
 database.dev.env
 

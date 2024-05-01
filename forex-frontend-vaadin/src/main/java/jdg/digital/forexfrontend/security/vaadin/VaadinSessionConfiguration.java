@@ -1,6 +1,7 @@
 package jdg.digital.forexfrontend.security.vaadin;
 
 import com.vaadin.flow.server.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -9,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * Configures Vaadin to work properly with sessions.
  */
 @Component
+@Slf4j
 class VaadinSessionConfiguration implements VaadinServiceInitListener, SystemMessagesProvider, SessionDestroyListener {
 
     private final String relativeSessionExpiredUrl;
@@ -34,7 +36,7 @@ class VaadinSessionConfiguration implements VaadinServiceInitListener, SystemMes
         try {
             event.getSession().getSession().invalidate();
         } catch (Exception ignore) {
-            // Session was probably already invalidated.
+            log.error("Session was probably already invalidated.", ignore);
         }
     }
 

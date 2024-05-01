@@ -1,0 +1,26 @@
+{
+  "name": "utils",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/shared/utils/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/web/shared/utils",
+        "main": "libs/web/shared/utils/src/index.ts",
+        "tsConfig": "libs/web/shared/utils/tsconfig.lib.json",
+        "assets": ["libs/web/shared/utils/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/web/shared/utils/jest.config.ts"
+      }
+    }
+  }
+}

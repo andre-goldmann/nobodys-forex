@@ -9,10 +9,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://85.215.32.163:8443/realms/forex_admininstrator
-          jwk-set-uri: https://85.215.32.163:8443/realms/forex_admininstrator/protocol/openid-connect/certs
+          issuer-uri: https://172.21.230.27:8080/realms/forex_admininstrator
+          jwk-set-uri: https://172.21.230.27:8080/realms/forex_admininstrator/protocol/openid-connect/certs
   datasource:
-    url: jdbc:postgresql://85.215.32.163:6432/trading-db
+    url: jdbc:postgresql://85.215.32.163:6432/forex
     username: nobodysforex
     password: pwd
   jpa:
@@ -31,15 +31,15 @@ logging:
         SQL: DEBUG
         type.descriptor.sql.BasicBinder: TRACE
 
-matomo:
-  tracker:
-    api-endpoint: http://85.215.32.163:8080/matomo.php
-    default-site-id: 2
-    enabled: true
-    connect-timeout: 10s
-    socket-timeout: 30s
-    user-agent: MatomoJavaClient
-    log-failed-tracking: true
-    disable-ssl-cert-validation: true
-    disable-ssl-host-verification: false
-    thread-pool-size: 2
+#matomo:
+#  tracker:
+#    api-endpoint: http://85.215.32.163:8080/matomo.php
+#    default-site-id: 2
+#    enabled: true
+#    connect-timeout: 10s
+#    socket-timeout: 30s
+#    user-agent: MatomoJavaClient
+#    log-failed-tracking: true
+#    disable-ssl-cert-validation: true
+#    disable-ssl-host-verification: false
+#    thread-pool-size: 2

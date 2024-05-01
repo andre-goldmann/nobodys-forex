@@ -1,0 +1,18 @@
+<p>fda-dashboard-ui works!</p>
+<button class="btn">Button</button>
+<p>fda-dashboard-ui works!</p>
+<div class="search-input-container">
+  <lib-input-component
+    class="search-control"
+    [control]="searchControl"
+    icon="search"
+    [iconSize]="'lg'"
+    placeholder="Artists, songs, albums, or playlists"
+    [autoFocus]="true"
+    [rounded]="true"
+    [enableClearButton]="true"
+  >
+  </lib-input-component>
+  <lib-spinner-component class="ml-4" *ngIf="isLoading$ | async"></lib-spinner-component>
+</div>
+

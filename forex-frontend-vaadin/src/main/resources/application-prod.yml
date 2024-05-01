@@ -30,16 +30,19 @@ spring:
       client:
         provider:
           keycloak:
-            issuer-uri: http:/keycloak:8443/realms/webinar
+            issuer-uri: https://keycloak:8443/realms/forex-frontend-vaadin
+            jwk-set-uri: https://keycloak:8443/realms/forex-frontend-vaadin/protocol/openid-connect/certs
+            token-uri: https://keycloak:8443/realms/forex-frontend-vaadin/protocol/openid-connect/token
         registration:
           keycloak:
-            client-id: webinar-sample-app
-            client-secret: se8wtanzEr3g13vJVLBF8MOhW6JSzaQl
+            client-id: forex-frontend-vaadin-client
+            client-secret: bmKLy4YdvepYASGrRmNndm6DbKyft69M
             scope:
               - profile
               - email
               - openid
               - roles
+
 
 logging:
   level:

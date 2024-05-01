@@ -47,7 +47,7 @@ services:
       DB_USER: nobodysforex
       DB_PASSWORD: pwd
       TZ: Europe/Paris
-      KC_HOSTNAME_URL: https://172.31.138.212:8443
+      KC_HOSTNAME_URL: https://172.21.230.27:8443
       KC_HEALTH_ENABLED: true
       KC_DB_URL: jdbc:postgresql://db:6432/trading-db
       #KC_HTTPS_CERTIFICATE_FILE: /opt/jboss/keycloak/conf/certificate.pem
@@ -62,12 +62,20 @@ services:
       - "8443:8443"
     expose:
       - "8443"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "--insecure", "https://localhost:8443/realms/master" ]
+      interval: 10s
+      retries: 12
+      start_period: 30s
+      timeout: 5s
     volumes:
       - ./backup/keycloak/changelog.xml:/liquibase/changelog/changelog.xml
       - ./backup/keycloak/keycloak_data:/opt/jboss/keycloak/standalone/data
       - ./certs/jdg.digital.p12:/opt/jboss/keycloak/conf/jdg.digital.p12
       - ./certs/certificate.pem:/opt/jboss/keycloak/conf/certificate.pem
       - ./certs/private.key:/opt/jboss/keycloak/conf/private.key
+      - ./certs/keycloak.crt:/etc/x509/https/tls.crt
+      - ./certs/keycloak.key:/etc/x509/https/tls.key
     depends_on:
       - db
 
@@ -89,35 +97,35 @@ services:
       #- ./init-multi-postgres-databases.sh:/docker-entrypoint-initdb.d/init-multi-postgres-databases.sh
     command: -p 6432
 
-  apigateway:
-    container_name: apigateway
-    build: ./api-gateway
-    restart: always
-    labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
-    ports:
-      - "9080:9080"
-    volumes:
-      - ./certs/certificate.pem:/opt/apigateway/conf/certificate.pem
-      - ./certs/private.key:/opt/apigateway/conf/private.key
-    depends_on:
-      - keycloak
+  #apigateway:
+  #  container_name: apigateway
+  #  build: ./api-gateway
+  #  restart: always
+  #  labels:
+  #    collect_logs_with_filebeat: "true"
+  #    decode_log_event_to_json_object: "true"
+  #  ports:
+  #    - "9080:9080"
+  #  volumes:
+  #    - ./certs/certificate.pem:/opt/apigateway/conf/certificate.pem
+  #    - ./certs/private.key:/opt/apigateway/conf/private.key
+  #  depends_on:
+  #    - keycloak
 
-  javabackend:
-    container_name: javabackend
-    build: ./forex-backend-java
-    restart: always
-    labels:
-      collect_logs_with_filebeat: "true"
-      decode_log_event_to_json_object: "true"
-    ports:
-      - "5080:5080"
-    volumes:
-      - ./certs/certificate.pem:/opt/javabackend/conf/certificate.pem
-      - ./certs/private.key:/opt/javabackend/conf/private.key
-    depends_on:
-      - keycloak
+  #javabackend:
+  #  container_name: javabackend
+  #  build: ./forex-backend-java
+  #  restart: always
+  #  labels:
+  #    collect_logs_with_filebeat: "true"
+  #    decode_log_event_to_json_object: "true"
+  #  ports:
+  #    - "5080:5080"
+  #  volumes:
+  #    - ./certs/certificate.pem:/opt/javabackend/conf/certificate.pem
+  #    - ./certs/private.key:/opt/javabackend/conf/private.key
+  #  depends_on:
+  #    - keycloak
 
   #forexfrontend:
   #  container_name: forexfrontend
@@ -137,10 +145,14 @@ services:
     ports:
       - "7080:7080"
     volumes:
-      - ./certs/certificate.pem:/opt/forexvaadinfrontend/conf/certificate.pem
-      - ./certs/private.key:/opt/forexvaadinfrontend/conf/private.key
-    #depends_on:
-    #  - keycloak
+      - ./certs/keycloak.crt:/opt/forexvaadinfrontend/conf/certificate.pem
+      - ./certs/keycloak.key:/opt/forexvaadinfrontend/conf/private.key
+      #- ./certs/keycloak.crt:/etc/x509/https/tls.crt
+      #- ./certs/keycloak.key:/etc/x509/https/tls.key
+    depends_on:
+      - keycloak
+      #keycloak:
+      #  condition: service_healthy
 
   qdrant:
     image: qdrant/qdrant:latest

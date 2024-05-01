@@ -22,13 +22,17 @@ FROM eclipse-temurin:17.0.10_7-jre-alpine
 # Set the working directory in the container
 WORKDIR /app
 
+# Set JAVA_HOME environment variable
+#ENV JAVA_HOME /opt/java/openjdk
+
+COPY certs/certificate.pem /usr/local/share/ca-certificates/
+
+RUN update-ca-certificates
+
+# Import the CA certificate(s) into the Java truststore
+RUN keytool -importcert -alias jdg.digital -keystore -cacerts -storepass Blade1708 -file /usr/local/share/ca-certificates/certificate.pem -noprompt
 
 COPY --from=builder /app/target/api-gateway-0.0.1-SNAPSHOT.jar .
-# Copy the packaged JAR file into the container
-#COPY target/forex-backend-java-0.0.1-SNAPSHOT.jar /app/forex-backend-java.jar
-
-# Copy the application-prod.yml file into the container
-#COPY src/main/resources/application-prod.yml /app/application-prod.yml
 
 # Expose the port that the application runs on
 EXPOSE 9080
