@@ -43,3 +43,8 @@ Thumbs.db
 
 
 storybook-static
+.nrx
+
+apps/financial-data-analysis/src/environments/environment.prod.ts
+apps/forex-app/src/environments/environment.prod.ts
+
