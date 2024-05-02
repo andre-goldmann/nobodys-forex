@@ -47,7 +47,7 @@ services:
       DB_USER: nobodysforex
       DB_PASSWORD: pwd
       TZ: Europe/Paris
-      KC_HOSTNAME_URL: https://172.21.230.27:8443
+      KC_HOSTNAME_URL: https://172.31.138.212:8443
       KC_HEALTH_ENABLED: true
       KC_DB_URL: jdbc:postgresql://db:6432/trading-db
       #KC_HTTPS_CERTIFICATE_FILE: /opt/jboss/keycloak/conf/certificate.pem

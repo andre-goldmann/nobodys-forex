@@ -1,0 +1,9 @@
+transformers
+fastapi
+uvicorn[standard]
+fastapi
+torch
+torchvision
+torchaudio
+accelerate
+sentencepiece

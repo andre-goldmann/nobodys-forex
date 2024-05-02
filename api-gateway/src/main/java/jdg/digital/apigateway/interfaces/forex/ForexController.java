@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -22,8 +21,8 @@ public class ForexController {
     private TokenValidationService tokenValidationService;
 
     @GetMapping("/routes")
-    public ResponseEntity<List<NavbarData>> getRoutes(Authentication authentication, HttpServletRequest request){
-        final String authorization = request.getHeader("authorization");
+    public ResponseEntity<List<NavbarData>> getRoutes(){
+        //final String authorization = request.getHeader("authorization");
         /*if(authorization == null || authorization.isEmpty()){
             return ResponseEntity.badRequest().build();
         }*/
@@ -58,12 +57,12 @@ public class ForexController {
     }
 
     @GetMapping("/symbols")
-    public ResponseEntity<List<String>> getSymbols(Authentication authentication, HttpServletRequest request){
+    public ResponseEntity<List<String>> getSymbols(HttpServletRequest request){
 
-        final String authorization = request.getHeader("authorization");
-        if(authorization == null || authorization.isEmpty()){
-            return ResponseEntity.badRequest().build();
-        }
+        //final String authorization = request.getHeader("authorization");
+        //if(authorization == null || authorization.isEmpty()){
+//            return ResponseEntity.badRequest().build();
+        //}
         final StringBuilder headersBuilder = new StringBuilder();
         // Get all header names and print them
         request.getHeaderNames().asIterator().forEachRemaining(headerName -> {

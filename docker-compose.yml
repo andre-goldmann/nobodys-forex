@@ -101,18 +101,18 @@ services:
     depends_on:
       - keycloak
 
-  forexfrontend:
-    container_name: forexfrontend
-    build:
-      context: ./forex-frontend
-      dockerfile: ./Dockerfile
-    labels:
-      co.elastic.logs/module: forexfrontend
-    volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
-    depends_on:
-      - keycloak
+  #forexfrontend:
+  #  container_name: forexfrontend
+  #  build:
+  #    context: ./forex-frontend
+  #    dockerfile: ./Dockerfile
+  #  labels:
+  #    co.elastic.logs/module: forexfrontend
+  #  volumes:
+  #    - .:/usr/app/
+  #    - /usr/app/node_modules
+  #  depends_on:
+  #    - keycloak
     #healthcheck:
     #  test: [ "CMD", "curl", "-kf", "https://forexfrontend" ]
     #  interval: 30s

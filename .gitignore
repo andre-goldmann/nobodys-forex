@@ -189,3 +189,6 @@ database.dev.env
 elasticsearch/data
 
 prodconfig
+
+venv
+pyenv

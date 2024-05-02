@@ -4,6 +4,7 @@
 keytool -genkeypair -alias jdg.digital -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore jdg.digital.p12 -validity 3650
 keytool -importkeystore -srckeystore jdg.digital.p12 -destkeystore intermediate.p12 -deststoretype PKCS12
 openssl pkcs12 -in intermediate.p12 -out certificate.pem -nokeys
+keytool -import -noprompt -trustcacerts -alias jdg.digital -file ./certificate.pem -keystore $JAVA_HOME\lib\security\cacerts -storepass Blade1708
 openssl pkcs12 -in intermediate.p12 -out private.key -nocerts
 # TODO here
 keytool -importcert -file jdg.digital.p12 -alias jdg.digital -keystore $JDK_HOME/jre/lib/security/cacerts
@@ -21,10 +22,10 @@ nano api-gateway/src/main/resources/application-prod.yml
 nano forex-backend-java/src/main/resources/application-prod.yml
 nano keycloak.dev.env
 
-apt-get update && apt-get upgrade && apt-get autoremove
-cd development/nobodys-forex/
-docker compose down
-docker compose up --build -d
+* apt-get update && apt-get upgrade && apt-get autoremove
+* cd development/nobodys-forex/
+* docker compose down
+* docker compose up --build -d
 
 # to check when out of space
 C:\Users\username\AppData\Local\Packages
@@ -33,12 +34,19 @@ C:\Users\username\AppData\Local\Packages
 * sudo nmap -sT IP
 * sudo nmap -sT IP
 * sudo nmap -sS IP
-* sudo nmap -O IP
+* Operating System
+  * sudo nmap -O IP
 * sudo nmap -A IP
 * sudo nmap --script vuln IP
+* Network-Scan
+  * sudo nmap -PR -sn IP/24
+* sudo nmap -PA80 -sn
+* Hostnames:
+  * sudo nmap -sL IP
+
 
 Docker disc usage:
-* docker system df 
+* docker system df
 
 17:10 23.04.2024
 
@@ -55,3 +63,16 @@ https://confluence.atlassian.com/kb/how-to-import-a-public-ssl-certificate-into-
 Read:
 https://confluence.atlassian.com/kb/connecting-to-ssl-services-802171215.html
 https://confluence.atlassian.com/kb/unable-to-connect-to-ssl-services-due-to-pkix-path-building-failed-error-779355358.html
+
+# How to deploy
+# app is deployed here
+https://nobodys-forex.vercel.app/auth/login
+
+# Keycloak and APIs are here
+https://85.215.32.163/
+
+# DAS WIRD ABER VIELLEICHT NICHT FUNKTIONIEREN, DA HIER DAS CERTIFICATE 
+# AUF VERCEL EIN ANDERES ALS AUF https://85.215.32.163/ ist
+
+#also muss/kann listen 80 ssl
+#auf keycloak + api-gateway weiterleiten und nicht mehr

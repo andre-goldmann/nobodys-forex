@@ -9,3 +9,4 @@ pandas
 python-dotenv
 pyarrow
 ecs-logging
+transformers

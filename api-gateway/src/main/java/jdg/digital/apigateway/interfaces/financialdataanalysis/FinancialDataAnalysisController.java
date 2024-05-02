@@ -1,10 +1,8 @@
 package jdg.digital.apigateway.interfaces.financialdataanalysis;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jdg.digital.apigateway.interfaces.NavbarData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +14,8 @@ import java.util.List;
 @Slf4j
 public class FinancialDataAnalysisController {
     @GetMapping("/routes")
-    public ResponseEntity<List<NavbarData>> getRoutes(Authentication authentication, HttpServletRequest request){
-        final String authorization = request.getHeader("authorization");
+    public ResponseEntity<List<NavbarData>> getRoutes(){
+        //final String authorization = request.getHeader("authorization");
         /*if(authorization == null || authorization.isEmpty()){
             return ResponseEntity.badRequest().build();
         }*/
