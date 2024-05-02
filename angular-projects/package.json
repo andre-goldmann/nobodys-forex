@@ -13,16 +13,17 @@
     "@angular/platform-browser": "~17.3.0",
     "@angular/platform-browser-dynamic": "~17.3.0",
     "@angular/router": "~17.3.0",
+    "@ngneat/svg-icon": "^7.1.0",
+    "@ngneat/until-destroy": "^8.0.4",
     "@nx/angular": "18.3.4",
     "angular-oauth2-oidc": "^17.0.2",
     "angular-oauth2-oidc-jwks": "^17.0.2",
+    "dotenv": "^16.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.3",
-    "@ngneat/svg-icon": "^7.1.0",
-    "@ngneat/until-destroy": "^8.0.4"
+    "zone.js": "~0.14.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~17.3.0",
