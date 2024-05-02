@@ -31,7 +31,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                         // For local development
                         "http://localhost:4200",
                         "http://localhost:4300",
-                        "https://85.215.32.163");
+                        "https://85.215.32.163",
+                        "https://nobodys-forex.vercel.app");
     }
 
     @Bean
