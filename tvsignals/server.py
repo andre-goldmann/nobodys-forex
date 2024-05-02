@@ -757,7 +757,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             return
         else:
             prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
-            if prodSignalsCount <= 5 and signalStats.profit > 1:
+            if prodSignalsCount <= 5 and signalStats.profit > 1 and ('EURCHF' == signal.symbol or 'AUDUSD' == signal.symbol):
                 storeProdSignal(ProdSignal(
                     symbol=signal.symbol,
                     type=signal.type,
