@@ -2,11 +2,11 @@ import { AppConfig } from '@angular-projects/app-config';
 
 export const environment: AppConfig = {
   production: false,
-  baseURL: 'http://localhost:7080/api/forex',
+  baseURL: 'https://85.215.32.163:9080/api/forex',
   clientId: 'forex_admininstrator_client',
-  clientSecret: 'fPeHnS3SUWvOH4I8lzHfym7Aq1fSSEIq',
+  clientSecret: 'L7YFcYYKDDpIG6dvBtISskp40O8RiyXd',
   webHost: window.location.origin,
-  keycloakHost: 'http://localhost:8080/realms/forex_admininstrator',
+  keycloakHost: 'https://85.215.32.163:8443/realms/forex_admininstrator',
   requireHttps: false
 };
 //TODO download keycloak to have no problems when offline

@@ -1,4 +1,4 @@
-import {computed, Inject, inject, Injectable, signal} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 
 import {debounceTime, EMPTY, filter, map, Observable, of} from "rxjs";
 import {AuthConfig, OAuthService} from "angular-oauth2-oidc";
