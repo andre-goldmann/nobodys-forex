@@ -10,7 +10,7 @@ export const environment: AppConfig = {
     baseURL: '${process.env.baseURL}',
     clientId: '${process.env.clientId}',
     clientSecret: '${process.env.clientSecret}',
-    webHost: '${process.env.webHost}',
+    webHost: ${process.env.webHost},
     keycloakHost: '${process.env.keycloakHost}',
     requireHttps: ${process.env.requireHttps}
 
