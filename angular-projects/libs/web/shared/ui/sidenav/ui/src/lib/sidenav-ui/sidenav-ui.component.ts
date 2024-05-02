@@ -1,11 +1,11 @@
 import { animate, keyframes, style, transition, trigger } from '@angular/animations';
-import {Component, Output, EventEmitter, OnInit, HostListener, inject} from '@angular/core';
+import {Component, Output, EventEmitter, OnInit, HostListener, inject, signal} from '@angular/core';
 import {CommonModule} from "@angular/common";
-import {Router, RouterModule} from "@angular/router";
-import {toSignal} from "@angular/core/rxjs-interop";
+import {RouterModule} from "@angular/router";
 import {LayoutService} from "@angular-projects/ui-data-access-api";
 import {AuthService} from "@angular-projects/login-data-access";
 import {SideNavToggle} from "@angular-projects/sidenav-models";
+import {NavbarData} from "@angular-projects/ui-data-access-models";
 
 @Component({
   selector: 'lib-sidenav-ui',
@@ -51,7 +51,7 @@ export class SidenavUiComponent implements OnInit {
   screenWidth = 0;
   private layoutService = inject(LayoutService);
   // load this from service
-  navData = toSignal(this.layoutService.navData());
+  navData = signal({} as NavbarData[]);
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -64,6 +64,17 @@ export class SidenavUiComponent implements OnInit {
 
   ngOnInit(): void {
     this.screenWidth = window.innerWidth;
+    this.layoutService.navData().subscribe(
+      {
+        next: value => {
+          this.navData.set(value);
+        },
+        error: error => {
+          console.error('error receiving layout', error);
+        }
+      }
+    )
+
   }
 
   toggleCollapse(): void {
