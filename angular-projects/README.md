@@ -13,3 +13,6 @@ nx g rm login-data-access
 
 cd C:\Users\agol\keycloak-23.0.7
 bin\kc.bat start-dev --log-level=DEBUG
+
+# TODOS
+* login does not work on cellphone
