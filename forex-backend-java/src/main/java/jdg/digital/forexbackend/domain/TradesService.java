@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,19 +45,17 @@ public class TradesService {
     }
 
     public Mono<List<Trade>> getWaitingTrades(String env) {
-        switch (env.toUpperCase()){
-            case "DEV":
-                return Mono.fromCallable(
-                        () -> this.tradeRepository.waitingTradesDev().stream()
-                                .map(this::entityToDto)
-                                .toList());
-            case "PROD":
-                return Mono.fromCallable(
-                        () -> this.tradeRepository.waitingTradesProd().stream()
-                                .map(this::entityToDto)
-                                .toList());
-            default: throw new IllegalArgumentException("Undefined env " + env);
-        }
+        return switch (env.toUpperCase(Locale.getDefault())) {
+            case "DEV" -> Mono.fromCallable(
+                    () -> this.tradeRepository.waitingTradesDev().stream()
+                            .map(this::entityToDto)
+                            .toList());
+            case "PROD" -> Mono.fromCallable(
+                    () -> this.tradeRepository.waitingTradesProd().stream()
+                            .map(this::entityToDto)
+                            .toList());
+            default -> throw new IllegalArgumentException("Undefined env " + env);
+        };
 
     }
 

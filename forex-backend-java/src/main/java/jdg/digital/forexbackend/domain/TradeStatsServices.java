@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,21 +27,21 @@ public class TradeStatsServices {
 
     // TODO change return to Mono<>
     public Mono<List<TradeStat>> getTradeStats(final String env) {
-        switch (env.toUpperCase()){
-            case "DEV": return Mono.fromCallable(
+        return switch (env.toUpperCase(Locale.getDefault())) {
+            case "DEV" -> Mono.fromCallable(
                     () -> this.tradeStatsRepository.statsDevTrades()
                             .stream()
                             .map(this::mapToTrade)
                             .toList()
             );
-            case "PROD": return Mono.fromCallable(
+            case "PROD" -> Mono.fromCallable(
                     () -> this.tradeStatsRepository.statsProdTrades()
                             .stream()
                             .map(this::mapToTrade)
                             .toList()
             );
-            default: throw new IllegalArgumentException("Undefined env " + env);
-        }
+            default -> throw new IllegalArgumentException("Undefined env " + env);
+        };
     }
 
     private TradeStat mapToTrade(final TradeStatInterface entity) {
