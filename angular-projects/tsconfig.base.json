@@ -25,6 +25,9 @@
       "@angular-projects/forex-app-dashboard-ui": [
         "libs/web/forex-app/dashboard/ui/src/index.ts"
       ],
+      "@angular-projects/forex-app-data-access": [
+        "libs/web/forex-app/shared/data-access/src/index.ts"
+      ],
       "@angular-projects/forgot-password": [
         "libs/web/shared/auth/forgot-password/ui/src/index.ts"
       ],

@@ -94,7 +94,7 @@ async def create_user(user_data: UserData):
 
 
 if __name__ == "__main__":
-    refreshData = False
+    refreshData = True
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 

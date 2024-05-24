@@ -1,0 +1,100 @@
+package jdg.digital.forexbackend.domain;
+
+import jdg.digital.forexbackend.domain.model.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static jdg.digital.forexbackend.domain.model.StrategyNameMapping.STRATEGY_NAMES;
+
+@Service
+@Slf4j
+public class TradesService {
+
+    @Autowired
+    private TradeRepository tradeRepository;
+
+    public Mono<List<Trade>> getTradesWithPositiveProfit(final SymbolEnum symbolEnum, final StrategyEnum strategyEnum) {
+        log.info("Search for {}-{}", symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum));
+        return Mono.fromCallable(
+                () -> this.tradeRepository.loadTrades(symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum)).stream()
+                .filter(e -> e.getProfit() > 0)
+                .map(e -> entityToDto(e))
+                .toList());
+    }
+
+    public Mono<List<Trade>> getTradesWithNegativeProfit(final SymbolEnum symbolEnum, final StrategyEnum strategyEnum) {
+        log.info("Search for {}-{}", symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum));
+        return Mono.fromCallable(
+                () -> this.tradeRepository.loadTrades(symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum)).stream()
+                .filter(e -> e.getProfit() < 0)
+                .map(e -> entityToDto(e))
+                .toList());
+    }
+
+    public Mono<List<Trade>> getWaitingTrades(String env) {
+        switch (env.toUpperCase()){
+            case "DEV":
+                return Mono.fromCallable(
+                        () -> this.tradeRepository.waitingTradesDev().stream()
+                                .map(e -> entityToDto(e))
+                                .toList());
+            case "PROD":
+                return Mono.fromCallable(
+                        () -> this.tradeRepository.waitingTradesProd().stream()
+                                .map(e -> entityToDto(e))
+                                .toList());
+            default: throw new IllegalArgumentException("Undefined env " + env);
+        }
+
+    }
+
+    private Trade entityToDto(final TradesEntity entity) {
+        log.info(entity.toString());
+        final Trade trade = new Trade();
+        trade.setSymbol(SymbolEnum.fromValue(entity.getSymbol()));
+        final Set<StrategyEnum> strategies = STRATEGY_NAMES.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(entity.getStrategy()))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+        if(strategies.size() == 0){
+            throw new IllegalArgumentException("Not StrategyEnum found for " + entity.getStrategy());
+        } else if (strategies.size() > 1){
+            throw new IllegalArgumentException("Multiple StrategyEnums found for " + entity.getStrategy());
+
+        }
+        trade.setStrategy(strategies.stream().findFirst().get());
+        trade.setExit(entity.getExit());
+        trade.setEntry(entity.getEntry());
+        final BigDecimal profit = BigDecimal.valueOf(entity.getProfit() - entity.getCommision() -  entity.getSwap());
+        trade.setProfit(profit.setScale(2, RoundingMode.HALF_UP).doubleValue());
+        if(entity.getClosed() != null && !entity.getClosed().isEmpty()) {
+            final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+            final LocalDateTime localDateTime = LocalDateTime.parse(entity.getClosed(), formatter);
+            trade.setClosed(localDateTime.atOffset(ZoneOffset.UTC));
+        }
+        if(entity.getActivated() != null && !entity.getActivated().isEmpty()) {
+            final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+            final LocalDateTime localDateTime = LocalDateTime.parse(entity.getActivated(), formatter);
+            trade.setActivated(localDateTime.atOffset(ZoneOffset.UTC));
+        }
+        trade.setType(TradeTypeEnum.valueOf(entity.getType().toUpperCase()));
+        return trade;
+    }
+
+    public Mono<Trade> updateTrade(String env, Trade trade) {
+        System.out.println("Update trade " + trade.toString());
+        return Mono.empty();
+    }
+}

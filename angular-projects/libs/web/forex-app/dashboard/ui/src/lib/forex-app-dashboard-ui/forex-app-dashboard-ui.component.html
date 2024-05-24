@@ -1,10 +1,201 @@
 <!--button class="btn">Button</button-->
 <!-- TODO info could be null?? -->
 @if(userStoreService.getUser() && userStoreService.getUser().info){
-  <p>Loged in as: {{userStoreService.getUser().info.preferred_username}}</p>
+<p>Loged in as: {{userStoreService.getUser().info.preferred_username}}</p>
 }
 @else{
-  <p>Could not show User-Info</p>
-  <div>{{userStoreService.getUser() | json}}</div>
+<p>Could not show User-Info</p>
+<div>{{userStoreService.getUser().info | json}}</div>
 }
+<button (click)="updateTrade()" class="btn btn-primary">Update Trade</button>
+<p> TODO Endpoint updateProdTrades</p>
+
+{{waitingTrades | json}}
+<table class="table table-auto mr-14 mb-4">
+  <thead>
+  <tr>
+    <th colspan="4" class="text-center px-4 py-2">Statistics (Combined)</th>
+  </tr>
+  <tr>
+    <th class="px-4 py-2">Symbol</th>
+    <th class="px-4 py-2">Strategy</th>
+    <th class="px-4 py-2">Results</th>
+    <!--th class="px-4 py-2">Loses</th>
+    <th class="px-4 py-2">Percentage</th>
+    <th class="px-4 py-2">Profit</th-->
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let item of map | keyvalue" class="hover">
+    <td class="border px-4 py-2">{{item.key.split("-")[0]}}</td>
+    <td class="border px-4 py-2">{{item.key.split("-")[1]}}</td>
+    <td>
+
+      @if (item.value.length > 1){
+        <table>
+          <thead>
+            <th class="px-4 py-2">System</th>
+            <th class="px-4 py-2">Wins</th>
+            <th class="px-4 py-2">Loses</th>
+            <th class="px-4 py-2">Percentage</th>
+            <th class="px-4 py-2">Profit</th>
+          </thead>
+          <tr *ngFor="let stat of item.value; let i = index;">
+            @if (item.value.length > 1 && i == 0){
+              <td class="border px-4 py-2">Dev</td>
+            } @else if (item.value.length > 1 && i == 1){
+              <td class="border px-4 py-2">Prod</td>
+            }
+            <td class="border px-4 py-2">{{stat.wins}}</td>
+            <td class="border px-4 py-2">{{stat.loses}}</td>
+            <td class="border px-4 py-2">{{stat.winpercentage}}</td>
+            <td class="border px-4 py-2">{{stat.profit}}</td>
+          </tr>
+        </table>
+      } @else {
+        <table border="0">
+          <thead>
+            <th class="px-4 py-2">Wins</th>
+            <th class="px-4 py-2">Loses</th>
+            <th class="px-4 py-2">Percentage</th>
+            <th class="px-4 py-2">Profit</th>
+          </thead>
+          <tr *ngFor="let stat of item.value">
+            <td class="border px-4 py-2">{{stat.wins}}</td>
+            <td class="border px-4 py-2">{{stat.loses}}</td>
+            <td class="border px-4 py-2">{{stat.winpercentage}}</td>
+            <td class="border px-4 py-2">{{stat.profit}}</td>
+          </tr>
+        </table>
+      }
+
+    </td>
+    <!--td class="border px-4 py-2">{{item.wins}}</td>
+    <td class="border px-4 py-2">{{item.loses}}</td>
+    <td class="border px-4 py-2">{{item.winpercentage}}</td>
+    <td class="border px-4 py-2">{{item.profit}}</td-->
+  </tr>
+  </tbody>
+</table>
+
+<div class="container mx-auto px-4">
+  <!-- create a table having the columns Symbol, Strategy, Wins, Loses, Percentage, Profit having a click-listener on each row
+  and each row that will be highlighted on hover -->
+  <div class="flex justify-between">
+
+    <table class="table table-auto mr-14 mb-4">
+      <thead>
+      <tr>
+        <th colspan="4" class="text-center px-4 py-2">Statistics (DEV)</th>
+      </tr>
+      <tr>
+        <th class="px-4 py-2">Symbol</th>
+        <th class="px-4 py-2">Strategy</th>
+        <th class="px-4 py-2">Wins</th>
+        <th class="px-4 py-2">Loses</th>
+        <th class="px-4 py-2">Percentage</th>
+        <th class="px-4 py-2">Profit</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of tradeStats" (click)="onRowClick(item)" class="hover">
+        <td class="border px-4 py-2">{{item.symbol}}</td>
+        <td class="border px-4 py-2">{{item.strategy}}</td>
+        <td class="border px-4 py-2">{{item.wins}}</td>
+        <td class="border px-4 py-2">{{item.loses}}</td>
+        <td class="border px-4 py-2">{{item.winpercentage}}</td>
+        <td class="border px-4 py-2">{{item.profit}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <table class="table table-auto mr-14">
+      <thead>
+      <tr>
+        <th colspan="6" class="text-center px-4 py-2">Statistics (Prod)</th>
+      </tr>
+      <tr>
+        <th class="px-4 py-2">Symbol</th>
+        <th class="px-4 py-2">Strategy</th>
+        <th class="px-4 py-2">Wins</th>
+        <th class="px-4 py-2">Loses</th>
+        <th class="px-4 py-2">Percentage</th>
+        <th class="px-4 py-2">Profit</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of prodTradeStats" class="hover">
+        <td class="border px-4 py-2">{{item.symbol}}</td>
+        <td class="border px-4 py-2">{{item.strategy}}</td>
+        <td class="border px-4 py-2">{{item.wins}}</td>
+        <td class="border px-4 py-2">{{item.loses}}</td>
+        <td class="border px-4 py-2">{{item.winpercentage}}</td>
+        <td class="border px-4 py-2">{{item.profit}}</td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+  <!-- on column click symbol and strategy should be show here-->
+  <div *ngIf="selectedItem" class="mb-4">
+    <p>Selected: {{selectedItem.symbol}}-{{selectedItem.strategy}}</p>
+  </div>
+  <div class="flex justify-between">
+    <!-- First Table -->
+    <table class="table-auto mr-8 mb-4">
+      <thead>
+      <tr>
+        <th colspan="4" class="text-center px-4 py-2">Wins</th>
+      </tr>
+      <tr>
+        <th class="px-4 py-2">Type</th>
+        <th class="px-4 py-2">Activated</th>
+        <th class="px-4 py-2">Closed</th>
+        <th class="px-4 py-2">Entry</th>
+        <th class="px-4 py-2">Exit</th>
+        <th class="px-4 py-2">Profit</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of positiveTrades" class="hover">
+          <td class="border px-4 py-2">{{item.type}}</td>
+          <td class="border px-4 py-2">{{item.activated}}</td>
+          <td class="border px-4 py-2">{{item.closed}}</td>
+          <td class="border px-4 py-2">{{item.entry}}</td>
+          <td class="border px-4 py-2">{{item.exit}}</td>
+          <td class="border px-4 py-2">{{item.profit}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Second Table -->
+    <table class="table-auto mb-8">
+      <thead>
+      <tr>
+      <th colspan="4" class="text-center px-4 py-2">Loses</th>
+      </tr>
+      <tr>
+        <th class="px-4 py-2">Type</th>
+        <th class="px-4 py-2">Activated</th>
+        <th class="px-4 py-2">Closed</th>
+        <th class="px-4 py-2">Entry</th>
+        <th class="px-4 py-2">Exit</th>
+        <th class="px-4 py-2">Profit</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of negativeTrades" class="hover">
+          <td class="border px-4 py-2">{{item.type}}</td>
+          <td class="border px-4 py-2">{{item.activated}}</td>
+          <td class="border px-4 py-2">{{item.closed}}</td>
+          <td class="border px-4 py-2">{{item.entry}}</td>
+          <td class="border px-4 py-2">{{item.exit}}</td>
+          <td class="border px-4 py-2">{{item.profit}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
 

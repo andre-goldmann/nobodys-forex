@@ -1,4 +1,4 @@
-package jdg.digital.forexbackend.model;
+package jdg.digital.forexbackend.domain.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

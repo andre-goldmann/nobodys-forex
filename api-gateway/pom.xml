@@ -14,7 +14,8 @@
 	<name>api-gateway</name>
 	<description>api-gateway</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>21</java.version>
+		<maven.compiler.target>21</maven.compiler.target>
 		<openapi-generator-maven-plugin.version>6.5.0</openapi-generator-maven-plugin.version>
 		<io.swagger.version>1.6.2</io.swagger.version>
 	</properties>
@@ -39,6 +40,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
 		</dependency>
 
 		<dependency>
@@ -143,7 +149,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk18on</artifactId>
@@ -177,6 +182,7 @@
 							<configOptions>
 								<npmName>@jdg.digital/api-interface</npmName>
 								<npmVersion>${project.version}</npmVersion>
+								<npmRepository>https://npmjs.com/org/jdg.digital</npmRepository>
 								<ngVersion>16.0.0</ngVersion>
 								<fileNaming>kebab-case</fileNaming>
 								<nullSafeAdditionalProps>true</nullSafeAdditionalProps>

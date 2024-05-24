@@ -1,4 +1,4 @@
-package jdg.digital.forexbackend.model;
+package jdg.digital.forexbackend.domain.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;

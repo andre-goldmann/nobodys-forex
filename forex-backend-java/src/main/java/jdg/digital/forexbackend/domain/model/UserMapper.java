@@ -3,7 +3,6 @@ package jdg.digital.forexbackend.domain.model;
 import jdg.digital.forexbackend.interfaces.users.UserDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import jdg.digital.forexbackend.model.UserEntity;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

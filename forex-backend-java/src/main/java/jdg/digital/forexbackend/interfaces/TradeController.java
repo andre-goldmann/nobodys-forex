@@ -1,13 +1,50 @@
 package jdg.digital.forexbackend.interfaces;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jdg.digital.forexbackend.domain.Trade;
+import jdg.digital.forexbackend.domain.TradeStat;
+import jdg.digital.forexbackend.domain.TradeStatsServices;
+import jdg.digital.forexbackend.domain.TradesService;
+import jdg.digital.forexbackend.domain.model.StrategyEnum;
+import jdg.digital.forexbackend.domain.model.SymbolEnum;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
+@Slf4j
 public class TradeController {
 
-    @GetMapping("trades")
-    public String getTrades(){
-        return "Hello World";
+    @Autowired
+    private TradesService tradeService;
+
+    @Autowired
+    private TradeStatsServices tradeStatsServices;
+
+    @GetMapping("tradetats/{env}")
+    public Mono<List<TradeStat>> getTradesDev(@PathVariable("env") final String env) {
+        return this.tradeStatsServices.getTradeStats(env);
+    }
+
+    @GetMapping("trades/positive-profit")
+    public Mono<List<Trade>> getTradesWithPositiveProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
+        return this.tradeService.getTradesWithPositiveProfit(symbol, strategy);
+    }
+
+    @GetMapping("trades/negative-profit")
+    public Mono<List<Trade>> getTradesWithNegativeProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
+        return this.tradeService.getTradesWithNegativeProfit(symbol, strategy);
+    }
+
+    @GetMapping("trades/waiting/{env}")
+    public Mono<List<Trade>> getWaitingTrades(@PathVariable("env") final String env) {
+        return this.tradeService.getWaitingTrades(env);
+    }
+
+    @PutMapping("trades/update/{env}")
+    public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
+        return this.tradeService.updateTrade(env, trade);
     }
 }

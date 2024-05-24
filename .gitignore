@@ -192,3 +192,6 @@ prodconfig
 
 venv
 pyenv
+
+python-ai/data
+python-ai/chroma_data

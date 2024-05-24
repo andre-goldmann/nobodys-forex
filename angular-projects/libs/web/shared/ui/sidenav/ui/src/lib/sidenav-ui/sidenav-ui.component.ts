@@ -3,7 +3,7 @@ import {Component, Output, EventEmitter, OnInit, HostListener, inject, signal} f
 import {CommonModule} from "@angular/common";
 import {RouterModule} from "@angular/router";
 import {LayoutService} from "@angular-projects/ui-data-access-api";
-import {AuthService} from "@angular-projects/login-data-access";
+import { AuthService, UserStoreService } from '@angular-projects/login-data-access';
 import {SideNavToggle} from "@angular-projects/sidenav-models";
 import {NavbarData} from "@angular-projects/ui-data-access-models";
 
@@ -46,6 +46,7 @@ import {NavbarData} from "@angular-projects/ui-data-access-models";
 export class SidenavUiComponent implements OnInit {
 
   private authService = inject(AuthService);
+  private userStorage= inject(UserStoreService);
   @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
   collapsed = false;
   screenWidth = 0;
@@ -89,6 +90,8 @@ export class SidenavUiComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    sessionStorage.clear();
+    this.userStorage.setUser({} as any);
   }
 }
 

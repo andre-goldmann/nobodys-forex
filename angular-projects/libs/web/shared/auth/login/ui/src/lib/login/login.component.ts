@@ -1,10 +1,10 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {Router, RouterModule} from "@angular/router";
-import {AuthService, UserProfile} from "@angular-projects/login-data-access";
+import { AuthService, UserProfile, UserStoreService } from '@angular-projects/login-data-access';
 import {SpinnerComponent} from "@angular-projects/spinner-component";
 import {AsyncPipe, CommonModule} from "@angular/common";
 import {BehaviorSubject} from "rxjs";
-import {UserStoreService} from "../../../../data-access/src/lib/service/user-store.service";
+
 
 @Component({
   standalone: true,
@@ -28,6 +28,7 @@ export default class LoginComponent implements OnInit{
   private router = inject(Router);
 
   ngOnInit(): void {
+
     this.authService.init();
 
     // Always try this???
@@ -35,6 +36,7 @@ export default class LoginComponent implements OnInit{
     if(i != -1) {
       let code = window.location.href.substring(i + 5);
       this.isLoadingSubject.next(true);
+
       this.authService.fetchToken(code).then(e => {
         console.info("Got token...");
         this.isLoadingSubject.next(false);
@@ -49,6 +51,7 @@ export default class LoginComponent implements OnInit{
     else {
       if (
         !this.authService.hasValidAccessToken() && !this.authService.hasValidIdToken()) {
+        sessionStorage.clear();
         this.authService.login();
       } else {
         // immer dashboard??

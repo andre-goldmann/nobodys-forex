@@ -52,6 +52,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .requestMatchers("/api/**").permitAll()
                 //.requestMatchers("/h2/**").permitAll()
                 .anyRequest().permitAll())
+                // TODO remove this line
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable());
         /*http
                 .authorizeRequests()

@@ -62,7 +62,7 @@ strategies = ["NNR",
               "T3-JMaCrossover_WITHOUT_REG",
 
               "T3-MachineLearningLogisticRegression",
-              "T3-machineLearningLogisticRegression",
+              "T3-MachineLearningLogisticRegression_WITHOUT_REG",
 
               "T3-GapFilling",
               "T3-GapFilling_WITHOUT_REG",

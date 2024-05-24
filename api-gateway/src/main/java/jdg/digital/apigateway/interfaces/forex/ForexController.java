@@ -1,14 +1,17 @@
 package jdg.digital.apigateway.interfaces.forex;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jdg.digital.apigateway.domain.TokenValidationService;
+import jdg.digital.api_interface.StrategyEnum;
+import jdg.digital.api_interface.SymbolEnum;
+import jdg.digital.api_interface.Trade;
+import jdg.digital.api_interface.TradeStat;
+import jdg.digital.apigateway.domain.*;
 import jdg.digital.apigateway.interfaces.NavbarData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -19,6 +22,37 @@ public class ForexController {
 
     @Autowired
     private TokenValidationService tokenValidationService;
+
+    @Autowired
+    private TradeStatsService tradeStatsService;
+
+    @Autowired
+    private TradeService tradeService;
+
+    @GetMapping("/trades/waiting/{env}")
+    public Mono<List<Trade>> getWaitingTrades(@PathVariable("env") final String env) {
+        return this.tradeService.getWaitingTrades(env);
+    }
+
+    @PutMapping("/trades/update/{env}")
+    public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
+        return this.tradeService.updateTrade(env, trade);
+    }
+
+    @GetMapping("/trades/positive-profit")
+    public Mono<List<Trade>> getTradesWithPositiveProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
+        return this.tradeService.getTradesWithPositiveProfit(symbol, strategy);
+    }
+
+    @GetMapping("/trades/negative-profit")
+    public Mono<List<Trade>> getTradesWithNegativeProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
+        return this.tradeService.getTradesWithNegativeProfit(symbol, strategy);
+    }
+
+    @GetMapping("/tradestats/{env}")
+    public Mono<TradeStat[]> getTradeStats(@PathVariable("env") final String env) {
+        return this.tradeStatsService.getTradeStats(env);
+    }
 
     @GetMapping("/routes")
     public ResponseEntity<List<NavbarData>> getRoutes(){

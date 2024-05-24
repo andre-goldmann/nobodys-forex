@@ -6,6 +6,12 @@ TensorFlow
 spacy
 sentence_transformers
 cohere
+langchain
+langchain_cohere
+ollama
+anthropic
+#voyageai
+pypdf
 #torch
 #torchvision
 #torchaudio
