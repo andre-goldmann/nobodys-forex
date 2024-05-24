@@ -1,4 +1,4 @@
-FROM maven:3.9.5-openjdk-21 AS builder
+FROM maven:latest AS builder
 
 # Set the working directory
 WORKDIR /app
