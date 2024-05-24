@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum SymbolEnum {
   
+  AUDCHF("AUDCHF"),
+  
   EURUSD("EURUSD"),
   
   GBPUSD("GBPUSD"),
@@ -98,9 +100,7 @@ public enum SymbolEnum {
   
   USOIL("USOil"),
   
-  UKOIL("UKOil"),
-
-  AUDCHF("AUDCHF");
+  UKOIL("UKOil");
 
   private String value;
 

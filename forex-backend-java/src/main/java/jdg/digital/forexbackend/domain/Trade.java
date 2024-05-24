@@ -45,7 +45,7 @@ import java.util.StringJoiner;
   Trade.JSON_PROPERTY_CLOSED,
   Trade.JSON_PROPERTY_ACTIVATED
 })
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-05-22T22:32:13.140195+02:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-05-24T21:03:49.168096600+02:00[Europe/Berlin]")
 public class Trade implements Serializable {
   private static final long serialVersionUID = 1L;
 

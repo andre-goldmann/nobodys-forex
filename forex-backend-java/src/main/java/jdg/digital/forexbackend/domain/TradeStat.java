@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jdg.digital.forexbackend.domain.model.StrategyEnum;
 import jdg.digital.forexbackend.domain.model.SymbolEnum;
 
+
 import java.io.Serializable;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -38,7 +39,7 @@ import java.util.StringJoiner;
   TradeStat.JSON_PROPERTY_WINPERCENTAGE,
   TradeStat.JSON_PROPERTY_PROFIT
 })
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-05-04T13:55:17.682765400+02:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2024-05-24T21:03:49.168096600+02:00[Europe/Berlin]")
 public class TradeStat implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -175,9 +176,9 @@ public class TradeStat implements Serializable {
    * Get total
    * @return total
   **/
-  @javax.annotation.Nullable
+  @javax.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_TOTAL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getTotal() {
     return total;
@@ -185,7 +186,7 @@ public class TradeStat implements Serializable {
 
 
   @JsonProperty(JSON_PROPERTY_TOTAL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTotal(Integer total) {
     this.total = total;
   }
