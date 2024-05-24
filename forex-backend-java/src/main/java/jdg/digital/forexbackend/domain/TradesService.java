@@ -30,7 +30,7 @@ public class TradesService {
         return Mono.fromCallable(
                 () -> this.tradeRepository.loadTrades(symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum)).stream()
                 .filter(e -> e.getProfit() > 0)
-                .map(e -> entityToDto(e))
+                .map(this::entityToDto)
                 .toList());
     }
 
@@ -39,7 +39,7 @@ public class TradesService {
         return Mono.fromCallable(
                 () -> this.tradeRepository.loadTrades(symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum)).stream()
                 .filter(e -> e.getProfit() < 0)
-                .map(e -> entityToDto(e))
+                .map(this::entityToDto)
                 .toList());
     }
 
@@ -48,12 +48,12 @@ public class TradesService {
             case "DEV":
                 return Mono.fromCallable(
                         () -> this.tradeRepository.waitingTradesDev().stream()
-                                .map(e -> entityToDto(e))
+                                .map(this::entityToDto)
                                 .toList());
             case "PROD":
                 return Mono.fromCallable(
                         () -> this.tradeRepository.waitingTradesProd().stream()
-                                .map(e -> entityToDto(e))
+                                .map(this::entityToDto)
                                 .toList());
             default: throw new IllegalArgumentException("Undefined env " + env);
         }
@@ -68,7 +68,7 @@ public class TradesService {
                 .filter(entry -> entry.getValue().equals(entity.getStrategy()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
-        if(strategies.size() == 0){
+        if(strategies.isEmpty()){
             throw new IllegalArgumentException("Not StrategyEnum found for " + entity.getStrategy());
         } else if (strategies.size() > 1){
             throw new IllegalArgumentException("Multiple StrategyEnums found for " + entity.getStrategy());

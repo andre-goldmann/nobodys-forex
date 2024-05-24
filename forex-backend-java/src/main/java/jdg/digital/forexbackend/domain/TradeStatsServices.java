@@ -30,13 +30,13 @@ public class TradeStatsServices {
             case "DEV": return Mono.fromCallable(
                     () -> this.tradeStatsRepository.statsDevTrades()
                             .stream()
-                            .map(e -> mapToTrade(e))
+                            .map(this::mapToTrade)
                             .toList()
             );
             case "PROD": return Mono.fromCallable(
                     () -> this.tradeStatsRepository.statsProdTrades()
                             .stream()
-                            .map(e -> mapToTrade(e))
+                            .map(this::mapToTrade)
                             .toList()
             );
             default: throw new IllegalArgumentException("Undefined env " + env);
@@ -49,18 +49,12 @@ public class TradeStatsServices {
         }
         final TradeStat stat = new TradeStat();
         stat.setSymbol(SymbolEnum.fromValue(entity.getSymbol()));
-        /*stat.setStrategy(StrategyEnum.fromValue(
-                    entity.getStrategy()
-                            .replace("-", "_")
-                            .replace(" ", "_")
-                            .toUpperCase()
-                )
-        );*/
+
         final Set<StrategyEnum> strategies = STRATEGY_NAMES.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(entity.getStrategy()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
-        if(strategies.size() == 0){
+        if(strategies.isEmpty()){
             throw new IllegalArgumentException("Not StrategyEnum found for " + entity.getStrategy());
         } else if (strategies.size() > 1){
             throw new IllegalArgumentException("Multiple StrategyEnums found for " + entity.getStrategy());

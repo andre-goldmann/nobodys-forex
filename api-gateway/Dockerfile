@@ -1,4 +1,4 @@
-FROM maven:3.8.4-openjdk-17 AS builder
+FROM maven:3.9.5-openjdk-21 AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY interface ./interface
 RUN mvn clean install -DskipTests
 
 # Use a base image with OpenJDK
-FROM eclipse-temurin:17.0.10_7-jre-alpine
+FROM eclipse-temurin:21
 
 # Set the working directory in the container
 WORKDIR /app
