@@ -47,6 +47,7 @@ public class TradeController {
 
     @PostMapping("signal")
     public Mono<String> createSignal(@RequestBody Signal signal) {
+        log.info("Signal: {}", signal);
         return this.tradeStatsServices.getStatsFor(signal.symbol(), signal.strategy())
                 .map(stats -> {
                     log.info("Stats: {}", stats);
