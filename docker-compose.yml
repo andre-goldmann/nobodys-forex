@@ -39,7 +39,7 @@ services:
       co.elastic.logs/module: kafka
     depends_on:
       - zookeeper
-    restart: always
+    restart: on-failure
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
