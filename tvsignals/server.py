@@ -729,9 +729,9 @@ async def signals(signal:SignalDto):
             "timestamp": "",
             "type": signal.type,
             "entry": signal.entry,
-            "sl": 0,
-            "tp": 0,
-            "strategy": "strategy"}
+            "sl": signal.sl,
+            "tp": signal.tp,
+            "strategy": signal.strategy}
     response = requests.post(
         "http://javabackend:5080/forex/signal",
         json=data,
