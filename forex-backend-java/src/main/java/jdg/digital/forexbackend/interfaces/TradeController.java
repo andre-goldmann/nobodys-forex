@@ -49,6 +49,7 @@ public class TradeController {
     public Mono<String> createSignal(@RequestBody Signal signal) {
         return this.tradeStatsServices.getStatsFor(signal.symbol(), signal.strategy())
                 .map(stats -> {
+                    log.info("Stats: {}", stats);
                     if (stats != null) {
                         return this.tradeService.storeSignal(signal, stats);
                     } else {
