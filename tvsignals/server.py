@@ -762,20 +762,22 @@ def calculateSlAndStoreSignal(signal, strategy, session):
     elif signalStats.failedtrades > signalStats.successtrades:
         lots = 0.01
 
+    # Immer an Java Backend senden
+    data = {"symbol": signal.symbol,
+            "timestamp": signal.timestamp,
+            "type": signal.type,
+            "entry": signal.entry,
+            "sl": sl,
+            "tp": tp,
+            "strategy": strategy}
+    response = requests.post(
+        "http://javabackend:5080/forex/signal",
+        json=data,
+    )
+    if response.status_code != 200:
+        print(str(response.status_code))
+
     if signalStats is not None and signalStats.alltrades > 150:
-        data = {"symbol": signal.symbol,
-                "timestamp": "",
-                "type": signal.type,
-                "entry": signal.entry,
-                "sl": sl,
-                "tp": tp,
-                "strategy": strategy}
-        response = requests.post(
-            "http://javabackend:5080/forex/signal/",
-            json=data,
-        )
-        if response.status_code != 200:
-            print(str(response.status_code))
 
         percentage = (100 / signalStats.alltrades) * signalStats.successtrades
         if percentage < 65 and signalStats.profit < 75:

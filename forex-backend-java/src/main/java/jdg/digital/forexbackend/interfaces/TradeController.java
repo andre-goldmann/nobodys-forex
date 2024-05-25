@@ -46,11 +46,14 @@ public class TradeController {
     }
 
     @PostMapping("signal")
-    public Mono<Void> createSignal(@RequestBody Signal signal) {
-        log.info("Received signal: {}", signal);
-        // TODO implement signal processing
-        // TODO send signal to queue
-        // TODO store it in ProdDB if it is a valid signal
-        return Mono.empty();
+    public Mono<String> createSignal(@RequestBody Signal signal) {
+        return this.tradeStatsServices.getStatsFor(signal.symbol(), signal.strategy())
+                .map(stats -> {
+                    if (stats != null) {
+                        return this.tradeService.storeSignal(signal, stats);
+                    } else {
+                        return "Trade not created";
+                    }
+                });
     }
 }

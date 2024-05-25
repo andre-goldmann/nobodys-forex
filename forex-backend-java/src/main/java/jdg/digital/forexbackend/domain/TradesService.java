@@ -4,6 +4,7 @@ import jdg.digital.forexbackend.domain.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -25,6 +26,9 @@ public class TradesService {
 
     @Autowired
     private TradeRepository tradeRepository;
+
+    @Autowired
+    private ProdTradeRepository prodTradeRepository;
 
     public Mono<List<Trade>> getTradesWithPositiveProfit(final SymbolEnum symbolEnum, final StrategyEnum strategyEnum) {
         log.info("Search for {}-{}", symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum));
@@ -95,5 +99,31 @@ public class TradesService {
     public Mono<Trade> updateTrade(String env, Trade trade) {
         System.out.println("Update trade " + trade.toString());
         return Mono.empty();
+    }
+
+    @Transactional
+    public String storeSignal(final Signal signal, final TradeStat stats) {
+        log.info("Signal {} has stats {}", signal, stats);
+
+        /*this.prodTradeRepository.save(
+                new ProdTradeEntity(
+                        signal.symbol(),
+                        signal.type(),
+                        signal.entry(),
+                        signal.sl(),
+                        signal.tp(),
+                        0.01,
+                        signal.strategy()));*/
+        this.prodTradeRepository.insertProdTradeEntity(
+                signal.symbol(),
+                signal.type(),
+                signal.entry(),
+                signal.sl(),
+                signal.tp(),
+                0.01,
+                signal.strategy(),
+                LocalDateTime.now());
+        // TODO send signal to queue
+        return "Signal processed";
     }
 }
