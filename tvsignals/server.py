@@ -739,7 +739,7 @@ async def signals(signal:SignalDto):
     if response.status_code != 200:
         print(str(response.status_code))
     ######################################################
-    proceedSignal(signal)
+    #proceedSignal(signal)
 
 def calculateSlAndStoreSignal(signal, strategy, session):
     df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
