@@ -733,7 +733,7 @@ async def signals(signal:SignalDto):
             "tp": 0,
             "strategy": "strategy"}
     response = requests.post(
-        "http://javabackend:5080/forex/signal/",
+        "http://javabackend:5080/forex/signal",
         json=data,
     )
     if response.status_code != 200:
