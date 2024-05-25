@@ -5,7 +5,7 @@ public class ClientMessage {
     public String message;
 
     public ClientMessage(){}
-    public ClientMessage(String sessionId, String message){
+    public ClientMessage(final String sessionId, final String message){
         this.sessionId = sessionId;
         this.message = message;
     }

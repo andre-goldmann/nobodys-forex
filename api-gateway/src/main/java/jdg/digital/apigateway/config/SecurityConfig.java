@@ -14,29 +14,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig implements WebMvcConfigurer {
 
-    public static final String[] ALLOW_ORIGINS = {"http://localhost:4200",
+    public static final String[] ALLOW_ORIGINS = {
+            "http://localhost:4200",
             "http://localhost:4300",
             "https://85.215.32.163",
-            "https://nobodys-forex.vercel.app"};
-
-    /*@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
-                .csrf().disable(); // Disable CSRF for simplicity, you might need to enable it depending on your application's requirements
-    }*/
+            "https://nobodys-forex.vercel.app"
+    };
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
+    public void addCorsMappings(final CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("*")
                 .allowedOrigins(ALLOW_ORIGINS);
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         /*http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")

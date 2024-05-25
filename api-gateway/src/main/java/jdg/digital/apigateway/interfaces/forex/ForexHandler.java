@@ -23,14 +23,16 @@ public class ForexHandler extends TextWebSocketHandler {
         System.out.println("Received message: " + message.getPayload());
     }
 
-    public void sendMessage(final String sessionId, final TextMessage message) {
-        final WebSocketSession session = sessions.get(sessionId);
-        if (session != null && session.isOpen()) {
-            try {
-                session.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void sendMessage(final TextMessage message) {
+        this.sessions.forEach((sessionId, session) -> {
+            if (session != null && session.isOpen()) {
+                try {
+                    session.sendMessage(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }
+        });
+
     }
 }

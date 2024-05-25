@@ -59,13 +59,11 @@ public class ForexController {
         return this.tradeStatsService.getTradeStats(env);
     }
 
-
     @PostMapping("/sendtoclient")
     public void sendMessage(@RequestBody ClientMessage message) {
         if(this.forexHandler instanceof ForexHandler){
-            ((ForexHandler) this.forexHandler).sendMessage(message.sessionId, new TextMessage(message.message));
+            ((ForexHandler) this.forexHandler).sendMessage(new TextMessage(message.message));
         }
-        //forexHandler.sendMessage(sessionId, new TextMessage("Hello, World!"));
     }
 
     @GetMapping("/routes")

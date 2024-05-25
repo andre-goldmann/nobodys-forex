@@ -1,6 +1,9 @@
 package jdg.digital.forexbackend.domain;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jdg.digital.forexbackend.domain.model.*;
+import jdg.digital.forexbackend.interfaces.ForexProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,9 @@ public class TradesService {
 
     @Autowired
     private ProdTradeRepository prodTradeRepository;
+
+    @Autowired
+    private ForexProducerService forexProducerService;
 
     public Mono<List<Trade>> getTradesWithPositiveProfit(final SymbolEnum symbolEnum, final StrategyEnum strategyEnum) {
         log.info("Search for {}-{}", symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum));
@@ -105,15 +111,6 @@ public class TradesService {
     public String storeSignal(final Signal signal, final TradeStat stats) {
         log.info("Signal {} has stats {}", signal, stats);
 
-        /*this.prodTradeRepository.save(
-                new ProdTradeEntity(
-                        signal.symbol(),
-                        signal.type(),
-                        signal.entry(),
-                        signal.sl(),
-                        signal.tp(),
-                        0.01,
-                        signal.strategy()));*/
         this.prodTradeRepository.insertProdTradeEntity(
                 signal.symbol(),
                 signal.type(),
@@ -123,6 +120,12 @@ public class TradesService {
                 0.01,
                 signal.strategy(),
                 LocalDateTime.now());
+        try {
+            this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(signal));
+        } catch (JsonProcessingException e) {
+            log.error("Error sending signal to queue", e);
+            throw new RuntimeException(e);
+        }
         // TODO send signal to queue
         return "Signal processed";
     }
