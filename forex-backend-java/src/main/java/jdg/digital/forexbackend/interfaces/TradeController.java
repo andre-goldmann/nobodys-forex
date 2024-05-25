@@ -1,9 +1,6 @@
 package jdg.digital.forexbackend.interfaces;
 
-import jdg.digital.forexbackend.domain.Trade;
-import jdg.digital.forexbackend.domain.TradeStat;
-import jdg.digital.forexbackend.domain.TradeStatsServices;
-import jdg.digital.forexbackend.domain.TradesService;
+import jdg.digital.forexbackend.domain.*;
 import jdg.digital.forexbackend.domain.model.StrategyEnum;
 import jdg.digital.forexbackend.domain.model.SymbolEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -46,5 +43,14 @@ public class TradeController {
     @PutMapping("trades/update/{env}")
     public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
         return this.tradeService.updateTrade(env, trade);
+    }
+
+    @PostMapping("signal")
+    public Mono<Void> createSignal(@RequestBody Signal signal) {
+        log.info("Received signal: {}", signal);
+        // TODO implement signal processing
+        // TODO send signal to queue
+        // TODO store it in ProdDB if it is a valid signal
+        return Mono.empty();
     }
 }

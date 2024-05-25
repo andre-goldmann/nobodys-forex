@@ -18,6 +18,7 @@ from sqlalchemy import create_engine, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
 from typing_extensions import Annotated
+import requests
 
 load_dotenv()
 
@@ -670,35 +671,35 @@ def lastCandle(symbol:str, timeFrame:TimeFrame):
         session.close()
         return candle
 
-@app.post("/resendsignal/")
-async def resendsignal(
-        id: Annotated[int, Form()],
-        symbol: Annotated[str, Form()],
-        timestamp: Annotated[str, Form()],
-        type: Annotated[str, Form()],
-        entry: Annotated[float, Form()],
-        sl: Annotated[float, Form()],
-        tp: Annotated[float, Form()],
-        strategy: Annotated[str, Form()]):
-
-    signal = SignalDto(
-        symbol=symbol,
-        timestamp= timestamp,
-        type = type,
-        entry = entry,
-        sl = sl,
-        tp = tp,
-        strategy = strategy
-    )
-    proceedSignal(signal)
-
-    with Session.begin() as session:
-        # TODO delete IgnoredSignal when comes here
-        signal = session.query(IgnoredSignal).filter(IgnoredSignal.id == id).first()
-        if signal is not None:
-            session.delete(signal)
-            session.commit()
-            session.close()
+#@app.post("/resendsignal/")
+#async def resendsignal(
+#        id: Annotated[int, Form()],
+#        symbol: Annotated[str, Form()],
+#        timestamp: Annotated[str, Form()],
+#        type: Annotated[str, Form()],
+#        entry: Annotated[float, Form()],
+#        sl: Annotated[float, Form()],
+#        tp: Annotated[float, Form()],
+#        strategy: Annotated[str, Form()]):
+#
+#    signal = SignalDto(
+#        symbol=symbol,
+#        timestamp= timestamp,
+#        type = type,
+#        entry = entry,
+#        sl = sl,
+#        tp = tp,
+#        strategy = strategy
+#    )
+#    proceedSignal(signal)
+#
+#    with Session.begin() as session:
+#        # TODO delete IgnoredSignal when comes here
+#        signal = session.query(IgnoredSignal).filter(IgnoredSignal.id == id).first()
+#        if signal is not None:
+#            session.delete(signal)
+#            session.commit()
+#            session.close()
 
 @app.post("/trendinfo")
 async def signals(trendInfo:TrendInfoDto):
@@ -723,8 +724,22 @@ async def signals(trendInfo:TrendInfoDto):
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
+    # only for testing connection ######################
+    data = {"symbol": signal.symbol,
+            "timestamp": "",
+            "type": signal.type,
+            "entry": signal.entry,
+            "sl": 0,
+            "tp": 0,
+            "strategy": "strategy"}
+    response = requests.post(
+        "http://javabackend:5080/forex/signal/",
+        json=data,
+    )
+    if response.status_code != 200:
+        print(str(response.status_code))
+    ######################################################
     proceedSignal(signal)
-
 
 def calculateSlAndStoreSignal(signal, strategy, session):
     df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
@@ -748,6 +763,20 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         lots = 0.01
 
     if signalStats is not None and signalStats.alltrades > 150:
+        data = {"symbol": signal.symbol,
+                "timestamp": "",
+                "type": signal.type,
+                "entry": signal.entry,
+                "sl": sl,
+                "tp": tp,
+                "strategy": strategy}
+        response = requests.post(
+            "http://javabackend:5080/forex/signal/",
+            json=data,
+        )
+        if response.status_code != 200:
+            print(str(response.status_code))
+
         percentage = (100 / signalStats.alltrades) * signalStats.successtrades
         if percentage < 65 and signalStats.profit < 75:
             storeIgnoredSignal(IgnoredSignal(
@@ -755,19 +784,19 @@ def calculateSlAndStoreSignal(signal, strategy, session):
                 reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
             ), session)
             return
-        else:
-            prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
-            if prodSignalsCount <= 5 and signalStats.profit > 1 and ('EURCHF' == signal.symbol or 'AUDUSD' == signal.symbol):
-                storeProdSignal(ProdSignal(
-                    symbol=signal.symbol,
-                    type=signal.type,
-                    entry=signal.entry,
-                    sl=sl,
-                    tp=tp,
-                    lots=0.01,
-                    commision=0.0,
-                    strategy=strategy
-                ), session)
+        #else:
+            #prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
+            #if prodSignalsCount <= 5 and signalStats.profit > 1 and ('EURCHF' == signal.symbol or 'AUDUSD' == signal.symbol):
+            #    storeProdSignal(ProdSignal(
+            #        symbol=signal.symbol,
+            #        type=signal.type,
+            #        entry=signal.entry,
+            #        sl=sl,
+            #        tp=tp,
+            #        lots=0.01,
+            #        commision=0.0,
+            #        strategy=strategy
+            #    ), session)
 
     storeSignal(Signal(
         symbol=signal.symbol,

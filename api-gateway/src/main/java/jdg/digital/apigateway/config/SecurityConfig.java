@@ -14,6 +14,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig implements WebMvcConfigurer {
 
+    public static final String[] ALLOW_ORIGINS = {"http://localhost:4200",
+            "http://localhost:4300",
+            "https://85.215.32.163",
+            "https://nobodys-forex.vercel.app"};
+
     /*@Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -27,12 +32,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("*")
-                .allowedOrigins(
-                        // For local development
-                        "http://localhost:4200",
-                        "http://localhost:4300",
-                        "https://85.215.32.163",
-                        "https://nobodys-forex.vercel.app");
+                .allowedOrigins(ALLOW_ORIGINS);
     }
 
     @Bean

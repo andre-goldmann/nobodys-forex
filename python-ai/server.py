@@ -135,6 +135,8 @@ async def search(query: str = Query(None)):
     searchWithCohere(client, co, prompt, cohere_embeddings_collection)
     print("###################################")
     searchWithEf(client, ollama_ef, ollama_embeddings_collection, query)
+    print("###################################")
+    searchWithEf(client, roboflow_ef, roboflow_embeddings_collection, query)
     #searchWithOllama(client, ollama_ef([query]), ollama_embeddings_collection)
     #print("###################################") # does not work offline
     # TODO use another model here as this is the same as used by SentenceTransformer
@@ -150,23 +152,31 @@ if __name__ == "__main__":
     #pages = loadFromPdf("icao_hf_guidelines_2003.pdf")
     #print(f"Got {str(len(pages))} pages from document")
     pages = loadFromPdf("PPR_WS_23_24_Abschluss_marked.pdf")
-    vector_index = Chroma.from_documents(documents=pages,
-                                         #embedding_function=ollama_ef,
-                                         collection_name=ollama_embeddings_collection,
-                                         client=client,
-                                         embedding=DefChromaEF(ollama_ef),
-                                         persist_directory=CHROMA_DATA_PATH)
-    vector_index.persist()
+    print(pages[0].page_content)
+    #storeEmbeddings_withEf(client, ollama_embeddings_collection, ollama_ef, [pages[0].page_content])
+    #for page in pages:
+    #    print(page.page_content.replace("\n", " "))
+    #vector_index = Chroma.from_documents(documents=pages,
+    #                                     #embedding_function=ollama_ef,
+    #                                     collection_name=ollama_embeddings_collection,
+    #                                     client=client,
+    #                                     embedding=DefChromaEF(ollama_ef),
+    #                                     persist_directory=CHROMA_DATA_PATH)
+    #vector_index.persist()
     #vector_index = Chroma(persist_directory=CHROMA_DATA_PATH,
-    #                      embedding_function=DefChromaEF(ollama_ef))
+    #                      embedding_function=DefChromaEF(ollama_ef),
+    #                      client=client)
     #https://generativeai.pub/advanced-rag-retrieval-strategy-query-rewriting-a1dd61815ff0
     #https://www.datascienceengineer.com/blog/post-multiple-pdfs-with-gpt
-    chain = get_chain(vector_index.as_retriever())
-    #retriever = get_retriever(client, ollama_ef, ollama_embeddings_collection,'group_id')
-    #chain = get_chain(retriever)
+    #chain = get_chain(vector_index.as_retriever())
+    retriever = get_retriever(client, ollama_ef, ollama_embeddings_collection,'group_id')
+    chain = get_chain(retriever)
     #result = chain.invoke("What is 'An Annex'?")
-    result = chain.invoke("What technologies should be use?")
+    result = chain.invoke("Was ist die Abschlussaufgabe?")
     print(result)
+    result = chain.invoke("Was sind die nachstehenden Aufgaben?")
+    print(result)
+
     #result = chain.invoke(data.query)
 
     #asyncio.run(talkToCo())
@@ -197,7 +207,7 @@ if __name__ == "__main__":
         model = SentenceTransformer(EMBED_MODEL)
         st_embeddings = model.encode(texts)
         # does not work
-        #storeEmbeddings(client, st_embeddings_collection, st_embeddings, texts)
+        storeEmbeddings(client, st_embeddings_collection, st_embeddings, texts)
 
         #print("Run Cohere")
         cohere_embeddings = co.embed(texts=texts,

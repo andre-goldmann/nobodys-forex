@@ -11,6 +11,7 @@ logging:
     root: debug
 
 
+
 forex:
   data:
     service:

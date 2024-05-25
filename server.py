@@ -1,19 +1,19 @@
-import ecs_logging
-import logging
 import datetime
 import json
+import logging
 import threading
 import time
 from datetime import timedelta
 from timeit import default_timer as timer
-from typing import List
-import requests
+
+import ecs_logging
 import numpy as np
 import pandas as pd
+import requests
 import schedule
 import uvicorn
 from fastapi import FastAPI, Request, status
-from fastapi import WebSocket, WebSocketDisconnect, Form
+from fastapi import Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 # Bellow the import create a job that will be executed on background
@@ -124,8 +124,8 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
 
-def receivedMsg(message):
-    print(f"{message} received on Queue!!!############")
+#def receivedMsg(message):
+#    print(f"{message} received on Queue!!!############")
 
 
 # Connected svelte: an implement a check list for trades:
@@ -133,41 +133,41 @@ def receivedMsg(message):
 # - ema200 crossed ema80 done
 # - usw.
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: List[WebSocket] = []
+#class ConnectionManager:
+#    def __init__(self):
+#        self.active_connections: List[WebSocket] = []
+#
+#    async def connect(self, websocket: WebSocket):
+#        await websocket.accept()
+#        self.active_connections.append(websocket)
+#
+#    def disconnect(self, websocket: WebSocket):
+#        self.active_connections.remove(websocket)
+#
+#    async def broadcast(self, message: str):
+#        for connection in self.active_connections:
+#            await connection.send_text(message)
 
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
 
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+#manager = ConnectionManager()
 
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.send_text(message)
-
-
-manager = ConnectionManager()
-
-@app.websocket("/ws/{client_id}")
-async def websocket_endpoint(websocket: WebSocket, client_id: str):
-    await manager.connect(websocket)
-    print(f"Client with id: {client_id} connected!!!")
-    last = lastCandle("EURUSD", TimeFrame.PERIOD_M15)
-    json_compatible_item_data = jsonable_encoder(last)
-    await manager.broadcast(json.dumps(json_compatible_item_data))
-
-    try:
-        while True:
-            data = await websocket.receive_text()
-            #Leave the wait here
-            #When a WebSocket connection is closed, the await websocket.receive_text()
-            # will raise a WebSocketDisconnect exception, which you can then catch and handle like in this
-
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
+#@app.websocket("/ws/{client_id}")
+#async def websocket_endpoint(websocket: WebSocket, client_id: str):
+#    await manager.connect(websocket)
+#    print(f"Client with id: {client_id} connected!!!")
+#    last = lastCandle("EURUSD", TimeFrame.PERIOD_M15)
+#    json_compatible_item_data = jsonable_encoder(last)
+#    await manager.broadcast(json.dumps(json_compatible_item_data))
+#
+#    try:
+#        while True:
+#            data = await websocket.receive_text()
+#            #Leave the wait here
+#            #When a WebSocket connection is closed, the await websocket.receive_text()
+#            # will raise a WebSocketDisconnect exception, which you can then catch and handle like in this#
+#
+#    except WebSocketDisconnect:
+#        manager.disconnect(websocket)
 
 @app.get("/lastCandle/")
 async def getLastCandleStamp(symbol:str, timeFrame:str):
@@ -332,28 +332,28 @@ async def createsignal(symbol: Annotated[str, Form()],
     return "Order created"
 
 #need to use form here, because delete does not work
-@app.post("/deletesignal/")
-async def deleteOrder(id: Annotated[int, Form()]):
-    deleteSignalInDb(id)
-    return "Signal deleted"
+#@app.post("/deletesignal/")
+#async def deleteOrder(id: Annotated[int, Form()]):
+#    deleteSignalInDb(id)
+#    return "Signal deleted"
 
-@app.post("/modifysignal/")
-async def modifySignalIn(id: Annotated[int, Form()],
-                      symbol: Annotated[str, Form()],
-                      type: Annotated[str, Form()],
-                      entry: Annotated[float, Form()],
-                      sl: Annotated[float, Form()],
-                      tp: Annotated[float, Form()],
-                      lots: Annotated[float, Form()]):
-
-    if type not in tradeTypes:
-        print(f"Ignore order because type is not handled: {type}")
-        return
-
-    print("Updating...")
-    modifySignalInDb(id, type, entry, sl, tp, lots)
-
-    return "Order modified"
+#@app.post("/modifysignal/")
+#async def modifySignalIn(id: Annotated[int, Form()],
+#                      symbol: Annotated[str, Form()],
+#                      type: Annotated[str, Form()],
+#                      entry: Annotated[float, Form()],
+#                      sl: Annotated[float, Form()],
+#                      tp: Annotated[float, Form()],
+#                      lots: Annotated[float, Form()]):
+#
+#    if type not in tradeTypes:
+#        print(f"Ignore order because type is not handled: {type}")
+#        return
+#
+#    print("Updating...")
+#    modifySignalInDb(id, type, entry, sl, tp, lots)
+#
+#    return "Order modified"
 
 #def process_row(index, row):
 #    print(f"Processing row {index} - DATETIME: {row['DATETIME']}, Close: {row['close']}, TIMEFRAME: {row['TIMEFRAME']}")

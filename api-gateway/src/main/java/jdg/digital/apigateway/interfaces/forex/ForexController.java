@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketHandler;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -22,6 +24,9 @@ public class ForexController {
 
     @Autowired
     private TokenValidationService tokenValidationService;
+
+    @Autowired
+    private WebSocketHandler forexHandler;
 
     @Autowired
     private TradeStatsService tradeStatsService;
@@ -52,6 +57,15 @@ public class ForexController {
     @GetMapping("/tradestats/{env}")
     public Mono<TradeStat[]> getTradeStats(@PathVariable("env") final String env) {
         return this.tradeStatsService.getTradeStats(env);
+    }
+
+
+    @PostMapping("/sendtoclient")
+    public void sendMessage(@RequestBody ClientMessage message) {
+        if(this.forexHandler instanceof ForexHandler){
+            ((ForexHandler) this.forexHandler).sendMessage(message.sessionId, new TextMessage(message.message));
+        }
+        //forexHandler.sendMessage(sessionId, new TextMessage("Hello, World!"));
     }
 
     @GetMapping("/routes")

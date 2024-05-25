@@ -39,19 +39,20 @@ async def talkToCo():
 
 def get_retriever(client: PersistentClient, ef:EmbeddingFunction, collectionName:str,  group_id: str):
     db = Chroma(client=client, collection_name=collectionName,embedding_function=DefChromaEF(ef))
-    return db.as_retriever(
-        search_kwargs={'filter': {
-            'group_id': group_id
-        }})
+    return db.as_retriever()
+    #return db.as_retriever(
+    #    search_kwargs={'filter': {
+    #        'group_id': group_id
+    #    }})
 
 #def get_chain(retriever=Depends(get_retriever)):
 def get_chain(retriever):
     # TODO fine tuning: just use data what is in the database
     template = """Answer the question based only on the following context:
     {context}
-    Question: {question}
     If the question can't be answered based on the context, respond with "I don't know."
     Always answer in the language of the question.
+    Question: {question}
     """
     prompt = ChatPromptTemplate.from_template(template)
     model = ChatCohere(model="command")#ChatCohere(api_key=COHERE_API_KEY)
