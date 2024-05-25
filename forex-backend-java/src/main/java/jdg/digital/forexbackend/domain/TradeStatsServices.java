@@ -75,6 +75,9 @@ public class TradeStatsServices {
     public Mono<TradeStat> getStatsFor(final String symbol, final String strategy) {
         return Mono.fromCallable(() -> {
             final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(symbol, strategy);
+            if(entity == null){
+                return null;
+            }
             return mapToTrade(entity);
         });
     }
