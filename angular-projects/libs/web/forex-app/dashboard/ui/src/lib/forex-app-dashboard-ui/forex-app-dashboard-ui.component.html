@@ -10,7 +10,16 @@
 <button (click)="updateTrade()" class="btn btn-primary">Update Trade</button>
 <p> TODO Endpoint updateProdTrades</p>
 
+<p>WaitingTrades</p>
 {{waitingTrades | json}}
+
+
+<p>Just published Signals</p>
+<ul>
+  <li *ngFor="let signal of signals()">
+    {{signal}}
+  </li>
+</ul>
 <table class="table table-auto mr-14 mb-4">
   <thead>
   <tr>
@@ -26,7 +35,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let item of map | keyvalue" class="hover">
+  <tr *ngFor="let item of map | keyvalue" class="hover" [ngClass]="{'green-background': item.value.length > 1}">
     <td class="border px-4 py-2">{{item.key.split("-")[0]}}</td>
     <td class="border px-4 py-2">{{item.key.split("-")[1]}}</td>
     <td>
@@ -78,9 +87,8 @@
   </tbody>
 </table>
 
-<div class="container mx-auto px-4">
-  <!-- create a table having the columns Symbol, Strategy, Wins, Loses, Percentage, Profit having a click-listener on each row
-  and each row that will be highlighted on hover -->
+<!--div class="container mx-auto px-4">
+
   <div class="flex justify-between">
 
     <table class="table table-auto mr-14 mb-4">
@@ -136,12 +144,10 @@
     </table>
 
   </div>
-  <!-- on column click symbol and strategy should be show here-->
   <div *ngIf="selectedItem" class="mb-4">
     <p>Selected: {{selectedItem.symbol}}-{{selectedItem.strategy}}</p>
   </div>
   <div class="flex justify-between">
-    <!-- First Table -->
     <table class="table-auto mr-8 mb-4">
       <thead>
       <tr>
@@ -168,7 +174,6 @@
       </tbody>
     </table>
 
-    <!-- Second Table -->
     <table class="table-auto mb-8">
       <thead>
       <tr>
@@ -195,7 +200,7 @@
       </tbody>
     </table>
   </div>
-</div>
+</div-->
 
 
 

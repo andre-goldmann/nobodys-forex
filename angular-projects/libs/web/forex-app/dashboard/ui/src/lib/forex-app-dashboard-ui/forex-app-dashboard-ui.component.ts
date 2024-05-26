@@ -37,12 +37,21 @@ export class ForexAppDashboardUiComponent implements OnInit{
   private socket!: Subject<MessageEvent>;
   private websocketService: WebsocketService = inject(WebsocketService);
   private webSocket!: WebSocket;
+
+  signals = signal<string[]>([]);
+
   ngOnInit(): void {
 
     this.socket = this.websocketService.connect('ws://localhost:9080/api/forexHandler');
 
     this.socket.subscribe(
-      message => console.log('Received message: ', message.data),
+      message =>
+      {
+        console.log('Received message: ', message.data);
+        this.signals.update(values => {
+          return [...values, message.data];
+        });
+      },
       error => console.error('Error: ', error),
       () => console.log('WebSocket connection closed')
     );
@@ -53,7 +62,7 @@ export class ForexAppDashboardUiComponent implements OnInit{
          return [];
         })
       )*/
-
+    // TODO hier ist schon wieder viel zu viel logic drin, das sollte in den Service ausgelagert werden
     zip(this.tradeStatService.getTradeStats("dev"), this.tradeStatService.getTradeStats("prod")).
       subscribe(d => {
         let devData = d[0];
