@@ -725,21 +725,21 @@ async def signals(trendInfo:TrendInfoDto):
 @app.post("/signal")
 async def signals(signal:SignalDto):
     # only for testing connection ######################
-    data = {"symbol": signal.symbol,
-            "timestamp": "",
-            "type": signal.type,
-            "entry": signal.entry,
-            "sl": signal.sl,
-            "tp": signal.tp,
-            "strategy": signal.strategy}
-    response = requests.post(
-        "http://javabackend:5080/forex/signal",
-        json=data,
-    )
-    if response.status_code != 200:
-        print(str(response.status_code))
+    #data = {"symbol": signal.symbol,
+    #        "timestamp": "",
+    #        "type": signal.type,
+    #        "entry": signal.entry,
+    #        "sl": signal.sl,
+    #        "tp": signal.tp,
+    #        "strategy": signal.strategy}
+    #response = requests.post(
+    #    "http://javabackend:5080/forex/signal",
+    #    json=data,
+    #)
+    #if response.status_code != 200:
+    #    print(str(response.status_code))
     ######################################################
-    #proceedSignal(signal)
+    proceedSignal(signal)
 
 def calculateSlAndStoreSignal(signal, strategy, session):
     df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
