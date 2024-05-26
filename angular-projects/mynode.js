@@ -12,8 +12,8 @@ export const environment: AppConfig = {
     clientSecret: '${process.env.clientSecret}',
     webHost: ${process.env.webHost},
     keycloakHost: '${process.env.keycloakHost}',
-    requireHttps: ${process.env.requireHttps}
-
+    requireHttps: ${process.env.requireHttps},
+    wsURL: ${process.env.wsURL}
 };
 `;
 const targetPath = path.join(__dirname, './apps/forex-app/src/environments/environment.ts');
