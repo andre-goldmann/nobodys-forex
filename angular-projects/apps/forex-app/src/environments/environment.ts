@@ -6,5 +6,6 @@ export const environment: AppConfig = {
   clientSecret: 'RdAJfqD7XCSh5P6AxnDNx2yqzQ4GNhLP',
   webHost: window.location.origin,
   keycloakHost: 'http://localhost:8080/realms/forex_admininstrator',
-  requireHttps: false
+  requireHttps: false,
+  wsURL: 'ws://localhost:9080/api/forexHandler'
 };

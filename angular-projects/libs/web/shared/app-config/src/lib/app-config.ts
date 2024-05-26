@@ -6,4 +6,5 @@ export interface AppConfig {
   webHost:string;
   keycloakHost:string;
   requireHttps: boolean;
+  wsURL:string;
 }

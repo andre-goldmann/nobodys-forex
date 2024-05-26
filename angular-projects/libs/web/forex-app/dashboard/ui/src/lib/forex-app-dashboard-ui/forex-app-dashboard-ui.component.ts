@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, Inject, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserStoreService } from '@angular-projects/login-data-access';
 import {
@@ -8,8 +8,9 @@ import {
   TradeStat,
   TradeStatService, WebsocketService
 } from '@angular-projects/forex-app-data-access';
-import { flatMap, map, Observable, Subject, zip } from 'rxjs';
+import { Subject, zip } from 'rxjs';
 import { TradeTypeEnum } from '../../../../../shared/data-access/src/lib/models/trade-type-enum';
+import { APP_CONFIG, AppConfig } from '@angular-projects/app-config';
 
 
 @Component({
@@ -38,11 +39,15 @@ export class ForexAppDashboardUiComponent implements OnInit{
   private websocketService: WebsocketService = inject(WebsocketService);
   private webSocket!: WebSocket;
 
+
+  constructor(@Inject(APP_CONFIG) private appConfig: AppConfig) {
+  }
+
   signals = signal<string[]>([]);
 
   ngOnInit(): void {
 
-    this.socket = this.websocketService.connect('ws://localhost:9080/api/forexHandler');
+    this.socket = this.websocketService.connect(`${this.appConfig.wsURL}`);
 
     this.socket.subscribe(
       message =>
