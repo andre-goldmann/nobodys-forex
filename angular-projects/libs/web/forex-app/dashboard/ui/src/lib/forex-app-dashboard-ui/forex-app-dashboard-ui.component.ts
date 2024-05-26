@@ -47,13 +47,6 @@ export class ForexAppDashboardUiComponent implements OnInit{
       () => console.log('WebSocket connection closed')
     );
 
-    /*this.webSocket = new WebSocket('ws://localhost:9080/api/forexHandler');
-    this.webSocket.onmessage = (event) => {
-      //this.stock = JSON.parse(event.data)
-      console.log('Received message: ', event);
-    };*/
-
-
     /*let result = zip(this.tradeStatService.getTradeStats("dev"), this.tradeStatService.getTradeStats("prod"))
       .pipe(
         map(([dev, prod]) => {
@@ -61,7 +54,7 @@ export class ForexAppDashboardUiComponent implements OnInit{
         })
       )*/
 
-    /*zip(this.tradeStatService.getTradeStats("dev"), this.tradeStatService.getTradeStats("prod")).
+    zip(this.tradeStatService.getTradeStats("dev"), this.tradeStatService.getTradeStats("prod")).
       subscribe(d => {
         let devData = d[0];
         let prodData = d[1];
@@ -79,7 +72,7 @@ export class ForexAppDashboardUiComponent implements OnInit{
     });
     this.tradeService.getWaitingTrades('prod').subscribe((data) => {
       this.waitingTrades = data;
-    });*/
+    });
 
   }
 
