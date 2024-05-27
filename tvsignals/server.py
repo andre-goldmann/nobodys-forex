@@ -703,9 +703,9 @@ def lastCandle(symbol:str, timeFrame:TimeFrame):
 
 @app.post("/trendinfo")
 async def signals(trendInfo:TrendInfoDto):
-    print("########################################trendinfo########################################")
-    print(str(trendInfo))
-    print("########################################trendinfo########################################")
+    #print("########################################trendinfo########################################")
+    #print(str(trendInfo))
+    #print("########################################trendinfo########################################")
     #proceedSignal(signal)
     with Session.begin() as session:
         storedInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == trendInfo.symbol).first()

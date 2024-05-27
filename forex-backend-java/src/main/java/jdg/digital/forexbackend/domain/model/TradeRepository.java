@@ -14,7 +14,7 @@ public interface TradeRepository extends JpaRepository<TradesEntity, Integer> {
     @Query(value = "SELECT * from \"Trades\" WHERE activated='' and tradeid=0 and openprice=0", nativeQuery = true)
     List<TradesEntity> waitingTradesDev();
 
-    @Query(value = "SELECT * from \"ProdTrades\" WHERE activated='' and tradeid=0 and openprice=0", nativeQuery = true)
+    @Query(value = "SELECT * from \"ProdTrades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0)", nativeQuery = true)
     List<TradesEntity> waitingTradesProd();
 
     //@Query(value = "SELECT COUNT(*) FROM \"Trades\" WHERE symbol = :symbol AND strategy = :strategy AND exit > 0", nativeQuery = true)

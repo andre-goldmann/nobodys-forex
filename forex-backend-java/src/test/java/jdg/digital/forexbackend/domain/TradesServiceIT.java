@@ -27,7 +27,7 @@ class TradesServiceIT {
     @Test
     void checkSignal() {
         // Arrange
-        Signal signal = new Signal("symbol", "timestamp", "type", 1.23, 0, 0, "strategy");
+        Signal signal = new Signal("symbol", "timestamp", "type", 1.23, 0, 0, "strategy", true, "");
         TradeStat stats = new TradeStat();
 
         // Act

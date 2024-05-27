@@ -86,8 +86,11 @@ public class TradesService {
         trade.setStrategy(strategies.stream().findFirst().get());
         trade.setExit(entity.getExit());
         trade.setEntry(entity.getEntry());
-        final BigDecimal profit = BigDecimal.valueOf(entity.getProfit() - entity.getCommision() -  entity.getSwap());
-        trade.setProfit(profit.setScale(2, RoundingMode.HALF_UP).doubleValue());
+        if(entity.getProfit() != null && entity.getCommision() != null && entity.getSwap() != null) {
+            final BigDecimal profit = BigDecimal.valueOf(entity.getProfit() - entity.getCommision() -  entity.getSwap());
+            trade.setProfit(profit.setScale(2, RoundingMode.HALF_UP).doubleValue());
+        }
+
         if(entity.getClosed() != null && !entity.getClosed().isEmpty()) {
             final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
             final LocalDateTime localDateTime = LocalDateTime.parse(entity.getClosed(), formatter);
@@ -130,9 +133,18 @@ public class TradesService {
             }
         } else {
             try {
-                // {"symbol":"EURCHF","timestamp":"signal.timestamp","type":"sell","entry":1.0,"sl":1.0,"tp":1.0,"strategy":"VHMA_WITHOUT_REG"}
-                final String ignored ="{\"message\":\"Ignore because there more then " + activeTrades + " active trade\"," + new ObjectMapper().writeValueAsString(signal) + "}";
-                this.forexProducerService.sendMessage("signals", ignored);
+
+                final Signal newSignal = new Signal(
+                        signal.symbol(),
+                        signal.timestamp(),
+                        signal.type(),
+                        signal.entry(),
+                        signal.sl(),
+                        signal.tp(),
+                        signal.strategy(),
+                        true,
+                        "Ignore because there more then " + activeTrades + " active trade.");
+                this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(newSignal));
             } catch (JsonProcessingException e) {
                 log.error("Error sending signal to queue", e);
                 throw new RuntimeException(e);

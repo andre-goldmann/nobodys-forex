@@ -48,6 +48,9 @@
         "libs/web/shared/ui/nav/data-access/src/index.ts"
       ],
       "@angular-projects/nav-ui": ["libs/web/shared/ui/nav/ui/src/index.ts"],
+      "@angular-projects/playground-ui": [
+        "libs/web/forex-app/playground/ui/src/index.ts"
+      ],
       "@angular-projects/register": [
         "libs/web/shared/auth/register/ui/src/index.ts"
       ],

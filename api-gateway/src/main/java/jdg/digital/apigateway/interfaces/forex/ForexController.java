@@ -79,6 +79,11 @@ public class ForexController {
                         .icon("fa-solid fa-house")
                         .label("Dashboard")
                         .build(),
+                NavbarData.builder()
+                        .routeLink("playground")
+                        .icon("fa-solid fa-tag")
+                        .label("Playground")
+                        .build(),
                 /*NavbarData.builder()
                         .routeLink("pricing")
                         .icon("fa-solid fa-tag")

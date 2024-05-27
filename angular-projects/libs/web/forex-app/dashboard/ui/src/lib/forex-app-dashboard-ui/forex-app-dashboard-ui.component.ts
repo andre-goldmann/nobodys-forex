@@ -11,6 +11,7 @@ import {
 import { Subject, zip } from 'rxjs';
 import { TradeTypeEnum } from '../../../../../shared/data-access/src/lib/models/trade-type-enum';
 import { APP_CONFIG, AppConfig } from '@angular-projects/app-config';
+import { Signal } from '../../../../../shared/data-access/src/lib/models/signal';
 
 
 @Component({
@@ -27,23 +28,21 @@ export class ForexAppDashboardUiComponent implements OnInit{
   protected tradeStatService:TradeStatService = inject(TradeStatService);
 
   protected userStoreService:UserStoreService = inject(UserStoreService);
-  //tableData: WinningTrade[] = [];
+  /*tableData: WinningTrade[] = [];
   tradeStats : TradeStat[]=[];
   prodTradeStats : TradeStat[]=[];
   selectedItem!:TradeStat;
   positiveTrades!: Trade[];
-  negativeTrades!: Trade[];
+  negativeTrades!: Trade[];*/
   map = new Map();
   waitingTrades!: Trade[];
   private socket!: Subject<MessageEvent>;
   private websocketService: WebsocketService = inject(WebsocketService);
-  private webSocket!: WebSocket;
-
 
   constructor(@Inject(APP_CONFIG) private appConfig: AppConfig) {
   }
 
-  signals = signal<string[]>([]);
+  signals = signal<Signal[]>([]);
 
   ngOnInit(): void {
 
@@ -53,8 +52,9 @@ export class ForexAppDashboardUiComponent implements OnInit{
       message =>
       {
         console.log('Received message: ', message.data);
+        let newSignal = JSON.parse(message.data);
         this.signals.update(values => {
-          return [...values, message.data];
+          return [...values, newSignal];
         });
       },
       error => console.error('Error: ', error),
@@ -90,7 +90,7 @@ export class ForexAppDashboardUiComponent implements OnInit{
 
   }
 
-  onRowClick(item: TradeStat) {
+  /*onRowClick(item: TradeStat) {
     //console.info(item);
     //console.info("Loading trade-details");
     this.selectedItem = item;
@@ -105,7 +105,7 @@ export class ForexAppDashboardUiComponent implements OnInit{
       //console.info("Negative-Data: " + data);
       this.negativeTrades = data;
     });
-  }
+  }*/
 
   updateTrade() {
     let exampleTrade: Trade = {
