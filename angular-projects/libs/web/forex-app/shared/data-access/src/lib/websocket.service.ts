@@ -15,7 +15,11 @@ export class WebsocketService {
     const observable = new Observable(observer => {
       this.socket.onmessage = observer.next.bind(observer);
       this.socket.onerror = observer.error.bind(observer);
-      this.socket.onclose = observer.complete.bind(observer);
+      this.socket.onclose = () => {
+        observer.complete.bind(observer);
+        // Reconnect after a delay
+        setTimeout(() => this.connect(url), 5000);
+      };
 
       return this.socket.close.bind(this.socket);
     });
