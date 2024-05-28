@@ -80,10 +80,31 @@ public class ForexController {
                         .label("Dashboard")
                         .build(),
                 NavbarData.builder()
+                        .routeLink("signals")
+                        .icon("fa-solid fa-signal")
+                        .label("Signals")
+                        .build(),
+                NavbarData.builder()
+                        .routeLink("trades")
+                        .icon("fa-solid fa-exchange")
+                        .label("Trades")
+                        .build(),
+                NavbarData.builder()
+                        .routeLink("stats")
+                        .icon("fa-solid fa-chart-bar")
+                        .label("Stats")
+                        .build(),
+                NavbarData.builder()
+                        .routeLink("regression")
+                        .icon("fa-solid fa-chart-line")
+                        .label("Regression")
+                        .build(),
+                NavbarData.builder()
                         .routeLink("playground")
                         .icon("fa-solid fa-tag")
                         .label("Playground")
                         .build(),
+                // TODO signals, trades, stats, regression, etc
                 /*NavbarData.builder()
                         .routeLink("pricing")
                         .icon("fa-solid fa-tag")

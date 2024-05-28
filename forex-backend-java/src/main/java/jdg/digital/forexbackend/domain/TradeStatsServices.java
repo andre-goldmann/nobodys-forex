@@ -29,7 +29,7 @@ public class TradeStatsServices {
     public Mono<List<TradeStat>> getTradeStats(final String env) {
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> Mono.fromCallable(
-                    () -> this.tradeStatsRepository.statsDevTrades()
+                    () -> this.tradeStatsRepository.statsDevTrades(150, 10.0, 55.0)
                             .stream()
                             .map(this::mapToTrade)
                             .toList()
@@ -74,7 +74,7 @@ public class TradeStatsServices {
 
     public Mono<TradeStat> getStatsFor(final String symbol, final String strategy) {
         return Mono.fromCallable(() -> {
-            final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(symbol, strategy);
+            final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(symbol, strategy, 150, 10.0, 55.0);
             log.info("Stats: {}", entity);
             if(entity == null){
                 log.warn("Stats not found for {}-{}", symbol, strategy);

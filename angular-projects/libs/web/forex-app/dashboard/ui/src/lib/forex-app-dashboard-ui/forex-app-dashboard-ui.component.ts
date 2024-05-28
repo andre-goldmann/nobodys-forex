@@ -5,7 +5,6 @@ import {
   StrategyEnum, SymbolEnum,
   Trade,
   TradesService,
-  TradeStat,
   TradeStatService, WebsocketService
 } from '@angular-projects/forex-app-data-access';
 import { Subject, zip } from 'rxjs';
@@ -82,6 +81,20 @@ export class ForexAppDashboardUiComponent implements OnInit{
             this.map.set(entry.symbol + "-" + entry.strategy, [entry])
           }
         });
+      // sort the map so that the entries with entry > 1 come first
+      this.map = new Map([...this.map.entries()].sort((a, b) => {
+        const aEntry = a[1][0].entry; // Assuming 'entry' is a property of the object
+        const bEntry = b[1][0].entry; // Assuming 'entry' is a property of the object
+
+        if (aEntry > 1 && bEntry <= 1) {
+          return -1; // a comes first
+        }
+        if (bEntry > 1 && aEntry <= 1) {
+          return 1; // b comes first
+        }
+        return 0; // equal values, no sorting
+      }));
+
       //console.info(this.map);
     });
     this.tradeService.getWaitingTrades('prod').subscribe((data) => {
