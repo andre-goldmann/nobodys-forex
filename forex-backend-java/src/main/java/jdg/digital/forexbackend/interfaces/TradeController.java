@@ -35,27 +35,9 @@ public class TradeController {
         return this.tradeService.getTradesWithNegativeProfit(symbol, strategy);
     }
 
-    @GetMapping("trades/waiting/{env}")
-    public Mono<List<Trade>> getWaitingTrades(@PathVariable("env") final String env) {
-        return this.tradeService.getWaitingTrades(env);
-    }
-
     @PutMapping("trades/update/{env}")
     public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
         return this.tradeService.updateTrade(env, trade);
     }
 
-    @PostMapping("signal")
-    public Mono<String> createSignal(@RequestBody Signal signal) {
-        log.info("Signal: {}", signal);
-        return this.tradeStatsServices.getStatsFor(signal.symbol(), signal.strategy())
-                .map(stats -> {
-                    log.info("Stats: {}", stats);
-                    if (stats != null) {
-                        return this.tradeService.storeSignal(signal, stats);
-                    } else {
-                        return "Trade not created";
-                    }
-                });
-    }
 }

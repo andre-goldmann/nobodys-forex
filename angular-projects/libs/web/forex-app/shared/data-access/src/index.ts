@@ -1,5 +1,6 @@
 export * from './lib/websocket.service';
 export * from './lib/trades.service';
+export * from './lib/signals.service';
 export * from './lib/tradestats.service';
 export * from './lib/models/strategy-enum';
 export * from './lib/models/symbol-enum';

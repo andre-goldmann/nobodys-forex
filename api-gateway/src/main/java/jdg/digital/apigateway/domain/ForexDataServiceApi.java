@@ -63,13 +63,13 @@ public class ForexDataServiceApi {
                 });
     }
 
-    public Mono<List<Trade>> getWaitingTrades(final String env) {
+    public Mono<List<Signal>> getSignals(final String env) {
         return this.webClient
                 .get()
-                .uri(uriBuilder -> uriBuilder.path("/trades/waiting/{env}").build(env))
+                .uri(uriBuilder -> uriBuilder.path("/signals/{env}").build(env))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Trade>>() {
+                .bodyToMono(new ParameterizedTypeReference<List<Signal>>() {
                 });
     }
 

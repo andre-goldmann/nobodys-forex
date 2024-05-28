@@ -1,13 +1,9 @@
 package jdg.digital.forexbackend.domain;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jdg.digital.forexbackend.domain.model.*;
-import jdg.digital.forexbackend.interfaces.ForexProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -16,7 +12,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,12 +24,6 @@ public class TradesService {
 
     @Autowired
     private TradeRepository tradeRepository;
-
-    @Autowired
-    private ProdTradeRepository prodTradeRepository;
-
-    @Autowired
-    private ForexProducerService forexProducerService;
 
     public Mono<List<Trade>> getTradesWithPositiveProfit(final SymbolEnum symbolEnum, final StrategyEnum strategyEnum) {
         log.info("Search for {}-{}", symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum));
@@ -52,21 +41,6 @@ public class TradesService {
                 .filter(e -> e.getProfit() < 0)
                 .map(this::entityToDto)
                 .toList());
-    }
-
-    public Mono<List<Trade>> getWaitingTrades(String env) {
-        return switch (env.toUpperCase(Locale.getDefault())) {
-            case "DEV" -> Mono.fromCallable(
-                    () -> this.tradeRepository.waitingTradesDev().stream()
-                            .map(this::entityToDto)
-                            .toList());
-            case "PROD" -> Mono.fromCallable(
-                    () -> this.tradeRepository.waitingTradesProd().stream()
-                            .map(this::entityToDto)
-                            .toList());
-            default -> throw new IllegalArgumentException("Undefined env " + env);
-        };
-
     }
 
     private Trade entityToDto(final TradesEntity entity) {
@@ -110,47 +84,5 @@ public class TradesService {
         return Mono.empty();
     }
 
-    @Transactional
-    public String storeSignal(final Signal signal, final TradeStat stats) {
-        log.info("Signal {} has stats {}", signal, stats);
 
-        final Integer activeTrades = this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy());
-        if(activeTrades < 4) {
-            this.prodTradeRepository.insertProdTradeEntity(
-                    signal.symbol(),
-                    signal.type(),
-                    signal.entry(),
-                    signal.sl(),
-                    signal.tp(),
-                    0.01,
-                    signal.strategy(),
-                    LocalDateTime.now());
-            try {
-                this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(signal));
-            } catch (JsonProcessingException e) {
-                log.error("Error sending signal to queue", e);
-                throw new RuntimeException(e);
-            }
-        } else {
-            try {
-
-                final Signal newSignal = new Signal(
-                        signal.symbol(),
-                        signal.timestamp(),
-                        signal.type(),
-                        signal.entry(),
-                        signal.sl(),
-                        signal.tp(),
-                        signal.strategy(),
-                        true,
-                        "Ignore because there more then " + activeTrades + " active trade.");
-                this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(newSignal));
-            } catch (JsonProcessingException e) {
-                log.error("Error sending signal to queue", e);
-                throw new RuntimeException(e);
-            }
-        }
-
-        return "Signal processed";
-    }
 }

@@ -26,10 +26,6 @@ export class TradesService {
     return this.http.get<Trade[]>( `${this.apiUrl}/negative-profit?symbol=${symbol}&strategy=${strategy}`);
   }
 
-  getWaitingTrades(env:string): Observable<Trade[]> {
-    return this.http.get<Trade[]>(  `${this.apiUrl}/waiting/${env}`);
-  }
-
   updateTrade(env:string, trade: Trade): Observable<Trade> {
     const headers = new HttpHeaders({
       'X-CSRF-TOKEN': 'your-csrf-token',

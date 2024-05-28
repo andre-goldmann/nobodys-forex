@@ -2,6 +2,7 @@ import { Component, Inject, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserStoreService } from '@angular-projects/login-data-access';
 import {
+  SignalsService,
   StrategyEnum, SymbolEnum,
   Trade,
   TradesService,
@@ -23,6 +24,7 @@ import { Signal } from '../../../../../shared/data-access/src/lib/models/signal'
 export class ForexAppDashboardUiComponent implements OnInit{
   // inject TradesService
   protected tradeService:TradesService = inject(TradesService);
+  protected signalsService:SignalsService = inject(SignalsService);
 
   protected tradeStatService:TradeStatService = inject(TradeStatService);
 
@@ -34,7 +36,7 @@ export class ForexAppDashboardUiComponent implements OnInit{
   positiveTrades!: Trade[];
   negativeTrades!: Trade[];*/
   map = new Map();
-  waitingTrades!: Trade[];
+
   private socket!: Subject<MessageEvent>;
   private websocketService: WebsocketService = inject(WebsocketService);
 
@@ -97,8 +99,8 @@ export class ForexAppDashboardUiComponent implements OnInit{
 
       //console.info(this.map);
     });
-    this.tradeService.getWaitingTrades('prod').subscribe((data) => {
-      this.waitingTrades = data;
+    this.signalsService.getSignals('prod').subscribe((data) => {
+      this.signals.set(data);
     });
 
   }

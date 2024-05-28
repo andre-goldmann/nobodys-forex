@@ -34,8 +34,8 @@ public class ForexController {
     @Autowired
     private TradeService tradeService;
 
-    @GetMapping("/trades/waiting/{env}")
-    public Mono<List<Trade>> getWaitingTrades(@PathVariable("env") final String env) {
+    @GetMapping("/signals/{env}")
+    public Mono<List<Signal>> getWaitingTrades(@PathVariable("env") final String env) {
         return this.tradeService.getWaitingTrades(env);
     }
 
