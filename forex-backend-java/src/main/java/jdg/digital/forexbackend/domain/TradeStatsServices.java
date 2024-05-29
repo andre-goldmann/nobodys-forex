@@ -22,6 +22,10 @@ import static jdg.digital.forexbackend.domain.model.StrategyNameMapping.STRATEGY
 @Slf4j
 public class TradeStatsServices {
 
+    public static final double WIN_PERCENTAGE = 62.0;
+    public static final double MIN_PROFIT = 10.0;
+    public static final int MIN_TRADES = 150;
+
     @Autowired
     private TradeStatsRepository tradeStatsRepository;
 
@@ -30,7 +34,7 @@ public class TradeStatsServices {
 
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> Mono.fromCallable(
-                    () -> this.tradeStatsRepository.statsDevTrades(150, 10.0, 62.0)
+                    () -> this.tradeStatsRepository.statsDevTrades(MIN_TRADES, MIN_PROFIT, WIN_PERCENTAGE)
                             .stream()
                             .map(this::mapToTrade)
                             .toList()
@@ -47,7 +51,7 @@ public class TradeStatsServices {
 
     public Mono<TradeStat> getStatsFor(final String symbol, final String strategy) {
         return Mono.fromCallable(() -> {
-            final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(symbol, strategy, 150, 10.0, 62.0);
+            final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(symbol, strategy, MIN_TRADES, MIN_PROFIT, WIN_PERCENTAGE);
             log.info("Stats: {}", entity);
             if(entity == null){
                 log.warn("Stats not found for {}-{}", symbol, strategy);
@@ -79,7 +83,7 @@ public class TradeStatsServices {
 
         stat.setProfit(BigDecimal.valueOf(entity.getProfit()).setScale(2, RoundingMode.HALF_UP).doubleValue());
         stat.setLoses(entity.getLoses());
-        stat.setLoses(entity.getLoses());
+        stat.setTotal(entity.getTotal());
         stat.setWins(entity.getWins());
         stat.setWinpercentage(entity.getWinPercentage());
         return stat;
