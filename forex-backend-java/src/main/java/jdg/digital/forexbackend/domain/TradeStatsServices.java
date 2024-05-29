@@ -1,8 +1,6 @@
 package jdg.digital.forexbackend.domain;
 
-import jdg.digital.forexbackend.domain.model.StrategyEnum;
-import jdg.digital.forexbackend.domain.model.SymbolEnum;
-import jdg.digital.forexbackend.domain.model.TradeStatInterface;
+import jdg.digital.forexbackend.domain.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +8,7 @@ import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -28,6 +27,9 @@ public class TradeStatsServices {
 
     @Autowired
     private TradeStatsRepository tradeStatsRepository;
+
+    @Autowired
+    private SignalRepository signalRepository;
 
     // TODO change return to Mono<>
     public Mono<List<TradeStat>> getTradeStats(final String env) {
@@ -49,12 +51,21 @@ public class TradeStatsServices {
         };
     }
 
-    public Mono<TradeStat> getStatsFor(final String symbol, final String strategy) {
+    public Mono<TradeStat> getStatsFor(final Signal signal) {
         return Mono.fromCallable(() -> {
-            final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(symbol, strategy, MIN_TRADES, MIN_PROFIT, WIN_PERCENTAGE);
-            log.info("Stats: {}", entity);
+            final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(signal.symbol(), signal.strategy());
             if(entity == null){
-                log.warn("Stats not found for {}-{}", symbol, strategy);
+                log.warn("Stats not found Signal of {}-{}", signal.symbol(), signal.strategy());
+                this.signalRepository.insertDevTradeEntity(
+                        signal.symbol(),
+                        signal.type(),
+                        signal.entry(),
+                        signal.sl(),
+                        signal.tp(),
+                        signal.lots(),
+                        signal.strategy(),
+                        LocalDateTime.now());
+
                 return null;
             }
             return mapToTrade(entity);

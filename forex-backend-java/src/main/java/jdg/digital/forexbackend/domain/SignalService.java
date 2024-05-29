@@ -2,10 +2,7 @@ package jdg.digital.forexbackend.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdg.digital.forexbackend.domain.model.IgnoredSignalInterface;
-import jdg.digital.forexbackend.domain.model.ProdTradeRepository;
-import jdg.digital.forexbackend.domain.model.SignalEntity;
-import jdg.digital.forexbackend.domain.model.SignalRepository;
+import jdg.digital.forexbackend.domain.model.*;
 import jdg.digital.forexbackend.interfaces.ForexProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,9 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
+
+import static jdg.digital.forexbackend.domain.TradeStatsServices.*;
 
 @Service
 @Slf4j
@@ -45,47 +45,70 @@ public class SignalService {
         };
     }
 
-    public String storeSignal(final Signal signal, final TradeStat stats) {
-        log.info("Signal {} has stats {}", signal, stats);
+    public String storeSignal(final Signal signal, final Optional<TradeStat> stats) {
+        //log.info("Signal {} has stats {}", signal, stats);
 
-        final Integer activeTrades = this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy());
-        if(activeTrades < 4) {
-            this.prodTradeRepository.insertProdTradeEntity(
-                    signal.symbol(),
-                    signal.type(),
-                    signal.entry(),
-                    signal.sl(),
-                    signal.tp(),
-                    0.01,
-                    signal.strategy(),
-                    LocalDateTime.now());
-            try {
-                this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(signal));
-            } catch (JsonProcessingException e) {
-                log.error("Error sending signal to queue", e);
-                throw new RuntimeException(e);
-            }
-        } else {
-            try {
+        if(stats.isPresent()) {
+            final Integer activeTrades = this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy());
+            if (activeTrades < 4 && stats.get().getWinpercentage() > WIN_PERCENTAGE && stats.get().getProfit() > MIN_PROFIT && stats.get().getTotal() > MIN_TRADES){
+                log.info("Stats found Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
+                storeDevSignal(signal);
 
-                final Signal newSignal = new Signal(
+                this.signalRepository.insertProdTradeEntity(
                         signal.symbol(),
-                        signal.timestamp(),
                         signal.type(),
                         signal.entry(),
                         signal.sl(),
                         signal.tp(),
+                        0.01,
                         signal.strategy(),
-                        true,
-                        "Ignore because there more then " + activeTrades + " active trade.");
-                this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(newSignal));
-            } catch (JsonProcessingException e) {
-                log.error("Error sending signal to queue", e);
-                throw new RuntimeException(e);
+                        LocalDateTime.now());
+                try {
+                    this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(signal));
+                } catch (JsonProcessingException e) {
+                    log.error("Error sending signal to queue", e);
+                    throw new RuntimeException(e);
+                }
+            } else {
+                try {
+                    log.info("Stats found Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
+                    storeDevSignal(signal);
+
+                    final Signal newSignal = new Signal(
+                            signal.symbol(),
+                            signal.timestamp(),
+                            signal.type(),
+                            signal.entry(),
+                            signal.sl(),
+                            signal.tp(),
+                            signal.lots(),
+                            signal.strategy(),
+                            true,
+                            "Ignore because there more then " + activeTrades + " active trade.");
+                    this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(newSignal));
+                } catch (JsonProcessingException e) {
+                    log.error("Error sending signal to queue", e);
+                    throw new RuntimeException(e);
+                }
             }
+        } else {
+            log.info("Stats not found Signal of {}-{}", signal.symbol(), signal.strategy());
+            storeDevSignal(signal);
         }
 
         return "Signal processed";
+    }
+
+    private void storeDevSignal(Signal signal) {
+        this.signalRepository.insertDevTradeEntity(
+                signal.symbol(),
+                signal.type(),
+                signal.entry(),
+                signal.sl(),
+                signal.tp(),
+                0.01,
+                signal.strategy(),
+                LocalDateTime.now());
     }
 
     public Mono<List<Signal>> getIgnoredSignals() {
@@ -107,6 +130,7 @@ public class SignalService {
                     0.0,
                     0.0,
                     0.0,
+                    0.01,
                     "",
                     true,
                     "");
@@ -120,6 +144,7 @@ public class SignalService {
                 signalEntity.getEntry(),
                 signalEntity.getSl(),
                 signalEntity.getTp(),
+                signalEntity.getLots(),
                 signalEntity.getStrategy(),
                 false,
                 "");

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -26,11 +28,11 @@ class TradesServiceIT {
     @Test
     void checkSignal() {
         // Arrange
-        Signal signal = new Signal("symbol", "timestamp", "type", 1.23, 0, 0, "strategy", true, "");
+        Signal signal = new Signal("symbol", "timestamp", "type", 1.23, 0, 0, 0.01, "strategy", true, "");
         TradeStat stats = new TradeStat();
 
         // Act
-        signalService.storeSignal(signal, stats);
+        signalService.storeSignal(signal, Optional.of(stats));
 
         // Assert
         /*ProdTradeEntity prodTradeEntity = prodTradeRepository.findBySymbolAndStrategy(signal.symbol(), signal.strategy());

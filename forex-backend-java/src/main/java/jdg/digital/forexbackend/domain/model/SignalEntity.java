@@ -23,6 +23,8 @@ public class SignalEntity {
 
     private Double tp;
 
+    private Double lots;
+
     private String stamp;
 
     public SignalEntity() {
@@ -92,6 +94,14 @@ public class SignalEntity {
 
     public void setStamp(String stamp) {
         this.stamp = stamp;
+    }
+
+    public Double getLots() {
+        return lots;
+    }
+
+    public void setLots(Double lots) {
+        this.lots = lots;
     }
 
     @Override

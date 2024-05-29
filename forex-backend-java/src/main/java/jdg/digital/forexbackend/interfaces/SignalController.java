@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -38,14 +39,12 @@ public class SignalController {
 
     @PostMapping
     public Mono<String> createSignal(@RequestBody Signal signal) {
-        log.info("Signal: {}", signal);
-        return this.tradeStatsServices.getStatsFor(signal.symbol(), signal.strategy())
-                .map(stats -> {
-                    log.info("Stats: {}", stats);
+        return this.tradeStatsServices.getStatsFor(signal)
+                .flatMap(stats -> {
                     if (stats != null) {
-                        return this.signalService.storeSignal(signal, stats);
+                        return Mono.just(this.signalService.storeSignal(signal, Optional.of(stats)));
                     } else {
-                        return "Trade not created";
+                        return Mono.just("Trade not created");
                     }
                 });
     }

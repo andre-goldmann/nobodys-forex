@@ -7,6 +7,7 @@ public record Signal (
     double entry,
     double sl,
     double tp,
+    double lots,
     String strategy,
     boolean ignored,
     String ignoreMessage

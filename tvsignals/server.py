@@ -792,6 +792,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "entry": signal.entry,
             "sl": sl,
             "tp": tp,
+            "lots": lots,
             "strategy": strategy}
     response = requests.post(
         "http://javabackend:5080/forex/signal",
@@ -799,17 +800,17 @@ def calculateSlAndStoreSignal(signal, strategy, session):
     )
     if response.status_code != 200:
         print(str(response.status_code))
-
-    storeSignal(Signal(
-        symbol=signal.symbol,
-        type=signal.type,
-        entry=signal.entry,
-        sl=sl,
-        tp=tp,
-        lots=lots,
-        commision=0.0,
-        strategy=strategy
-    ), session)
+    # TODO move this to java to
+    #storeSignal(Signal(
+    #    symbol=signal.symbol,
+    #    type=signal.type,
+    #    entry=signal.entry,
+    #    sl=sl,
+    #    tp=tp,
+    #    lots=lots,
+    #    commision=0.0,
+    #    strategy=strategy
+    #), session)
 
 
 
