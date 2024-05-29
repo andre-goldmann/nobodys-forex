@@ -31,6 +31,9 @@ public class SignalService {
     @Autowired
     private ForexProducerService forexProducerService;
 
+    @Autowired
+    private IgnoredSignalsRepository ignoredSignalsRepository;
+
     public Mono<List<Signal>> getSignals(String env) {
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> Mono.fromCallable(
@@ -71,6 +74,21 @@ public class SignalService {
                 }
             } else {
                 try {
+
+                    if (stats.get().getTotal() >= MIN_TRADES && stats.get().getWinpercentage() <= WIN_PERCENTAGE) {
+                        /* TODO check if to store ignored signal
+                        percentage = (100 / signalStats.alltrades) * signalStats.successtrades
+                        if percentage < 65 and signalStats.profit < 75:
+                            storeIgnoredSignal(IgnoredSignal(
+                                json=signal.symbol + "-" + strategy,
+                                reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
+                            ), session)
+                            return
+                     */
+                     this.ignoredSignalsRepository.insert(signal.symbol() + "-" + signal.strategy(),
+                             "Ignored, because it has "+stats.get().getLoses()+" failed Trades (All: "+stats.get().getTotal()+", Sucess: "+stats.get().getWins()+") and Win-Percentage is "+stats.get().getWinpercentage()+"!");
+                    }
+
                     log.info("Stats found Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
                     storeDevSignal(signal);
 
