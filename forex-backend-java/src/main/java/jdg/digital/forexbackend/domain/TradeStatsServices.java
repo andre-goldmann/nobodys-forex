@@ -27,9 +27,10 @@ public class TradeStatsServices {
 
     // TODO change return to Mono<>
     public Mono<List<TradeStat>> getTradeStats(final String env) {
+
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> Mono.fromCallable(
-                    () -> this.tradeStatsRepository.statsDevTrades(150, 10.0, 55.0)
+                    () -> this.tradeStatsRepository.statsDevTrades(150, 10.0, 62.0)
                             .stream()
                             .map(this::mapToTrade)
                             .toList()
@@ -42,6 +43,18 @@ public class TradeStatsServices {
             );
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
+    }
+
+    public Mono<TradeStat> getStatsFor(final String symbol, final String strategy) {
+        return Mono.fromCallable(() -> {
+            final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(symbol, strategy, 150, 10.0, 62.0);
+            log.info("Stats: {}", entity);
+            if(entity == null){
+                log.warn("Stats not found for {}-{}", symbol, strategy);
+                return null;
+            }
+            return mapToTrade(entity);
+        });
     }
 
     private TradeStat mapToTrade(final TradeStatInterface entity) {
@@ -70,17 +83,5 @@ public class TradeStatsServices {
         stat.setWins(entity.getWins());
         stat.setWinpercentage(entity.getWinPercentage());
         return stat;
-    }
-
-    public Mono<TradeStat> getStatsFor(final String symbol, final String strategy) {
-        return Mono.fromCallable(() -> {
-            final TradeStatInterface entity = this.tradeStatsRepository.getStatsFor(symbol, strategy, 150, 10.0, 55.0);
-            log.info("Stats: {}", entity);
-            if(entity == null){
-                log.warn("Stats not found for {}-{}", symbol, strategy);
-                return null;
-            }
-            return mapToTrade(entity);
-        });
     }
 }

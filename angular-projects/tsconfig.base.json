@@ -72,6 +72,9 @@
       "@angular-projects/spinner-component": [
         "libs/web/shared/ui/spinner/src/index.ts"
       ],
+      "@angular-projects/trades-ui": [
+        "libs/web/forex-app/trades/ui/src/index.ts"
+      ],
       "@angular-projects/ui-data-access-api": [
         "libs/web/shared/ui/data-access/api/src/index.ts"
       ],

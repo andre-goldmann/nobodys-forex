@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Service
-public class TradeService {
+public class ForexService {
 
     @Autowired
     ForexDataServiceApi forexDataServiceApi;
@@ -33,6 +33,10 @@ public class TradeService {
 
     public Mono<Trade> updateTrade(final String env,Trade trade) {
         return this.forexDataServiceApi.updateTrade(env, trade);
+    }
+
+    public Mono<Void> deleteIgnoredSignal(final String json) {
+        return this.forexDataServiceApi.deleteIgnoredSignal(json);
     }
 }
 

@@ -32,31 +32,36 @@ public class ForexController {
     private TradeStatsService tradeStatsService;
 
     @Autowired
-    private TradeService tradeService;
+    private ForexService forexService;
 
     @GetMapping("/signals/{env}")
     public Mono<List<Signal>> getSignals(@PathVariable("env") final String env) {
-        return this.tradeService.getSignals(env);
+        return this.forexService.getSignals(env);
     }
 
     @GetMapping("/signals/ignored")
     public Mono<List<Signal>> getIgnoredSignals() {
-        return this.tradeService.getIgnoredSignals();
+        return this.forexService.getIgnoredSignals();
+    }
+
+    @DeleteMapping("/signals/ignored/delete")
+    public Mono<Void> deleteIgnoredSignal(@RequestParam String json) {
+        return this.forexService.deleteIgnoredSignal(json);
     }
 
     @PutMapping("/trades/update/{env}")
     public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
-        return this.tradeService.updateTrade(env, trade);
+        return this.forexService.updateTrade(env, trade);
     }
 
     @GetMapping("/trades/positive-profit")
     public Mono<List<Trade>> getTradesWithPositiveProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
-        return this.tradeService.getTradesWithPositiveProfit(symbol, strategy);
+        return this.forexService.getTradesWithPositiveProfit(symbol, strategy);
     }
 
     @GetMapping("/trades/negative-profit")
     public Mono<List<Trade>> getTradesWithNegativeProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
-        return this.tradeService.getTradesWithNegativeProfit(symbol, strategy);
+        return this.forexService.getTradesWithNegativeProfit(symbol, strategy);
     }
 
     @GetMapping("/tradestats/{env}")

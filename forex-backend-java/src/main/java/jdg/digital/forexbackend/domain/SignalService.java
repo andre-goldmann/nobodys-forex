@@ -19,6 +19,7 @@ import java.util.Locale;
 
 @Service
 @Slf4j
+@Transactional
 public class SignalService {
 
     @Autowired
@@ -44,7 +45,6 @@ public class SignalService {
         };
     }
 
-    @Transactional
     public String storeSignal(final Signal signal, final TradeStat stats) {
         log.info("Signal {} has stats {}", signal, stats);
 
@@ -95,8 +95,11 @@ public class SignalService {
                         .toList());
     }
 
-    private Signal ignoredSignalToDto(final IgnoredSignalInterface entity)  {
+    public Mono<Void> deleteIgnoredSignal(final String json) {
+        return Mono.fromRunnable(() -> this.signalRepository.deleteByJson(json));
+    }
 
+    private Signal ignoredSignalToDto(final IgnoredSignalInterface entity)  {
             return new Signal(
                     entity.getJson(),
                     "",

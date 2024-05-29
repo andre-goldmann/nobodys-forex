@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { APP_CONFIG, AppConfig } from '@angular-projects/app-config';
@@ -26,5 +26,10 @@ export class SignalsService {
 
   getIgnoredSignals(): Observable<Trade[]> {
     return this.http.get<Signal[]>(  `${this.apiUrl}/ignored`);
+  }
+
+  deleteIgnoredSignal(json: string){
+    let params = new HttpParams().set('json', json);
+    return this.http.delete(`${this.apiUrl}/ignored/delete`, {params: params});
   }
 }

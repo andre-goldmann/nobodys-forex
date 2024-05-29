@@ -54,7 +54,7 @@
           <tbody>
           <tr *ngFor="let signal of ignoredSignals()" class="text-center">
             <td class="border px-4 py-2">{{ signal.symbol }}</td>
-            <td class="border px-4 py-2"><button class="btn btn-primary">Delete</button></td>
+            <td class="border px-4 py-2"><button class="btn btn-primary" (click)="deleteIgnoredSignals(signal.symbol)">Delete</button></td>
             <!--td class="border px-4 py-2">{{ signal.type }}</td>
             <td class="border px-4 py-2">{{ signal.entry }}</td>
             <td class="border px-4 py-2">{{ signal.sl }}</td>

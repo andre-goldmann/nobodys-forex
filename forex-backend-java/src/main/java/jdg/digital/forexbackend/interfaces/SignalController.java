@@ -31,6 +31,11 @@ public class SignalController {
         return this.signalService.getIgnoredSignals();
     }
 
+    @DeleteMapping("/ignored/delete")
+    public Mono<Void> deleteIgnoredSignal(@RequestParam String json) {
+        return this.signalService.deleteIgnoredSignal(json);
+    }
+
     @PostMapping
     public Mono<String> createSignal(@RequestBody Signal signal) {
         log.info("Signal: {}", signal);

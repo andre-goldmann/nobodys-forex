@@ -48,11 +48,14 @@ export class SignalsUiComponent implements OnInit {
     });
   }
 
-  showSignals() {
-
-  }
-
-  showIgnoredSignals() {
-
+  deleteIgnoredSignals(json: string) {
+    this.signalsService.deleteIgnoredSignal(json).subscribe(  {
+      next: () => {
+        console.info("Deleted signal!");
+      },
+      error: (error) => {
+        console.error('Error: ', error);
+      }
+    });
   }
 }

@@ -92,4 +92,16 @@ public class ForexDataServiceApi {
                 .retrieve()
                 .bodyToMono(Trade.class);
     }
+
+    public Mono<Void> deleteIgnoredSignal(final String json) {
+        return this.webClient
+                .delete()
+                .uri(uriBuilder -> uriBuilder.path("/signals/ignored/delete")
+                        .replaceQueryParam("json", json)
+                        .build())
+                .accept(MediaType.APPLICATION_JSON)
+                //.body(json, String.class)
+                .retrieve()
+                .bodyToMono(Void.class);
+    }
 }
