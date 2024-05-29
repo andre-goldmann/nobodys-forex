@@ -35,8 +35,13 @@ public class ForexController {
     private TradeService tradeService;
 
     @GetMapping("/signals/{env}")
-    public Mono<List<Signal>> getWaitingTrades(@PathVariable("env") final String env) {
-        return this.tradeService.getWaitingTrades(env);
+    public Mono<List<Signal>> getSignals(@PathVariable("env") final String env) {
+        return this.tradeService.getSignals(env);
+    }
+
+    @GetMapping("/signals/ignored")
+    public Mono<List<Signal>> getIgnoredSignals() {
+        return this.tradeService.getIgnoredSignals();
     }
 
     @PutMapping("/trades/update/{env}")

@@ -15,6 +15,7 @@ export class SignalsUiComponent implements OnInit {
 
   protected signalsService:SignalsService = inject(SignalsService);
   signals = signal<Signal[]>([]);
+  ignoredSignals = signal<Signal[]>([]);
   private socket!: Subject<MessageEvent>;
 
   private websocketService: WebsocketService = inject(WebsocketService);
@@ -42,6 +43,16 @@ export class SignalsUiComponent implements OnInit {
     this.signalsService.getSignals('prod').subscribe((data) => {
       this.signals.set(data);
     });
+    this.signalsService.getIgnoredSignals().subscribe((data) => {
+      this.ignoredSignals.set(data);
+    });
   }
 
+  showSignals() {
+
+  }
+
+  showIgnoredSignals() {
+
+  }
 }

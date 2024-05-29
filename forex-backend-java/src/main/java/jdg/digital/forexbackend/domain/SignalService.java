@@ -87,6 +87,12 @@ public class SignalService {
         return "Signal processed";
     }
 
+    public Mono<List<Signal>> getIgnoredSignals() {
+        return Mono.fromCallable(
+                () -> this.signalRepository.ignoredSignals().stream()
+                        .map(this::entityToDto)
+                        .toList());
+    }
 
     private Signal entityToDto(final SignalEntity signalEntity) {
         return new Signal(

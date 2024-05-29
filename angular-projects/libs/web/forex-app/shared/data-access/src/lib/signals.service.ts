@@ -24,4 +24,7 @@ export class SignalsService {
     return this.http.get<Signal[]>(  `${this.apiUrl}/${env}`);
   }
 
+  getIgnoredSignals(): Observable<Trade[]> {
+    return this.http.get<Signal[]>(  `${this.apiUrl}/ignored`);
+  }
 }

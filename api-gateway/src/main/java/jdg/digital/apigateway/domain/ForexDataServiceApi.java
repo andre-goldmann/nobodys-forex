@@ -69,7 +69,17 @@ public class ForexDataServiceApi {
                 .uri(uriBuilder -> uriBuilder.path("/signals/{env}").build(env))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Signal>>() {
+                .bodyToMono(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    public Mono<List<Signal>> getIgnoredSignals() {
+        return this.webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder.path("/signals/ignored").build())
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {
                 });
     }
 

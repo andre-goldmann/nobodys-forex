@@ -22,8 +22,13 @@ public class SignalController {
     private TradeStatsServices tradeStatsServices;
 
     @GetMapping("/{env}")
-    public Mono<List<Signal>> getWaitingTrades(@PathVariable("env") final String env) {
+    public Mono<List<Signal>> getSignals(@PathVariable("env") final String env) {
         return this.signalService.getSignals(env);
+    }
+
+    @GetMapping("/ignored")
+    public Mono<List<Signal>> getIgnoredSignals() {
+        return this.signalService.getIgnoredSignals();
     }
 
     @PostMapping

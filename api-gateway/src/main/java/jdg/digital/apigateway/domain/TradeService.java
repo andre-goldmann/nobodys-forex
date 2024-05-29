@@ -23,8 +23,12 @@ public class TradeService {
         return this.forexDataServiceApi.getTradesWithNegativeProfit(symbol, strategy);
     }
 
-    public Mono<List<Signal>> getWaitingTrades(final String env) {
+    public Mono<List<Signal>> getSignals(final String env) {
         return this.forexDataServiceApi.getSignals(env);
+    }
+
+    public Mono<List<Signal>> getIgnoredSignals() {
+        return this.forexDataServiceApi.getIgnoredSignals();
     }
 
     public Mono<Trade> updateTrade(final String env,Trade trade) {

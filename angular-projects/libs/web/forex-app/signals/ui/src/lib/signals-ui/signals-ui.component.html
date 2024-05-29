@@ -1,32 +1,87 @@
 <div class="container mx-auto">
+  <div role="tablist" class="tabs tabs-lifted">
+    <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="Signals" checked />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
 
-  <p>Just published Signals</p>
-  <div class="overflow-x-auto">
-    <table class="table-auto w-full">
-      <thead>
-      <tr>
-        <th class="px-4 py-2">Symbol</th>
-        <th class="px-4 py-2">Strategy</th>
-        <th class="px-4 py-2">Type</th>
-        <th class="px-4 py-2">Entry</th>
-        <th class="px-4 py-2">SL</th>
-        <th class="px-4 py-2">TP</th>
-        <th class="px-4 py-2">Ignored</th>
-        <th class="px-4 py-2">Ignored Message</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let signal of signals()" class="text-center">
-        <td class="border px-4 py-2">{{ signal.symbol }}</td>
-        <td class="border px-4 py-2">{{ signal.strategy }}</td>
-        <td class="border px-4 py-2">{{ signal.type }}</td>
-        <td class="border px-4 py-2">{{ signal.entry }}</td>
-        <td class="border px-4 py-2">{{ signal.sl }}</td>
-        <td class="border px-4 py-2">{{ signal.tp }}</td>
-        <td class="border px-4 py-2">{{ signal.ignrored }}</td>
-        <td class="border px-4 py-2">{{ signal.ignroredMessage }}</td>
-      </tr>
-      </tbody>
-    </table>
+      <div class="overflow-x-auto">
+        <table class="table-auto w-full">
+          <thead>
+          <tr>
+            <th class="px-4 py-2">Symbol</th>
+            <th class="px-4 py-2">Strategy</th>
+            <th class="px-4 py-2">Type</th>
+            <th class="px-4 py-2">Entry</th>
+            <th class="px-4 py-2">SL</th>
+            <th class="px-4 py-2">TP</th>
+            <th class="px-4 py-2">Ignored</th>
+            <th class="px-4 py-2">Ignored Message</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let signal of signals()" class="text-center">
+            <td class="border px-4 py-2">{{ signal.symbol }}</td>
+            <td class="border px-4 py-2">{{ signal.strategy }}</td>
+            <td class="border px-4 py-2">{{ signal.type }}</td>
+            <td class="border px-4 py-2">{{ signal.entry }}</td>
+            <td class="border px-4 py-2">{{ signal.sl }}</td>
+            <td class="border px-4 py-2">{{ signal.tp }}</td>
+            <td class="border px-4 py-2">{{ signal.ignrored }}</td>
+            <td class="border px-4 py-2">{{ signal.ignroredMessage }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="Ignored Signals" />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
+
+      <div class="overflow-x-auto">
+        <table class="table-auto w-full">
+          <thead>
+          <tr>
+            <th class="px-4 py-2">Symbol</th>
+            <th class="px-4 py-2">Strategy</th>
+            <th class="px-4 py-2">Type</th>
+            <th class="px-4 py-2">Entry</th>
+            <th class="px-4 py-2">SL</th>
+            <th class="px-4 py-2">TP</th>
+            <th class="px-4 py-2">Ignored</th>
+            <th class="px-4 py-2">Ignored Message</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let signal of ignoredSignals()" class="text-center">
+            <td class="border px-4 py-2">{{ signal.symbol }}</td>
+            <td class="border px-4 py-2">{{ signal.strategy }}</td>
+            <td class="border px-4 py-2">{{ signal.type }}</td>
+            <td class="border px-4 py-2">{{ signal.entry }}</td>
+            <td class="border px-4 py-2">{{ signal.sl }}</td>
+            <td class="border px-4 py-2">{{ signal.tp }}</td>
+            <td class="border px-4 py-2">{{ signal.ignrored }}</td>
+            <td class="border px-4 py-2">{{ signal.ignroredMessage }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!--input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="Tab 3" />
+    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">Tab content 3</div-->
   </div>
+  <!-- add a tap here with two tabs>
+  <div class="flex flex-col">
+    <div class="flex p-4">
+      <div class="p-2">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="showSignals()">Signals</button>
+      </div>
+      <div class="p-2">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="showIgnoredSignals()">Trades</button>
+      </div>
+    </div>
+  </div-->
+  <!--p>Just published Signals</p-->
+
 </div>
