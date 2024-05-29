@@ -762,29 +762,6 @@ def calculateSlAndStoreSignal(signal, strategy, session):
     elif signalStats.failedtrades > signalStats.successtrades:
         lots = 0.01
 
-    if signalStats is not None and signalStats.alltrades > 150:
-
-        percentage = (100 / signalStats.alltrades) * signalStats.successtrades
-        if percentage < 65 and signalStats.profit < 75:
-            storeIgnoredSignal(IgnoredSignal(
-                json=signal.symbol + "-" + strategy,
-                reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
-            ), session)
-            return
-        #else:
-            #prodSignalsCount = session.query(ProdSignal).filter(ProdSignal.activated == "", ProdSignal.openprice == 0.0).count()
-            #if prodSignalsCount <= 5 and signalStats.profit > 1 and ('EURCHF' == signal.symbol or 'AUDUSD' == signal.symbol):
-            #    storeProdSignal(ProdSignal(
-            #        symbol=signal.symbol,
-            #        type=signal.type,
-            #        entry=signal.entry,
-            #        sl=sl,
-            #        tp=tp,
-            #        lots=0.01,
-            #        commision=0.0,
-            #        strategy=strategy
-            #    ), session)
-
     # Immer an Java Backend senden
     data = {"symbol": signal.symbol,
             "timestamp": signal.timestamp,
@@ -800,18 +777,6 @@ def calculateSlAndStoreSignal(signal, strategy, session):
     )
     if response.status_code != 200:
         print(str(response.status_code))
-    # TODO move this to java to
-    #storeSignal(Signal(
-    #    symbol=signal.symbol,
-    #    type=signal.type,
-    #    entry=signal.entry,
-    #    sl=sl,
-    #    tp=tp,
-    #    lots=lots,
-    #    commision=0.0,
-    #    strategy=strategy
-    #), session)
-
 
 
 def proceedSignal(signal):
