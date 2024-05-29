@@ -88,7 +88,13 @@
 
       .sidenav-link-text {
         margin-left: 1.5rem;
+        opacity: 1;
       }
+
+      .sidenav-nav-link:hover {
+        opacity: 1;
+      }
+
     }
   }
 
@@ -108,3 +114,5 @@
     color: #000;
   }
 }
+
+

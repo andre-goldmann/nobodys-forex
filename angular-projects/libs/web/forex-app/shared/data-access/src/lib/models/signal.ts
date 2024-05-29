@@ -24,7 +24,7 @@ export interface Signal {
     ignrored?: boolean;
     ignroredMessage?: string;
 }
-export namespace Trade {
+export namespace Signal {
 }
 
 

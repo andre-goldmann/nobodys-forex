@@ -66,6 +66,9 @@
       "@angular-projects/sidenav-ui": [
         "libs/web/shared/ui/sidenav/ui/src/index.ts"
       ],
+      "@angular-projects/signals-ui": [
+        "libs/web/forex-app/signals/ui/src/index.ts"
+      ],
       "@angular-projects/spinner-component": [
         "libs/web/shared/ui/spinner/src/index.ts"
       ],

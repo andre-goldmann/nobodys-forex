@@ -1,18 +1,15 @@
-import { Component, Inject, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserStoreService } from '@angular-projects/login-data-access';
 import {
-  SignalsService,
-  StrategyEnum, SymbolEnum,
+  StrategyEnum,
+  SymbolEnum,
   Trade,
   TradesService,
-  TradeStatService, WebsocketService
+  TradeStatService,
+  TradeTypeEnum
 } from '@angular-projects/forex-app-data-access';
-import { Subject, zip } from 'rxjs';
-import { TradeTypeEnum } from '../../../../../shared/data-access/src/lib/models/trade-type-enum';
-import { APP_CONFIG, AppConfig } from '@angular-projects/app-config';
-import { Signal } from '../../../../../shared/data-access/src/lib/models/signal';
-
+import { zip } from 'rxjs';
 
 @Component({
   selector: 'lib-forex-app-dashboard-ui',
@@ -24,43 +21,14 @@ import { Signal } from '../../../../../shared/data-access/src/lib/models/signal'
 export class ForexAppDashboardUiComponent implements OnInit{
   // inject TradesService
   protected tradeService:TradesService = inject(TradesService);
-  protected signalsService:SignalsService = inject(SignalsService);
 
   protected tradeStatService:TradeStatService = inject(TradeStatService);
 
   protected userStoreService:UserStoreService = inject(UserStoreService);
-  /*tableData: WinningTrade[] = [];
-  tradeStats : TradeStat[]=[];
-  prodTradeStats : TradeStat[]=[];
-  selectedItem!:TradeStat;
-  positiveTrades!: Trade[];
-  negativeTrades!: Trade[];*/
+
   map = new Map();
 
-  private socket!: Subject<MessageEvent>;
-  private websocketService: WebsocketService = inject(WebsocketService);
-
-  constructor(@Inject(APP_CONFIG) private appConfig: AppConfig) {
-  }
-
-  signals = signal<Signal[]>([]);
-
   ngOnInit(): void {
-
-    this.socket = this.websocketService.connect(`${this.appConfig.wsURL}`);
-
-    this.socket.subscribe(
-      message =>
-      {
-        console.log('Received message: ', message.data);
-        let newSignal = JSON.parse(message.data);
-        this.signals.update(values => {
-          return [...values, newSignal];
-        });
-      },
-      error => console.error('Error: ', error),
-      () => console.log('WebSocket connection closed')
-    );
 
     /*let result = zip(this.tradeStatService.getTradeStats("dev"), this.tradeStatService.getTradeStats("prod"))
       .pipe(
@@ -98,9 +66,6 @@ export class ForexAppDashboardUiComponent implements OnInit{
       }));
 
       //console.info(this.map);
-    });
-    this.signalsService.getSignals('prod').subscribe((data) => {
-      this.signals.set(data);
     });
 
   }

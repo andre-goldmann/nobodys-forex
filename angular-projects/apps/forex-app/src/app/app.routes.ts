@@ -2,6 +2,8 @@ import { Route } from '@angular/router';
 import {isAuthenticatedGuard} from "@angular-projects/utils";
 import {ForexAppDashboardUiComponent} from "@angular-projects/forex-app-dashboard-ui";
 import {LogoutComponent} from "./LogoutComponent";
+import { PlaygroundUiComponent } from '@angular-projects/playground-ui';
+import { SignalsUiComponent } from '@angular-projects/signals-ui';
 
 export const APP_ROUTES: Route[] = [
   {
@@ -12,6 +14,16 @@ export const APP_ROUTES: Route[] = [
     path: 'dashboard',
     canActivate: [isAuthenticatedGuard()],
     component: ForexAppDashboardUiComponent
+  },
+  {
+    path: 'signals',
+    canActivate: [isAuthenticatedGuard()],
+    component: SignalsUiComponent
+  },
+  {
+    path: 'playground',
+    canActivate: [isAuthenticatedGuard()],
+    component: PlaygroundUiComponent
   },
   {
     path: 'logout',

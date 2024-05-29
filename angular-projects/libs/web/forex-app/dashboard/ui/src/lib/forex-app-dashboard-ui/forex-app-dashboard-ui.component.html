@@ -11,42 +11,6 @@
   <!--button (click)="updateTrade()" class="btn btn-primary">Update Trade</button>
   <p> TODO Endpoint updateProdTrades</p-->
 
-  <p>WaitingTrades</p>
-  {{signals | json}}
-<!-- TODO this should be in another view -->
-<!-- Maximum two tabs, everything else in a new view-->
-<!-- convert tables to panels -->
-
-  <p>Just published Signals</p>
-  <div class="overflow-x-auto">
-    <table class="table-auto w-full">
-      <thead>
-        <tr>
-          <th class="px-4 py-2">Symbol</th>
-          <th class="px-4 py-2">Strategy</th>
-          <th class="px-4 py-2">Type</th>
-          <th class="px-4 py-2">Entry</th>
-          <th class="px-4 py-2">SL</th>
-          <th class="px-4 py-2">TP</th>
-          <th class="px-4 py-2">Ignored</th>
-          <th class="px-4 py-2">Ignored Message</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let signal of signals()" class="text-center">
-          <td class="border px-4 py-2">{{ signal.symbol }}</td>
-          <td class="border px-4 py-2">{{ signal.strategy }}</td>
-          <td class="border px-4 py-2">{{ signal.type }}</td>
-          <td class="border px-4 py-2">{{ signal.entry }}</td>
-          <td class="border px-4 py-2">{{ signal.sl }}</td>
-          <td class="border px-4 py-2">{{ signal.tp }}</td>
-          <td class="border px-4 py-2">{{ signal.ignrored }}</td>
-          <td class="border px-4 py-2">{{ signal.ignroredMessage }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
 
   <div class="flex flex-col justify-around spacy-y-4">
     <div *ngFor="let item of map | keyvalue" class="w-full rounded overflow-hidden shadow-lg m-4"[ngClass]="{'green-background': item.value.length > 1}">

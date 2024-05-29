@@ -1,0 +1,18 @@
+<p>Signals</p>
+<div class="text-center">
+  <h2 class="text-2xl font-bold mb-4">Playground</h2>
+
+  <div class="flex items-center justify-center mb-4">
+    <button (click)="minus()" class="bg-red-500 text-white px-3 py-2 rounded mr-2">
+      <i class="fa-solid fa-minus"></i>
+    </button>
+    <span class="text-xl">{{ quantity() }}</span>
+    <button (click)="plus()" class="bg-green-500 text-white px-3 py-2 rounded ml-2">
+      <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
+
+  <div>
+    <p class="text-xl">Total: {{ total() }}</p>
+  </div>
+</div>
