@@ -2,6 +2,7 @@ package jdg.digital.forexbackend.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdg.digital.forexbackend.domain.model.IgnoredSignalInterface;
 import jdg.digital.forexbackend.domain.model.ProdTradeRepository;
 import jdg.digital.forexbackend.domain.model.SignalEntity;
 import jdg.digital.forexbackend.domain.model.SignalRepository;
@@ -90,8 +91,22 @@ public class SignalService {
     public Mono<List<Signal>> getIgnoredSignals() {
         return Mono.fromCallable(
                 () -> this.signalRepository.ignoredSignals().stream()
-                        .map(this::entityToDto)
+                        .map(this::ignoredSignalToDto)
                         .toList());
+    }
+
+    private Signal ignoredSignalToDto(final IgnoredSignalInterface entity)  {
+
+            return new Signal(
+                    entity.getJson(),
+                    "",
+                    "",
+                    0.0,
+                    0.0,
+                    0.0,
+                    "",
+                    true,
+                    "");
     }
 
     private Signal entityToDto(final SignalEntity signalEntity) {
