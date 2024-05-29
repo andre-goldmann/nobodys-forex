@@ -195,3 +195,8 @@ pyenv
 
 python-ai/data
 python-ai/chroma_data
+
+resumee-check/.idea
+resumee-check/chroma_data
+
+.nx/cache
