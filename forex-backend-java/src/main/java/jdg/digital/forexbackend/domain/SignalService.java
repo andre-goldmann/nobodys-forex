@@ -36,9 +36,9 @@ public class SignalService {
 
     public Mono<List<Signal>> getSignals(String env) {
         return switch (env.toUpperCase(Locale.getDefault())) {
-            case "DEV" -> this.signalRepository.waitingTradesDev()
+            case "DEV" -> this.signalRepository.signalsDev()
                             .map(this::entityToDto).collectList();
-            case "PROD" -> this.signalRepository.waitingTradesProd()
+            case "PROD" -> this.signalRepository.signalsProd()
                             .map(this::entityToDto).collectList();
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };

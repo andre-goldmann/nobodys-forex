@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @Transactional
 public interface SignalRepository extends ReactiveCrudRepository<SignalEntity, Integer> {
 
-    @Query(value = "SELECT * from \"Trades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0)")
-    Flux<SignalEntity> waitingTradesDev();
+    @Query(value = "SELECT * from \"Trades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0) limit = 10")
+    Flux<SignalEntity> signalsDev();
 
     @Query(value = "SELECT * from \"ProdTrades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0)")
-    Flux<SignalEntity> waitingTradesProd();
+    Flux<SignalEntity> signalsProd();
 
     @Query(value = "SELECT json, count(*) from \"IgnoredSignals\" group by json")
     Flux<IgnoredSignalInterface> ignoredSignals();
