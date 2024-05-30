@@ -1223,8 +1223,8 @@ async def storeCandle(candle:CandlesDto):
         #tSICrossover(df, symbol, timeframeEnum)
 
 
-    json_compatible_item_data = jsonable_encoder(candle)
-    await manager.broadcast(json.dumps(json_compatible_item_data))
+    #json_compatible_item_data = jsonable_encoder(candle)
+    #await manager.broadcast(json.dumps(json_compatible_item_data))
 
 def autoDetectSupportAndResistance(symbol:str, sliceMax:int, peaksMax:int, timeFrame: TimeFrame):
 
