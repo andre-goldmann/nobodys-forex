@@ -1,8 +1,10 @@
 package jdg.digital.forexbackend.domain;
 
+import java.time.OffsetDateTime;
+
 public record Signal (
     String symbol,
-    String timestamp,
+    OffsetDateTime timestamp,
     String type,
     double entry,
     double sl,

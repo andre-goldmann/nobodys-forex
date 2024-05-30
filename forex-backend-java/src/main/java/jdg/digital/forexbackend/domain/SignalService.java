@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime;import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -178,7 +178,7 @@ public class SignalService {
     private Signal ignoredSignalToDto(final IgnoredSignalInterface entity)  {
         return new Signal(
                 entity.getJson(),
-                "",
+                OffsetDateTime.now(),
                 "",
                 0.0,
                 0.0,
