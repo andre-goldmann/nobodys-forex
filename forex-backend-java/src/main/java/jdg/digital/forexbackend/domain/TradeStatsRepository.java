@@ -31,12 +31,12 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
             "GROUP BY symbol, strategy\n" +
             "HAVING\n" +
-            "    count(*) > ?1\n" +
-            "   AND sum(profit - \"Trades\".swap - \"Trades\".commision) > ?2\n" +
+            "    count(*) > :minTrades\n" +
+            "   AND sum(profit - \"Trades\".swap - \"Trades\".commision) > :minProfit\n" +
             "   AND COUNT(CASE WHEN profit > 0 THEN 1 END) > COUNT(CASE WHEN profit < 0 THEN 1 END)\n" +
-            "   AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > ?3\n" +
+            "   AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > :winPercentage\n" +
             "ORDER BY symbol, sum(profit) DESC")
-    Flux<TradeStatInterface> statsDevTrades(Integer minTrades, Double minProfit, Double winPercentage);
+    Flux<TradeStatInterface> statsDevTrades(@Param("minTrades") Integer minTrades, @Param("minProfit") Double minProfit, @Param("winPercentage") Double winPercentage);
 
     @Query(value = "SELECT symbol,\n" +
             "       strategy,\n" +

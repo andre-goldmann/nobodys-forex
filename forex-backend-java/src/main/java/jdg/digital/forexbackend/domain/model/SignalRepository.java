@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Transactional
 public interface SignalRepository extends ReactiveCrudRepository<SignalEntity, Integer> {
 
-    @Query(value = "SELECT * from \"Trades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0) limit = 10")
+    @Query(value = "SELECT * from \"Trades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0) limit = 5")
     Flux<SignalEntity> signalsDev();
 
     @Query(value = "SELECT * from \"ProdTrades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0)")
@@ -26,8 +26,8 @@ public interface SignalRepository extends ReactiveCrudRepository<SignalEntity, I
     Flux<IgnoredSignalInterface> ignoredSignals();
 
     @Modifying
-    @Query(value = "delete from \"IgnoredSignals\" where json = ?1")
-    Mono<Void> deleteByJson(final String json);
+    @Query(value = "delete from \"IgnoredSignals\" where json = :json")
+    Mono<Void> deleteByJson(@Param("json") String json);
 
     @Modifying
     @Query(value = "INSERT INTO \"ProdTrades\" (symbol, type, entry, sl, tp, lots, strategy, stamp, activated) VALUES (:symbol, :type, :entry, :sl, :tp, :lots, :strategy, :stamp, '')")
