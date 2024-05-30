@@ -1486,7 +1486,12 @@ if __name__ == "__main__":
     #schedule.every().hour.do(runFirstStrategy)
     # Start the background thread
     stop_run_continuously = run_continuously()
-    uvicorn.run(app, host="0.0.0.0", port=6081)
+
+    #uvicorn_error = logging.getLogger("uvicorn.error")
+    #uvicorn_error.disabled = True
+    #uvicorn_access = logging.getLogger("uvicorn.access")
+    #uvicorn_access.disabled = True
+    uvicorn.run(app, host="0.0.0.0", port=6081, log_level="critical", access_log=False)
 
     #consumer.subscribe(['test:1:1'])
 
