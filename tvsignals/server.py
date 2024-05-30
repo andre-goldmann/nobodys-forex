@@ -772,12 +772,13 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "lots": lots,
             "strategy": strategy}
     response = requests.post(
-        "http://javabackend:5080/forex/signal",
+        "http://javabackend:5080/forex/signals",
         json=data,
     )
     if response.status_code != 200:
+        print("#############################Error sending to Java Backend##############################")
         print(str(response.status_code))
-
+        print(str(response))
 
 def proceedSignal(signal):
     # no need to check for trend in TradingView we send everything
