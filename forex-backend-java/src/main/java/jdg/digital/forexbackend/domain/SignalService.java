@@ -36,25 +36,71 @@ public class SignalService {
 
     public Mono<List<Signal>> getSignals(String env) {
         return switch (env.toUpperCase(Locale.getDefault())) {
-            case "DEV" -> Mono.fromCallable(
-                    () -> this.signalRepository.waitingTradesDev().stream()
-                            .map(this::entityToDto)
-                            .toList());
-            case "PROD" -> Mono.fromCallable(
-                    () -> this.signalRepository.waitingTradesProd().stream()
-                            .map(this::entityToDto)
-                            .toList());
+            case "DEV" -> this.signalRepository.waitingTradesDev()
+                            .map(this::entityToDto).collectList();
+            case "PROD" -> this.signalRepository.waitingTradesProd()
+                            .map(this::entityToDto).collectList();
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
     }
 
-    public String storeSignal(final Signal signal, final Optional<TradeStat> stats) {
+    public Mono<String> storeSignal(final Signal signal, final Optional<TradeStat> stats) {
         //log.info("Signal {} has stats {}", signal, stats);
 
-        if(stats.isPresent()) {
+        if(stats.isPresent() && stats.get().getWinpercentage() > WIN_PERCENTAGE && stats.get().getProfit() > MIN_PROFIT && stats.get().getTotal() > MIN_TRADES) {
+            return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy()).map(activeTrades -> {
+                if (activeTrades < 4) {
+                    log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
+                    storeDevSignal(signal);
+
+                    this.signalRepository.insertProdTradeEntity(
+                            signal.symbol(),
+                            signal.type(),
+                            signal.entry(),
+                            signal.sl(),
+                            signal.tp(),
+                            0.01,
+                            signal.strategy(),
+                            LocalDateTime.now()).flatMap(signalEntity -> {
+                                log.info("Signal {} inserted in prod", signalEntity);
+                                return Mono.just("Signal processed");
+                            });
+                    try {
+                        this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(signal));
+                    } catch (JsonProcessingException e) {
+                        log.error("Error sending signal to queue", e);
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
+                    storeDevSignal(signal);
+
+                    final Signal newSignal = new Signal(
+                            signal.symbol(),
+                            signal.timestamp(),
+                            signal.type(),
+                            signal.entry(),
+                            signal.sl(),
+                            signal.tp(),
+                            signal.lots(),
+                            signal.strategy(),
+                            true,
+                            "Ignore because there more then " + activeTrades + " active trade.");
+                    try {
+                        this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(newSignal));
+                    } catch (JsonProcessingException e) {
+                        log.error("Error sending signal to queue", e);
+                        throw new RuntimeException(e);
+                    }
+                }
+                return "Signal processed";
+            });
+        }
+
+        /*if(stats.isPresent()) {
             final Integer activeTrades = this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy());
             if (activeTrades < 4 && stats.get().getWinpercentage() > WIN_PERCENTAGE && stats.get().getProfit() > MIN_PROFIT && stats.get().getTotal() > MIN_TRADES){
-                log.info("Stats found Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
+                log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
                 storeDevSignal(signal);
 
                 this.signalRepository.insertProdTradeEntity(
@@ -76,20 +122,11 @@ public class SignalService {
                 try {
 
                     if (stats.get().getTotal() >= MIN_TRADES && stats.get().getWinpercentage() <= WIN_PERCENTAGE) {
-                        /* TODO check if to store ignored signal
-                        percentage = (100 / signalStats.alltrades) * signalStats.successtrades
-                        if percentage < 65 and signalStats.profit < 75:
-                            storeIgnoredSignal(IgnoredSignal(
-                                json=signal.symbol + "-" + strategy,
-                                reason=f"Ignored, because it has {signalStats.failedtrades} failed Trades (All: {signalStats.alltrades}, Sucess: {signalStats.successtrades}) and Win-Percentage is {percentage}!"
-                            ), session)
-                            return
-                     */
-                     this.ignoredSignalsRepository.insert(signal.symbol() + "-" + signal.strategy(),
+                        this.ignoredSignalsRepository.insert(signal.symbol() + "-" + signal.strategy(),
                              "Ignored, because it has "+stats.get().getLoses()+" failed Trades (All: "+stats.get().getTotal()+", Sucess: "+stats.get().getWins()+") and Win-Percentage is "+stats.get().getWinpercentage()+"!");
                     }
 
-                    log.info("Stats found Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
+                    log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
                     storeDevSignal(signal);
 
                     final Signal newSignal = new Signal(
@@ -110,11 +147,11 @@ public class SignalService {
                 }
             }
         } else {
-            log.info("Stats not found Signal of {}-{}", signal.symbol(), signal.strategy());
+            log.info("Stats not found for Signal of {}-{}", signal.symbol(), signal.strategy());
             storeDevSignal(signal);
-        }
+        }*/
 
-        return "Signal processed";
+        return Mono.just("Signal processed");
     }
 
     private void storeDevSignal(Signal signal) {
@@ -130,10 +167,8 @@ public class SignalService {
     }
 
     public Mono<List<Signal>> getIgnoredSignals() {
-        return Mono.fromCallable(
-                () -> this.signalRepository.ignoredSignals().stream()
-                        .map(this::ignoredSignalToDto)
-                        .toList());
+        return this.signalRepository.ignoredSignals()
+                        .map(this::ignoredSignalToDto).collectList();
     }
 
     public Mono<Void> deleteIgnoredSignal(final String json) {
@@ -141,17 +176,17 @@ public class SignalService {
     }
 
     private Signal ignoredSignalToDto(final IgnoredSignalInterface entity)  {
-            return new Signal(
-                    entity.getJson(),
-                    "",
-                    "",
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.01,
-                    "",
-                    true,
-                    "");
+        return new Signal(
+                entity.getJson(),
+                "",
+                "",
+                0.0,
+                0.0,
+                0.0,
+                0.01,
+                "",
+                true,
+                "");
     }
 
     private Signal entityToDto(final SignalEntity signalEntity) {

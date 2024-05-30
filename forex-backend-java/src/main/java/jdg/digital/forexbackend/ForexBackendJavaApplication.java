@@ -5,9 +5,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
 
 @SpringBootApplication
 @EnableConfigurationProperties
+@EnableR2dbcAuditing
 @Slf4j
 public class ForexBackendJavaApplication implements CommandLineRunner {
 

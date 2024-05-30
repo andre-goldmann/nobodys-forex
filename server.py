@@ -23,14 +23,13 @@ from scipy.signal import argrelextrema, find_peaks
 from sklearn.neighbors import KernelDensity
 from typing_extensions import Annotated
 
-from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, getWaitingSignals, \
+from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, \
     SignalActivationDto, \
-    activateSignal, activateSignalProd, SignalUpdateDto, updateSignalInDb, updateSignalProdInDb, modifySignalInDb, \
-    deleteSignalInDb, tradeTypes, \
+    activateSignal, activateSignalProd, SignalUpdateDto, updateSignalInDb, updateSignalProdInDb, tradeTypes, \
     getExecutedSignals, HistoryUpdateDto, updateSignalByHistory, getStrategystats, getIgnoredSignals, TimeFrame, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
-    getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, getWaitingSignalsProd, countSignals, \
+    getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, countSignals, \
     geTrendInfos
 from pinescripts import f_LazyLine, tThree
 from trading_strategies.adx_crossover import AdxCrossover
@@ -189,22 +188,7 @@ async def ignoredSignals():
 
     return result
 
-@app.get("/waitingsignalsx")
-async def waitingSignals():
-    signals = getWaitingSignals()
-    result = []
-    for signal in signals:
-        result.append({'id': signal.id,
-                       'symbol': signal.symbol,
-                       'type': signal.type,
-                       'entry': signal.entry,
-                       'sl': signal.sl,
-                       'tp': signal.tp,
-                       'lots': signal.lots,
-                       'stamp': signal.stamp,
-                       'strategy': signal.strategy})
 
-    return result
 
 @app.get("/trendinfos")
 async def trendinfos():
@@ -220,27 +204,11 @@ async def trendinfos():
 
     return result
 
-@app.get("/waitingsignalsprod")
-async def waitingSignalsProd():
-    signals = getWaitingSignalsProd()
-    result = []
-    for signal in signals:
-        result.append({'id': signal.id,
-                       'symbol': signal.symbol,
-                       'type': signal.type,
-                       'entry': signal.entry,
-                       'sl': signal.sl,
-                       'tp': signal.tp,
-                       'lots': signal.lots,
-                       'stamp': signal.stamp,
-                       'strategy': signal.strategy})
-
-    return result
-
 
 @app.post("/deletesignal")
 async def deleteSignal(id:SignalId):
     deleteSignalFromDb(id)
+
 
 @app.post("/deleteignoredsignal")
 async def deleteIgnoredSignal(id:SignalId):

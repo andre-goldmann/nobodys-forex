@@ -344,35 +344,6 @@ def geTrendInfos():
         session.close()
         return signals
 
-def getWaitingSignals():
-    with Session.begin() as session:
-        signals = session.query(Signal.id,
-                             Signal.symbol,
-                             Signal.type,
-                             Signal.entry,
-                             Signal.sl,
-                             Signal.tp,
-                             Signal.lots,
-                             Signal.stamp,
-                             Signal.strategy).filter(Signal.tradeid == 0, Signal.activated == "", Signal.openprice == 0.0).all()
-        session.expunge_all()
-        session.close()
-        return signals
-
-def getWaitingSignalsProd():
-    with Session.begin() as session:
-        signals = session.query(ProdSignal.id,
-                                ProdSignal.symbol,
-                                ProdSignal.type,
-                                ProdSignal.entry,
-                                ProdSignal.sl,
-                                ProdSignal.tp,
-                                ProdSignal.lots,
-                                ProdSignal.stamp,
-                                ProdSignal.strategy).filter(ProdSignal.tradeid == 0, ProdSignal.activated == "", ProdSignal.openprice == 0.0).all()
-        session.expunge_all()
-        session.close()
-        return signals
 
 def deleteSignalFromDb(id:SignalId):
     with Session.begin() as session:

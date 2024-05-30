@@ -1,5 +1,6 @@
 package jdg.digital.forexbackend.domain.model;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,29 +9,26 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.UUID;
-
-@Table(name= "users")
+@Table(name= "\"Trades\"")
 @Getter
 @Setter
 @ToString
 @Accessors(chain = true)
 @NoArgsConstructor
-// DO not use Lombock her
-public class UserEntity  {
+public class TradeStatEntity {
 
     @Id
-    UUID id;
+    private Integer id;
 
-    String fullName;
-    //Integer age;
+    private String symbol;
 
-    String email;
-    //String password;
-    //posts: Post[];
-    //OffsetDateTime createdAt;
-    //OffsetDateTime updatedAt;
-    //OffsetDateTime deletedAt;
+    private String strategy;
 
+    private Double profit;
 
+    private Integer wins;
+
+    private Integer total;
+
+    private Double winpercentage;
 }

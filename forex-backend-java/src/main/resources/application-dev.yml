@@ -11,17 +11,21 @@ spring:
   #      jwt:
   #        issuer-uri: https://172.21.230.27:8080/realms/forex_admininstrator
   #        jwk-set-uri: https://172.21.230.27:8080/realms/forex_admininstrator/protocol/openid-connect/certs
-  datasource:
-    url: jdbc:postgresql://172.31.138.212:6432/trading-db
+  #datasource:
+  #  url: jdbc:postgresql://172.31.138.212:6432/trading-db
+  #  username: nobodysforex
+  #  password: pwd
+  #jpa:
+  #  hibernate:
+  #    ddl-auto: none
+  #  show-sql: false
+  #  properties:
+  #    hibernate:
+  #      dialect: org.hibernate.dialect.PostgreSQLDialect
+  r2dbc:
+    url: r2dbc:postgresql://172.31.138.212:6432/trading-db
     username: nobodysforex
     password: pwd
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
   kafka:
     bootstrap-servers: 172.31.138.212:9092
     producer:

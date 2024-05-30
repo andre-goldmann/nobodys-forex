@@ -24,11 +24,13 @@ public class UserService {
     private final UserMapper mapper;
 
     public Optional<UserDto> findByUuid(UUID uuid) {
-        return this.userEntityRepository.findById(uuid).map(this.mapper::mapUserToDto);
+        //return this.userEntityRepository.findById(uuid).map(this.mapper::mapUserToDto);
+        return Optional.empty();
     }
 
     public UserDto save(UserDto dto) {
         final UserEntity entity = this.mapper.mapUserToEntity(dto);
-        return this.mapper.mapUserToDto(this.userEntityRepository.save(entity));
+        //return this.mapper.mapUserToDto(this.userEntityRepository.save(entity));
+        return dto;
     }
 }

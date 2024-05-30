@@ -1,11 +1,19 @@
 package jdg.digital.forexbackend.domain.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-@Entity
-@Table(name= "\"IgnoredSignals\"")
+@Table("\"IgnoredSignals\"")
+@Getter
+@Setter
+@ToString
+@Accessors(chain = true)
+@NoArgsConstructor
 public class IgnoredSignalEntity {
 
     @Id
@@ -15,30 +23,4 @@ public class IgnoredSignalEntity {
 
     private String reason;
 
-    protected IgnoredSignalEntity() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getJson() {
-        return json;
-    }
-
-    public void setJson(String json) {
-        this.json = json;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
 }

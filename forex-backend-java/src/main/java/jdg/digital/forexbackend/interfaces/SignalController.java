@@ -1,15 +1,19 @@
 package jdg.digital.forexbackend.interfaces;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jdg.digital.forexbackend.domain.Signal;
 import jdg.digital.forexbackend.domain.SignalService;
 import jdg.digital.forexbackend.domain.TradeStatsServices;
+import jdg.digital.forexbackend.domain.model.ProdTradeRepository;
+import jdg.digital.forexbackend.domain.model.SignalRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -21,6 +25,15 @@ public class SignalController {
 
     @Autowired
     private TradeStatsServices tradeStatsServices;
+
+    @Autowired
+    private SignalRepository signalRepository;
+
+    @Autowired
+    private ProdTradeRepository prodTradeRepository;
+
+    @Autowired
+    private ForexProducerService forexProducerService;
 
     @GetMapping("/{env}")
     public Mono<List<Signal>> getSignals(@PathVariable("env") final String env) {
@@ -41,12 +54,87 @@ public class SignalController {
     public Mono<String> createSignal(@RequestBody Signal signal) {
         return this.tradeStatsServices.getStatsFor(signal)
                 .flatMap(stats -> {
-                    if (stats != null) {
-                        return Mono.just(this.signalService.storeSignal(signal, Optional.of(stats)));
+
+                    // Always store to dev
+                    this.signalRepository.insertDevTradeEntity(
+                            signal.symbol(),
+                            signal.type(),
+                            signal.entry(),
+                            signal.sl(),
+                            signal.tp(),
+                            signal.lots(),
+                            signal.strategy(),
+                            LocalDateTime.now()).subscribe();
+
+                    if (stats.getWinpercentage() > TradeStatsServices.WIN_PERCENTAGE
+                            && stats.getProfit() > TradeStatsServices.MIN_PROFIT
+                            && stats.getTotal() > TradeStatsServices.MIN_TRADES) {
+
+                        return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
+                                .map(activeTrades -> {
+                                    if (activeTrades < 4) {
+                                        log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats);
+
+                                        this.signalRepository.insertProdTradeEntity(
+                                                signal.symbol(),
+                                                signal.type(),
+                                                signal.entry(),
+                                                signal.sl(),
+                                                signal.tp(),
+                                                0.01,
+                                                signal.strategy(),
+                                                LocalDateTime.now()).subscribe();
+                                        try {
+                                            this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(signal));
+                                        } catch (JsonProcessingException e) {
+                                            throw new RuntimeException(e);
+                                        }
+
+                                        return "Signal also stored in prod!";
+                                    } else {
+                                        log.info("Stats found for Signal of {}-{} but amount of active trades ({}) allready reached", signal.symbol(), signal.strategy(), activeTrades);
+
+                                        final Signal newSignal = new Signal(
+                                                signal.symbol(),
+                                                signal.timestamp(),
+                                                signal.type(),
+                                                signal.entry(),
+                                                signal.sl(),
+                                                signal.tp(),
+                                                signal.lots(),
+                                                signal.strategy(),
+                                                true,
+                                                "Ignore because there more then " + activeTrades + " active trade.");
+
+                                        try {
+                                            this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(newSignal));
+                                        } catch (JsonProcessingException e) {
+                                            throw new RuntimeException(e);
+                                        }
+
+                                        return "Active trades are " + activeTrades;
+                                    }
+                                });
                     } else {
-                        return Mono.just("Trade not created");
+                        log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats);
+                        return Mono.just("Stats are not fulfilled");
                     }
-                });
+                })
+
+                .switchIfEmpty(storeNewSignal(signal));
+    }
+
+    private Mono<String> storeNewSignal(final Signal signal) {
+        return this.signalRepository.insertDevTradeEntity(
+                        signal.symbol(),
+                        signal.type(),
+                        signal.entry(),
+                        signal.sl(),
+                        signal.tp(),
+                        signal.lots(),
+                        signal.strategy(),
+                        LocalDateTime.now())
+                .then(Mono.just("Stored new signal"));
     }
 
 }

@@ -14,7 +14,7 @@ public class ForexProducerService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(String topic, String message) {
+    public void sendMessage(final String topic, final String message) {
         this.kafkaTemplate.send(topic, message);
     }
 }
