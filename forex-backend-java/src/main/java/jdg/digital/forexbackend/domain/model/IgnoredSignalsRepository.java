@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Repository
@@ -16,4 +17,11 @@ public interface IgnoredSignalsRepository extends ReactiveCrudRepository<Ignored
     @Modifying
     @Query(value = "INSERT INTO \"IgnoredSignals\" (json, reason) VALUES (:json, :reason)")
     Mono<Void> insert(@Param("json") String json, @Param("reason") String reason);
+
+    @Query(value = "SELECT json, count(*) from \"IgnoredSignals\" group by json")
+    Flux<IgnoredSignalInterface> ignoredSignals();
+
+    @Modifying
+    @Query(value = "delete from \"IgnoredSignals\" where json = :json")
+    Mono<Void> deleteByJson(@Param("json") String json);
 }

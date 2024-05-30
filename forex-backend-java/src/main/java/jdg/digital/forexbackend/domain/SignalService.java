@@ -167,12 +167,12 @@ public class SignalService {
     }
 
     public Mono<List<Signal>> getIgnoredSignals() {
-        return this.signalRepository.ignoredSignals()
+        return this.ignoredSignalsRepository.ignoredSignals()
                         .map(this::ignoredSignalToDto).collectList();
     }
 
     public Mono<Void> deleteIgnoredSignal(final String json) {
-        return Mono.fromRunnable(() -> this.signalRepository.deleteByJson(json));
+        return Mono.fromRunnable(() -> this.ignoredSignalsRepository.deleteByJson(json));
     }
 
     private Signal ignoredSignalToDto(final IgnoredSignalInterface entity)  {

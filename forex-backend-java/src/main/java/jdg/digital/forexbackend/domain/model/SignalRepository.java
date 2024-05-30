@@ -22,13 +22,6 @@ public interface SignalRepository extends ReactiveCrudRepository<SignalEntity, I
     @Query(value = "SELECT * from \"ProdTrades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0)")
     Flux<SignalEntity> signalsProd();
 
-    @Query(value = "SELECT json, count(*) from \"IgnoredSignals\" group by json")
-    Flux<IgnoredSignalInterface> ignoredSignals();
-
-    @Modifying
-    @Query(value = "delete from \"IgnoredSignals\" where json = :json")
-    Mono<Void> deleteByJson(@Param("json") String json);
-
     @Modifying
     @Query(value = "INSERT INTO \"ProdTrades\" (symbol, type, entry, sl, tp, lots, strategy, stamp, activated) VALUES (:symbol, :type, :entry, :sl, :tp, :lots, :strategy, :stamp, '')")
     Mono<Void> insertProdTradeEntity(@Param("symbol") String symbol, @Param("type") String type, @Param("entry") Double entry, @Param("sl") Double sl, @Param("tp") Double tp, @Param("lots") Double lots, @Param("strategy") String strategy, @Param("stamp") LocalDateTime stamp);
