@@ -21,7 +21,7 @@ class ADXEMA14:
 
     def add_adx(self):
         self.df['adx'] = ta.trend.ADXIndicator(high=self.high, low=self.low, close=self.close).adx()
-        self.df['adx'].replace(0.0, np.nan, inplace=True)
+        self.df.loc['adx'].replace(0.0, np.nan, inplace=True)
 
     def calculate_ema_14(self):
         self.df['14ema'] = self.df['close'].ewm(span=14, adjust=False).mean()
