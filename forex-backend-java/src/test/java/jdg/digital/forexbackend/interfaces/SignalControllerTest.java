@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.OffsetDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,7 +35,7 @@ public class SignalControllerTest {
 
     @Test
     public void createSignalNoStatsFound() throws Exception {
-        Signal signal = new Signal("EURUSD", "2022-01-01 00:00:00", "BUY", 1.1300, 1.1200, 1.1400, 0.01,"strategy1", false, "false");
+        Signal signal = new Signal("EURUSD", OffsetDateTime.now(), "BUY", 1.1300, 1.1200, 1.1400, 0.01,"strategy1", false, "false");
 
         mockMvc.perform(post("/signals")
                         .contentType("application/json")

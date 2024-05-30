@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +29,7 @@ class TradesServiceIT {
     @Test
     void checkSignal() {
         // Arrange
-        Signal signal = new Signal("symbol", "timestamp", "type", 1.23, 0, 0, 0.01, "strategy", true, "");
+        Signal signal = new Signal("symbol", OffsetDateTime.now(), "type", 1.23, 0, 0, 0.01, "strategy", true, "");
         TradeStat stats = new TradeStat();
 
         // Act
