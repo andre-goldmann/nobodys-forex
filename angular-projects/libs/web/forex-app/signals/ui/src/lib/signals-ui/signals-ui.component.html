@@ -2,8 +2,8 @@
   <div role="tablist" class="tabs tabs-lifted">
     <input type="radio" name="my_tabs_2" role="tab" class="tab" aria-label="Signals" checked />
     <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-      <!-- TODO zeige ProdSignal und die letzten 10 DevTrades + deren Total-Count -->
       <div class="overflow-x-auto">
+        <h1 class="text-2xl font-bold text-center text-blue-50">Prod-Trades</h1>
         <table class="table-auto w-full">
           <thead>
           <tr>
@@ -18,7 +18,37 @@
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let signal of signals()" class="text-center">
+          <tr *ngFor="let signal of prodSignals()" class="text-center">
+            <td class="border px-4 py-2">{{ signal.symbol }}</td>
+            <td class="border px-4 py-2">{{ signal.strategy }}</td>
+            <td class="border px-4 py-2">{{ signal.type }}</td>
+            <td class="border px-4 py-2">{{ signal.entry }}</td>
+            <td class="border px-4 py-2">{{ signal.sl }}</td>
+            <td class="border px-4 py-2">{{ signal.tp }}</td>
+            <td class="border px-4 py-2">{{ signal.ignrored }}</td>
+            <td class="border px-4 py-2">{{ signal.ignroredMessage }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="overflow-x-auto">
+        <h1 class="text-2xl font-bold text-center text-blue-50">Dev-Trades</h1>
+        <table class="table-auto w-full">
+          <thead>
+          <tr>
+            <th class="px-4 py-2">Symbol</th>
+            <th class="px-4 py-2">Strategy</th>
+            <th class="px-4 py-2">Type</th>
+            <th class="px-4 py-2">Entry</th>
+            <th class="px-4 py-2">SL</th>
+            <th class="px-4 py-2">TP</th>
+            <th class="px-4 py-2">Ignored</th>
+            <th class="px-4 py-2">Ignored Message</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let signal of devSignals()" class="text-center">
             <td class="border px-4 py-2">{{ signal.symbol }}</td>
             <td class="border px-4 py-2">{{ signal.strategy }}</td>
             <td class="border px-4 py-2">{{ signal.type }}</td>

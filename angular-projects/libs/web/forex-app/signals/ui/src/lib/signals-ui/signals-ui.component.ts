@@ -14,7 +14,8 @@ import { Signal, SignalsService, WebsocketService } from '@angular-projects/fore
 export class SignalsUiComponent implements OnInit {
 
   protected signalsService:SignalsService = inject(SignalsService);
-  signals = signal<Signal[]>([]);
+  prodSignals = signal<Signal[]>([]);
+  devSignals = signal<Signal[]>([]);
   ignoredSignals = signal<Signal[]>([]);
   private socket!: Subject<MessageEvent>;
 
@@ -32,7 +33,7 @@ export class SignalsUiComponent implements OnInit {
       {
         console.log('Received message: ', message.data);
         let newSignal = JSON.parse(message.data);
-        this.signals.update(values => {
+        this.prodSignals.update(values => {
           return [newSignal, ...values];
         });
       },
@@ -41,7 +42,10 @@ export class SignalsUiComponent implements OnInit {
     );
 
     this.signalsService.getSignals('prod').subscribe((data) => {
-      this.signals.set(data);
+      this.prodSignals.set(data);
+    });
+    this.signalsService.getSignals('dev').subscribe((data) => {
+      this.devSignals.set(data);
     });
     this.signalsService.getIgnoredSignals().subscribe((data) => {
       this.ignoredSignals.set(data);
