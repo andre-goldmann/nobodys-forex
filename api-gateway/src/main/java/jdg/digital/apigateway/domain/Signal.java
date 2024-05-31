@@ -1,13 +1,14 @@
 package jdg.digital.apigateway.domain;
 
 public record Signal(
+    Integer id,
     String symbol,
     String timestamp,
     String type,
-    double entry,
-    double sl,
-    double tp,
+    Double entry,
+    Double sl,
+    Double tp,
     String strategy,
-    boolean ignored,
+    Boolean ignored,
     String ignoreMessage
 ) {}
