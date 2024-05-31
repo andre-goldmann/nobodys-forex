@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class CustomOffsetDateTimeDeserializer extends JsonDeserializer<OffsetDateTime> {
     // 2024-03-19 14:45:05.110579 +00:00
@@ -14,7 +15,11 @@ public class CustomOffsetDateTimeDeserializer extends JsonDeserializer<OffsetDat
 
     @Override
     public OffsetDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        return OffsetDateTime.parse(p.getValueAsString(), formatter);
+        try {
+            return OffsetDateTime.parse(p.getValueAsString(), formatter);
+        } catch (DateTimeParseException e){
+            return OffsetDateTime.now();
+        }
     }
 
 }

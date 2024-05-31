@@ -27,6 +27,13 @@ class CustomOffsetDateTimeDeserializerTest {
         assertEquals(OffsetDateTime.parse("2024-03-19T14:45:05.110579Z"), result);
     }
 
+    @Test
+    void deserializeGenerateNew() throws IOException {
+        JsonParser p = getJsonParser(" 01:45:00 2024.05.31 ");
+        OffsetDateTime result = cut.deserialize(p, null);
+        assertEquals(OffsetDateTime.now().getMinute(), result.getMinute());
+    }
+
     private static JsonParser getJsonParser(String date) {
         JsonParser p = new JsonParser() {
             @Override
