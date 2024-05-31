@@ -70,7 +70,7 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.T3_BERNOULLIENTROPYFUNCTION, "T3-BernoulliEntropyFunction");
         STRATEGY_NAMES.put(StrategyEnum.T3_BERNOULLIENTROPYFUNCTION_WITHOUT_REG, "T3-BernoulliEntropyFunction_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_LINEARTREND, "T3-LinearTrend");
-        STRATEGY_NAMES.put(StrategyEnum.SOTT_LORENTZIAN_WITHOUT_REG, "T3-LinearTrend_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum.T3_LINEARTREND_WITHOUT_REG, "T3-LinearTrend_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_UTBOT, "T3-UtBot");
         STRATEGY_NAMES.put(StrategyEnum.T3_UTBOT_WITHOUT_REG, "T3-UtBot_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_PIVOTPOINTSUPERTREND, "T3-PivotPointSuperTrend");
@@ -78,7 +78,7 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.T3_ANTIBREAKOUT, "T3-AntiBreakout");
         STRATEGY_NAMES.put(StrategyEnum.T3_ANTIBREAKOUT_WITHOUT_REG, "T3-AntiBreakout_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_LUBE, "T3-Lube");
-        STRATEGY_NAMES.put(StrategyEnum.T3_LUBE, "T3-Lube_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum.T3_LUBE_WITHOUT_REG, "T3-Lube_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_THIRDWAVE, "T3-ThirdWave");
         STRATEGY_NAMES.put(StrategyEnum.T3_THIRDWAVE_WITHOUT_REG, "T3-ThirdWave_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_PINBARSTRATEGY, "T3-PinBarStrategy");
@@ -102,7 +102,7 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.T3_NEUTRONIXAI, "T3-NeutronixAi");
         STRATEGY_NAMES.put(StrategyEnum.T3_NEUTRONIXAI_WITHOUT_REG, "T3-NeutronixAi_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_NEUTRONIXSWING, "T3-NeutronixSwing");
-        STRATEGY_NAMES.put(StrategyEnum.T3_NEUTRONIXSCALPING_WITHOUT_REG, "T3-NeutronixSwing_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum.T3_NEUTRONIXSWING_WITHOUT_REG, "T3-NeutronixSwing_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_NEUTRONIXSCALPING, "T3-NeutronixScalping");
         STRATEGY_NAMES.put(StrategyEnum.T3_NEUTRONIXSCALPING_WITHOUT_REG,"T3-NeutronixScalping_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_THREECOMMASBOTSTRATEGY_EMA, "T3-ThreeCommasBotStrategy-EMA");
@@ -164,14 +164,14 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.AROONINDICATOR_H4, "AroonIndicator_H4");
         STRATEGY_NAMES.put(StrategyEnum.AWESOMEOSCILLATOR_M15, "AwesomeOscillator_M15");
         STRATEGY_NAMES.put(StrategyEnum.AWESOMEOSCILLATOR_H1, "AwesomeOscillator_H1");
-        STRATEGY_NAMES.put(StrategyEnum.AROONINDICATOR_H4, "AwesomeOscillator_H4");
+        STRATEGY_NAMES.put(StrategyEnum.AWESOMEOSCILLATOR_H4, "AwesomeOscillator_H4");
         STRATEGY_NAMES.put(StrategyEnum.AWESOMEOSCILLATORSAUCER_M15, "AwesomeOscillatorSaucer_M15");
         STRATEGY_NAMES.put(StrategyEnum.AWESOMEOSCILLATORSAUCER_H1, "AwesomeOscillatorSaucer_H1");
         STRATEGY_NAMES.put(StrategyEnum.AWESOMEOSCILLATORSAUCER_H4, "AwesomeOscillatorSaucer_H4");
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_M15, "BladeRunner_M15");
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_H1, "BladeRunner_H1");
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_H4, "BladeRunner_H4");
-        STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI2_M15, "BollingerBandsAndRSI_M15");
+        STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_M15, "BollingerBandsAndRSI_M15");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_H1, "BollingerBandsAndRSI_H1");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_H4, "BollingerBandsAndRSI_H4");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI2_M15, "BollingerBandsAndRSI2_M15");
