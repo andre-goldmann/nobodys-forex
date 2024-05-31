@@ -23,6 +23,7 @@ export interface Signal {
     tp?: number;
     ignrored?: boolean;
     ignroredMessage?: string;
+    timestamp?: string;
 }
 export namespace Signal {
 }
