@@ -98,6 +98,7 @@ public class SignalController {
                                         log.info("Stats found for Signal of {}-{} but amount of active trades ({}) allready reached", signal.symbol(), signal.strategy(), activeTrades);
 
                                         final Signal newSignal = new Signal(
+                                               1,
                                                 signal.symbol(),
                                                 signal.timestamp(),
                                                 signal.type(),

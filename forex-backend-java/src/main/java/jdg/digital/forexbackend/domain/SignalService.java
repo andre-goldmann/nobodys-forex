@@ -76,6 +76,7 @@ public class SignalService {
                     storeDevSignal(signal);
 
                     final Signal newSignal = new Signal(
+                            signal.id(),
                             signal.symbol(),
                             signal.timestamp(),
                             signal.type(),
@@ -177,6 +178,7 @@ public class SignalService {
 
     private Signal ignoredSignalToDto(final IgnoredSignalInterface entity)  {
         return new Signal(
+                0,
                 entity.getJson(),
                 OffsetDateTime.now(),
                 "",
@@ -191,6 +193,7 @@ public class SignalService {
 
     private Signal entityToDto(final SignalEntity signalEntity) {
         return new Signal(
+                signalEntity.getId(),
                 signalEntity.getSymbol(),
                 signalEntity.getStamp(),
                 signalEntity.getType(),

@@ -6,6 +6,7 @@ import jdg.digital.forexbackend.utils.CustomOffsetDateTimeDeserializer;
 import java.time.OffsetDateTime;
 
 public record Signal (
+    Integer id,
     String symbol,
     @JsonDeserialize(using = CustomOffsetDateTimeDeserializer.class)
     OffsetDateTime timestamp,
