@@ -8,6 +8,7 @@ public record Signal(
     Double entry,
     Double sl,
     Double tp,
+    Double lots,
     String strategy,
     Boolean ignored,
     String ignoreMessage
