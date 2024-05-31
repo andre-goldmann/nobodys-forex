@@ -16,10 +16,10 @@ import java.time.LocalDateTime;
 @Transactional
 public interface SignalRepository extends ReactiveCrudRepository<SignalEntity, Integer> {
 
-    @Query(value = "SELECT * from \"Trades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0) or (activated='' and tradeid IS NULL and openprice IS NULL) order by stamp desc limit 5")
+    @Query(value = "SELECT * from \"Trades\" WHERE (activated IS NULL and openprice IS NULL) or (activated='' and openprice = 0) or (activated='' and openprice IS NULL) order by stamp desc limit 5")
     Flux<SignalEntity> signalsDev();
 
-    @Query(value = "SELECT * from \"ProdTrades\" WHERE (activated IS NULL and tradeid IS NULL and openprice IS NULL) or (activated='' and tradeid = 0 and openprice = 0) or (activated='' and tradeid IS NULL and openprice IS NULL) order by stamp desc")
+    @Query(value = "SELECT * from \"ProdTrades\" WHERE (activated IS NULL and openprice IS NULL) or (activated='' and openprice = 0) or (activated='' and openprice IS NULL) order by stamp desc")
     Flux<SignalEntity> signalsProd();
 
     @Modifying

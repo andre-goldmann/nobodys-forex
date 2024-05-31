@@ -36,8 +36,6 @@ public class ProdTradeEntity {
 
     private Double spread;
 
-    private Integer tradeId;
-
     private LocalDateTime stamp;
 
     private String activated;

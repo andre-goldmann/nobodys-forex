@@ -36,7 +36,6 @@ public class TradesEntity {
 
     private Double spread;
 
-    //private Integer tradeid;
     private String activated;
 
     private Double openprice;
