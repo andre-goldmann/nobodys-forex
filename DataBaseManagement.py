@@ -100,7 +100,6 @@ class Signal(Base):
     tp: Mapped[float]
     lots: Mapped[float]
     spread: Mapped[float] = mapped_column(nullable=True, default=0.0)
-    tradeid: Mapped[int] = mapped_column(nullable=True, default=0)
     stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
     activated: Mapped[str] = mapped_column(nullable=True, default="")
     openprice: Mapped[float] = mapped_column(nullable=True, default=0.0)
@@ -124,7 +123,6 @@ class ProdSignal(Base):
     tp: Mapped[float]
     lots: Mapped[float]
     spread: Mapped[float] = mapped_column(nullable=True, default=0.0)
-    tradeid: Mapped[int] = mapped_column(nullable=True, default=0)
     stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
     # werden erst nach der Erstellung des Trades gesetzt
     activated: Mapped[str] = mapped_column(nullable=True, default="")
@@ -617,7 +615,6 @@ def insertFromFile(file:str):
                 tp=row['tp'],
                 lots=row['lots'],
                 spread=row['spread'],
-                tradeid=row['tradeid'],
                 stamp=row['stamp'],
                 activated=row['activated'],
                 openprice=row['openprice'],
