@@ -35,6 +35,9 @@ public class SignalController {
     @Autowired
     private ForexProducerService forexProducerService;
 
+    @Autowired
+    private ObjectMapper mapper;
+
     @GetMapping("/{env}")
     public Mono<List<Signal>> getSignals(@PathVariable("env") final String env) {
         return this.signalService.getSignals(env);
@@ -85,7 +88,7 @@ public class SignalController {
                                                 signal.strategy(),
                                                 LocalDateTime.now()).subscribe();
                                         try {
-                                            this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(signal));
+                                            this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
                                         } catch (JsonProcessingException e) {
                                             throw new RuntimeException(e);
                                         }
@@ -107,7 +110,7 @@ public class SignalController {
                                                 "Ignore because there more then " + activeTrades + " active trade.");
 
                                         try {
-                                            this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(newSignal));
+                                            this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(newSignal));
                                         } catch (JsonProcessingException e) {
                                             throw new RuntimeException(e);
                                         }

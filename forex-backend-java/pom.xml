@@ -19,7 +19,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <io.swagger.version>1.6.2</io.swagger.version>
     </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.17.1</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.piwik.java.tracking</groupId>
             <artifactId>matomo-java-tracker-java17</artifactId>
@@ -51,11 +59,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-
-        <!--dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
