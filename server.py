@@ -1230,7 +1230,7 @@ def autoDetectSupportAndResistance(symbol:str, sliceMax:int, peaksMax:int, timeF
     for price in price_range[peaks]:
         prices.append(float(price))
         type = SupportResistanceType.SUPPORT
-        if actualPrice < float(price):
+        if actualPrice < float(price[0]):
             type = SupportResistanceType.RESISTANCE
 
         storeSupportResistance(
