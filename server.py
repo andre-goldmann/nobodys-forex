@@ -1228,7 +1228,7 @@ def autoDetectSupportAndResistance(symbol:str, sliceMax:int, peaksMax:int, timeF
     actualPrice = df.iloc[-1]['CLOSE']
     prices = []
     for price in price_range[peaks]:
-        prices.append(float(price))
+        prices.append(float(price[0]))
         type = SupportResistanceType.SUPPORT
         if actualPrice < float(price[0]):
             type = SupportResistanceType.RESISTANCE
