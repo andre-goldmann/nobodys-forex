@@ -121,8 +121,8 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.T3_THREECOMMASBOTSTRATEGY_VWMA_WITHOUT_REG, "T3-ThreeCommasBotStrategy-VWMA_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_THREECOMMASBOTSTRATEGY_VWAP, "T3-ThreeCommasBotStrategy-VWAP");
         STRATEGY_NAMES.put(StrategyEnum.T3_THREECOMMASBOTSTRATEGY_VWAP_WITHOUT_REG, "T3-ThreeCommasBotStrategy-VWAP_WITHOUT_REG");
-        //"T3-ThreeCommasBotStrategy-T3");
-        //    "T3-ThreeCommasBotStrategy-T3_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum. T3_THREECOMMASBOTSTRATEGY_T3, "T3-ThreeCommasBotStrategy-T3");
+        STRATEGY_NAMES.put(StrategyEnum. T3_THREECOMMASBOTSTRATEGY_T3_WITHOUT_REG, "T3-ThreeCommasBotStrategy-T3_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_MOMENTUMBASEDZIGZAG, "T3-MomentumBasedZigZag");
         STRATEGY_NAMES.put(StrategyEnum.T3_MOMENTUMBASEDZIGZAG_WITHOUT_REG, "T3-MomentumBasedZigZag_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_DEKIDAKAASHISIGNALS, "T3-DekidakaAshiSignals");
