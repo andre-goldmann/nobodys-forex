@@ -40,6 +40,8 @@ spring:
 logging:
   level:
     root: INFO
+    org:
+      springframework: TRACE
     #org:
     #  hibernate:
     #    SQL: DEBUG
