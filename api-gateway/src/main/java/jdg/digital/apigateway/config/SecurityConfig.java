@@ -11,9 +11,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -24,10 +21,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig implements WebMvcConfigurer {
 
-
     @Value("${keycloak.jwk}")
     private String jwkProviderUrl;
-
 
     public static final String[] ALLOW_ORIGINS = {
             "http://localhost:4200",
@@ -60,16 +55,6 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .addFilterBefore(new TokenRequiredFilter(jwtTokenValidator(keycloakJwkProvider())), LogoutFilter.class)
                 .authenticationProvider(new JwtAuthenticationProvider())
                 .build();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService(){
-        return new InMemoryUserDetailsManager(
-                User.withUsername("user")
-                        .password("{noop}password")
-                        .roles("user")
-                        .build()
-        );
     }
 
     @Bean
