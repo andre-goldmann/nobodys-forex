@@ -44,7 +44,7 @@ public class ForexController {
     // Funktioniert nicht
     // Funktioniert, wenn manuell in der JwtAuthentication hinzugefügt
     // @PreAuthorize("hasRole('USER')")
-    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
+    //@PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Signal>> getSignals(
             @PathVariable("env") final String env) {
         // kann man machen, aber @PreAuthorize prüft schon alles
