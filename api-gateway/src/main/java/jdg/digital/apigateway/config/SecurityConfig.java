@@ -1,18 +1,33 @@
 package jdg.digital.apigateway.config;
 
+import com.auth0.jwk.JwkProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.context.ApplicationListener;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig implements WebMvcConfigurer {
+
+
+    @Value("${keycloak.jwk}")
+    private String jwkProviderUrl;
+
 
     public static final String[] ALLOW_ORIGINS = {
             "http://localhost:4200",
@@ -29,31 +44,52 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-        /*http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.DELETE).hasRole("ADMIN")
-                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
-                                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/login/**").permitAll()
-                                .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        */
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/**").permitAll()
-                //.requestMatchers("/h2/**").permitAll()
-                .anyRequest().permitAll())
-                // TODO remove this line
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable());
-        /*http
-                .authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
-                //.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.disable());*/
-        return http.build();
+        return http
+                .authorizeHttpRequests(
+                        authorizeHttp -> {
+                            // Allow routes to be accessed without authentication
+                            authorizeHttp.requestMatchers("/api/forex/routes").permitAll();
+                            authorizeHttp.anyRequest().authenticated();
+                        }
+                )
+                // this part is need otherwise there is an Access Denied error
+                .with(new RobotAccountConfigurer(), withDefaults())
+                //.addFilterBefore(new ForbiddenFilter(), LogoutFilter.class) // filter before auth/logout
+                .addFilterBefore(new TokenRequiredFilter(jwtTokenValidator(keycloakJwkProvider())), LogoutFilter.class)
+                .authenticationProvider(new JwtAuthenticationProvider())
+                .build();
     }
+
+    @Bean
+    UserDetailsService userDetailsService(){
+        return new InMemoryUserDetailsManager(
+                User.withUsername("user")
+                        .password("{noop}password")
+                        .roles("user")
+                        .build()
+        );
+    }
+
+    @Bean
+    ApplicationListener<AuthenticationSuccessEvent> successListener() {
+        return event -> {
+            System.out.println("🎉 [%s] %s".formatted(
+                    event.getAuthentication().getClass().getSimpleName(),
+                    event.getAuthentication().getName()
+            ));
+        };
+    }
+
+    @Bean
+    public JwtTokenValidator jwtTokenValidator(JwkProvider jwkProvider) {
+        return new JwtTokenValidator(jwkProvider);
+    }
+
+    @Bean
+    public JwkProvider keycloakJwkProvider() {
+        return new KeycloakJwkProvider(jwkProviderUrl);
+    }
+
 }
