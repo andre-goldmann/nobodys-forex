@@ -1,22 +1,23 @@
 package jdg.digital.apigateway.config;
 
-import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 public class TokenRequiredFilter extends OncePerRequestFilter {
+
+    private final JwtTokenValidator tokenVerifier;
+
+    public TokenRequiredFilter(JwtTokenValidator jwtTokenValidator) {
+        this.tokenVerifier = jwtTokenValidator;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -26,17 +27,21 @@ public class TokenRequiredFilter extends OncePerRequestFilter {
             return;
         }
 
-        //var auth = request.authenticate(response);
-        SecurityContext newContext = SecurityContextHolder.createEmptyContext();
-        Authentication auth = new TokenAuthentication(token);
+        final String authorizationHeader = extractAuthorizationHeaderAsString(request);
+        final AccessToken accessToken = tokenVerifier.validateAuthorizationHeader(authorizationHeader);
+        final Authentication auth = new JwtAuthentication(accessToken);
+        final SecurityContext newContext = SecurityContextHolder.createEmptyContext();
         newContext.setAuthentication(auth);
         SecurityContextHolder.setContext(newContext);
         filterChain.doFilter(request, response);
     }
 
-    @Bean
-    UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername("user").password("password").authorities("ROLE_USER").build());
+
+    private String extractAuthorizationHeaderAsString(HttpServletRequest request) {
+        try {
+            return request.getHeader("Authorization");
+        } catch (Exception ex){
+            throw new InvalidTokenException("There is no Authorization header in a request", ex);
+        }
     }
 }

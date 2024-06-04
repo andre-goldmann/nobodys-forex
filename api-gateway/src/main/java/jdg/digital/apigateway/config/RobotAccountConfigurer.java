@@ -7,16 +7,18 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 class RobotAccountConfigurer extends AbstractHttpConfigurer<RobotAccountConfigurer, HttpSecurity> {
 
-    @Override
+    /*@Override
     public void init(HttpSecurity http) {
         http.authenticationProvider(
-                new RobotAuthenticationProvider()
+                //new RobotAuthenticationProvider()
+                new JwtAuthenticationProvider()
         );
-    }
+    }*/
 
     @Override
     public void configure(HttpSecurity http) {
         var authManager = http.getSharedObject(AuthenticationManager.class);
+        // this also needed to avoid Access Denied error
         http.addFilterBefore(
                 new RobotAuthenticationFilter(authManager),
                 AuthorizationFilter.class

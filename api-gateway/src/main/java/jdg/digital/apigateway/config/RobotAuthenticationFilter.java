@@ -1,8 +1,8 @@
 package jdg.digital.apigateway.config;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,11 +15,22 @@ class RobotAuthenticationFilter extends AuthenticationFilter {
 
     private final static String HEADER_NAME = "x-robot-password";
     private static final AuthenticationConverter authenticationConverter = req -> {
-        if (Collections.list(req.getHeaderNames()).contains(HEADER_NAME)) {
-            return RobotAuthentication.unauthenticated(req.getHeader(HEADER_NAME));
+        /*if (Collections.list(req.getHeaderNames()).contains(HEADER_NAME)) {
+            return "";//RobotAuthentication.unauthenticated(req.getHeader(HEADER_NAME));
         }
-        return null;
+        return null;*/
+
+        // this is set before within TokenRequiredFilter
+        return SecurityContextHolder.getContext().getAuthentication();
     };
+
+    private static String extractAuthorizationHeaderAsString(HttpServletRequest request) {
+        try {
+            return request.getHeader("Authorization");
+        } catch (Exception ex){
+            throw new InvalidTokenException("There is no Authorization header in a request", ex);
+        }
+    }
 
     private final AuthenticationFailureHandler failureHandler = (request, response, exception) -> {
         response.setStatus(HttpStatus.FORBIDDEN.value());
@@ -30,9 +41,9 @@ class RobotAuthenticationFilter extends AuthenticationFilter {
 
     private final AuthenticationSuccessHandler successHandler = (request, response, authentication) -> {
         //System.out.printf("Robot %s authenticated successfully! 🤖%n", authentication.getPrincipal());
-        var newContext = SecurityContextHolder.createEmptyContext();
-        newContext.setAuthentication(authentication);
-        SecurityContextHolder.setContext(newContext);
+        //var newContext = SecurityContextHolder.createEmptyContext();
+        //newContext.setAuthentication(authentication);
+        //SecurityContextHolder.setContext(newContext);
     };
 
     public RobotAuthenticationFilter(AuthenticationManager authenticationManager) {

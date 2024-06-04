@@ -39,12 +39,18 @@ public class ForexController {
     private ForexService forexService;
 
     @GetMapping("/signals/{env}")
-    @PreAuthorize("isAuthenticated() and hasRole('ROLE_robot')")
+    //@PreAuthorize("isAuthenticated() and hasRole('USER')")
+    // Funktioniert
+    //@PreAuthorize("isAuthenticated()")
+    // Funktioniert nicht
+    // Funktioniert, wenn manuell in der JwtAuthentication hinzugefügt
+    // @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public Mono<List<Signal>> getSignals(
             @PathVariable("env") final String env) {
         // kann man machen, aber @PreAuthorize prüft schon alles
-        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //log.info("auth: {}", auth);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        log.info("auth: {}, {}", auth, auth.getAuthorities());
         return this.forexService.getSignals(env);
     }
 

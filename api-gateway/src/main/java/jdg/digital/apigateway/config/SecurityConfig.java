@@ -1,5 +1,7 @@
 package jdg.digital.apigateway.config;
 
+import com.auth0.jwk.JwkProvider;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -22,6 +24,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig implements WebMvcConfigurer {
 
+
+    @Value("${keycloak.jwk}")
+    private String jwkProviderUrl;
+
+
     public static final String[] ALLOW_ORIGINS = {
             "http://localhost:4200",
             "http://localhost:4300",
@@ -38,6 +45,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         return http
                 .authorizeHttpRequests(
                         authorizeHttp -> {
@@ -49,12 +57,14 @@ public class SecurityConfig implements WebMvcConfigurer {
                             authorizeHttp.anyRequest().authenticated();
                         }
                 )
-                .oauth2Login(withDefaults())
+                // this part is need otherwise there is an Access Denied error
                 .with(new RobotAccountConfigurer(), withDefaults())
-                .addFilterBefore(new ForbiddenFilter(), LogoutFilter.class) // filter before auth/logout
-                .authenticationProvider(new DanielAuthenticationProvider())
+                //.addFilterBefore(new ForbiddenFilter(), LogoutFilter.class) // filter before auth/logout
+                .addFilterBefore(new TokenRequiredFilter(jwtTokenValidator(keycloakJwkProvider())), LogoutFilter.class)
+                .authenticationProvider(new JwtAuthenticationProvider())
                 .build();
     }
+
 
     @Bean
     UserDetailsService userDetailsService(){
@@ -76,5 +86,14 @@ public class SecurityConfig implements WebMvcConfigurer {
         };
     }
 
+    @Bean
+    public JwtTokenValidator jwtTokenValidator(JwkProvider jwkProvider) {
+        return new JwtTokenValidator(jwkProvider);
+    }
+
+    @Bean
+    public JwkProvider keycloakJwkProvider() {
+        return new KeycloakJwkProvider(jwkProviderUrl);
+    }
 
 }
