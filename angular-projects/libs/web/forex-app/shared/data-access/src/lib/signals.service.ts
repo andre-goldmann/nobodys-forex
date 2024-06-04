@@ -25,8 +25,6 @@ export class SignalsService {
   getSignals(env:string): Observable<Trade[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'clientId': 'financialdataanalysis_admininstrator_client',
-      'clientSecret': 'gnA9Dldgs3PGCaHvSMhh2eClQBhKKF8J',
       'Authorization': 'Bearer ' + this.authService.getAccessToken()  // Replace with the method to get your token
     });
     return this.http.get<Signal[]>(  `${this.apiUrl}/${env}`, { headers: headers });

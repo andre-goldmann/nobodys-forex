@@ -43,6 +43,7 @@ public class ForexController {
     // Funktioniert nicht
     // Funktioniert, wenn manuell in der JwtAuthentication hinzugefügt
     // @PreAuthorize("hasRole('USER')")
+    @CrossOrigin(origins = "https://nobodys-forex.vercel.app")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Signal>> getSignals(
             @PathVariable("env") final String env) {
@@ -88,6 +89,8 @@ public class ForexController {
         return this.tradeStatsService.getTradeStats(env);
     }
 
+
+    @CrossOrigin(origins = "https://nobodys-forex.vercel.app")
     // this is always accessible
     @GetMapping("/routes")
     public ResponseEntity<List<NavbarData>> getRoutes(){

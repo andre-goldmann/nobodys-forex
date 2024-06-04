@@ -22,20 +22,8 @@ FROM eclipse-temurin:21
 # Set the working directory in the container
 WORKDIR /app
 
-# Create a non-root user for running the application
-RUN adduser --disabled-password --gecos '' springuser
-USER springuser
-
-# Set JAVA_HOME environment variable
-#ENV JAVA_HOME /opt/java/openjdk
-
-COPY certs/certificate.pem .
-
-#RUN update-ca-certificates
-
-# Import the CA certificate(s) into the Java truststore
-#RUN keytool -import -alias jdg.digital -keystore -cacerts -storepass Blade1708 -file /usr/local/share/ca-certificates/certificate.pem -noprompt
-
+COPY certificate.pem .
+# TODO remove this
 RUN keytool -import -alias jdg.digital -keystore $JAVA_HOME/lib/security/cacerts -file certificate.pem -noprompt -storepass Blade1708
 
 COPY --from=builder /app/target/api-gateway-0.0.1-SNAPSHOT.jar .
