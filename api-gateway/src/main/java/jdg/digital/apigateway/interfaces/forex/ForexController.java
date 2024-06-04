@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
 import reactor.core.publisher.Mono;
 
@@ -43,7 +44,6 @@ public class ForexController {
     // Funktioniert nicht
     // Funktioniert, wenn manuell in der JwtAuthentication hinzugefügt
     // @PreAuthorize("hasRole('USER')")
-    @CrossOrigin(origins = "https://nobodys-forex.vercel.app")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Signal>> getSignals(
             @PathVariable("env") final String env) {
@@ -89,8 +89,6 @@ public class ForexController {
         return this.tradeStatsService.getTradeStats(env);
     }
 
-
-    @CrossOrigin(origins = "https://nobodys-forex.vercel.app")
     // this is always accessible
     @GetMapping("/routes")
     public ResponseEntity<List<NavbarData>> getRoutes(){
