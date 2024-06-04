@@ -49,11 +49,8 @@ public class SecurityConfig implements WebMvcConfigurer {
         return http
                 .authorizeHttpRequests(
                         authorizeHttp -> {
-                            // Allow origins
-                            //authorizeHttp.requestMatchers("/").permitAll();
-                            //authorizeHttp.requestMatchers("/favicon.svg").permitAll();
-                            //authorizeHttp.requestMatchers("/css/*").permitAll();
-                            //authorizeHttp.requestMatchers("/error").permitAll();
+                            // Allow routes to be accessed without authentication
+                            authorizeHttp.requestMatchers("/api/forex/routes").permitAll();
                             authorizeHttp.anyRequest().authenticated();
                         }
                 )
@@ -64,7 +61,6 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .authenticationProvider(new JwtAuthenticationProvider())
                 .build();
     }
-
 
     @Bean
     UserDetailsService userDetailsService(){

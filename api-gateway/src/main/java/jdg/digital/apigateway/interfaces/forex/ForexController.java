@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.TextMessage;
@@ -45,7 +44,7 @@ public class ForexController {
     // Funktioniert nicht
     // Funktioniert, wenn manuell in der JwtAuthentication hinzugefügt
     // @PreAuthorize("hasRole('USER')")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Signal>> getSignals(
             @PathVariable("env") final String env) {
         // kann man machen, aber @PreAuthorize prüft schon alles
@@ -55,42 +54,42 @@ public class ForexController {
     }
 
     @GetMapping("/signals/ignored")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Signal>> getIgnoredSignals() {
         return this.forexService.getIgnoredSignals();
     }
 
     @DeleteMapping("/signals/ignored/delete")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
     public Mono<Void> deleteIgnoredSignal(@RequestParam String json) {
         return this.forexService.deleteIgnoredSignal(json);
     }
 
     @PutMapping("/trades/update/{env}")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
     public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
         return this.forexService.updateTrade(env, trade);
     }
 
     @GetMapping("/trades/positive-profit")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Trade>> getTradesWithPositiveProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
         return this.forexService.getTradesWithPositiveProfit(symbol, strategy);
     }
 
     @GetMapping("/trades/negative-profit")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Trade>> getTradesWithNegativeProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
         return this.forexService.getTradesWithNegativeProfit(symbol, strategy);
     }
 
     @GetMapping("/tradestats/{env}")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<TradeStat[]> getTradeStats(@PathVariable("env") final String env) {
         return this.tradeStatsService.getTradeStats(env);
     }
 
-    @PostMapping("/sendtoclient")
-    public void sendMessage(@RequestBody ClientMessage message) {
-        if(this.forexHandler instanceof ForexHandler){
-            ((ForexHandler) this.forexHandler).sendMessage(new TextMessage(message.message));
-        }
-    }
-
+    // this is always accessible
     @GetMapping("/routes")
     public ResponseEntity<List<NavbarData>> getRoutes(){
         //final String authorization = request.getHeader("authorization");
@@ -153,6 +152,7 @@ public class ForexController {
                 ));
     }
 
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     @GetMapping("/symbols")
     public ResponseEntity<List<String>> getSymbols(HttpServletRequest request){
 
