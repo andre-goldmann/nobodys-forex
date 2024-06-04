@@ -36,7 +36,7 @@ public class KeycloakJwkProvider implements JwkProvider {
     public Jwk get(String keyId) throws JwkException {
         final List<Jwk> jwks = getAll();
         if (keyId == null && jwks.size() == 1) {
-            return jwks.get(0);
+            return jwks.getFirst();
         }
         if (keyId != null) {
             for (Jwk jwk : jwks) {
@@ -68,7 +68,7 @@ public class KeycloakJwkProvider implements JwkProvider {
 
     private Map<String, Object> getJwks() throws SigningKeyNotFoundException {
         try {
-
+            // Again excaption with SSL
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(this.uri)
