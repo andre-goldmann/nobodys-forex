@@ -171,6 +171,7 @@ certs
 api-gateway/src/main/resources/keystore
 api-gateway/src/main/resources/application-prod.yml
 api-gateway/interface/angular
+api-gateway/certificate.pem
 
 forex-backend-java/src/main/resources/keystore
 forex-backend-java/src/main/resources/application-prod.yml
