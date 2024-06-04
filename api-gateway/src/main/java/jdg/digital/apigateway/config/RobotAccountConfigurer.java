@@ -7,13 +7,6 @@ import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 class RobotAccountConfigurer extends AbstractHttpConfigurer<RobotAccountConfigurer, HttpSecurity> {
 
-    /*@Override
-    public void init(HttpSecurity http) {
-        http.authenticationProvider(
-                //new RobotAuthenticationProvider()
-                new JwtAuthenticationProvider()
-        );
-    }*/
 
     @Override
     public void configure(HttpSecurity http) {
