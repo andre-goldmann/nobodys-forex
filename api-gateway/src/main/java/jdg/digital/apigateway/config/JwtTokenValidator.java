@@ -71,10 +71,12 @@ public class JwtTokenValidator {
     private void verifyPayload(DecodedJWT decodedJWT) {
         final JsonObject payloadAsJson = decodeTokenPayloadToJsonObject(decodedJWT);
         // das läuft zu schnell ab
-        if (hasTokenExpired(payloadAsJson)) {
+        // TODO für Aufrufe von METATRADER soll das nicht geprüft werden
+        // for now skip it
+        /*if (hasTokenExpired(payloadAsJson)) {
             log.warn("Token has expired: {}", payloadAsJson);
             throw new InvalidTokenException("Token has expired");
-        }
+        }*/
         log.debug("Token has not expired");
 
         if (!hasTokenRealmRolesClaim(payloadAsJson)) {

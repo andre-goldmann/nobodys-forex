@@ -45,9 +45,12 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .authorizeHttpRequests(
                         authorizeHttp -> {
                             // Allow routes to be accessed without authentication
-                            authorizeHttp.requestMatchers("/routes").permitAll();
-                            authorizeHttp.requestMatchers("/forex/routes").permitAll();
-                            authorizeHttp.requestMatchers("/api/forex/routes").permitAll();
+                            // does not work
+                            //authorizeHttp.requestMatchers("/routes").permitAll();
+                            // does not work
+                            //authorizeHttp.requestMatchers("/forex/routes").permitAll();
+                            // does not work, but I also do not want to give access to this endpoint
+                            //authorizeHttp.requestMatchers("/api/forex/routes").permitAll();
                             authorizeHttp.requestMatchers("/api/forex/signals/dev").permitAll();
                             authorizeHttp.anyRequest().authenticated();
                         }
