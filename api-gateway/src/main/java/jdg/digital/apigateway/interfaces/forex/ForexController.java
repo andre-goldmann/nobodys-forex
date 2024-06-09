@@ -47,8 +47,8 @@ public class ForexController {
     public Mono<List<Signal>> getSignals(
             @PathVariable("env") final String env) {
         // kann man machen, aber @PreAuthorize prüft schon alles
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        log.info("auth: {}, {}", auth, auth.getAuthorities());
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //log.info("auth: {}, {}", auth, auth.getAuthorities());
         return this.forexService.getSignals(env);
     }
 
