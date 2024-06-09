@@ -26,6 +26,8 @@ public class SignalEntity {
 
     private String strategy;
 
+    private String timeframe;
+
     private String type;
 
     private Double entry;

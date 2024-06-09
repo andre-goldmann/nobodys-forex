@@ -8,6 +8,7 @@ import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, status, Form
 from fastapi.encoders import jsonable_encoder
+from typing import Optional
 from fastapi.exceptions import RequestValidationError
 # Bellow the import create a job that will be executed on background
 from fastapi.responses import JSONResponse
@@ -599,6 +600,7 @@ class SignalDto(BaseModel):
     sl:float
     tp:float
     strategy: str
+    timeframe: Optional[str] = None
 
 class TrendInfoDto(BaseModel):
     symbol:str
@@ -669,36 +671,6 @@ def lastCandle(symbol:str, timeFrame:TimeFrame):
         session.close()
         return candle
 
-#@app.post("/resendsignal/")
-#async def resendsignal(
-#        id: Annotated[int, Form()],
-#        symbol: Annotated[str, Form()],
-#        timestamp: Annotated[str, Form()],
-#        type: Annotated[str, Form()],
-#        entry: Annotated[float, Form()],
-#        sl: Annotated[float, Form()],
-#        tp: Annotated[float, Form()],
-#        strategy: Annotated[str, Form()]):
-#
-#    signal = SignalDto(
-#        symbol=symbol,
-#        timestamp= timestamp,
-#        type = type,
-#        entry = entry,
-#        sl = sl,
-#        tp = tp,
-#        strategy = strategy
-#    )
-#    proceedSignal(signal)
-#
-#    with Session.begin() as session:
-#        # TODO delete IgnoredSignal when comes here
-#        signal = session.query(IgnoredSignal).filter(IgnoredSignal.id == id).first()
-#        if signal is not None:
-#            session.delete(signal)
-#            session.commit()
-#            session.close()
-
 @app.post("/trendinfo")
 async def signals(trendInfo:TrendInfoDto):
     #print("########################################trendinfo########################################")
@@ -743,6 +715,9 @@ def calculateSlAndStoreSignal(signal, strategy, session):
     df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
     atrValue = atr(df)
 
+    if signal.timestamp is None:
+        signal.timestamp = "15"
+
     sl = 0.0
     tp = 0.0
     if signal.type == "sell":
@@ -753,6 +728,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         tp = signal.entry + atrValue.iloc[-1]
 
     lots = 0.1
+    # TODO remove this part here to
     signalStats = getSignalStats(strategy, signal.symbol, session)
 
     if signalStats is None:
@@ -768,7 +744,8 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "sl": sl,
             "tp": tp,
             "lots": lots,
-            "strategy": strategy}
+            "strategy": strategy,
+            "timeframe": signal.timesframe}
     response = requests.post(
         "http://javabackend:5080/forex/signals",
         json=data,
@@ -777,6 +754,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         print("#############################Error sending to Java Backend##############################")
         print(str(response.status_code))
         print(str(response))
+        logger.error("Error sending to Java Backend" + str(response))
 
 def proceedSignal(signal):
     # no need to check for trend in TradingView we send everything
@@ -924,6 +902,7 @@ def proceedSignal(signal):
                 or strategy == "T3Fvma" \
                 or strategy == "T3-JMaCrossover" \
                 or strategy == "T3-GapFilling":
+            # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", session)
 
 
@@ -938,6 +917,7 @@ def proceedSignal(signal):
                 #    json=jsonSignal,
                 #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
                 #))
+                # session weiterhin beenden, da Stats aus DB geladen werden
                 session.commit()
                 session.close()
                 return
@@ -948,67 +928,75 @@ def proceedSignal(signal):
                 #    json=jsonSignal,
                 #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
                 #))
+                # session weiterhin beenden, da Stats aus DB geladen werden
                 session.commit()
                 session.close()
                 return
-
+            # Mit Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy, session)
+            # session weiterhin beenden, da Stats aus DB geladen werden
             session.commit()
             session.close()
-            print(f"######## {signal} stored ########")
+            #print(f"######## {signal} stored ########")
         else:
-            regressionLineD1 = session.query(Regressions).filter(
-                Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
-            if len(regressionLineD1) > 0:
-                if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
-                    print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
-                    #storeIgnoredSignal(IgnoredSignal(
-                    #    json=jsonSignal,
-                    #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
-                    #))
-                    session.commit()
-                    session.close()
-                    return
+            storeIgnoredSignal(IgnoredSignal(
+                json=jsonSignal,
+                reason=f"Ignored because Regression Line for H4 was not found!"
+            ))
+            session.commit()
+            session.close()
+        #    regressionLineD1 = session.query(Regressions).filter(
+        #        Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
+        #    if len(regressionLineD1) > 0:
+        #        if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
+        #            print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
+        #            #storeIgnoredSignal(IgnoredSignal(
+        #            #    json=jsonSignal,
+        #            #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
+        #            #))
+        #            session.commit()
+        #            session.close()
+        #            return
 
-                if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
-                    print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
-                    #storeIgnoredSignal(IgnoredSignal(
-                    #    json=jsonSignal,
-                    #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
-                    #))
-                    session.commit()
-                    session.close()
-                    return
+        #        if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
+        #            print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
+        #            #storeIgnoredSignal(IgnoredSignal(
+        #            #    json=jsonSignal,
+        #            #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
+        #            #))
+        #            session.commit()
+        #            session.close()
+        #            return
 
-                df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session)
-                atrValue = atr(df)
+        #        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session)
+        #        atrValue = atr(df)
 
-                sl = 0.0
-                tp = 0.0
-                if signal.type == "sell":
-                    sl = signal.entry + atrValue.iloc[-1]
-                    tp = signal.entry - atrValue.iloc[-1]
-                if signal.type == "buy":
-                    sl = signal.entry - atrValue.iloc[-1]
-                    tp = signal.entry + atrValue.iloc[-1]
+        #        sl = 0.0
+        #        tp = 0.0
+        #        if signal.type == "sell":
+        #            sl = signal.entry + atrValue.iloc[-1]
+        #            tp = signal.entry - atrValue.iloc[-1]
+        #        if signal.type == "buy":
+        #            sl = signal.entry - atrValue.iloc[-1]
+        #            tp = signal.entry + atrValue.iloc[-1]
 
-                storeSignal(Signal(
-                    symbol=signal.symbol,
-                    type=signal.type,
-                    entry=signal.entry,
-                    sl=sl,
-                    tp=tp,
-                    lots=0.1,
-                    commision=0.0,
-                    strategy=strategy
-                ), session)
-                session.commit()
-                session.close()
-                print(f"######## {signal} stored ########")
-            else:
-                session.commit()
-                session.close()
-                print(f"No Regression-Data found for {signal.symbol}")
+                #storeSignal(Signal(
+                #    symbol=signal.symbol,
+                #    type=signal.type,
+                #    entry=signal.entry,
+                #    sl=sl,
+                #    tp=tp,
+                #    lots=0.1,
+                #    commision=0.0,
+                #    strategy=strategy
+                #), session)
+                #session.commit()
+                #session.close()
+        #        print(f"######## {signal} stored ########")
+        #    else:
+                #session.commit()
+                #session.close()
+        #        print(f"No Regression-Data found for {signal.symbol}")
 
 def storeProdSignal(signal: ProdSignal, session):
     session.add(signal)
@@ -1022,7 +1010,7 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
 if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler('elvis.json')
+    handler = logging.FileHandler('logs.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(handler)
     Base.metadata.create_all(engine)

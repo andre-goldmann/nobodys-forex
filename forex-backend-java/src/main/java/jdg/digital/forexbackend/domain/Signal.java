@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 public record Signal (
     Integer id,
     String symbol,
+    String timeframe,
     @JsonDeserialize(using = CustomOffsetDateTimeDeserializer.class)
     OffsetDateTime timestamp,
     String type,

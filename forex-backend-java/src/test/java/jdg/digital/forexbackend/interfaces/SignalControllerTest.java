@@ -35,7 +35,7 @@ public class SignalControllerTest {
 
     @Test
     public void createSignalNoStatsFound() throws Exception {
-        Signal signal = new Signal(1,"EURUSD", OffsetDateTime.now(), "BUY", 1.1300, 1.1200, 1.1400, 0.01,"strategy1", false, "false");
+        Signal signal = new Signal(1,"EURUSD", "M15", OffsetDateTime.now(), "BUY", 1.1300, 1.1200, 1.1400, 0.01,"strategy1", false, "false");
 
         mockMvc.perform(post("/signals")
                         .contentType("application/json")

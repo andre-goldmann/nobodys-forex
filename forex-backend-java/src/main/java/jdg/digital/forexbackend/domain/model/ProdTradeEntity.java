@@ -24,6 +24,8 @@ public class ProdTradeEntity {
 
     private String symbol;
 
+    private String timeframe;
+
     private String type;
 
     private Double entry;

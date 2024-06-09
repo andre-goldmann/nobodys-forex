@@ -55,6 +55,7 @@ public class SignalService {
 
                     this.signalRepository.insertProdTradeEntity(
                             signal.symbol(),
+                            signal.timeframe(),
                             signal.type(),
                             signal.entry(),
                             signal.sl(),
@@ -78,6 +79,7 @@ public class SignalService {
                     final Signal newSignal = new Signal(
                             signal.id(),
                             signal.symbol(),
+                            signal.timeframe(),
                             signal.timestamp(),
                             signal.type(),
                             signal.entry(),
@@ -158,6 +160,7 @@ public class SignalService {
     private void storeDevSignal(Signal signal) {
         this.signalRepository.insertDevTradeEntity(
                 signal.symbol(),
+                signal.timeframe(),
                 signal.type(),
                 signal.entry(),
                 signal.sl(),
@@ -180,6 +183,7 @@ public class SignalService {
         return new Signal(
                 0,
                 entity.getJson(),
+                "",
                 OffsetDateTime.now(),
                 "",
                 0.0,
@@ -195,6 +199,7 @@ public class SignalService {
         return new Signal(
                 signalEntity.getId(),
                 signalEntity.getSymbol(),
+                signalEntity.getTimeframe(),
                 signalEntity.getStamp(),
                 signalEntity.getType(),
                 signalEntity.getEntry(),

@@ -22,6 +22,8 @@ public class TradesEntity {
 
     private String symbol;
 
+    private String timeframe;
+
     private String strategy;
 
     private String type;

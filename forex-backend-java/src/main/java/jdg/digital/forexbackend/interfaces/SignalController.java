@@ -61,6 +61,7 @@ public class SignalController {
                     // Always store to dev
                     this.signalRepository.insertDevTradeEntity(
                             signal.symbol(),
+                            signal.timeframe(),
                             signal.type(),
                             signal.entry(),
                             signal.sl(),
@@ -80,6 +81,7 @@ public class SignalController {
 
                                         this.signalRepository.insertProdTradeEntity(
                                                 signal.symbol(),
+                                                signal.timeframe(),
                                                 signal.type(),
                                                 signal.entry(),
                                                 signal.sl(),
@@ -100,6 +102,7 @@ public class SignalController {
                                         final Signal newSignal = new Signal(
                                                1,
                                                 signal.symbol(),
+                                                signal.timeframe(),
                                                 signal.timestamp(),
                                                 signal.type(),
                                                 signal.entry(),
@@ -131,6 +134,7 @@ public class SignalController {
     private Mono<String> storeNewSignal(final Signal signal) {
         return this.signalRepository.insertDevTradeEntity(
                         signal.symbol(),
+                        signal.timeframe(),
                         signal.type(),
                         signal.entry(),
                         signal.sl(),

@@ -1417,7 +1417,7 @@ def job():
 if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler('elvis.json')
+    handler = logging.FileHandler('logs.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(handler)
     #dropAllTables()

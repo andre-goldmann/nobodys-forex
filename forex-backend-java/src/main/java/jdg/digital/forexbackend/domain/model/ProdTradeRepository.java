@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 @Transactional
 public interface ProdTradeRepository extends ReactiveCrudRepository<ProdTradeEntity, Integer> {
 
-    ProdTradeEntity findBySymbolAndStrategy(String symbol, String strategy);
+    //ProdTradeEntity findBySymbolAndStrategy(String symbol, String strategy);
 
     @Query(value = "SELECT COUNT(*) FROM \"ProdTrades\" WHERE symbol = :symbol AND strategy = :strategy AND openprice=0 AND activated=''")
     Mono<Integer> countActiveTrades(String symbol, String strategy);

@@ -29,7 +29,7 @@ class TradesServiceIT {
     @Test
     void checkSignal() {
         // Arrange
-        Signal signal = new Signal(1,"symbol", OffsetDateTime.now(), "type", 1.23, 0, 0, 0.01, "strategy", true, "");
+        Signal signal = new Signal(1,"symbol", "15", OffsetDateTime.now(), "type", 1.23, 0, 0, 0.01, "strategy", true, "");
         TradeStat stats = new TradeStat();
 
         // Act
