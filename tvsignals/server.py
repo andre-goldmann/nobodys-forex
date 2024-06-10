@@ -751,6 +751,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "lots": lots,
             "strategy": strategy,
             "timeframe": signal.timesframe}
+    print("Sending signal ...")
     response = requests.post(
         "http://javabackend:5080/forex/signals",
         json=data,
@@ -761,7 +762,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         print(str(response))
         logger.error("Error sending to Java Backend" + str(response))
     else:
-        print(f"{signal} send to Java Backend")
+        print(f"Signal sent to Java Backend")
         logger.info(f"{signal} send to Java Backend")
 
 def proceedSignal(signal):
@@ -790,6 +791,8 @@ def proceedSignal(signal):
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
 
+    print(f"Received: {jsonSignal}")
+    logger.info(f"Received {jsonSignal} ..")
 
     with (Session.begin() as session):
 
