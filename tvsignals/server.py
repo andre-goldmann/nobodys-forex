@@ -600,7 +600,7 @@ class SignalDto(BaseModel):
     sl:float
     tp:float
     strategy: str
-    #timeframe: Optional[str] = None
+    timeframe: Optional[str] = None
 
 class TrendInfoDto(BaseModel):
     symbol:str
@@ -716,8 +716,8 @@ def calculateSlAndStoreSignal(signal, strategy, session):
     df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
     atrValue = atr(df)
 
-    #if signal.timestamp is None:
-    #    signal.timestamp = "15"
+    if signal.timestamp is None:
+        signal.timestamp = "15"
 
     sl = 0.0
     tp = 0.0
@@ -745,8 +745,8 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "sl": sl,
             "tp": tp,
             "lots": lots,
-            "strategy": strategy}
-            #"timeframe": signal.timesframe}
+            "strategy": strategy,
+            "timeframe": signal.timesframe}
     response = requests.post(
         "http://javabackend:5080/forex/signals",
         json=data,
