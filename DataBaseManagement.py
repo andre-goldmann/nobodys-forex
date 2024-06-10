@@ -488,10 +488,10 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
 
             session.commit()
             session.close()
-            print("Updated Signal")
+            #print("Updated Signal")
         else:
             session.close()
-            print("No Signal found for: " + str(historyUpdateDto))
+            logger.error("No Signal found for: " + str(historyUpdateDto))
 
 def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
 

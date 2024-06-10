@@ -1,14 +1,16 @@
-import logging
-import ecs_logging
 import enum
+import logging
 import os
 import sys
+from typing import Optional
+
+import ecs_logging
 import pandas as pd
+import requests
 import uvicorn
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request, status, Form
+from fastapi import FastAPI, Request, status
 from fastapi.encoders import jsonable_encoder
-from typing import Optional
 from fastapi.exceptions import RequestValidationError
 # Bellow the import create a job that will be executed on background
 from fastapi.responses import JSONResponse
@@ -18,8 +20,6 @@ from sqlalchemy import String, DateTime, UniqueConstraint
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
-from typing_extensions import Annotated
-import requests
 
 load_dotenv()
 
@@ -1031,10 +1031,11 @@ if __name__ == "__main__":
     logger.addHandler(console_handler)
 
     # needs to be a different log files than default-server
-    handler = logging.FileHandler('tvlogs.json')
+    handler = logging.FileHandler('logs.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(handler)
     Base.metadata.create_all(engine)
     #port can only be 80 see tradingview
-    # access_log is deactivating print
+    # almost no logs
+    #uvicorn.run(app, host="0.0.0.0", port=80, log_level="critical", access_log=False)
     uvicorn.run(app, host="0.0.0.0", port=80, log_level="info", access_log=True)

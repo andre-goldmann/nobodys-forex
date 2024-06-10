@@ -5,7 +5,7 @@ import threading
 import time
 from datetime import timedelta
 from timeit import default_timer as timer
-
+import sys
 import ecs_logging
 import numpy as np
 import pandas as pd
@@ -1097,7 +1097,7 @@ def zigZag(df, symbol, timeframeEnum, entry):
 async def storeCandle(candle:CandlesDto):
     symbol = candle.symbol
     if symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {candle}")
+        logger.warn(f"Ignore request because symbol is not handled yet: {candle}")
         return
 
     timeframeEnum: TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
@@ -1416,7 +1416,13 @@ def job():
 
 if __name__ == "__main__":
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
+
+    # Create a console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(ecs_logging.StdlibFormatter())
+    logger.addHandler(console_handler)
+
     handler = logging.FileHandler('logs.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(handler)
@@ -1459,7 +1465,9 @@ if __name__ == "__main__":
     #uvicorn_error.disabled = True
     #uvicorn_access = logging.getLogger("uvicorn.access")
     #uvicorn_access.disabled = True
-    uvicorn.run(app, host="0.0.0.0", port=6081, log_level="critical", access_log=False)
+    # almost no logs
+    #uvicorn.run(app, host="0.0.0.0", port=6081, log_level="critical", access_log=False)
+    uvicorn.run(app, host="0.0.0.0", port=6081, log_level="info", access_log=True)
 
     #consumer.subscribe(['test:1:1'])
 
