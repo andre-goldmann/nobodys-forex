@@ -698,7 +698,7 @@ async def signals(trendInfo:TrendInfoDto):
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
-    print(str(signal))
+    #print(str(signal))
     # only for testing connection ######################
     #data = {"symbol": signal.symbol,
     #        "timestamp": "",
@@ -760,6 +760,8 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         print(str(response.status_code))
         print(str(response))
         logger.error("Error sending to Java Backend" + str(response))
+    else:
+        logger.info(f"{signal} send to Java Backend")
 
 def proceedSignal(signal):
     # no need to check for trend in TradingView we send everything
@@ -784,7 +786,8 @@ def proceedSignal(signal):
                      'entry': signal.entry,
                      'sl': signal.sl,
                      'tp': signal.tp,
-                     'strategy': strategy})
+                     'strategy': strategy,
+                     'timeframe': signal.timeframe})
 
 
     with (Session.begin() as session):
@@ -923,7 +926,7 @@ def proceedSignal(signal):
                 #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
                 #))
                 # session weiterhin beenden, da Stats aus DB geladen werden
-                session.commit()
+                #session.commit()
                 session.close()
                 return
 
@@ -934,7 +937,7 @@ def proceedSignal(signal):
                 #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
                 #))
                 # session weiterhin beenden, da Stats aus DB geladen werden
-                session.commit()
+                #session.commit()
                 session.close()
                 return
             # Mit Beachtung der Regression Line speichern
@@ -1015,6 +1018,7 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
 if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
+    # needs to be a different log files than default-server
     handler = logging.FileHandler('tvlogs.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(handler)
