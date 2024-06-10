@@ -1015,7 +1015,7 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
 if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler('logs.json')
+    handler = logging.FileHandler('tvlogs.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(handler)
     Base.metadata.create_all(engine)
