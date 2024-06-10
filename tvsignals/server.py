@@ -538,7 +538,7 @@ class Signal(Base):
     profit: Mapped[float] = mapped_column(nullable=True, default=0.0)
     closed: Mapped[str] = mapped_column(nullable=True, default="")
     commision: Mapped[float] = mapped_column(nullable=True, default="")
-    strategy: Mapped[str] = mapped_column(nullable=True, default=""),
+    strategy: Mapped[str] = mapped_column(nullable=True, default="")
     # here a string because of tradingview
     timeframe: Mapped[str]
 
@@ -560,7 +560,7 @@ class ProdSignal(Base):
     profit: Mapped[float] = mapped_column(nullable=True, default=0.0)
     closed: Mapped[str] = mapped_column(nullable=True, default="")
     commision: Mapped[float] = mapped_column(nullable=True, default="")
-    strategy: Mapped[str] = mapped_column(nullable=True, default=""),
+    strategy: Mapped[str] = mapped_column(nullable=True, default="")
     # here a string because of tradingview
     timeframe: Mapped[str]
 
