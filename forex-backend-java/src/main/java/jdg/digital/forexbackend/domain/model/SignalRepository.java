@@ -23,10 +23,10 @@ public interface SignalRepository extends ReactiveCrudRepository<SignalEntity, I
     Flux<SignalEntity> signalsProd();
 
     @Modifying
-    @Query(value = "INSERT INTO \"ProdTrades\" (symbol, timeframe, type, entry, sl, tp, lots, strategy, stamp, activated) VALUES (:symbol, :type, :entry, :sl, :tp, :lots, :strategy, :stamp, '')")
+    @Query(value = "INSERT INTO \"ProdTrades\" (symbol, timeframe, type, entry, sl, tp, lots, strategy, stamp, activated) VALUES (:symbol, :timeframe, :type, :entry, :sl, :tp, :lots, :strategy, :stamp, '')")
     Mono<Void> insertProdTradeEntity(@Param("symbol") String symbol, @Param("timeframe") String timeframe, @Param("type") String type, @Param("entry") Double entry, @Param("sl") Double sl, @Param("tp") Double tp, @Param("lots") Double lots, @Param("strategy") String strategy, @Param("stamp") LocalDateTime stamp);
 
     @Modifying
-    @Query(value = "INSERT INTO \"Trades\" (symbol, timeframe, type, entry, sl, tp, lots, strategy, stamp, activated) VALUES (:symbol, :type, :entry, :sl, :tp, :lots, :strategy, :stamp, '')")
+    @Query(value = "INSERT INTO \"Trades\" (symbol, timeframe, type, entry, sl, tp, lots, strategy, stamp, activated) VALUES (:symbol, :timeframe, :type, :entry, :sl, :tp, :lots, :strategy, :stamp, '')")
     Mono<Void> insertDevTradeEntity(@Param("symbol") String symbol, @Param("timeframe") String timeframe, @Param("type") String type, @Param("entry") Double entry, @Param("sl") Double sl, @Param("tp") Double tp, @Param("lots") Double lots, @Param("strategy") String strategy, @Param("stamp") LocalDateTime stamp);
 }

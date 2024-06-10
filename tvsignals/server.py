@@ -761,6 +761,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         print(str(response))
         logger.error("Error sending to Java Backend" + str(response))
     else:
+        print(f"{signal} send to Java Backend")
         logger.info(f"{signal} send to Java Backend")
 
 def proceedSignal(signal):

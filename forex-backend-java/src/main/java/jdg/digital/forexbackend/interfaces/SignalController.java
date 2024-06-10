@@ -55,6 +55,7 @@ public class SignalController {
 
     @PostMapping
     public Mono<String> createSignal(@RequestBody Signal signal) {
+        log.info("Received signal: {}", signal);
         return this.tradeStatsServices.getStatsFor(signal)
                 .flatMap(stats -> {
 
