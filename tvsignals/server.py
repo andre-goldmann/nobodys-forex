@@ -2,7 +2,7 @@ import logging
 import ecs_logging
 import enum
 import os
-
+import sys
 import pandas as pd
 import uvicorn
 from dotenv import load_dotenv
@@ -698,7 +698,7 @@ async def signals(trendInfo:TrendInfoDto):
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
-    print(str(signal))
+    #print(str(signal))
     # only for testing connection ######################
     #data = {"symbol": signal.symbol,
     #        "timestamp": "",
@@ -715,6 +715,7 @@ async def signals(signal:SignalDto):
     #    print(str(response.status_code))
     ######################################################
     proceedSignal(signal)
+    return "Finished!"
 
 def calculateSlAndStoreSignal(signal, strategy, session):
     df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
@@ -765,12 +766,12 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         print(f"Signal sent to Java Backend")
         logger.info(f"{signal} send to Java Backend")
 
-def proceedSignal(signal):
+def proceedSignal(signal:SignalDto):
     # no need to check for trend in TradingView we send everything
     # and do the check here
     # D-EMA200, H4-EMA, D-Regression, H4-Regression
     # Support Resistance
-
+    #print(f"Received: {signal}")
     #ignored XRPUSD
     if signal.symbol == "XRPUSD":
         return
@@ -791,8 +792,8 @@ def proceedSignal(signal):
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
 
-    print(f"Received: {jsonSignal}")
-    logger.info(f"Received {jsonSignal} ..")
+    #print(f"Received: {jsonSignal}")
+    #logger.info(f"Received {jsonSignal} ..")
 
     with (Session.begin() as session):
 
@@ -837,7 +838,7 @@ def proceedSignal(signal):
                 session.close()
                 return
         if trendInfo is None:
-            print(f"Ignore Signal {signal} because TrendInfo not found!")
+            logger.warning(f"Ignore Signal {signal} because TrendInfo not found!")
             storeIgnoredSignal(IgnoredSignal(
                 json=jsonSignal,
                 reason=f"Ignore Signal {signal} because TrendInfo not found!"
@@ -924,7 +925,7 @@ def proceedSignal(signal):
         if len(regressionLineH4) > 0:
 
             if "buy" == signal.type and signal.entry < regressionLineH4[0].endValue:
-                print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
+                logger.warning(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
                 #storeIgnoredSignal(IgnoredSignal(
                 #    json=jsonSignal,
                 #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
@@ -935,7 +936,7 @@ def proceedSignal(signal):
                 return
 
             if "sell" == signal.type and signal.entry > regressionLineH4[0].endValue:
-                print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
+                logger.warning(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineH4[0].endValue}")
                 #storeIgnoredSignal(IgnoredSignal(
                 #    json=jsonSignal,
                 #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineH4[0].endValue}"
@@ -1021,11 +1022,19 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
 
 if __name__ == "__main__":
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
+
+
+    # Create a console handler
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(ecs_logging.StdlibFormatter())
+    logger.addHandler(console_handler)
+
     # needs to be a different log files than default-server
     handler = logging.FileHandler('tvlogs.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(handler)
     Base.metadata.create_all(engine)
     #port can only be 80 see tradingview
-    uvicorn.run(app, host="0.0.0.0", port=80, log_level="critical", access_log=False)
+    # access_log is deactivating print
+    uvicorn.run(app, host="0.0.0.0", port=80, log_level="info", access_log=True)
