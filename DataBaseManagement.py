@@ -11,7 +11,7 @@ import pandas as pd
 import statsmodels.api as sm
 from dotenv import load_dotenv
 from pydantic import BaseModel
-from sqlalchemy import Enum, text
+from sqlalchemy import Enum, text, or_, and_
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
 from sqlalchemy import create_engine, DateTime, func
@@ -651,6 +651,20 @@ def dropAllTables():
 
 def countSignals(strategy, symbol):
     with Session.begin() as session:
-        count = session.query(Signal).filter(Signal.exit == 0.0,  Signal.symbol == symbol, Signal.strategy == strategy).count()
+        count = session.query(Signal).filter(
+            or_(
+                and_(Signal.activated is None,
+                     Signal.openprice is None,
+                     Signal.symbol == symbol,
+                     Signal.strategy == strategy),
+                and_(Signal.activated == '',
+                     Signal.openprice == 0,
+                     Signal.symbol == symbol,
+                     Signal.strategy == strategy),
+                and_(Signal.activated == '',
+                     Signal.openprice is None,
+                     Signal.symbol == symbol,
+                     Signal.strategy == strategy)
+            )).count()
         session.close()
         return count

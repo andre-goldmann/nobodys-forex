@@ -299,33 +299,6 @@ async def createsignal(symbol: Annotated[str, Form()],
     ))
     return "Order created"
 
-#need to use form here, because delete does not work
-#@app.post("/deletesignal/")
-#async def deleteOrder(id: Annotated[int, Form()]):
-#    deleteSignalInDb(id)
-#    return "Signal deleted"
-
-#@app.post("/modifysignal/")
-#async def modifySignalIn(id: Annotated[int, Form()],
-#                      symbol: Annotated[str, Form()],
-#                      type: Annotated[str, Form()],
-#                      entry: Annotated[float, Form()],
-#                      sl: Annotated[float, Form()],
-#                      tp: Annotated[float, Form()],
-#                      lots: Annotated[float, Form()]):
-#
-#    if type not in tradeTypes:
-#        print(f"Ignore order because type is not handled: {type}")
-#        return
-#
-#    print("Updating...")
-#    modifySignalInDb(id, type, entry, sl, tp, lots)
-#
-#    return "Order modified"
-
-#def process_row(index, row):
-#    print(f"Processing row {index} - DATETIME: {row['DATETIME']}, Close: {row['close']}, TIMEFRAME: {row['TIMEFRAME']}")
-
 @app.get("/redkslow/")
 async def redkslow(symbol:str, timeframe: str):
 
@@ -444,14 +417,6 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
     updateSignalByHistory(historyUpdateDto, logger)
 
 
-#@app.get("/insertTrades")
-#def insertTrades():
-#    if countTrades() == 0:
-#        insertFromFile("sql/Trades.csv")
-#        return countTrades()
-#    else:
-#        return countTrades()
-
 @app.post("/signalactivated")
 async def signalActivated(signalActivation:SignalActivationDto):
     if signalActivation.symbol not in symbols:
@@ -468,9 +433,6 @@ async def signalActivatedProd(signalActivation:SignalActivationDto):
 
     activateSignalProd(signalActivation)
 
-
-#@app.post("/signalactivatedprod")
-#async def countSignals(signalActivation:SignalActivationDto):
 
 def postSignal(symbol, timeframeEnum, type, strategy, entry):
     strategyStr = str(timeframeEnum).replace("PERIOD", "")
