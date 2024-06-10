@@ -487,13 +487,15 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
                 "entry": entry,
                 "sl": 0,
                 "tp": 0,
-                "strategy": strategyStr}
+                "strategy": strategyStr,
+                "timeframe": str(timeframeEnum)}
+        logger.info(f"Send {data}")
         response = requests.post(
             "http://tvsignals:80/signal/",
             json=data,
         )
         if response.status_code != 200:
-            print(str(response.status_code))
+            logger.error(str(response.status_code))
 
 
 def adx(df, symbol, timeframeEnum, entry):

@@ -260,12 +260,12 @@ def storeCandleInDb(candle:CandlesDto):
                 SPREAD=candle.SPREAD,
             )
             last = lastCandle(candle.symbol, timeFrame)
-            print(f"New: {candle} ----- last {last}")
+            #logger.info(f"New: {candle} ----- last {last}")
             session.add(spongebob)
             session.commit()
             session.close()
         else:
-            print("Allreadys exists:" + str(candle))
+            logger.warning("Allreadys exists:" + str(candle))
 
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
