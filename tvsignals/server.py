@@ -724,9 +724,6 @@ def calculateSlAndStoreSignal(signal, strategy, session):
     df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
     atrValue = atr(df)
 
-    if signal.timestamp is None:
-        signal.timestamp = "15"
-
     sl = 0.0
     tp = 0.0
     if signal.type == "sell":
@@ -776,6 +773,10 @@ def proceedSignal(signal:SignalDto):
     # Support Resistance
     #print(f"Received: {signal}")
     #ignored XRPUSD
+
+    if signal.timestamp is None:
+        signal.timestamp = "15"
+
     if signal.symbol == "XRPUSD":
         return
     #generates too much signals
