@@ -56,10 +56,11 @@ public class TradeStatsServices {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
         if (strategies.isEmpty()) {
-            throw new IllegalArgumentException("Not StrategyEnum found for " + entity.getStrategy());
+            log.warn("No StrategyEnum found for " + entity.getStrategy());
+            throw new IllegalArgumentException("No StrategyEnum found for " + entity.getStrategy());
         } else if (strategies.size() > 1) {
+            log.warn("Multiple StrategyEnums found for " + entity.getStrategy());
             throw new IllegalArgumentException("Multiple StrategyEnums found for " + entity.getStrategy());
-
         }
         stat.setStrategy(strategies.stream().findFirst().get());
         // get StrategyEnum from StrategyNameMapping using entity.getStrategy()
