@@ -698,7 +698,7 @@ async def signals(trendInfo:TrendInfoDto):
 
 @app.post("/signal")
 async def signals(signal:SignalDto):
-    #print(str(signal))
+    print(str(signal))
     # only for testing connection ######################
     #data = {"symbol": signal.symbol,
     #        "timestamp": "",
