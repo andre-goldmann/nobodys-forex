@@ -147,8 +147,8 @@ services:
     restart: always
     labels:
       co.elastic.logs/module: tvsignals
-    volumes:
-      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
+    #volumes:
+    #  - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/backend:/var/lib/tvsignals
     depends_on:
       - keycloak
 
