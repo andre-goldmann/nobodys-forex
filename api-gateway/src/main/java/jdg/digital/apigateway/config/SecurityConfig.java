@@ -66,10 +66,11 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     ApplicationListener<AuthenticationSuccessEvent> successListener() {
         return event -> {
-            System.out.println("🎉 [%s] %s".formatted(
+            /*System.out.println("🎉 [%s] %s".formatted(
                     event.getAuthentication().getClass().getSimpleName(),
                     event.getAuthentication().getName()
-            ));
+            ));*/
+            //TODO add some other message here
         };
     }
 

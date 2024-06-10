@@ -1237,7 +1237,7 @@ def autoDetectSupportAndResistance(symbol:str, sliceMax:int, peaksMax:int, timeF
             SupportResistance(
                 symbol=symbol,
                 timeframe=timeFrame,
-                level=float(price),
+                level=float(price[0]),
                 type=type,
                 caclulator="defaultsr"
             )
