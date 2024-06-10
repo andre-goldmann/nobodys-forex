@@ -758,9 +758,9 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         json=data,
     )
     if response.status_code != 200:
-        print("#############################Error sending to Java Backend##############################")
-        print(str(response.status_code))
-        print(str(response))
+        #logger.error("#############################Error sending to Java Backend##############################")
+        #logger.error(str(response.status_code))
+        #print(str(response))
         logger.error("Error sending to Java Backend" + str(response))
     else:
         print(f"Signal sent to Java Backend")
