@@ -751,7 +751,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "tp": tp,
             "lots": lots,
             "strategy": strategy,
-            "timeframe": signal.timesframe}
+            "timeframe": signal.timeframe}
     logger.info("Sending signal to backend ...")
     response = requests.post(
         "http://javabackend:5080/forex/signals",
