@@ -774,8 +774,8 @@ def proceedSignal(signal:SignalDto):
     #print(f"Received: {signal}")
     #ignored XRPUSD
 
-    if signal.timestamp is None:
-        signal.timestamp = "15"
+    if signal.timeframe is None:
+        signal.timeframe = "15"
 
     if signal.symbol == "XRPUSD":
         return
