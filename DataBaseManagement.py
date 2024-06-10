@@ -473,8 +473,8 @@ def getLinesInfo(symbol, timeframeEnum):
         session.close()
         return infos
 
-def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
-    print(historyUpdateDto)
+def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto, logger):
+    #print(historyUpdateDto)
     with Session.begin() as session:
         storedSignal = session.query(Signal).filter(Signal.symbol == historyUpdateDto.symbol, Signal.id == historyUpdateDto.magic).first()
         if storedSignal is not None:
@@ -493,7 +493,7 @@ def updateSignalByHistory(historyUpdateDto:HistoryUpdateDto):
             session.close()
             logger.error("No Signal found for: " + str(historyUpdateDto))
 
-def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
+def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame, logger):
 
     start = timer()
 
@@ -521,12 +521,12 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame):
     all_df = pd.concat([lsma_df,df], axis=1)
     all_df.dropna(inplace=True)
 
-    print("StartTime: ", all_df.iloc[0]['DATETIME'])
-    print("endTime:  ", all_df.iloc[-1]['DATETIME'])
-    print("###################################")
+    logger.info("StartTime: ", all_df.iloc[0]['DATETIME'])
+    logger.info("endTime:  ", all_df.iloc[-1]['DATETIME'])
+    logger.info("###################################")
 
     end = timer()
-    print("Regression took: ", timedelta(seconds=end-start))
+    logger.info("Regression took: ", timedelta(seconds=end-start))
 
     deleteRegressionData(symbol, timeFrame)
 

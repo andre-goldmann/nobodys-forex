@@ -282,11 +282,11 @@ async def createsignal(symbol: Annotated[str, Form()],
                       lots: Annotated[float, Form()]):
 
     if symbol not in symbols:
-        print(f"Ignore order because symbol is not handled yet: {symbol}")
+        logger.warning(f"Ignore order because symbol is not handled yet: {symbol}")
         return
 
     if type not in tradeTypes:
-        print(f"Ignore order because type is not handled: {type}")
+        logger.warning(f"Ignore order because type is not handled: {type}")
         return
 
     storeSignal(Signal(
@@ -330,7 +330,7 @@ async def createsignal(symbol: Annotated[str, Form()],
 async def redkslow(symbol:str, timeframe: str):
 
     if symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {symbol}")
+        logger.warning(f"Ignore request because symbol is not handled yet: {symbol}")
         return
 
     timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
@@ -338,7 +338,7 @@ async def redkslow(symbol:str, timeframe: str):
     if TimeFrame.PERIOD_D1 is not timeframeEnum and TimeFrame.PERIOD_H4 is not timeframeEnum and TimeFrame.PERIOD_H1 is not timeframeEnum:
         return f"For {timeframeEnum} no line information was greated!!!"
 
-    print("Calculating redkslow for %s-%s" % (symbol, timeframeEnum))
+    logger.warning("Calculating redkslow for %s-%s" % (symbol, timeframeEnum))
     data = loadDfFromDb(symbol, timeframeEnum)
 
     data = data.set_index('DATETIME')
@@ -360,7 +360,7 @@ async def redkslow(symbol:str, timeframe: str):
     data['redkslowtrend'] = np.select(conditions, choices)#np.where(, "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
 
     tThree(data, 300)
-    print(data.tail(-1).tail(15))
+    #print(data.tail(-1).tail(15))
 
     #print("++++++++++++++++++")
     #print(data['redkslow'])
@@ -382,7 +382,7 @@ async def redkslow(symbol:str, timeframe: str):
 async def linesInfo(symbol:str, timeframe: str):
 
     if symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {symbol}")
+        logger.warning(f"Ignore request because symbol is not handled yet: {symbol}")
         return
 
     timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
@@ -390,7 +390,7 @@ async def linesInfo(symbol:str, timeframe: str):
     if TimeFrame.PERIOD_D1 is not timeframeEnum and TimeFrame.PERIOD_H4 is not timeframeEnum and TimeFrame.PERIOD_H1 is not timeframeEnum:
         return f"For {timeframeEnum} no line information was greated!!!"
 
-    print("Loading linesinfo at %s for TF %s" % (datetime.datetime.now(), timeframeEnum))
+    logger.warning("Loading linesinfo at %s for TF %s" % (datetime.datetime.now(), timeframeEnum))
     result = getLinesInfo(symbol, timeframeEnum)
 
     if len(result) > 0:
@@ -402,7 +402,7 @@ async def linesInfo(symbol:str, timeframe: str):
 async def srlevels(symbol:str):
 
     if symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {symbol}")
+        logger.warning(f"Ignore request because symbol is not handled yet: {symbol}")
         return
 
     result = getSrLevels(symbol)
@@ -423,7 +423,7 @@ async def srlevels(symbol:str):
 @app.post("/updatesignal")
 async def updateSignal(signalUpdateDto:SignalUpdateDto):
     if signalUpdateDto.symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
+        logger.warning(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
         return
     updateSignalInDb(signalUpdateDto)
     #TODO send information to clients
@@ -431,7 +431,7 @@ async def updateSignal(signalUpdateDto:SignalUpdateDto):
 @app.post("/updatesignalprod")
 async def updateSignalProd(signalUpdateDto:SignalUpdateDto):
     if signalUpdateDto.symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
+        logger.warning(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
         return
     updateSignalProdInDb(signalUpdateDto)
     #TODO send information to clients
@@ -439,9 +439,9 @@ async def updateSignalProd(signalUpdateDto:SignalUpdateDto):
 @app.post("/updatehistory")
 async def updateHistory(historyUpdateDto:HistoryUpdateDto):
     if historyUpdateDto.symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {historyUpdateDto}")
+        logger.warning(f"Ignore request because symbol is not handled yet: {historyUpdateDto}")
         return
-    updateSignalByHistory(historyUpdateDto)
+    updateSignalByHistory(historyUpdateDto, logger)
 
 
 #@app.get("/insertTrades")
@@ -455,7 +455,7 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
 @app.post("/signalactivated")
 async def signalActivated(signalActivation:SignalActivationDto):
     if signalActivation.symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {signalActivation}")
+        logger.warning(f"Ignore request because symbol is not handled yet: {signalActivation}")
         return
 
     activateSignal(signalActivation)
@@ -463,7 +463,7 @@ async def signalActivated(signalActivation:SignalActivationDto):
 @app.post("/signalactivatedprod")
 async def signalActivatedProd(signalActivation:SignalActivationDto):
     if signalActivation.symbol not in symbols:
-        print(f"Ignore request because symbol is not handled yet: {signalActivation}")
+        logger.warning(f"Ignore request because symbol is not handled yet: {signalActivation}")
         return
 
     activateSignalProd(signalActivation)
@@ -1223,7 +1223,7 @@ def autoDetectSupportAndResistance(symbol:str, sliceMax:int, peaksMax:int, timeF
         bandwidth += interval
 
         if bandwidth > 100*interval:
-            print("Failed to converge, stopping ...")
+            logger.error("Failed to converge, stopping ...")
             break
 
 
@@ -1249,7 +1249,7 @@ def autoDetectSupportAndResistance(symbol:str, sliceMax:int, peaksMax:int, timeF
         'prices': prices
     }
 
-def defaultsr(symbol:str, diff:float, timeFrame: TimeFrame):
+def defaultsr(symbol:str, diff:float, timeFrame: TimeFrame, logger):
 
     startDate: str = '2015.01.02'
 
@@ -1283,7 +1283,7 @@ def defaultsr(symbol:str, diff:float, timeFrame: TimeFrame):
     #print(finalSupports)
     
     end = timer()
-    print(timedelta(seconds=end-start))
+    logger.info(timedelta(seconds=end-start))
 
     #return finalSupports.combine(finalResistances, min)
     #return pd.concat([finalSupports, finalResistances], axis=1)
@@ -1397,10 +1397,10 @@ def job():
         for timeFrame in TimeFrame:
             if TimeFrame.PERIOD_H1 is timeFrame or TimeFrame.PERIOD_H4 is timeFrame:
                 deleteSupportResistance(symbol, timeFrame)
-                regressionCalculation(symbol,startDate, timeFrame)
+                regressionCalculation(symbol, startDate, timeFrame, logger)
                 trendlinebreakout(symbol, timeFrame)
                 autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
-                defaultsr(symbol, 0.01, timeFrame)
+                defaultsr(symbol, 0.01, timeFrame, logger)
 
     if hour == 0:
 
@@ -1446,7 +1446,7 @@ if __name__ == "__main__":
                     if last is None:
                         storeData(symbol,timeFrame)
                         #loadDfFromDb(symbol, timeFrame)
-                        print(f"Inserted data for {symbol} + {timeFrame}")
+                        logger.info(f"Inserted data for {symbol} + {timeFrame}")
 
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
     #for symbol in symbols:

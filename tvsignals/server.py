@@ -23,6 +23,9 @@ from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 engine = create_engine(os.environ['POSTGRES_URL'], pool_size=10, max_overflow=0)
 Session = sessionmaker(bind=engine)
 app = FastAPI()
@@ -1021,8 +1024,7 @@ def storeIgnoredSignal(signal: IgnoredSignal, session):
     session.add(signal)
 
 if __name__ == "__main__":
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+
 
 
     # Create a console handler
