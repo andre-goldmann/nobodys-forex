@@ -109,6 +109,8 @@ class Signal(Base):
     commision: Mapped[float] = mapped_column(nullable=True, default=0.0)
     strategy: Mapped[str] = mapped_column(nullable=True, default="")
     exit: Mapped[float] = mapped_column(nullable=True, default=0.0)
+    # here a string because of tradingview
+    timeframe: Mapped[str]
 
     def as_dict(self):
         return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
@@ -132,6 +134,8 @@ class ProdSignal(Base):
     closed: Mapped[str] = mapped_column(nullable=True, default="")
     commision: Mapped[float] = mapped_column(nullable=True, default="")
     strategy: Mapped[str] = mapped_column(nullable=True, default="")
+    # here a string because of tradingview
+    timeframe: Mapped[str]
 
 class IgnoredSignal(Base):
     __tablename__ = "IgnoredSignals"
