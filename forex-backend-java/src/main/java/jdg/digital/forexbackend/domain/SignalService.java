@@ -100,60 +100,6 @@ public class SignalService {
             });
         }
 
-        /*if(stats.isPresent()) {
-            final Integer activeTrades = this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy());
-            if (activeTrades < 4 && stats.get().getWinpercentage() > WIN_PERCENTAGE && stats.get().getProfit() > MIN_PROFIT && stats.get().getTotal() > MIN_TRADES){
-                log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
-                storeDevSignal(signal);
-
-                this.signalRepository.insertProdTradeEntity(
-                        signal.symbol(),
-                        signal.type(),
-                        signal.entry(),
-                        signal.sl(),
-                        signal.tp(),
-                        0.01,
-                        signal.strategy(),
-                        LocalDateTime.now());
-                try {
-                    this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(signal));
-                } catch (JsonProcessingException e) {
-                    log.error("Error sending signal to queue", e);
-                    throw new RuntimeException(e);
-                }
-            } else {
-                try {
-
-                    if (stats.get().getTotal() >= MIN_TRADES && stats.get().getWinpercentage() <= WIN_PERCENTAGE) {
-                        this.ignoredSignalsRepository.insert(signal.symbol() + "-" + signal.strategy(),
-                             "Ignored, because it has "+stats.get().getLoses()+" failed Trades (All: "+stats.get().getTotal()+", Sucess: "+stats.get().getWins()+") and Win-Percentage is "+stats.get().getWinpercentage()+"!");
-                    }
-
-                    log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats.get());
-                    storeDevSignal(signal);
-
-                    final Signal newSignal = new Signal(
-                            signal.symbol(),
-                            signal.timestamp(),
-                            signal.type(),
-                            signal.entry(),
-                            signal.sl(),
-                            signal.tp(),
-                            signal.lots(),
-                            signal.strategy(),
-                            true,
-                            "Ignore because there more then " + activeTrades + " active trade.");
-                    this.forexProducerService.sendMessage("signals", new ObjectMapper().writeValueAsString(newSignal));
-                } catch (JsonProcessingException e) {
-                    log.error("Error sending signal to queue", e);
-                    throw new RuntimeException(e);
-                }
-            }
-        } else {
-            log.info("Stats not found for Signal of {}-{}", signal.symbol(), signal.strategy());
-            storeDevSignal(signal);
-        }*/
-
         return Mono.just("Signal processed");
     }
 
