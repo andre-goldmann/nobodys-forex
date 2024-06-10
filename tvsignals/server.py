@@ -752,7 +752,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "lots": lots,
             "strategy": strategy,
             "timeframe": signal.timesframe}
-    print("Sending signal ...")
+    logger.info("Sending signal to backend ...")
     response = requests.post(
         "http://javabackend:5080/forex/signals",
         json=data,
@@ -820,7 +820,7 @@ def proceedSignal(signal:SignalDto):
         trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
         if trendInfo is not None:
             if trendInfo.trendscore > -7 and signal.type == "sell":
-                #print(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
                 #if trendInfo.trendscore == -6:
                 #    storeIgnoredSignal(IgnoredSignal(
                 #        json=jsonSignal,
@@ -829,7 +829,7 @@ def proceedSignal(signal:SignalDto):
                 session.close()
                 return
             if trendInfo.trendscore < 7 and signal.type == "buy":
-                #print(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
                 #if trendInfo.trendscore == 6:
                 #    storeIgnoredSignal(IgnoredSignal(
                 #        json=jsonSignal,
