@@ -237,7 +237,7 @@ def modifySignalInDb(id:int, type:str, entry:float, sl:float, tp:float, lots:flo
             session.commit()
             session.close()
 
-def storeCandleInDb(candle:CandlesDto):
+def storeCandleInDb(candle:CandlesDto, logger):
     with Session.begin() as session:
 
         timeFrame:TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
@@ -528,7 +528,7 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame, logger
     end = timer()
     logger.info("Regression took: ", timedelta(seconds=end-start))
 
-    deleteRegressionData(symbol, timeFrame)
+    deleteRegressionData(symbol, timeFrame, logger)
 
     with Session.begin() as session:
 
@@ -545,7 +545,7 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame, logger
         session.commit()
         session.close()
 
-def deleteRegressionData(symbol:str, timeFrame:TimeFrame):
+def deleteRegressionData(symbol:str, timeFrame:TimeFrame, logger):
     with Session.begin() as session:
         try:
             results = session.query(Regressions).filter(Regressions.symbol==symbol, Regressions.timeFrame==timeFrame).all()
@@ -555,10 +555,10 @@ def deleteRegressionData(symbol:str, timeFrame:TimeFrame):
             session.commit()
             session.close()
         except Exception:
-            print("Exception while deleting Regressions:")
-            print("-"*60)
+            logger.error("Exception while deleting Regressions:")
+            #print("-"*60)
             traceback.print_exc(file=sys.stdout)
-            print("-"*60)
+            ##print("-"*60)
             session.rollback()
             session.close()
 
