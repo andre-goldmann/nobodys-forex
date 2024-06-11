@@ -1,7 +1,6 @@
 package jdg.digital.forexbackend.domain;
 
 import jdg.digital.forexbackend.domain.model.TradeStatEntity;
-import jdg.digital.forexbackend.domain.model.TradesEntity;
 import jdg.digital.forexbackend.domain.model.TradeStatInterface;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Repository
 @Transactional

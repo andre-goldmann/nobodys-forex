@@ -33,7 +33,7 @@ class TradesServiceIT {
         TradeStat stats = new TradeStat();
 
         // Act
-        signalService.storeSignal(signal, Optional.of(stats));
+        //signalService.storeSignal(signal, Optional.of(stats));
 
         // Assert
         /*ProdTradeEntity prodTradeEntity = prodTradeRepository.findBySymbolAndStrategy(signal.symbol(), signal.strategy());

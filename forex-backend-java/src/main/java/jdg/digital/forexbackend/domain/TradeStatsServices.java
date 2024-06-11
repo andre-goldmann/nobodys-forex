@@ -24,9 +24,6 @@ public class TradeStatsServices {
     @Autowired
     private TradeStatsRepository tradeStatsRepository;
 
-    @Autowired
-    private SignalRepository signalRepository;
-
     // TODO change return to Mono<>
     public Mono<List<TradeStat>> getTradeStats(final String env) {
 

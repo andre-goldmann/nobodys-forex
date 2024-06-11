@@ -55,8 +55,7 @@ public class SignalController {
 
     @PostMapping
     public Mono<String> createSignal(@RequestBody Signal signal) {
-        log.info("#### Received signal: {}", signal);
-        System.out.println("####SOUT Received signal: " + signal);
+
         return this.tradeStatsServices.getStatsFor(signal)
                 .flatMap(stats -> {
 
@@ -72,6 +71,7 @@ public class SignalController {
                             signal.strategy(),
                             LocalDateTime.now()).subscribe();
 
+                    // Only store to prod if stats are fulfilled
                     if (stats.getWinpercentage() > TradeStatsServices.WIN_PERCENTAGE
                             && stats.getProfit() > TradeStatsServices.MIN_PROFIT
                             && stats.getTotal() > TradeStatsServices.MIN_TRADES) {
