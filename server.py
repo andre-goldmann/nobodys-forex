@@ -1092,7 +1092,8 @@ async def storeCandle(candle:CandlesDto):
 
         # Just always 3 to not interupt TradingView-Signals
         adx(df, symbol, timeframeEnum, entry)
-        adxEma14(df, symbol, timeframeEnum, entry)
+        #not working
+        #adxEma14(df, symbol, timeframeEnum, entry)
         adxRsi(df, symbol, timeframeEnum, entry)
         awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry)
         awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry)
