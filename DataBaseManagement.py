@@ -526,7 +526,7 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame, logger
     logger.info("###################################")
 
     end = timer()
-    logger.info("Regression took: ", timedelta(seconds=end-start))
+    logger.info("Regression took: " +  str(timedelta(seconds=end-start)))
 
     deleteRegressionData(symbol, timeFrame, logger)
 

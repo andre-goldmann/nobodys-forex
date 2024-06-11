@@ -10,6 +10,7 @@ filebeat.autodiscover:
       hints.enabled: true
 
 processors:
+  - add_cloud_metadata: ~
   - add_docker_metadata: ~
 
 setup.kibana:
