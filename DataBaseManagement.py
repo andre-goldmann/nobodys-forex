@@ -521,12 +521,12 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame, logger
     all_df = pd.concat([lsma_df,df], axis=1)
     all_df.dropna(inplace=True)
 
-    logger.info("StartTime: ", all_df.iloc[0]['DATETIME'])
-    logger.info("endTime:  ", all_df.iloc[-1]['DATETIME'])
+    logger.info("StartTime: " + str(all_df.iloc[0]['DATETIME']))
+    logger.info("endTime:  " + str(all_df.iloc[-1]['DATETIME']))
     logger.info("###################################")
 
     end = timer()
-    logger.info("Regression took: " +  str(timedelta(seconds=end-start)))
+    logger.info("Regression took: " + str(timedelta(seconds=end-start)))
 
     deleteRegressionData(symbol, timeFrame, logger)
 
