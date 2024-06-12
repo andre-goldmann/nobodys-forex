@@ -15,6 +15,9 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static jdg.digital.forexbackend.domain.TradeStatsServices.MIN_TRADES;
+import static jdg.digital.forexbackend.domain.TradeStatsServices.WIN_PERCENTAGE;
+
 @RestController
 @Slf4j
 @RequestMapping("signals")
@@ -34,6 +37,7 @@ public class SignalController {
 
     @Autowired
     private ForexProducerService forexProducerService;
+
 
     @Autowired
     private ObjectMapper mapper;
@@ -59,43 +63,33 @@ public class SignalController {
         return this.tradeStatsServices.getStatsFor(signal)
                 .flatMap(stats -> {
 
-                    if (stats.getTotal() >= TradeStatsServices.MIN_TRADES
-                            && stats.getWinpercentage() < TradeStatsServices.WIN_PERCENTAGE){
+                    if (stats.getTotal() >= MIN_TRADES
+                            && stats.getWinpercentage() < WIN_PERCENTAGE){
+                        this.signalService.storeIgnoredSignal(signal, "Stats not fulfilled").subscribe();
                         return Mono.just("Signal Ignored!");
                     }
 
-                        // Always store to dev
-                    this.signalRepository.insertDevTradeEntity(
-                            signal.symbol(),
-                            signal.timeframe(),
-                            signal.type(),
-                            signal.entry(),
-                            signal.sl(),
-                            signal.tp(),
-                            signal.lots(),
-                            signal.strategy(),
-                            LocalDateTime.now()).subscribe();
+                    double lots = signal.lots();
+                    if (stats.getTotal() >= MIN_TRADES
+                            && stats.getWinpercentage() >= WIN_PERCENTAGE){
+                        lots = 0.1;
+                    }
+
+                    // Always store to dev
+                    this.signalService.storeDevSignal(signal, lots).subscribe();
 
                     // Only store to prod if stats are fulfilled
-                    if (stats.getWinpercentage() > TradeStatsServices.WIN_PERCENTAGE
+                    if (stats.getWinpercentage() > WIN_PERCENTAGE
                             && stats.getProfit() > TradeStatsServices.MIN_PROFIT
-                            && stats.getTotal() > TradeStatsServices.MIN_TRADES) {
+                            && stats.getTotal() > MIN_TRADES) {
 
                         return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
                                 .map(activeTrades -> {
                                     if (activeTrades < 4) {
                                         log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats);
+                                        // TODO we could load prodStats here and dynamically set the lots
+                                        this.signalService.storeProdSignal(signal).subscribe();
 
-                                        this.signalRepository.insertProdTradeEntity(
-                                                signal.symbol(),
-                                                signal.timeframe(),
-                                                signal.type(),
-                                                signal.entry(),
-                                                signal.sl(),
-                                                signal.tp(),
-                                                0.01,
-                                                signal.strategy(),
-                                                LocalDateTime.now()).subscribe();
                                         try {
                                             this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
                                         } catch (JsonProcessingException e) {

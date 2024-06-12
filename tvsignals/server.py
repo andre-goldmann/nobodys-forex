@@ -618,16 +618,6 @@ class TrendInfoDto(BaseModel):
     s1: float
     strategy: str
 
-def getSignalStats(strategy:str, symbol:str, session):
-        signalStats = (session.query(Signal.strategy,
-                                    func.count(Signal.id).filter(Signal.profit != 0).label("alltrades"),
-                                    func.count(Signal.id).filter(Signal.profit < 0).label("failedtrades"),
-                                    func.count(Signal.id).filter(Signal.profit > 0).label("successtrades"),
-                                    func.sum(Signal.profit).label("profit"))
-                       .filter(Signal.strategy == strategy, Signal.symbol == symbol).group_by(Signal.strategy).first())
-        session.expunge_all()
-        return signalStats
-
 def wwma(values, n):
     """
      J. Welles Wilder's EMA
@@ -733,15 +723,6 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         sl = signal.entry - atrValue.iloc[-1]
         tp = signal.entry + atrValue.iloc[-1]
 
-    lots = 0.1
-    # TODO remove this part here to
-    signalStats = getSignalStats(strategy, signal.symbol, session)
-
-    if signalStats is None:
-        lots = 0.01
-    elif signalStats.failedtrades > signalStats.successtrades:
-        lots = 0.01
-
     # Immer an Java Backend senden
     data = {"symbol": signal.symbol,
             "timestamp": signal.timestamp,
@@ -749,7 +730,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "entry": signal.entry,
             "sl": sl,
             "tp": tp,
-            "lots": lots,
+            "lots": 0.1,
             "strategy": strategy,
             "timeframe": signal.timeframe}
     logger.info("Sending signal to backend ...")

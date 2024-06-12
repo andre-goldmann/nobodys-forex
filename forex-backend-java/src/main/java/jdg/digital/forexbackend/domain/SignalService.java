@@ -1,6 +1,5 @@
 package jdg.digital.forexbackend.domain;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdg.digital.forexbackend.domain.model.*;
 import jdg.digital.forexbackend.interfaces.ForexProducerService;
@@ -10,12 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
-
-import static jdg.digital.forexbackend.domain.TradeStatsServices.*;
+;
 
 @Service
 @Slf4j
@@ -33,6 +31,9 @@ public class SignalService {
 
     @Autowired
     private IgnoredSignalsRepository ignoredSignalsRepository;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     public Mono<List<Signal>> getSignals(String env) {
         return switch (env.toUpperCase(Locale.getDefault())) {
@@ -85,4 +86,37 @@ public class SignalService {
                 "");
     }
 
+    public Mono<Void> storeIgnoredSignal(Signal signal, String info) {
+        try {
+            return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Mono<Void> storeDevSignal(Signal signal, double lots) {
+        return this.signalRepository.insertDevTradeEntity(
+                signal.symbol(),
+                signal.timeframe(),
+                signal.type(),
+                signal.entry(),
+                signal.sl(),
+                signal.tp(),
+                lots,
+                signal.strategy(),
+                LocalDateTime.now());
+    }
+
+    public Mono<Void> storeProdSignal(Signal signal) {
+        return this.signalRepository.insertProdTradeEntity(
+                signal.symbol(),
+                signal.timeframe(),
+                signal.type(),
+                signal.entry(),
+                signal.sl(),
+                signal.tp(),
+                0.01,
+                signal.strategy(),
+                LocalDateTime.now());
+    }
 }
