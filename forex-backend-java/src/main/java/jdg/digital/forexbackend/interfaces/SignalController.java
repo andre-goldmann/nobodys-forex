@@ -59,7 +59,12 @@ public class SignalController {
         return this.tradeStatsServices.getStatsFor(signal)
                 .flatMap(stats -> {
 
-                    // Always store to dev
+                    if (stats.getTotal() >= TradeStatsServices.MIN_TRADES
+                            && stats.getWinpercentage() < TradeStatsServices.WIN_PERCENTAGE){
+                        return Mono.just("Signal Ignored!");
+                    }
+
+                        // Always store to dev
                     this.signalRepository.insertDevTradeEntity(
                             signal.symbol(),
                             signal.timeframe(),

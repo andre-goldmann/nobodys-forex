@@ -30,6 +30,8 @@ services:
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
+    labels:
+      co.elastic.logs/module: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -39,8 +41,8 @@ services:
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafkaserver
-    #labels:
-    #  co.elastic.logs/module: kafka
+    labels:
+      co.elastic.logs/module: kafka
     depends_on:
       - zookeeper
     restart: on-failure
@@ -126,7 +128,7 @@ services:
     build: ./forex-backend-java
     restart: always
     labels:
-      co.elastic.logs/module: javabackend
+      co.elastic.logs/module: forex-backend-java
       co.elastic.logs/json.keys_under_root: "true"
       co.elastic.logs/json.overwrite_keys: "true"
       co.elastic.logs/json.expand_keys: "true"
@@ -174,8 +176,8 @@ services:
 
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
-    #labels:
-    #  co.elastic.logs/module: elasticsearch
+    labels:
+      co.elastic.logs/module: elasticsearch
     volumes:
       #- certs:/usr/share/elasticsearch/config/certs
       - esdata01:/usr/share/elasticsearch/data
@@ -220,8 +222,8 @@ services:
       es01:
         condition: service_healthy
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
-    #labels:
-    #  co.elastic.logs/module: kibana
+    labels:
+      co.elastic.logs/module: kibana
     volumes:
       #- certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
@@ -258,6 +260,8 @@ services:
       kibana:
         condition: service_healthy
     image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
+    labels:
+      co.elastic.logs/module: metricbeat
     restart: on-failure
     user: root
     volumes:
@@ -307,6 +311,8 @@ services:
       kibana:
         condition: service_healthy
     image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+    labels:
+      co.elastic.logs/module: logstash
     #labels:
     #  co.elastic.logs/module: logstash
     user: root
