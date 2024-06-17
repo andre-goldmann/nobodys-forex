@@ -86,9 +86,10 @@ public class SignalService {
                 "");
     }
 
-    public Mono<Void> storeIgnoredSignal(Signal signal, String info) {
+    public Mono<Void> storeIgnoredSignal(final Signal signal,final TradeStat stats, final String info) {
         try {
-            return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info);
+            // TODO resdesign Ignored-Table
+            return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info + ": " + stats.toString());
         } catch (Exception e){
             throw new RuntimeException(e);
         }
