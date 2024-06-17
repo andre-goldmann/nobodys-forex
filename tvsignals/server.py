@@ -805,7 +805,7 @@ def proceedSignal(signal:SignalDto):
         trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
         if trendInfo is not None:
             if trendInfo.trendscore > -7 and signal.type == "sell":
-                logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                #logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
                 #if trendInfo.trendscore == -6:
                 #    storeIgnoredSignal(IgnoredSignal(
                 #        json=jsonSignal,
@@ -814,7 +814,7 @@ def proceedSignal(signal:SignalDto):
                 session.close()
                 return
             if trendInfo.trendscore < 7 and signal.type == "buy":
-                logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                #logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
                 #if trendInfo.trendscore == 6:
                 #    storeIgnoredSignal(IgnoredSignal(
                 #        json=jsonSignal,
