@@ -343,7 +343,14 @@ async def srlevels(symbol:str):
 
 @app.post("/updatesignal")
 async def updateSignal(signalUpdateDto:SignalUpdateDto):
-    if signalUpdateDto.symbol not in symbols:
+
+    symbol = signalUpdateDto.symbol
+
+    if symbol.endswith('#'):
+        symbol = symbol.replace("#", "")
+        signalUpdateDto.symbol = symbol
+
+    if symbol not in symbols:
         logger.warning(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
         return
     updateSignalInDb(signalUpdateDto)
