@@ -24,7 +24,37 @@
             </providers>
         </encoder>
     </appender>
+
+    <!-- New file appender -->
+    <appender name="jsonFileAppender" class="ch.qos.logback.core.FileAppender">
+        <file>logs/app.log</file> <!-- Specify your log file path here -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "severity": "%level",
+                        "service": "${appName:-}",
+                        "trace": "%X{X-B3-TraceId:-}",
+                        "span": "%X{X-B3-SpanId:-}",
+                        "parent": "%X{X-B3-ParentSpanId:-}",
+                        "exportable": "%X{EXPORT:-}",
+                        "pid": "${PID:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "rest": "%message"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
     <root level="INFO">
         <appender-ref ref="jsonConsoleAppender"/>
+        <appender-ref ref="jsonFileAppender"/>
     </root>
 </configuration>
