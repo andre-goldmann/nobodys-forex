@@ -399,7 +399,7 @@ def postSignal(symbol, timeframeEnum, type, strategy, entry):
                 "tp": 0,
                 "strategy": strategyStr,
                 "timeframe": str(timeframeEnum)}
-        logger.info(f"Send {data}")
+        #logger.info(f"Send {data}")
         response = requests.post(
             "http://tvsignals:80/signal/",
             json=data,

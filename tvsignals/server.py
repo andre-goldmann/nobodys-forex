@@ -733,7 +733,7 @@ def calculateSlAndStoreSignal(signal, strategy, session):
             "lots": 0.1,
             "strategy": strategy,
             "timeframe": signal.timeframe}
-    logger.info("Sending signal to backend ...")
+    #logger.info("Sending signal to backend ...")
     response = requests.post(
         "http://javabackend:5080/forex/signals",
         json=data,
@@ -743,9 +743,9 @@ def calculateSlAndStoreSignal(signal, strategy, session):
         #logger.error(str(response.status_code))
         #print(str(response))
         logger.error("Error sending to Java Backend" + str(response))
-    else:
-        #print(f"Signal sent to Java Backend")
-        logger.info(f"{signal} send to Java Backend")
+    #else:
+    #    #print(f"Signal sent to Java Backend")
+    #    logger.info(f"{signal} send to Java Backend")
 
 def proceedSignal(signal:SignalDto):
     # no need to check for trend in TradingView we send everything
