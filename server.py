@@ -31,7 +31,6 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
     getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, countSignals, \
     geTrendInfos
-from pinescripts import f_LazyLine, tThree
 from trading_strategies.adx_crossover import AdxCrossover
 from trading_strategies.adx_ema_14 import ADXEMA14
 from trading_strategies.adx_rsi import AdxRsi
@@ -299,57 +298,6 @@ async def createsignal(symbol: Annotated[str, Form()],
     ))
     return "Order created"
 
-@app.get("/redkslow/")
-async def redkslow(symbol:str, timeframe: str):
-
-    if symbol not in symbols:
-        logger.warning(f"Ignore request because symbol is not handled yet: {symbol}")
-        return
-
-    timeframeEnum: TimeFrame = TimeFrame.__dict__[timeframe]
-
-    if TimeFrame.PERIOD_D1 is not timeframeEnum and TimeFrame.PERIOD_H4 is not timeframeEnum and TimeFrame.PERIOD_H1 is not timeframeEnum:
-        return f"For {timeframeEnum} no line information was greated!!!"
-
-    logger.warning("Calculating redkslow for %s-%s" % (symbol, timeframeEnum))
-    data = loadDfFromDb(symbol, timeframeEnum)
-
-    data = data.set_index('DATETIME')
-    data = data.dropna()
-    #data['Open'] = data.OPEN
-    #data['High'] = data.HIGH
-    #data['Low'] = data.LOW
-    data['close'] = data.CLOSE
-    #data['Volume'] = data.TICKVOL
-
-    #for index, row in data.tail(-1).tail(25).iterrows():
-    #    process_row(index, row)
-
-    LL = f_LazyLine(data['close'].tail(-1).tail(200), 15)
-    LLPrev = f_LazyLine(data['close'].iloc[len(data)-200:len(data)-1], 15)
-    data['redkslow'] = data['close'].apply(lambda row: f_LazyLine(row, 15))
-    conditions  = [ data['redkslow'] > data['redkslow'].shift(1), data['redkslow'] < data['redkslow'].shift(1), data['redkslow'] == data['redkslow'].shift(1) ]
-    choices     = [ "Long", 'Short', 'Ranging' ]
-    data['redkslowtrend'] = np.select(conditions, choices)#np.where(, "Long", "Short") # (data['redkslow'] > data['redkslow'].shift(1))  # data.apply(lambda row: trendRedkslow(row))
-
-    tThree(data, 300)
-    #print(data.tail(-1).tail(15))
-
-    #print("++++++++++++++++++")
-    #print(data['redkslow'])
-    #print(data['redkslow'].shift(1))
-    #print(data['close'].tail(-1).tail(200))
-    #print(data['close'].iloc[len(data)-200:len(data)-1])
-    #print("++++++++++++++++++")
-    #print(f"{LL}")
-    #print(f"{LLPrev}")
-    #print("++++++++++++++++++")
-
-    #uptrend     = LL > LL[1]
-    #SwingDn = uptrend[1] and not uptrend
-    #SwingUp = uptrend and not uptrend[1]
-
-    return {'ll': LL, 'llprev': LLPrev}
 
 @app.get("/linesinfo/")
 async def linesInfo(symbol:str, timeframe: str):
