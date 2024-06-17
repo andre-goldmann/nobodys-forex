@@ -92,13 +92,14 @@ public class SignalController {
                                         this.tradeStatsServices.getStatsFor(signal, "PROD").flatMap(prodStats -> {
                                             if (prodStats.getTotal() >= MIN_TRADES
                                                     && prodStats.getWinpercentage() < WIN_PERCENTAGE){
+                                                this.signalService.storeIgnoredSignal(signal, prodStats,"Stats found for Signal but prod-stats have reached total trades").subscribe();
                                                 return Mono.just(true);
                                             } else {
                                                 return Mono.just(false);
                                             }
                                         }).subscribe(ignored -> {
                                             if (ignored){
-                                                log.info("Stats found for Signal of {}-{} but prod-stats have reached total trades {}", signal.symbol(), signal.strategy(), stats);
+                                                //log.info("Stats found for Signal of {}-{} but prod-stats have reached total trades {}", signal.symbol(), signal.strategy(), stats);
                                                 return;
                                             }
                                             final Signal newSignal = new Signal(
