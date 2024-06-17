@@ -350,7 +350,7 @@ async def updateSignal(signalUpdateDto:SignalUpdateDto):
         symbol = symbol.replace("#", "")
         signalUpdateDto.symbol = symbol
 
-    if symbol not in symbols:
+    if signalUpdateDto.symbol not in symbols:
         logger.warning(f"Ignore request because symbol is not handled yet: {signalUpdateDto}")
         return
     updateSignalInDb(signalUpdateDto)
