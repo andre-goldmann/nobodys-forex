@@ -366,6 +366,12 @@ async def updateSignalProd(signalUpdateDto:SignalUpdateDto):
 
 @app.post("/updatehistory")
 async def updateHistory(historyUpdateDto:HistoryUpdateDto):
+    symbol = historyUpdateDto.symbol
+
+    if symbol.endswith('#'):
+        symbol = symbol.replace("#", "")
+        historyUpdateDto.symbol = symbol
+
     if historyUpdateDto.symbol not in symbols:
         logger.warning(f"Ignore request because symbol is not handled yet: {historyUpdateDto}")
         return
