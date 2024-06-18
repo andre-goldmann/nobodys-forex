@@ -937,11 +937,12 @@ def proceedSignal(signal:SignalDto):
             session.close()
             #print(f"######## {signal} stored ########")
         else:
-            storeIgnoredSignal(IgnoredSignal(
-                json=jsonSignal,
-                reason=f"Ignored because Regression Line for H4 was not found!"
-            ), session)
-            session.commit()
+            #storeIgnoredSignal(IgnoredSignal(
+            #    json=jsonSignal,
+            #    reason=f"Ignored because Regression Line for H4 was not found!"
+            #), session)
+            #session.commit()
+            logger.warning(f"Ignored because Regression Line for H4 was not found!")
             session.close()
         #    regressionLineD1 = session.query(Regressions).filter(
         #        Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
