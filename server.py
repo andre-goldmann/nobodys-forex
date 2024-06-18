@@ -1372,14 +1372,14 @@ if __name__ == "__main__":
                         logger.info(f"Inserted data for {symbol} + {timeFrame}")
 
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
-    for symbol in symbols:
-       for timeFrame in TimeFrame:
-            if TimeFrame.PERIOD_H1 is timeFrame or TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
-                deleteSupportResistance(symbol, timeFrame)
-                #trendlinebreakout(symbol, timeFrame)
-                autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
-                defaultsr(symbol, 0.01, timeFrame, logger)
-                regressionCalculation(symbol,startDate, timeFrame, logger)
+    #for symbol in symbols:
+    #   for timeFrame in TimeFrame:
+    #        if TimeFrame.PERIOD_H1 is timeFrame or TimeFrame.PERIOD_H4 is timeFrame or TimeFrame.PERIOD_D1 is timeFrame or TimeFrame.PERIOD_W1 is timeFrame:
+    #            deleteSupportResistance(symbol, timeFrame)
+    #            #trendlinebreakout(symbol, timeFrame)
+    #            autoDetectSupportAndResistance(symbol, 30000, 20, timeFrame)
+    #            defaultsr(symbol, 0.01, timeFrame, logger)
+    #            regressionCalculation(symbol,startDate, timeFrame, logger)
 
     schedule.every().hour.do(job)
     #schedule.every().hour.do(runFirstStrategy)
