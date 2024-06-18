@@ -940,7 +940,7 @@ def proceedSignal(signal:SignalDto):
             storeIgnoredSignal(IgnoredSignal(
                 json=jsonSignal,
                 reason=f"Ignored because Regression Line for H4 was not found!"
-            ))
+            ), session)
             session.commit()
             session.close()
         #    regressionLineD1 = session.query(Regressions).filter(
