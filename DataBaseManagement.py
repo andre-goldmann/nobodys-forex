@@ -522,7 +522,9 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame, logger
     all_df.dropna(inplace=True)
 
     logger.info("StartTime: " + str(all_df.iloc[0]['DATETIME']))
+    logger.info("startValue: " + str(all_df.iloc[0].LSMA))
     logger.info("endTime:  " + str(all_df.iloc[-1]['DATETIME']))
+    logger.info("endValue:  " + str(all_df.iloc[-1].LSMA))
     logger.info("###################################")
 
     end = timer()
@@ -537,8 +539,8 @@ def regressionCalculation(symbol:str, startDate:str, timeFrame:TimeFrame, logger
             timeFrame= timeFrame.name,
             startTime= all_df.iloc[0].DATETIME,
             endTime=all_df.iloc[-1].DATETIME,
-            startValue=all_df.iloc[0].LSMA,
-            endValue=all_df.iloc[-1].LSMA,
+            startValue=float(all_df.iloc[0].LSMA),
+            endValue=float(all_df.iloc[-1].LSMA),
         )
 
         session.add_all([spongebob])
