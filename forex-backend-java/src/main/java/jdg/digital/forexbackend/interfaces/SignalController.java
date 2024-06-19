@@ -59,13 +59,14 @@ public class SignalController {
 
     @PostMapping
     public Mono<String> createSignal(@RequestBody Signal signal) {
-
+        log.info("{} received!", signal);
         return this.tradeStatsServices.getStatsFor(signal, "DEV")
                 .flatMap(stats -> {
 
                     if (stats.getTotal() >= MIN_TRADES
                             && stats.getWinpercentage() < WIN_PERCENTAGE){
                         this.signalService.storeIgnoredSignal(signal, stats,"Stats not fulfilled").subscribe();
+                        log.info("Signal Ignored!");
                         return Mono.just("Signal Ignored!");
                     }
 
@@ -125,14 +126,7 @@ public class SignalController {
                                                 throw new RuntimeException(e);
                                             }
                                         });
-                                        // generated end
-                                        /*this.signalService.storeProdSignal(signal).subscribe();
 
-                                        try {
-                                            this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
-                                        } catch (JsonProcessingException e) {
-                                            throw new RuntimeException(e);
-                                        }*/
 
                                         return "Signal also stored in prod!";
                                     } else {
