@@ -777,8 +777,7 @@ def proceedSignal(signal:SignalDto):
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
 
-    #print(f"Received: {jsonSignal}")
-    #logger.info(f"Received {jsonSignal} ..")
+    logger.info(f"Received {jsonSignal} ..")
 
     with (Session.begin() as session):
 
@@ -793,7 +792,7 @@ def proceedSignal(signal:SignalDto):
             return
 
         if strategy not in strategies:
-            #print(f"Ignore Signal because strategy is unknown: {strategy}")
+            logger.info(f"Ignore Signal because strategy is unknown: {strategy}")
             storeIgnoredSignal(IgnoredSignal(
                 json=jsonSignal,
                 reason=f"Ignore Signal because strategy is unknown: {strategy}"
@@ -805,7 +804,7 @@ def proceedSignal(signal:SignalDto):
         trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
         if trendInfo is not None:
             if trendInfo.trendscore > -7 and signal.type == "sell":
-                #logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
                 #if trendInfo.trendscore == -6:
                 #    storeIgnoredSignal(IgnoredSignal(
                 #        json=jsonSignal,
@@ -814,7 +813,7 @@ def proceedSignal(signal:SignalDto):
                 session.close()
                 return
             if trendInfo.trendscore < 7 and signal.type == "buy":
-                #logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
                 #if trendInfo.trendscore == 6:
                 #    storeIgnoredSignal(IgnoredSignal(
                 #        json=jsonSignal,
