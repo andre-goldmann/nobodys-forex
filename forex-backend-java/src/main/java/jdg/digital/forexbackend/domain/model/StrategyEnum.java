@@ -23,7 +23,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum StrategyEnum {
   
   NNR("NNR"),
-  
+
+  STD_FILTERED_CLOSE("STD-Filtered-Close"),
+
+  STD_FILTERED_CLOSE_WITHOUT_REG("STD-Filtered-Close_WITHOUT_REG"),
+
   NNR_WITHOUT_REG("NNR_WITHOUT_REG"),
 
   SUPERTREND_AI("SuperTrend AI"),

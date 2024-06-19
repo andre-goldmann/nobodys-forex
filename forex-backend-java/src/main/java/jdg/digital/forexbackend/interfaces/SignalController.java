@@ -96,36 +96,31 @@ public class SignalController {
                                                 this.signalService.storeIgnoredSignal(signal, prodStats,"Stats found for Signal but prod-stats have reached total trades").subscribe();
                                                 return Mono.just(true);
                                             } else {
+                                                final Signal newSignal = new Signal(
+                                                        1,
+                                                        signal.symbol(),
+                                                        signal.timeframe(),
+                                                        signal.timestamp(),
+                                                        signal.type(),
+                                                        signal.entry(),
+                                                        signal.sl(),
+                                                        signal.tp(),
+                                                        0.01,
+                                                        signal.strategy(),
+                                                        false,
+                                                        null);
+
+                                                // Store to prod (only if stats are fulfilled)
+                                                this.signalService.storeProdSignal(newSignal).subscribe();
+
+                                                try {
+                                                    this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(newSignal));
+                                                } catch (JsonProcessingException e) {
+                                                    throw new RuntimeException(e);
+                                                }
                                                 return Mono.just(false);
                                             }
-                                        }).subscribe(ignored -> {
-                                            if (ignored){
-                                                //log.info("Stats found for Signal of {}-{} but prod-stats have reached total trades {}", signal.symbol(), signal.strategy(), stats);
-                                                return;
-                                            }
-                                            final Signal newSignal = new Signal(
-                                                    1,
-                                                    signal.symbol(),
-                                                    signal.timeframe(),
-                                                    signal.timestamp(),
-                                                    signal.type(),
-                                                    signal.entry(),
-                                                    signal.sl(),
-                                                    signal.tp(),
-                                                    0.01,
-                                                    signal.strategy(),
-                                                    true,
-                                                    "Signal stored in prod");
-
-                                            // Store to prod (only if stats are fulfilled)
-                                            this.signalService.storeProdSignal(newSignal).subscribe();
-
-                                            try {
-                                                this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(newSignal));
-                                            } catch (JsonProcessingException e) {
-                                                throw new RuntimeException(e);
-                                            }
-                                        });
+                                        }).subscribe();
 
 
                                         return "Signal also stored in prod!";

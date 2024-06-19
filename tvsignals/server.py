@@ -42,6 +42,9 @@ strategies = ["NNR",
 
               "70% Strategy",
 
+              "STD-Filtered-Close",
+              "STD-Filtered-Close_WITHOUT_REG",
+
               "SSL Hybrid",
               "SSL Hybrid_WITHOUT_REG",
 
@@ -839,11 +842,11 @@ def proceedSignal(signal:SignalDto):
         #print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
         if strategy == "T3-GridLike" \
-                or strategy== "T3-NickRypockTrailingReverse" \
+                or strategy == "T3-NickRypockTrailingReverse" \
                 or strategy == "T3-BilateralStochasticOscillator" \
                 or strategy == "T3-CustomSuperTrendCleaned" \
                 or strategy == "T3-LlorensActivator" \
-                or strategy =="T3-UhlMASystem" \
+                or strategy == "T3-UhlMASystem" \
                 or strategy == "T3-NeutronixDCAemu" \
                 or strategy == "T3-MacdHistogram-LLTDEMA" \
                 or strategy == "T3-MacdHistogram-TDEMA" \
@@ -902,7 +905,8 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "T3Fvma" \
                 or strategy == "T3-JMaCrossover" \
                 or strategy == "T3-GapFilling" \
-                or strategy == "SuperTrend AI":
+                or strategy == "SuperTrend AI" \
+                or strategy == "STD-Filtered-Close":
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", session)
 
