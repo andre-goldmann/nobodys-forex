@@ -34,6 +34,9 @@ symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF",
 strategies = ["NNR",
               "NNR_WITHOUT_REG",
 
+              "SuperTrend AI",
+              "SuperTrend AI_WITHOUT_REG",
+
               "Super AI Trend",
               "Super AI Trend_WITHOUT_REG",
 
@@ -898,7 +901,8 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "T3-AroonBased" \
                 or strategy == "T3Fvma" \
                 or strategy == "T3-JMaCrossover" \
-                or strategy == "T3-GapFilling":
+                or strategy == "T3-GapFilling" \
+                or strategy == "SuperTrend AI":
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", session)
 

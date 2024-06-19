@@ -25,7 +25,11 @@ public enum StrategyEnum {
   NNR("NNR"),
   
   NNR_WITHOUT_REG("NNR_WITHOUT_REG"),
-  
+
+  SUPERTREND_AI("SuperTrend AI"),
+
+  SUPERTREND_AI_WITHOUT_REG("SuperTrend AI_WITHOUT_REG"),
+
   SUPER_AI_TREND("Super_AI_Trend"),
   
   SUPER_AI_TREND_WITHOUT_REG("Super_AI_Trend_WITHOUT_REG"),
