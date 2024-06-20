@@ -121,52 +121,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 app.add_middleware(CORSMiddleware, allow_origins=["*"])
 
-
-#def receivedMsg(message):
-#    print(f"{message} received on Queue!!!############")
-
-
-# Connected svelte: an implement a check list for trades:
-# - crossed support/resistance done
-# - ema200 crossed ema80 done
-# - usw.
-
-#class ConnectionManager:
-#    def __init__(self):
-#        self.active_connections: List[WebSocket] = []
-#
-#    async def connect(self, websocket: WebSocket):
-#        await websocket.accept()
-#        self.active_connections.append(websocket)
-#
-#    def disconnect(self, websocket: WebSocket):
-#        self.active_connections.remove(websocket)
-#
-#    async def broadcast(self, message: str):
-#        for connection in self.active_connections:
-#            await connection.send_text(message)
-
-
-#manager = ConnectionManager()
-
-#@app.websocket("/ws/{client_id}")
-#async def websocket_endpoint(websocket: WebSocket, client_id: str):
-#    await manager.connect(websocket)
-#    print(f"Client with id: {client_id} connected!!!")
-#    last = lastCandle("EURUSD", TimeFrame.PERIOD_M15)
-#    json_compatible_item_data = jsonable_encoder(last)
-#    await manager.broadcast(json.dumps(json_compatible_item_data))
-#
-#    try:
-#        while True:
-#            data = await websocket.receive_text()
-#            #Leave the wait here
-#            #When a WebSocket connection is closed, the await websocket.receive_text()
-#            # will raise a WebSocketDisconnect exception, which you can then catch and handle like in this#
-#
-#    except WebSocketDisconnect:
-#        manager.disconnect(websocket)
-
 @app.get("/lastCandle/")
 async def getLastCandleStamp(symbol:str, timeFrame:str):
     timeframeEnum: TimeFrame = TimeFrame.__dict__[timeFrame]
@@ -186,7 +140,6 @@ async def ignoredSignals():
                        'reason': signal.reason})
 
     return result
-
 
 
 @app.get("/trendinfos")
@@ -1059,9 +1012,9 @@ async def storeCandle(candle:CandlesDto):
         bladeRunner(df, symbol, timeframeEnum, entry)
         bollingerBandsAndRSI(df, symbol, timeframeEnum, entry)
         bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry)
-        cciMacdPsar(df, symbol, timeframeEnum, entry)
-        cciMovingAverage(df, symbol, timeframeEnum, entry)
-        commodityChannelIndex(df, symbol, timeframeEnum, entry)
+        #cciMacdPsar(df, symbol, timeframeEnum, entry)
+        #cciMovingAverage(df, symbol, timeframeEnum, entry)
+        #commodityChannelIndex(df, symbol, timeframeEnum, entry)
         #donchianATR(df, symbol, timeframeEnum, entry)
         #donchianBreakout(df, symbol, timeframeEnum, entry)
         #donchianMiddle(df, symbol, timeframeEnum, entry)
