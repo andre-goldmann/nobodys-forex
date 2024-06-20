@@ -14,6 +14,7 @@ COPY src ./src
 
 
 # Build the application with Maven
+RUN mvn install:install-file -Dfile=forex-domain-0.0.1-SNAPSHOT.jar -DgroupId=jdg.digital -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
 RUN mvn clean install -DskipTests
 
 # Use a base image with OpenJDK
