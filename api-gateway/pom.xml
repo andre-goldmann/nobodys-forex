@@ -123,8 +123,6 @@
             <groupId>jdg.digital</groupId>
             <artifactId>forex-domain</artifactId>
             <version>${project.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/forex-domain-0.0.1-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>
