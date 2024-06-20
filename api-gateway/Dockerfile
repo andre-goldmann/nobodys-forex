@@ -7,10 +7,10 @@ WORKDIR /app
 COPY pom.xml .
 COPY spotbugs-security-exclude.xml .
 COPY spotbugs-security-include.xml .
+COPY forex-domain-0.0.1-SNAPSHOT.jar .
 
 # Copy the source code
 COPY src ./src
-COPY interface ./interface
 
 
 # Build the application with Maven

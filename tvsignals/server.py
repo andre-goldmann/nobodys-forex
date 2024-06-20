@@ -761,8 +761,12 @@ def proceedSignal(signal:SignalDto):
     #print(f"Received: {signal}")
     #ignored XRPUSD
 
-    if signal.timeframe is None:
+    if signal.timeframe is None or signal.timeframe == "TimeFrame.PERIOD_M15":
         signal.timeframe = "15"
+    if signal.timeframe == "TimeFrame.PERIOD_H1":
+        signal.timeframe = "60"
+    if signal.timeframe == "TimeFrame.PERIOD_H4":
+        signal.timeframe = "240"
 
     if signal.symbol == "XRPUSD":
         return
