@@ -1,5 +1,6 @@
 package jdg.digital.forexbackend.domain;
 
+import jdg.digital.api_interface.TradeStat;
 import jdg.digital.forexbackend.domain.model.ProdTradeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

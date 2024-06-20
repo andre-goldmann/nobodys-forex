@@ -1,0 +1,10 @@
+{
+  "symbol": "EURCHF",
+  "timestamp": "02:15:00 2024.06.18",
+  "type": "buy",
+  "entry": 0.954475,
+  "sl": 0.9544043412,
+  "tp": 0.954475,
+  "timeframe": 15,
+  "strategy": "SuperTrend AI"
+}

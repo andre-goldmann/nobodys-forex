@@ -1,6 +1,7 @@
 package jdg.digital.forexbackend.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdg.digital.api_interface.TradeStat;
 import jdg.digital.forexbackend.domain.model.*;
 import jdg.digital.forexbackend.interfaces.ForexProducerService;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +87,7 @@ public class SignalService {
                 "");
     }
 
-    public Mono<Void> storeIgnoredSignal(final Signal signal,final TradeStat stats, final String info) {
+    public Mono<Void> storeIgnoredSignal(final Signal signal, final TradeStat stats, final String info) {
         try {
             // TODO resdesign Ignored-Table
             return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info + ": " + stats.toString());

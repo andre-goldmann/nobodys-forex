@@ -89,8 +89,6 @@
             <version>33.2.1-jre</version>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
@@ -110,24 +108,6 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-
-        <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>${io.swagger.version}</version>
@@ -139,6 +119,11 @@
             <version>7.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>jdg.digital</groupId>
+            <artifactId>forex-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.mock-server</groupId>
@@ -204,68 +189,6 @@
 
     <build>
         <plugins>
-
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>${openapi-generator-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <phase>validate</phase>
-                        <id>Generate angular service</id>
-                        <configuration>
-                            <inputSpec>${project.basedir}/interface/api-types.yaml</inputSpec>
-                            <generatorName>typescript-angular</generatorName>
-                            <strictSpec>true</strictSpec>
-                            <typeMappings>
-                                <typeMapping>DateTime=Date</typeMapping>
-                            </typeMappings>
-                            <configOptions>
-                                <npmName>@jdg.digital/api-interface</npmName>
-                                <npmVersion>${project.version}</npmVersion>
-                                <npmRepository>https://npmjs.com/org/jdg.digital</npmRepository>
-                                <ngVersion>16.0.0</ngVersion>
-                                <fileNaming>kebab-case</fileNaming>
-                                <nullSafeAdditionalProps>true</nullSafeAdditionalProps>
-                            </configOptions>
-                            <output>${project.basedir}/interface/angular</output>
-                            <templateDirectory>${project.basedir}/interface/templates/angular</templateDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                        <id>Generate java classes</id>
-                        <configuration>
-                            <inputSpec>${project.basedir}/interface/api-types.yaml</inputSpec>
-                            <generatorName>java</generatorName>
-                            <strictSpec>true</strictSpec>
-                            <generateApis>false</generateApis>
-                            <generateApiTests>false</generateApiTests>
-                            <generateSupportingFiles>false</generateSupportingFiles>
-                            <generateModelTests>false</generateModelTests>
-                            <configOptions>
-                                <java8>true</java8>
-                                <dateLibrary>java8</dateLibrary>
-                                <library>native</library>
-                                <artifactId>${project.artifactId}</artifactId>
-                                <developerOrganization>jdg.digital</developerOrganization>
-                                <developerOrganizationUrl>https://jdg.digital</developerOrganizationUrl>
-                                <modelPackage>jdg.digital.api-interface</modelPackage>
-                                <serializableModel>true</serializableModel>
-                                <snapshotVersion>true</snapshotVersion>
-                            </configOptions>
-                            <output>${project.build.directory}/generated-sources/java</output>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
 
             <plugin>
                 <groupId>org.springframework.boot</groupId>

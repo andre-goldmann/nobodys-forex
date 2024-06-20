@@ -2,9 +2,9 @@ package jdg.digital.apigateway.domain;
 
 
 import jdg.digital.api_interface.TradeStat;
+import reactor.core.publisher.Mono;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 @Service
 public class TradeStatsService {

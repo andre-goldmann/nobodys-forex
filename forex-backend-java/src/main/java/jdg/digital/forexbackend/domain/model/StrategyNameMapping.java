@@ -1,5 +1,7 @@
 package jdg.digital.forexbackend.domain.model;
 
+import jdg.digital.api_interface.StrategyEnum;
+
 import java.util.HashMap;
 import java.util.Map;
 

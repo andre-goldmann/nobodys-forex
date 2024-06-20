@@ -1,8 +1,10 @@
 package jdg.digital.forexbackend.interfaces;
 
+import jdg.digital.api_interface.StrategyEnum;
+import jdg.digital.api_interface.SymbolEnum;
+import jdg.digital.api_interface.Trade;
+import jdg.digital.api_interface.TradeStat;
 import jdg.digital.forexbackend.domain.*;
-import jdg.digital.forexbackend.domain.model.StrategyEnum;
-import jdg.digital.forexbackend.domain.model.SymbolEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

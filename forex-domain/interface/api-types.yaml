@@ -68,6 +68,10 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - STD-Filtered-Close
+        - STD-Filtered-Close_WITHOUT_REG
+        - SuperTrend AI
+        - SuperTrend AI_WITHOUT_REG
         - NNR
         - NNR_WITHOUT_REG
         - Super_AI_Trend
