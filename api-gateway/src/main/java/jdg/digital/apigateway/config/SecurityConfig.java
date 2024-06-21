@@ -60,6 +60,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                 //.addFilterBefore(new ForbiddenFilter(), LogoutFilter.class) // filter before auth/logout
                 .addFilterBefore(new TokenRequiredFilter(jwtTokenValidator(keycloakJwkProvider())), LogoutFilter.class)
                 .authenticationProvider(new JwtAuthenticationProvider())
+                // for local testing
+                // TODO remove this line
+                .csrf(csrf -> csrf. disable())
                 .build();
     }
 

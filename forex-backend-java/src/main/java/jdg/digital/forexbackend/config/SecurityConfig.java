@@ -35,10 +35,10 @@ public class SecurityConfig implements WebMvcConfigurer {
         http.authorizeHttpRequests(authz -> authz
                         .requestMatchers("/forex/**").permitAll()
                         //.requestMatchers("/h2/**").permitAll()
-                        .anyRequest().permitAll());
+                        .anyRequest().permitAll())
                 // TODO remove this line
-                //.csrf(csrf -> csrf.disable())
-                //.cors(cors -> cors.disable());
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable());
         /*http
                 .authorizeRequests()
                 .anyRequest().permitAll()
