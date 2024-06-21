@@ -3,6 +3,7 @@ package jdg.digital.apigateway.domain;
 import jdg.digital.api_interface.StrategyEnum;
 import jdg.digital.api_interface.SymbolEnum;
 import jdg.digital.api_interface.Trade;
+import jdg.digital.api_interface.TradeHistoryUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -37,6 +38,10 @@ public class ForexService {
 
     public Mono<Void> deleteIgnoredSignal(final String json) {
         return this.forexDataServiceApi.deleteIgnoredSignal(json);
+    }
+
+    public Mono<String> updateHistory(String env, TradeHistoryUpdate tradeHistoryUpdate) {
+        return this.forexDataServiceApi.updateHistory(env, tradeHistoryUpdate);
     }
 }
 

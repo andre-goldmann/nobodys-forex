@@ -41,9 +41,9 @@ public class TradeStatsServices {
 
     public Mono<TradeStat> getStatsFor(final Signal signal, final String env) {
         return switch (env.toUpperCase(Locale.getDefault())) {
-            case "DEV" -> this.tradeStatsRepository.getDevStatsFor(signal.symbol(), signal.strategy())
+            case "DEV" -> this.tradeStatsRepository.getDevStatsFor(signal.symbol(), signal.strategy(), signal.timeframe())
                     .map(this::mapToTrade);
-            case "PROD" -> this.tradeStatsRepository.getProdStatsFor(signal.symbol(), signal.strategy())
+            case "PROD" -> this.tradeStatsRepository.getProdStatsFor(signal.symbol(), signal.strategy(), signal.timeframe())
                     .map(this::mapToTrade);
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };

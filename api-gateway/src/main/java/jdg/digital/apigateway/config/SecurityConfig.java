@@ -51,7 +51,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                             //authorizeHttp.requestMatchers("/forex/routes").permitAll();
                             // does not work, but I also do not want to give access to this endpoint
                             //authorizeHttp.requestMatchers("/api/forex/routes").permitAll();
-                            authorizeHttp.requestMatchers("/api/forex/signals/dev").permitAll();
+                            //authorizeHttp.requestMatchers("/api/forex/signals/dev").permitAll();
                             authorizeHttp.anyRequest().authenticated();
                         }
                 )

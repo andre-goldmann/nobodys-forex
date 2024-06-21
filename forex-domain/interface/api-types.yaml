@@ -429,6 +429,8 @@ components:
       type: object
       required:
         - symbol
+        - timeframe
+        - strategy
       properties:
         id:
           type: integer
@@ -452,3 +454,23 @@ components:
         activated:
           type: string
           format: date-time
+
+    TradeHistoryUpdate:
+      type: object
+      required:
+        - symbol
+      properties:
+        symbol:
+          $ref: '#/components/schemas/SymbolEnum'
+        closed:
+          type: string
+        magic:
+          type: integer
+        profit:
+          type: double
+        swap:
+          type: double
+        commision:
+          type: double
+        exit:
+          type: double

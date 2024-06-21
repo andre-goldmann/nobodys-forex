@@ -128,7 +128,6 @@ public class SignalController {
                         return Mono.just("Stats are not fulfilled");
                     }
                 })
-
                 .switchIfEmpty(storeNewSignal(signal));
     }
 

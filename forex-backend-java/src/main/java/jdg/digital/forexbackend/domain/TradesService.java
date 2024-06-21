@@ -1,13 +1,11 @@
 package jdg.digital.forexbackend.domain;
 
-import jdg.digital.api_interface.StrategyEnum;
-import jdg.digital.api_interface.SymbolEnum;
-import jdg.digital.api_interface.Trade;
-import jdg.digital.api_interface.TradeTypeEnum;
+import jdg.digital.api_interface.*;
 import jdg.digital.forexbackend.domain.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -16,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +23,7 @@ import static jdg.digital.forexbackend.domain.model.StrategyNameMapping.STRATEGY
 
 @Service
 @Slf4j
+@Transactional
 public class TradesService {
 
     @Autowired
@@ -39,6 +39,51 @@ public class TradesService {
         log.info("Search for {}-{}", symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum));
         return this.tradeRepository.loadTrades(symbolEnum.getValue(), STRATEGY_NAMES.get(strategyEnum))
                 .map(this::entityToDto).collectList();
+    }
+
+    public Mono<Trade> updateTrade(final String env, final Trade trade) {
+        System.out.println("Update trade " + trade.toString());
+        return Mono.empty();
+    }
+
+
+    public Mono<String> updateHistory(final String env, final TradeHistoryUpdate update) {
+        //log.info("updatehistory: {}", update);
+
+        return switch (env.toUpperCase(Locale.getDefault())) {
+            case "DEV" -> this.tradeRepository.updateDev(
+                            update.getSymbol().getValue(),
+                            update.getMagic(),
+                            update.getExit(),
+                            update.getProfit(),
+                            update.getCommision(),
+                            update.getSwap(),
+                            update.getClosed())
+                    .map(result -> {
+                        if(result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
+            case "PROD" ->  this.tradeRepository.updateProd(
+                            update.getSymbol().getValue(),
+                            update.getMagic(),
+                            update.getExit(),
+                            update.getProfit(),
+                            update.getCommision(),
+                            update.getSwap(),
+                            update.getClosed())
+                    .map(result -> {
+                        if(result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
+            default -> throw new IllegalArgumentException("Undefined env " + env);
+        };
+
     }
 
     private Trade entityToDto(final TradesEntity entity) {
@@ -75,11 +120,5 @@ public class TradesService {
             trade.setType(TradeTypeEnum.valueOf(entity.getType().toUpperCase()));
             return trade;
     }
-
-    public Mono<Trade> updateTrade(String env, Trade trade) {
-        System.out.println("Update trade " + trade.toString());
-        return Mono.empty();
-    }
-
 
 }

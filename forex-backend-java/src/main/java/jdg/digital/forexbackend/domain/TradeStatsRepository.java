@@ -67,10 +67,10 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
             "FROM  \"Trades\"\n" +
             "WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
-            " and symbol = :symbol and strategy = :strategy\n " +
+            " and symbol = :symbol and strategy = :strategy and timeframe = :timeframe\n " +
             "GROUP BY symbol, strategy\n"
     )
-    Mono<TradeStatInterface> getDevStatsFor(@Param("symbol") String symbol, @Param("strategy") String strategy);
+    Mono<TradeStatInterface> getDevStatsFor(@Param("symbol") String symbol, @Param("strategy") String strategy, @Param("timeframe") String timeframe);
 
 
     @Query(value = "SELECT symbol,\n" +
@@ -84,8 +84,8 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
             "FROM  \"ProdTrades\"\n" +
             "WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
-            " and symbol = :symbol and strategy = :strategy\n " +
+            " and symbol = :symbol and strategy = :strategy and timeframe = :timeframe\n " +
             "GROUP BY symbol, strategy\n"
     )
-    Mono<TradeStatInterface> getProdStatsFor(@Param("symbol") String symbol, @Param("strategy") String strategy);
+    Mono<TradeStatInterface> getProdStatsFor(@Param("symbol") String symbol, @Param("strategy") String strategy, @Param("timeframe") String timeframe);
 }

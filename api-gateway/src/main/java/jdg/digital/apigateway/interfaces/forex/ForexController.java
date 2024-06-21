@@ -1,18 +1,13 @@
 package jdg.digital.apigateway.interfaces.forex;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jdg.digital.api_interface.StrategyEnum;
-import jdg.digital.api_interface.SymbolEnum;
-import jdg.digital.api_interface.Trade;
-import jdg.digital.api_interface.TradeStat;
+import jdg.digital.api_interface.*;
 import jdg.digital.apigateway.domain.*;
 import jdg.digital.apigateway.interfaces.NavbarData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.WebSocketHandler;
 import reactor.core.publisher.Mono;
@@ -59,9 +54,15 @@ public class ForexController {
     }
 
     @DeleteMapping("/signals/ignored/delete")
-    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<Void> deleteIgnoredSignal(@RequestParam String json) {
         return this.forexService.deleteIgnoredSignal(json);
+    }
+
+    @PostMapping("/trades/updatehistory/{env}")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
+    public Mono<String> updatehistory(@PathVariable("env") final String env, @RequestBody TradeHistoryUpdate trade) {
+        return this.forexService.updateHistory(env, trade);
     }
 
     @PutMapping("/trades/update/{env}")

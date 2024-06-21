@@ -1,0 +1,4 @@
+- bessere Auswertung der Trades (Dev-Prod): Prod-Trade mit aktuellem Dev- als Prod-Ergebnissen 
+- bessere Darstellung der Ignored-Signals
+- Aktulalisierung der Prod-Trade-History
+- 
