@@ -20,7 +20,7 @@ import static jdg.digital.forexbackend.domain.model.StrategyNameMapping.STRATEGY
 @Slf4j
 public class TradeStatsServices {
 
-    public static final double WIN_PERCENTAGE = 62.0;
+    public static final double WIN_PERCENTAGE = 63.0;
     public static final double MIN_PROFIT = 10.0;
     public static final int MIN_TRADES = 150;
 

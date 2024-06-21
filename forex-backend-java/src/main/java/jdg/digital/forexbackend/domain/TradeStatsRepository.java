@@ -46,7 +46,7 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
             "FROM  \"ProdTrades\"\n" +
             //"WHERE activated!='' AND openprice > 0 --and exit > 0\n" +
-            "WHERE ((activated IS NOT NULL or activated!='') and openprice > 0)" +
+            "WHERE ((activated IS NOT NULL or activated!='') and openprice > 0 and exit > 0)" +
             "GROUP BY symbol, strategy\n" +
             "HAVING\n" +
             "    --count(*) > 150\n" +
