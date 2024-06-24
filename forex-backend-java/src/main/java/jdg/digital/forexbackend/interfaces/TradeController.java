@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@RequestMapping("trades")
 public class TradeController {
 
     @Autowired
@@ -24,22 +25,27 @@ public class TradeController {
         return this.tradeStatsServices.getTradeStats(env);
     }
 
-    @GetMapping("trades/positive-profit")
+    @GetMapping("statsforlastntrades")
+    public Mono<List<StatsPerProdTrade>> getStatsForLastNTrades() {
+        return this.tradeStatsServices.getStatsForLastNTrades();
+    }
+
+    @GetMapping("positive-profit")
     public Mono<List<Trade>> getTradesWithPositiveProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
         return this.tradeService.getTradesWithPositiveProfit(symbol, strategy);
     }
 
-    @GetMapping("trades/negative-profit")
+    @GetMapping("negative-profit")
     public Mono<List<Trade>> getTradesWithNegativeProfit(@RequestParam SymbolEnum symbol, @RequestParam StrategyEnum strategy) {
         return this.tradeService.getTradesWithNegativeProfit(symbol, strategy);
     }
 
-    @PutMapping("trades/update/{env}")
+    @PutMapping("update/{env}")
     public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
         return this.tradeService.updateTrade(env, trade);
     }
 
-    @PostMapping("trades/updatehistory/{env}")
+    @PostMapping("updatehistory/{env}")
     public Mono<String> updatehistory(@PathVariable("env") final String env, @RequestBody TradeHistoryUpdate trade) {
         return this.tradeService.updateHistory(env, trade);
     }

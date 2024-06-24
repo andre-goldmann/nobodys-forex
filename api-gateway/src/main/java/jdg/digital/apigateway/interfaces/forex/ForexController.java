@@ -66,9 +66,15 @@ public class ForexController {
     }
 
     @PutMapping("/trades/update/{env}")
-    @PreAuthorize("isAuthenticated() and hasRole('ROLE_ADMIN')")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
         return this.forexService.updateTrade(env, trade);
+    }
+
+    @GetMapping("/trades/statsforlastntrades")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
+    public Mono<List<StatsPerProdTrade>> getStatsForLastNTrades() {
+        return this.forexService.getStatsForLastNTrades();
     }
 
     @GetMapping("/trades/positive-profit")
@@ -83,7 +89,7 @@ public class ForexController {
         return this.forexService.getTradesWithNegativeProfit(symbol, strategy);
     }
 
-    @GetMapping("/tradestats/{env}")
+    @GetMapping("/trades/tradestats/{env}")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<TradeStat[]> getTradeStats(@PathVariable("env") final String env) {
         return this.tradeStatsService.getTradeStats(env);

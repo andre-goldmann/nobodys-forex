@@ -2,6 +2,7 @@ package jdg.digital.forexbackend.interfaces;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdg.digital.api_interface.TradeStat;
 import jdg.digital.forexbackend.domain.Signal;
 import jdg.digital.forexbackend.domain.SignalService;
 import jdg.digital.forexbackend.domain.TradeStatsServices;
@@ -23,6 +24,7 @@ import static jdg.digital.forexbackend.domain.TradeStatsServices.WIN_PERCENTAGE;
 @RequestMapping("signals")
 public class SignalController {
 
+    public static final int ACTIVE_TRADES_MAX = 4;
     @Autowired
     private SignalService signalService;
 
@@ -60,75 +62,58 @@ public class SignalController {
     @PostMapping
     public Mono<String> createSignal(@RequestBody Signal signal) {
 
-        return this.tradeStatsServices.getStatsFor(signal, "DEV")
-                .flatMap(stats -> {
+        final Mono<TradeStat> devStatsMono = this.tradeStatsServices.getStatsFor(signal, "DEV");
+        final Mono<TradeStat> prodStatsMono = this.tradeStatsServices.getStatsFor(signal, "PROD");
+        final Mono<Integer> activeTradesMonot = this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy());
+        return Mono.zip(devStatsMono, prodStatsMono, activeTradesMonot).map(tuple -> {
 
-                    if (stats.getTotal() >= MIN_TRADES
-                            && stats.getWinpercentage() < WIN_PERCENTAGE){
-                        this.signalService.storeIgnoredSignal(signal, stats, "Stats not fulfilled").subscribe();
-                        return Mono.just("Signal Ignored!");
-                    }
+            TradeStat devStats = tuple.getT1();
+            if(devStats == null){
+                storeNewSignal(signal).subscribe();
+                return "New Signal stored!";
+            }
 
-                    double lots = signal.lots();
-                    if (stats.getTotal() >= MIN_TRADES
-                            && stats.getWinpercentage() >= WIN_PERCENTAGE){
-                        lots = 0.1;
-                    }
+            if (devStats.getTotal() >= MIN_TRADES
+                    && devStats.getWinpercentage().doubleValue() < WIN_PERCENTAGE){
+                this.signalService.storeIgnoredSignal(signal, devStats, "Stats not fulfilled").subscribe();
+                return "Signal Ignored!";
+            }
 
-                    // Always store to dev
-                    this.signalService.storeDevSignal(signal, lots).subscribe();
+            double lots = signal.lots();
+            if (devStats.getTotal() >= MIN_TRADES
+                    && devStats.getWinpercentage().doubleValue() >= WIN_PERCENTAGE){
+                lots = 0.1;
+            }
 
-                    // Only store to prod if stats are fulfilled
-                    if (stats.getWinpercentage() > WIN_PERCENTAGE
-                            && stats.getProfit() > TradeStatsServices.MIN_PROFIT
-                            && stats.getTotal() > MIN_TRADES) {
+            // Always store to dev
+            this.signalService.storeDevSignal(signal, lots).subscribe();
+            Integer activeTradeCount = tuple.getT3();
 
-                        return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
-                                .map(activeTrades -> {
-                                    if (activeTrades < 4) {
-                                        log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats);
-                                        // TODO we could load prodStats here and dynamically set the lots
-                                        this.signalService.storeProdSignal(signal).subscribe();
+            if (devStats.getWinpercentage().doubleValue() > WIN_PERCENTAGE
+                    && devStats.getProfit().doubleValue() > TradeStatsServices.MIN_PROFIT
+                    && devStats.getTotal() > MIN_TRADES
+                    && activeTradeCount < ACTIVE_TRADES_MAX) {
+                final TradeStat prodStats = tuple.getT2();
+                if (prodStats != null && prodStats.getTotal() > MIN_TRADES
+                        && prodStats.getWinpercentage().doubleValue() < WIN_PERCENTAGE) {
+                    String msg = "Do not store to Prod as MinTrades have been reached but WinPercentage is " + prodStats.getWinpercentage();
+                    this.signalService.storeIgnoredSignal(signal, devStats, msg).subscribe();
+                    return msg;
+                }
 
-                                        try {
-                                            this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
-                                        } catch (JsonProcessingException e) {
-                                            throw new RuntimeException(e);
-                                        }
+                log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), devStats);
+                // TODO we could load prodStats here and dynamically set the lots
+                this.signalService.storeProdSignal(signal).subscribe();
 
-                                        return "Signal also stored in prod!";
-                                    } else {
-                                        log.info("Stats found for Signal of {}-{} but amount of active trades ({}) allready reached", signal.symbol(), signal.strategy(), activeTrades);
+                try {
+                    this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
 
-                                        final Signal newSignal = new Signal(
-                                               1,
-                                                signal.symbol(),
-                                                signal.timeframe(),
-                                                signal.timestamp(),
-                                                signal.type(),
-                                                signal.entry(),
-                                                signal.sl(),
-                                                signal.tp(),
-                                                signal.lots(),
-                                                signal.strategy(),
-                                                true,
-                                                "Ignore because there more then " + activeTrades + " active trade.");
-
-                                        try {
-                                            this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(newSignal));
-                                        } catch (JsonProcessingException e) {
-                                            throw new RuntimeException(e);
-                                        }
-
-                                        return "Active trades are " + activeTrades;
-                                    }
-                                });
-                    } else {
-                        log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats);
-                        return Mono.just("Stats are not fulfilled");
-                    }
-                })
-                .switchIfEmpty(storeNewSignal(signal));
+            return "Signal Processed!";
+        });
     }
 
     private Mono<String> storeNewSignal(final Signal signal) {

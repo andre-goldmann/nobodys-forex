@@ -42,8 +42,7 @@ public class ForexDataServiceApi {
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Trade>>() {
-                });
+                .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
     public Mono<List<Trade>> getTradesWithNegativeProfit(final SymbolEnum symbol, final StrategyEnum strategy) {
@@ -56,8 +55,7 @@ public class ForexDataServiceApi {
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Trade>>() {
-                });
+                .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
     public Mono<List<Signal>> getSignals(final String env) {
@@ -66,8 +64,7 @@ public class ForexDataServiceApi {
                 .uri(uriBuilder -> uriBuilder.path("/signals/{env}").build(env))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
+                .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
     public Mono<List<Signal>> getIgnoredSignals() {
@@ -76,8 +73,7 @@ public class ForexDataServiceApi {
                 .uri(uriBuilder -> uriBuilder.path("/signals/ignored").build())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<>() {
-                });
+                .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
     public Mono<Trade> updateTrade(final String env, final Trade trade) {
@@ -110,5 +106,14 @@ public class ForexDataServiceApi {
                 .body(Mono.just(tradeHistoryUpdate), TradeHistoryUpdate.class)
                 .retrieve()
                 .bodyToMono(String.class);
+    }
+
+    public Mono<List<StatsPerProdTrade>> getStatsForLastNTrades() {
+        return this.webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder.path("/trades/statsforlastntrades").build())
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 }

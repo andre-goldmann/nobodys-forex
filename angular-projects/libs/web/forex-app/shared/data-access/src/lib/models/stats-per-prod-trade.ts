@@ -10,24 +10,26 @@
  * Do not edit the class manually.
  */
 import { StrategyEnum } from './strategy-enum';
-import { TradeTypeEnum } from './trade-type-enum';
 import { SymbolEnum } from './symbol-enum';
 import { TimeFrameEnum } from './time-frame-enum';
 
 
-export interface Trade { 
+export interface StatsPerProdTrade { 
     id?: number;
     symbol: SymbolEnum;
     timeframe: TimeFrameEnum;
     strategy: StrategyEnum;
-    type?: TradeTypeEnum;
-    entry?: number;
-    exit?: number;
-    profit?: number;
-    closed?: Date;
-    activated?: Date;
+    stamp?: Date;
+    prodWins?: number;
+    prodLoses?: number;
+    prodTotal?: number;
+    prodWinPercentage?: number;
+    devWins?: number;
+    devLoses?: number;
+    devTotal?: number;
+    devWinPercentage?: number;
 }
-export namespace Trade {
+export namespace StatsPerProdTrade {
 }
 
 

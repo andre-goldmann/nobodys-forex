@@ -54,10 +54,10 @@ public class TradesService {
             case "DEV" -> this.tradeRepository.updateDev(
                             update.getSymbol().getValue(),
                             update.getMagic(),
-                            update.getExit(),
-                            update.getProfit(),
-                            update.getCommision(),
-                            update.getSwap(),
+                            update.getExit().doubleValue(),
+                            update.getProfit().doubleValue(),
+                            update.getCommision().doubleValue(),
+                            update.getSwap().doubleValue(),
                             update.getClosed())
                     .map(result -> {
                         if(result == 1) {
@@ -69,10 +69,10 @@ public class TradesService {
             case "PROD" ->  this.tradeRepository.updateProd(
                             update.getSymbol().getValue(),
                             update.getMagic(),
-                            update.getExit(),
-                            update.getProfit(),
-                            update.getCommision(),
-                            update.getSwap(),
+                            update.getExit().doubleValue(),
+                            update.getProfit().doubleValue(),
+                            update.getCommision().doubleValue(),
+                            update.getSwap().doubleValue(),
                             update.getClosed())
                     .map(result -> {
                         if(result == 1) {
@@ -97,14 +97,13 @@ public class TradesService {
                 throw new IllegalArgumentException("Not StrategyEnum found for " + entity.getStrategy());
             } else if (strategies.size() > 1){
                 throw new IllegalArgumentException("Multiple StrategyEnums found for " + entity.getStrategy());
-
             }
             trade.setStrategy(strategies.stream().findFirst().get());
-            trade.setExit(entity.getExit());
-            trade.setEntry(entity.getEntry());
+            trade.setExit(BigDecimal.valueOf(entity.getExit()));
+            trade.setEntry(BigDecimal.valueOf(entity.getEntry()));
             if(entity.getProfit() != null && entity.getCommision() != null && entity.getSwap() != null) {
                 final BigDecimal profit = BigDecimal.valueOf(entity.getProfit() - entity.getCommision() -  entity.getSwap());
-                trade.setProfit(profit.setScale(2, RoundingMode.HALF_UP).doubleValue());
+                trade.setProfit(profit.setScale(2, RoundingMode.HALF_UP));
             }
 
             if(entity.getClosed() != null && !entity.getClosed().isEmpty()) {

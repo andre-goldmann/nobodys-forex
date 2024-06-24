@@ -2,14 +2,10 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserStoreService } from '@angular-projects/login-data-access';
 import {
-  StrategyEnum,
-  SymbolEnum,
-  Trade,
-  TradesService,
-  TradeStatService,
-  TradeTypeEnum
+  StatsPerProdTrade,
+  TradeStatService
 } from '@angular-projects/forex-app-data-access';
-import { zip } from 'rxjs';
+import { Observable, zip } from 'rxjs';
 
 @Component({
   selector: 'lib-forex-app-dashboard-ui',
@@ -19,14 +15,13 @@ import { zip } from 'rxjs';
   styleUrl: './forex-app-dashboard-ui.component.scss',
 })
 export class ForexAppDashboardUiComponent implements OnInit{
-  // inject TradesService
-  protected tradeService:TradesService = inject(TradesService);
 
   protected tradeStatService:TradeStatService = inject(TradeStatService);
 
   protected userStoreService:UserStoreService = inject(UserStoreService);
 
   map = new Map();
+  items!: Observable<StatsPerProdTrade[]>;
 
   ngOnInit(): void {
 
@@ -37,7 +32,7 @@ export class ForexAppDashboardUiComponent implements OnInit{
         })
       )*/
     // TODO hier ist schon wieder viel zu viel logic drin, das sollte in den Service ausgelagert werden
-    zip(this.tradeStatService.getTradeStats("dev"), this.tradeStatService.getTradeStats("prod")).
+    /*zip(this.tradeStatService.getTradeStats("dev"), this.tradeStatService.getTradeStats("prod")).
       subscribe(d => {
         let devData = d[0];
         let prodData = d[1];
@@ -66,7 +61,9 @@ export class ForexAppDashboardUiComponent implements OnInit{
       }));
 
       //console.info(this.map);
-    });
+    });*/
+
+    this.items = this.tradeStatService.getStatsForLastNTrades();
 
   }
 
@@ -85,7 +82,7 @@ export class ForexAppDashboardUiComponent implements OnInit{
       //console.info("Negative-Data: " + data);
       this.negativeTrades = data;
     });
-  }*/
+  }
 
   updateTrade() {
     let exampleTrade: Trade = {
@@ -103,5 +100,5 @@ export class ForexAppDashboardUiComponent implements OnInit{
       .subscribe(value => {
         console.info("Trade updated: " + value);
       });
-  }
+  }*/
 }

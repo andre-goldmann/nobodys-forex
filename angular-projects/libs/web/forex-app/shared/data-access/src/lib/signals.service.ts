@@ -1,8 +1,7 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { APP_CONFIG, AppConfig } from '@angular-projects/app-config';
-import { Trade } from './models/trade';
 import { HttpUrlEncodingCodec } from '@angular/common/http';
 import { Signal } from './models/signal';
 import { AuthService } from '@angular-projects/login-data-access';
@@ -22,11 +21,11 @@ export class SignalsService {
     this.apiUrl = `${appConfig.baseURL}/signals`;
   }
 
-  getSignals(env:string): Observable<Trade[]> {
+  getSignals(env:string): Observable<Signal[]> {
     return this.http.get<Signal[]>(  `${this.apiUrl}/${env}`);
   }
 
-  getIgnoredSignals(): Observable<Trade[]> {
+  getIgnoredSignals(): Observable<Signal[]> {
     return this.http.get<Signal[]>(  `${this.apiUrl}/ignored`);
   }
 

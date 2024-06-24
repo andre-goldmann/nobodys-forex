@@ -9,25 +9,19 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { StrategyEnum } from './strategy-enum';
-import { TradeTypeEnum } from './trade-type-enum';
 import { SymbolEnum } from './symbol-enum';
-import { TimeFrameEnum } from './time-frame-enum';
 
 
-export interface Trade { 
-    id?: number;
+export interface TradeHistoryUpdate { 
     symbol: SymbolEnum;
-    timeframe: TimeFrameEnum;
-    strategy: StrategyEnum;
-    type?: TradeTypeEnum;
-    entry?: number;
-    exit?: number;
+    closed?: string;
+    magic?: number;
     profit?: number;
-    closed?: Date;
-    activated?: Date;
+    swap?: number;
+    commision?: number;
+    exit?: number;
 }
-export namespace Trade {
+export namespace TradeHistoryUpdate {
 }
 
 

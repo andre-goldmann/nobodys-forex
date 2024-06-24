@@ -68,6 +68,8 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - AI Volume Supertrend-WMA
+        - AI Volume Supertrend-WMA_WITHOUT_REG
         - STD-Filtered-Close
         - STD-Filtered-Close_WITHOUT_REG
         - SuperTrend AI
@@ -421,9 +423,9 @@ components:
         total:
           type: integer
         winpercentage:
-          type: double
+          type: number
         profit:
-          type: double
+          type: number
 
     Trade:
       type: object
@@ -443,11 +445,11 @@ components:
         type:
           $ref: '#/components/schemas/TradeTypeEnum'
         entry:
-          type: double
+          type: number
         exit:
-          type: double
+          type: number
         profit:
-          type: double
+          type: number
         closed:
           type: string
           format: date-time
@@ -467,10 +469,45 @@ components:
         magic:
           type: integer
         profit:
-          type: double
+          type: number
         swap:
-          type: double
+          type: number
         commision:
-          type: double
+          type: number
         exit:
-          type: double
+          type: number
+
+    StatsPerProdTrade:
+      type: object
+      required:
+        - symbol
+        - timeframe
+        - strategy
+      properties:
+        id:
+          type: number
+        symbol:
+          $ref: '#/components/schemas/SymbolEnum'
+        timeframe:
+          $ref: '#/components/schemas/TimeFrameEnum'
+        strategy:
+          $ref: '#/components/schemas/StrategyEnum'
+        stamp:
+          type: string
+          format: date-time
+        prodWins:
+          type: integer
+        prodLoses:
+          type: integer
+        prodTotal:
+          type: integer
+        prodWinPercentage:
+          type: number
+        devWins:
+          type: integer
+        devLoses:
+          type: integer
+        devTotal:
+          type: integer
+        devWinPercentage:
+          type: number

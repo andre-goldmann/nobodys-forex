@@ -26,6 +26,8 @@ public class TradeStatEntity {
 
     private Double profit;
 
+    private Integer loses;
+
     private Integer wins;
 
     private Integer total;

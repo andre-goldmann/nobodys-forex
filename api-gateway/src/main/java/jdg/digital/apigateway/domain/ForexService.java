@@ -1,9 +1,6 @@
 package jdg.digital.apigateway.domain;
 
-import jdg.digital.api_interface.StrategyEnum;
-import jdg.digital.api_interface.SymbolEnum;
-import jdg.digital.api_interface.Trade;
-import jdg.digital.api_interface.TradeHistoryUpdate;
+import jdg.digital.api_interface.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -42,6 +39,10 @@ public class ForexService {
 
     public Mono<String> updateHistory(String env, TradeHistoryUpdate tradeHistoryUpdate) {
         return this.forexDataServiceApi.updateHistory(env, tradeHistoryUpdate);
+    }
+
+    public Mono<List<StatsPerProdTrade>> getStatsForLastNTrades() {
+        return this.forexDataServiceApi.getStatsForLastNTrades();
     }
 }
 
