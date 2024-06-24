@@ -68,6 +68,8 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - RedK-SMA-SMA
+        - RedK-SMA-SMA_WITHOUT_REG
         - AI Volume Supertrend-WMA
         - AI Volume Supertrend-WMA_WITHOUT_REG
         - STD-Filtered-Close

@@ -333,6 +333,8 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.STD_FILTERED_CLOSE_WITHOUT_REG, "STD-Filtered-Close_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.AI_VOLUME_SUPERTREND_WMA, "AI Volume Supertrend-WMA");
         STRATEGY_NAMES.put(StrategyEnum.AI_VOLUME_SUPERTREND_WMA_WITHOUT_REG, "AI Volume Supertrend-WMA_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum.REDK_SMA_SMA, "RedK-SMA-SMA");
+        STRATEGY_NAMES.put(StrategyEnum.REDK_SMA_SMA_WITHOUT_REG, "RedK-SMA-SMA_WITHOUT_REG");
 
     }
 }

@@ -51,8 +51,11 @@ strategies = ["NNR",
               "AI Volume Supertrend",
               "SSL + Wave Trend Strategy",
 
+              "RedK-SMA-SMA",
+              "RedK-SMA-SMA_WITHOUT_REG",
+
               "AI Volume Supertrend-WMA",
-              "AI Volume Supertrend-WMA_WITHOUT_REG"
+              "AI Volume Supertrend-WMA_WITHOUT_REG",
 
               "VHMA",
               "VHMA_WITHOUT_REG",
@@ -914,7 +917,8 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "T3-GapFilling" \
                 or strategy == "SuperTrend AI" \
                 or strategy == "STD-Filtered-Close" \
-                or strategy == "AI Volume Supertrend-WMA":
+                or strategy == "AI Volume Supertrend-WMA" \
+                or strategy == "RedK-SMA-SMA":
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", session)
 
