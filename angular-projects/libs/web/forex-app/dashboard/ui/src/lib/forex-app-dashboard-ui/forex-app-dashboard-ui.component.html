@@ -18,31 +18,59 @@
     <div class="max-w-sm rounded overflow-hidden shadow-lg">
       <!--img class="w-full" src="https://tailwindcss.com/img/card-top.jpg" alt="Sunset in the mountains"-->
       <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2">{{item.symbol}}</div>
-        <p class="text-gray-700 text-base">
-          {{item.strategy}}
-        </p>
-      </div>
-      <div class="px-6 pt-4 pb-2">
-        <!-- show dev/prod winpercentag, wins, loses and total -->
+        <div class="font-bold text-xl mb-2">{{item.symbol}} - {{item.strategy}} - {{item.stamp}} </div>
         <table border="0">
           <thead>
+          <th class="px-4 py-2">System</th>
           <th class="px-4 py-2">Wins</th>
           <th class="px-4 py-2">Loses</th>
           <th class="px-4 py-2">Percentage</th>
           </thead>
           <tr>
+            <td class="border px-4 py-2">Prod</td>
             <td class="border px-4 py-2">{{item.prodWins}}</td>
             <td class="border px-4 py-2">{{item.prodLoses}}</td>
             <td class="border px-4 py-2">{{item.prodWinPercentage}}</td>
           </tr>
+
+          <tr>
+            <td class="border px-4 py-2">Dev</td>
+            <td class="border px-4 py-2">{{item.devWins}}</td>
+            <td class="border px-4 py-2">{{item.devLoses}}</td>
+            <td class="border px-4 py-2">{{item.devWinPercentage}}</td>
+          </tr>
         </table>
-        <!--span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#photography</span>
-        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#travel</span>
-        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">#winter</span-->
       </div>
+      <!--div class="px-6 pt-4 pb-2">
+
+        <table border="0">
+          <thead>
+            <th class="px-4 py-2">System</th>
+            <th class="px-4 py-2">Wins</th>
+            <th class="px-4 py-2">Loses</th>
+            <th class="px-4 py-2">Percentage</th>
+          </thead>
+          <tr>
+            <td class="border px-4 py-2">Prod</td>
+            <td class="border px-4 py-2">{{item.prodWins}}</td>
+            <td class="border px-4 py-2">{{item.prodLoses}}</td>
+            <td class="border px-4 py-2">{{item.prodWinPercentage}}</td>
+          </tr>
+
+          <tr>
+            <td class="border px-4 py-2">Dev</td>
+            <td class="border px-4 py-2">{{item.devWins}}</td>
+            <td class="border px-4 py-2">{{item.devLoses}}</td>
+            <td class="border px-4 py-2">{{item.devWinPercentage}}</td>
+          </tr>
+        </table>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#photography</span>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">#travel</span>
+        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">#winter</span>
+      </div-->
     </div>
   </div>
+</div>
   <!--div class="flex flex-col justify-around spacy-y-4">
     <div *ngFor="let item of map | keyvalue" class="w-full rounded overflow-hidden shadow-lg m-4" [ngClass]="{'green-background': item.value.length > 1}">
       <div class="px-6 py-4">
