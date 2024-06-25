@@ -13,7 +13,9 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.NNR, "NNR");
         STRATEGY_NAMES.put(StrategyEnum.NNR_WITHOUT_REG, "NNR_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.SUPER_AI_TREND, "Super AI Trend");
+        STRATEGY_NAMES.put(StrategyEnum.SUPERTREND_AI, "SuperTrend AI");
         STRATEGY_NAMES.put(StrategyEnum.SUPER_AI_TREND_WITHOUT_REG, "Super AI Trend_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum.SUPERTREND_AI_WITHOUT_REG, "SuperTrend AI_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum._70__STRATEGY, "70% Strategy");
         STRATEGY_NAMES.put(StrategyEnum.SSL_HYBRID, "SSL Hybrid");
         STRATEGY_NAMES.put(StrategyEnum.SSL_HYBRID_WITHOUT_REG, "SSL Hybrid_WITHOUT_REG");
