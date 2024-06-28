@@ -18,7 +18,7 @@
     <div class="max-w-sm rounded overflow-hidden shadow-lg">
       <!--img class="w-full" src="https://tailwindcss.com/img/card-top.jpg" alt="Sunset in the mountains"-->
       <div class="px-6 py-4">
-        <div class="font-bold text-xl mb-2">{{item.symbol}} - {{item.strategy}} - {{item.stamp}} </div>
+        <div class="font-bold text-xl mb-2">{{item.symbol}} - {{item.strategy}} - {{item.stamp | date:'HH:mm dd.MM.yyyy'}} </div>
         <table border="0">
           <thead>
           <th class="px-4 py-2">System</th>
@@ -30,14 +30,14 @@
             <td class="border px-4 py-2">Prod</td>
             <td class="border px-4 py-2">{{item.prodWins}}</td>
             <td class="border px-4 py-2">{{item.prodLoses}}</td>
-            <td class="border px-4 py-2">{{item.prodWinPercentage}}</td>
+            <td class="border px-4 py-2" [ngStyle]="{'color': item.prodWinPercentage < 50.0 ? 'red' : 'green'}">{{item.prodWinPercentage}} %</td>
           </tr>
 
           <tr>
             <td class="border px-4 py-2">Dev</td>
             <td class="border px-4 py-2">{{item.devWins}}</td>
             <td class="border px-4 py-2">{{item.devLoses}}</td>
-            <td class="border px-4 py-2">{{item.devWinPercentage}}</td>
+            <td class="border px-4 py-2">{{item.devWinPercentage}} %</td>
           </tr>
         </table>
       </div>

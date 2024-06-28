@@ -19,15 +19,15 @@ export interface StatsPerProdTrade {
     symbol: SymbolEnum;
     timeframe: TimeFrameEnum;
     strategy: StrategyEnum;
-    stamp?: Date;
-    prodWins?: number;
-    prodLoses?: number;
-    prodTotal?: number;
-    prodWinPercentage?: number;
-    devWins?: number;
-    devLoses?: number;
-    devTotal?: number;
-    devWinPercentage?: number;
+    stamp: Date;
+    prodWins: number;
+    prodLoses: number;
+    prodTotal: number;
+    prodWinPercentage: number;
+    devWins: number;
+    devLoses: number;
+    devTotal: number;
+    devWinPercentage: number;
 }
 export namespace StatsPerProdTrade {
 }
