@@ -87,10 +87,22 @@ public class SignalService {
                 "");
     }
 
-    public Mono<Void> storeIgnoredSignal(final Signal signal, final TradeStat stats, final String info) {
+    public Mono<IgnoredSignalEntity> storeIgnoredSignal(final Signal signal, final TradeStat stats, final String info) {
         try {
-            // TODO resdesign Ignored-Table
-            return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info + ": " + stats.toString());
+            if(this.ignoredSignalsRepository.existsBySymbolStrategyAndTimeframe(signal.symbol(), signal.strategy(), signal.timeframe()).blockOptional().orElse(false)){
+                return Mono.empty();
+            }
+            // before storing this information check if it is exists allready
+            //return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info + ": " + stats.toString());
+            return this.ignoredSignalsRepository.save(IgnoredSignalEntity.builder()
+                    .symbol(signal.symbol())
+                    .strategy(signal.strategy())
+                    .timeframe(signal.timeframe())
+                    .loses(stats.getLoses())
+                    .wins(stats.getWins())
+                    .total(stats.getTotal())
+                    .info(info)
+                    .build());
         } catch (Exception e){
             throw new RuntimeException(e);
         }

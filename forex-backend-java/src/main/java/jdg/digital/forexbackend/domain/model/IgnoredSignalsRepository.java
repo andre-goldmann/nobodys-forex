@@ -24,4 +24,6 @@ public interface IgnoredSignalsRepository extends ReactiveCrudRepository<Ignored
     @Modifying
     @Query(value = "delete from \"IgnoredSignals\" where json = :json")
     Mono<Void> deleteByJson(@Param("json") String json);
+
+    Mono<Boolean> existsBySymbolStrategyAndTimeframe(String symbol, String strategy, String timeframe);
 }
