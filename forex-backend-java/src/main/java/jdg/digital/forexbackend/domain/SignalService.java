@@ -87,25 +87,28 @@ public class SignalService {
                 "");
     }
 
-    public Mono<IgnoredSignalEntity> storeIgnoredSignal(final Signal signal, final TradeStat stats, final String info) {
-        try {
-            if(this.ignoredSignalsRepository.existsBySymbolAndStrategyAndTimeframe(signal.symbol(), signal.strategy(), signal.timeframe()).block()){
-                return Mono.empty();
-            }
+    public Mono<Boolean> storeIgnoredSignal(final Signal signal, final TradeStat stats, final String info) {
+
+            return this.ignoredSignalsRepository.existsBySymbolAndStrategyAndTimeframe(signal.symbol(), signal.strategy(), signal.timeframe())
+                    .map(exists -> {
+                        if(!exists){
+                            this.ignoredSignalsRepository.save(IgnoredSignalEntity.builder()
+                                    .symbol(signal.symbol())
+                                    .strategy(signal.strategy())
+                                    .timeframe(signal.timeframe())
+                                    .loses(stats.getLoses())
+                                    .wins(stats.getWins())
+                                    .total(stats.getTotal())
+                                    .info(info)
+                                    .build()).subscribe();
+
+                            return false;
+                        }
+                        return exists;
+                    });
+
             // before storing this information check if it is exists allready
             //return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info + ": " + stats.toString());
-            return this.ignoredSignalsRepository.save(IgnoredSignalEntity.builder()
-                    .symbol(signal.symbol())
-                    .strategy(signal.strategy())
-                    .timeframe(signal.timeframe())
-                    .loses(stats.getLoses())
-                    .wins(stats.getWins())
-                    .total(stats.getTotal())
-                    .info(info)
-                    .build());
-        } catch (Exception e){
-            throw new RuntimeException(e);
-        }
     }
 
     public Mono<Void> storeDevSignal(Signal signal, double lots) {
