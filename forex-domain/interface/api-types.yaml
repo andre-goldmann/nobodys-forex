@@ -120,7 +120,7 @@ components:
         - SOTT_Lorentzian
         - SOTT_Lorentzian_WITHOUT_REG
         - RSS_WMA
-        - RSS_WMA_WITHOUT_WITHOUT_REG
+        - RSS_WMA_WITHOUT_REG
         - T3_MesaPhasor
         - T3_MesaPhasor_WITHOUT_REG
         - T3_SupportAndResistanceLevels

@@ -56,7 +56,7 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.SOTT_LORENTZIAN, "SOTT-Lorentzian");
         STRATEGY_NAMES.put(StrategyEnum.SOTT_LORENTZIAN_WITHOUT_REG, "SOTT-Lorentzian_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.RSS_WMA, "RSS_WMA");
-        STRATEGY_NAMES.put(StrategyEnum.RSS_WMA_WITHOUT_WITHOUT_REG, "RSS_WMA_WITHOUT_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum.RSS_WMA_WITHOUT_REG, "RSS_WMA_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_MESAPHASOR, "T3-MesaPhasor");
         STRATEGY_NAMES.put(StrategyEnum.T3_MESAPHASOR_WITHOUT_REG, "T3-MesaPhasor_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.T3_SUPPORTANDRESISTANCELEVELS, "T3-SupportAndResistanceLevels");
