@@ -413,6 +413,7 @@ def aroonAdx(df, symbol, timeframeEnum, entry):
     elif signal == -1:
         postSignal(symbol, timeframeEnum, "sell", "AroonAdx", entry)
 
+
 def aroonIndicator(df, symbol, timeframeEnum, entry):
     strategy = AroonIndicator(df)
     signal_lst, df = strategy.run_aroon_indicator()
@@ -1176,7 +1177,7 @@ def defaultsr(symbol:str, diff:float, timeFrame: TimeFrame, logger):
             SupportResistance(
                 symbol=symbol,
                 timeframe=timeFrame,
-                level=support,
+                level=float(support),
                 type=SupportResistanceType.SUPPORT,
                 caclulator="defaultsr"
             )
@@ -1187,7 +1188,7 @@ def defaultsr(symbol:str, diff:float, timeFrame: TimeFrame, logger):
             SupportResistance(
                 symbol=symbol,
                 timeframe=timeFrame,
-                level=resistance,
+                level=float(resistance),
                 type=SupportResistanceType.RESISTANCE,
                 caclulator="defaultsr"
             )
@@ -1217,7 +1218,7 @@ def trendlinebreakout(symbol:str, timeFrame: TimeFrame):
         SupportResistance(
             symbol=symbol,
             timeframe=timeFrame,
-            level= support[len(support)-1],
+            level=float(support[len(support)-1]),
             type=SupportResistanceType.RESISTANCE,
             caclulator="trendlinebreakout"
         )
@@ -1227,7 +1228,7 @@ def trendlinebreakout(symbol:str, timeFrame: TimeFrame):
         SupportResistance(
             symbol=symbol,
             timeframe=timeFrame,
-            level= resist[len(resist)-1],
+            level=float(resist[len(resist)-1]),
             type=SupportResistanceType.RESISTANCE,
             caclulator="trendlinebreakout"
         )
