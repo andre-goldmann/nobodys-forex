@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("IgnoredSignals")
+@Table("IgnoredSignalsNew")
 @Getter
 @Setter
 @ToString
