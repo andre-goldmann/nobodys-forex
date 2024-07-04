@@ -10,6 +10,8 @@ public class StrategyNameMapping {
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap();
     
     static {
+        STRATEGY_NAMES.put(StrategyEnum.MTI, "MTI");
+        STRATEGY_NAMES.put(StrategyEnum.MTI_WITHOUT_REG, "MTI_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.NNR, "NNR");
         STRATEGY_NAMES.put(StrategyEnum.NNR_WITHOUT_REG, "NNR_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.SUPER_AI_TREND, "Super AI Trend");
