@@ -89,7 +89,7 @@ public class SignalService {
 
     public Mono<IgnoredSignalEntity> storeIgnoredSignal(final Signal signal, final TradeStat stats, final String info) {
         try {
-            if(this.ignoredSignalsRepository.existsBySymbolStrategyAndTimeframe(signal.symbol(), signal.strategy(), signal.timeframe()).blockOptional().orElse(false)){
+            if(this.ignoredSignalsRepository.existsBySymbolAndStrategyAndTimeframe(signal.symbol(), signal.strategy(), signal.timeframe()).blockOptional().orElse(false)){
                 return Mono.empty();
             }
             // before storing this information check if it is exists allready
