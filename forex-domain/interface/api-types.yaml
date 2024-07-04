@@ -68,6 +68,8 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - MTI
+        - MTI_WITHOUT_REG
         - RedK-SMA-SMA
         - RedK-SMA-SMA_WITHOUT_REG
         - AI Volume Supertrend-WMA
