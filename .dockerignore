@@ -1,1 +1,4 @@
 .*
+
+# But not the .env file
+!.env
