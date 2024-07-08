@@ -7,9 +7,11 @@ import java.util.Map;
 
 public class StrategyNameMapping {
     
-    public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap();
+    public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
     
     static {
+        STRATEGY_NAMES.put(StrategyEnum.TURTLE_SOUP, "Turtle Soup");
+        STRATEGY_NAMES.put(StrategyEnum.TURTLE_SOUP_WITHOUT_REG, "Turtle Soup_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.MTI, "MTI");
         STRATEGY_NAMES.put(StrategyEnum.MTI_WITHOUT_REG, "MTI_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.NNR, "NNR");

@@ -68,6 +68,8 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - Turtle Soup
+        - Turtle Soup_WITHOUT_REG
         - MTI
         - MTI_WITHOUT_REG
         - RedK-SMA-SMA
