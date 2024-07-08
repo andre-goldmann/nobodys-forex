@@ -68,6 +68,8 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - Multiple Logistic Regression
+        - Multiple Logistic Regression_WITHOUT_REG
         - Turtle Soup
         - Turtle Soup_WITHOUT_REG
         - MTI
