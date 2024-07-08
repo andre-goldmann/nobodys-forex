@@ -2,3 +2,7 @@
 
 # But not the .env file
 !.env
+
+# But not the .env file
+!DataBaseManagement.py
+!requirements.txt

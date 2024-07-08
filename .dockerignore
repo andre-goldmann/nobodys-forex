@@ -2,3 +2,8 @@
 
 # But not the .env file
 !.env
+!DataBaseManagement.py
+!requirements.txt
+!keycloak.dev.env
+!database.dev.env
+!trading_strategies
