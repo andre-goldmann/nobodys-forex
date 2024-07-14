@@ -44,5 +44,10 @@ def main():
     # Plot the backtest results
     bt.plot()
 
+    # Save the plot
+    bt.plot(filename='adx_crossover_backtest_results.html', open_browser=False)
+
+    print("Backtest results saved to 'adx_crossover_backtest_results.html'")
+
 if __name__ == "__main__":
     main()
