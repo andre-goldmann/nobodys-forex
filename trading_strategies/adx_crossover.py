@@ -42,9 +42,9 @@ class AdxCrossover(Strategy):
         self.smoothed_plus_dm = self.I(lambda: self.smoothed(self.plus_dm, self.window), name='Smoothed_Plus_DM')
         self.smoothed_minus_dm = self.I(lambda: self.smoothed(self.minus_dm, self.window), name='Smoothed_Minus_DM')
         
-        self.plus_di = self.I(lambda: 100 * self.smoothed_plus_dm / self.smoothed_tr, name='Plus_DI')
-        self.minus_di = self.I(lambda: 100 * self.smoothed_minus_dm / self.smoothed_tr, name='Minus_DI')
-        self.dx = self.I(lambda: 100 * np.abs(self.plus_di - self.minus_di) / (self.plus_di + self.minus_di), name='DX')
+        self.plus_di = self.I(lambda: np.where(self.smoothed_tr != 0, 100 * self.smoothed_plus_dm / self.smoothed_tr, 0), name='Plus_DI')
+        self.minus_di = self.I(lambda: np.where(self.smoothed_tr != 0, 100 * self.smoothed_minus_dm / self.smoothed_tr, 0), name='Minus_DI')
+        self.dx = self.I(lambda: np.where((self.plus_di + self.minus_di) != 0, 100 * np.abs(self.plus_di - self.minus_di) / (self.plus_di + self.minus_di), 0), name='DX')
         self.adx = self.I(lambda: self.smoothed(self.dx, self.window), name='ADX')
 
     def next(self):
@@ -61,4 +61,8 @@ class AdxCrossover(Strategy):
 
     def smoothed(self, series, window):
         alpha = 1 / window
-        return self.I(lambda x: x[0] if np.isnan(x[1]) else alpha * x[0] + (1 - alpha) * x[1], series, name=f'EMA_{window}')
+        def smooth(x):
+            if len(x) < 2:
+                return x
+            return x[0] if np.isnan(x[1]) else alpha * x[0] + (1 - alpha) * x[1]
+        return self.I(smooth, series, name=f'EMA_{window}')

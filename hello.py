@@ -18,7 +18,9 @@ def main():
     # SQL query to fetch data
     query = """
     SELECT * FROM "Candles"
-    WHERE "SYMBOL" = 'EURUSD' and "TIMEFRAME"='PERIOD_M15' limit 1000
+    WHERE "SYMBOL" = 'EURUSD' and "TIMEFRAME"='PERIOD_M15'
+    ORDER BY "DATETIME" DESC
+    LIMIT 5000
     """
 
     # Load data into pandas DataFrame
