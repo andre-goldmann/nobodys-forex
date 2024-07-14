@@ -68,6 +68,8 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - ML kNN
+        - ML kNN_WITHOUT_REG
         - Multiple Logistic Regression
         - Multiple Logistic Regression_WITHOUT_REG
         - Turtle Soup

@@ -10,6 +10,8 @@ public class StrategyNameMapping {
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
     
     static {
+        STRATEGY_NAMES.put(StrategyEnum.ML_KNN, "ML kNN");
+        STRATEGY_NAMES.put(StrategyEnum.ML_KNN_WITHOUT_REG, "ML kNN_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.MULTIPLE_LOGISTIC_REGRESSION, "Multiple Logistic Regression");
         STRATEGY_NAMES.put(StrategyEnum.MULTIPLE_LOGISTIC_REGRESSION_WITHOUT_REG, "Multiple Logistic Regression_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.TURTLE_SOUP, "Turtle Soup");

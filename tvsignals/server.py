@@ -34,6 +34,9 @@ symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF",
 strategies = ["NNR",
               "NNR_WITHOUT_REG",
 
+              "ML kNN",
+              "ML kNN_WITHOUT_REG",
+
               "Multiple Logistic Regression",
               "Multiple Logistic Regression_WITHOUT_REG",
 
@@ -906,7 +909,8 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "T3-VolumeDifferenceDeltaCycleOscillator" \
                 or strategy == "NNR" \
                 or strategy == "T3-LocallyWeightedRegression" \
-                or strategy == "T3-HmaKahlman" or strategy == "T3-EvwmaVwapMacd" \
+                or strategy == "T3-HmaKahlman" \
+                or strategy == "T3-EvwmaVwapMacd" \
                 or strategy == "T3-EfficientTrendStepMod" \
                 or strategy == "SOTT-Lorentzian" \
                 or strategy == "T3-Eams" \
@@ -930,7 +934,8 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "RedK-SMA-SMA" \
                 or strategy == "MTI" \
                 or strategy == "Turtle Soup" \
-                or strategy == "Multiple Logistic Regression":
+                or strategy == "Multiple Logistic Regression" \
+                or strategy == "ML kNN":
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", session)
 
