@@ -5,10 +5,9 @@ Created on Sun Sep 27 09:29:36 2020
 @author: mingyu
 """
 
+import ta
 from backtesting import Strategy
 from backtesting.lib import crossover
-import pandas as pd
-import ta
 
 class AdxCrossover(Strategy):
     window = 20

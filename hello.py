@@ -16,15 +16,15 @@ def main():
     # SQL query to fetch data
     query = """
     SELECT * FROM "Candles"
-    WHERE "SYMBOL" = 'EURUSD' and "TIMEFRAME"='PERIOD_M15'
+    WHERE "SYMBOL" = 'EURUSD' and "TIMEFRAME"='PERIOD_M15' limit 1000
     """
 
     # Load data into pandas DataFrame
     df = pd.read_sql(query, engine)
 
     # Prepare data for backtesting
-    df['Time'] = pd.to_datetime(df['TIME'])
-    df = df.set_index('Time')
+    df['Time'] = pd.to_datetime(df['DATETIME'])
+    df = df.set_index('DATETIME')
     df = df.rename(columns={
         'OPEN': 'Open',
         'HIGH': 'High',
