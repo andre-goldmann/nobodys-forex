@@ -2,6 +2,8 @@ from sqlalchemy import create_engine
 import pandas as pd
 from backtesting import Backtest
 from trading_strategies.adx_crossover import AdxCrossover
+from trading_strategies.aroon_adx import AroonAdx
+
 
 def main():
     # Database connection details
@@ -36,6 +38,8 @@ def main():
 
     # Run backtest
     bt = Backtest(df, AdxCrossover, cash=10000, commission=.002)
+    #bt = Backtest(df, AroonAdx, cash=10000, commission=.002)
+
     results = bt.run()
 
     # Print results
