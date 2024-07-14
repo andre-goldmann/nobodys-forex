@@ -3,18 +3,18 @@ import pandas as pd
 
 def main():
     # Database connection details
-    db_host = "172.31.138.212"
+    db_host = "172.31.138.212:6432"
     db_name = "trading-db"
-    db_user = "your_username"  # Replace with actual username
-    db_password = "your_password"  # Replace with actual password
+    db_user = "nobodysforex"  # Replace with actual username
+    db_password = "pwd"  # Replace with actual password
 
     # Create SQLAlchemy engine
     engine = create_engine(f"postgresql://{db_user}:{db_password}@{db_host}/{db_name}")
 
     # SQL query to fetch data
     query = """
-    SELECT * FROM candles
-    WHERE symbol = 'EURUUSD' AND timeframe = '15'
+    SELECT * FROM "Candles"
+    WHERE "SYMBOL" = 'EURUSD' and "TIMEFRAME"='PERIOD_M15'
     """
 
     # Load data into pandas DataFrame
