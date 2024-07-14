@@ -65,7 +65,7 @@ def main():
     print(results)
 
     # Plot the backtest results
-    bt.plot()
+    bt.plot(resample=False)
 
     # Save the plot
     bt.plot(filename='adx_crossover_backtest_results.html', open_browser=False)
