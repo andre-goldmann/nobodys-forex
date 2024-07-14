@@ -65,7 +65,10 @@ def main():
     print(results)
 
     # Plot the backtest results
-    bt.plot(resample=False)
+    bt.plot(resample=False, 
+            plot_width=1200,
+            plot_height=800,
+            xaxis_kwargs={'formatter': DatetimeTickFormatter(days='%d %b')})
 
     # Save the plot
     bt.plot(filename='adx_crossover_backtest_results.html', open_browser=False)
