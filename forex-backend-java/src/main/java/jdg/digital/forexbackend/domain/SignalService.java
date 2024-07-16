@@ -46,7 +46,7 @@ public class SignalService {
                 .timeFrame(signal.getTimeframe())
                 .strategy(signal.getStrategy())
                 .type(signal.getType())
-                .timestamp(OffsetDateTime.now())
+                .timestamp(signal.getTimestamp())
                 .build());
     }
 

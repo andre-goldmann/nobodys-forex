@@ -540,15 +540,14 @@ components:
         - type
       properties:
         symbol:
-          $ref: '#/components/schemas/SymbolEnum'
+          type: string
         timestamp:
           type: string
-          format: date-time
         type:
-          $ref: '#/components/schemas/TradeTypeEnum'
+          type: string
         strategy:
-          $ref: '#/components/schemas/StrategyEnum'
+          type: string
         timeframe:
-          $ref: '#/components/schemas/TimeFrameEnum'
+          type: string
         trendinfo:
           type: number

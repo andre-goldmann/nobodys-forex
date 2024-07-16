@@ -21,14 +21,14 @@ public class AgainstTrendSignalEntity {
     @Id
     private Long id;
 
-    private SymbolEnum symbol;
+    private String symbol;
 
-    private TimeFrameEnum timeFrame;
+    private String timeFrame;
 
-    private StrategyEnum strategy;
+    private String strategy;
 
-    private TradeTypeEnum type;
+    private String type;
 
-    private OffsetDateTime timestamp;
+    private String timestamp;
 
 }
