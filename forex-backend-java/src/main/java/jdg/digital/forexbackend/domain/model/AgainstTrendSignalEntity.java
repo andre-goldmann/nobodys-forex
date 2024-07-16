@@ -23,7 +23,7 @@ public class AgainstTrendSignalEntity {
 
     private String symbol;
 
-    private String timeFrame;
+    private String timeframe;
 
     private String strategy;
 

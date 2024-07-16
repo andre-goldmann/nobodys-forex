@@ -43,7 +43,7 @@ public class SignalService {
     public Mono<AgainstTrendSignalEntity> storeAgainstTrendSignal(final AgainstTrendSignal signal){
         return this.againstTrendSignalRepository.save(AgainstTrendSignalEntity.builder()
                 .symbol(signal.getSymbol())
-                .timeFrame(signal.getTimeframe())
+                .timeframe(signal.getTimeframe())
                 .strategy(signal.getStrategy())
                 .type(signal.getType())
                 .timestamp(signal.getTimestamp())
