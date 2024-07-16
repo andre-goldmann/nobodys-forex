@@ -8,7 +8,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.OffsetDateTime;
 
-@Table("AgainstTrendSignal")
+@Table("AgainstTrendSignals")
 @Getter
 @Setter
 @ToString
