@@ -1,6 +1,7 @@
 package jdg.digital.forexbackend.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdg.digital.api_interface.AgainstTrendSignal;
 import jdg.digital.api_interface.TradeStat;
 import jdg.digital.forexbackend.domain.model.*;
 import jdg.digital.forexbackend.interfaces.ForexProducerService;
@@ -34,7 +35,20 @@ public class SignalService {
     private IgnoredSignalsRepository ignoredSignalsRepository;
 
     @Autowired
+    private AgainstTrendSignalRepository againstTrendSignalRepository;
+
+    @Autowired
     private ObjectMapper mapper;
+
+    public Mono<AgainstTrendSignalEntity> storeAgainstTrendSignal(final AgainstTrendSignal signal){
+        return this.againstTrendSignalRepository.save(AgainstTrendSignalEntity.builder()
+                .symbol(signal.getSymbol())
+                .timeFrame(signal.getTimeframe())
+                .strategy(signal.getStrategy())
+                .type(signal.getType())
+                .timestamp(OffsetDateTime.now())
+                .build());
+    }
 
     public Mono<List<Signal>> getSignals(String env) {
         return switch (env.toUpperCase(Locale.getDefault())) {

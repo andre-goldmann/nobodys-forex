@@ -201,3 +201,4 @@ resumee-check/.idea
 resumee-check/chroma_data
 
 .nx/cache
+.aider*

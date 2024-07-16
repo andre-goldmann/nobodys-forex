@@ -831,8 +831,25 @@ def proceedSignal(signal:SignalDto):
 
         trendInfo = session.query(TrendInfoEntity).filter(TrendInfoEntity.symbol == signal.symbol).first()
         if trendInfo is not None:
+            data = {"symbol": signal.symbol,
+                    "timestamp": signal.timestamp,
+                    "type": signal.type,
+                    "strategy": strategy,
+                    "timeframe": signal.timeframe,
+                    "trendinfo": + trendInfo.id}
+
             if trendInfo.trendscore > -7 and signal.type == "sell":
                 logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                #"http://javabackend:5080/forex/signals"
+                response = requests.post(
+                    "http://javabackend:5080/forex/signals/againsttrendsignal",
+                    json=data,
+                )
+                if response.status_code != 200:
+                    #logger.error("#############################Error sending to Java Backend##############################")
+                    #logger.error(str(response.status_code))
+                    #print(str(response))
+                    logger.error("Error sending to Java Backend" + str(response))
                 #if trendInfo.trendscore == -6:
                 #    storeIgnoredSignal(IgnoredSignal(
                 #        json=jsonSignal,
@@ -842,6 +859,15 @@ def proceedSignal(signal:SignalDto):
                 return
             if trendInfo.trendscore < 7 and signal.type == "buy":
                 logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                response = requests.post(
+                    "http://javabackend:5080/forex/signals/againsttrendsignal",
+                    json=data,
+                )
+                if response.status_code != 200:
+                    #logger.error("#############################Error sending to Java Backend##############################")
+                    #logger.error(str(response.status_code))
+                    #print(str(response))
+                    logger.error("Error sending to Java Backend" + str(response))
                 #if trendInfo.trendscore == 6:
                 #    storeIgnoredSignal(IgnoredSignal(
                 #        json=jsonSignal,
@@ -980,58 +1006,7 @@ def proceedSignal(signal:SignalDto):
             #session.commit()
             logger.warning(f"Ignored because Regression Line for H4 was not found!")
             session.close()
-        #    regressionLineD1 = session.query(Regressions).filter(
-        #        Regressions.symbol == signal.symbol, Regressions.timeFrame == TimeFrame.PERIOD_D1).all()
-        #    if len(regressionLineD1) > 0:
-        #        if "buy" == signal.type and signal.entry < regressionLineD1[0].endValue:
-        #            print(f"Ignore (2. Condition) Buy-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
-        #            #storeIgnoredSignal(IgnoredSignal(
-        #            #    json=jsonSignal,
-        #            #    reason=f"Ignore (2. Condition) Buy-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
-        #            #))
-        #            session.commit()
-        #            session.close()
-        #            return
 
-        #        if "sell" == signal.type and signal.entry > regressionLineD1[0].endValue:
-        #            print(f"Ignore (2. Condition) Sell-Signal: {signal}, Regression-End: {regressionLineD1[0].endValue}")
-        #            #storeIgnoredSignal(IgnoredSignal(
-        #            #    json=jsonSignal,
-        #            #    reason=f"Ignore (2. Condition) Sell-Signal: {signal.entry}, Regression-End: {regressionLineD1[0].endValue}"
-        #            #))
-        #            session.commit()
-        #            session.close()
-        #            return
-
-        #        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session)
-        #        atrValue = atr(df)
-
-        #        sl = 0.0
-        #        tp = 0.0
-        #        if signal.type == "sell":
-        #            sl = signal.entry + atrValue.iloc[-1]
-        #            tp = signal.entry - atrValue.iloc[-1]
-        #        if signal.type == "buy":
-        #            sl = signal.entry - atrValue.iloc[-1]
-        #            tp = signal.entry + atrValue.iloc[-1]
-
-                #storeSignal(Signal(
-                #    symbol=signal.symbol,
-                #    type=signal.type,
-                #    entry=signal.entry,
-                #    sl=sl,
-                #    tp=tp,
-                #    lots=0.1,
-                #    commision=0.0,
-                #    strategy=strategy
-                #), session)
-                #session.commit()
-                #session.close()
-        #        print(f"######## {signal} stored ########")
-        #    else:
-                #session.commit()
-                #session.close()
-        #        print(f"No Regression-Data found for {signal.symbol}")
 
 def storeProdSignal(signal: ProdSignal, session):
     session.add(signal)

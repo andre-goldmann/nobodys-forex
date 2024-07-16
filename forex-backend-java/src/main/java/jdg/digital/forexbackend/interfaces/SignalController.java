@@ -2,10 +2,11 @@ package jdg.digital.forexbackend.interfaces;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdg.digital.api_interface.TradeStat;
+import jdg.digital.api_interface.AgainstTrendSignal;
 import jdg.digital.forexbackend.domain.Signal;
 import jdg.digital.forexbackend.domain.SignalService;
 import jdg.digital.forexbackend.domain.TradeStatsServices;
+import jdg.digital.forexbackend.domain.model.AgainstTrendSignalEntity;
 import jdg.digital.forexbackend.domain.model.ProdTradeRepository;
 import jdg.digital.forexbackend.domain.model.SignalRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,12 @@ public class SignalController {
     @DeleteMapping("/ignored/delete")
     public Mono<Void> deleteIgnoredSignal(@RequestParam String json) {
         return this.signalService.deleteIgnoredSignal(json);
+    }
+
+    @PostMapping("/againsttrendsignal")
+    public Mono<AgainstTrendSignalEntity> createSignal(@RequestBody AgainstTrendSignal signal) {
+        log.info("Received against trend signal: {}", signal);
+        return this.signalService.storeAgainstTrendSignal(signal);
     }
 
     @PostMapping
