@@ -1,5 +1,8 @@
 package jdg.digital.forexbackend.interfaces;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdg.digital.api_interface.AgainstTrendSignal;
@@ -97,7 +100,26 @@ public class SignalController {
                                     if (activeTrades < 4) {
                                         log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats);
                                         // TODO we could load prodStats here and dynamically set the lots
-                                        this.signalService.storeProdSignal(signal).subscribe();
+
+                                        // check if today is Thursday and if actuall time is before 16:00
+                                        // if yes, then do nothing here
+                                        // if no, then store the signal in prod
+
+                                        // 1. Obtain the current date and time
+                                        final LocalDateTime now = LocalDateTime.now();
+
+                                        // 2. Check if today is Thursday
+                                        final boolean isThursday = now.getDayOfWeek() == DayOfWeek.THURSDAY;
+
+                                        // 3. Check if the current time is before 16:00
+                                        final boolean isBefore16 = now.toLocalTime().isBefore(LocalTime.of(16, 0));
+
+                                        if (isThursday && isBefore16) {
+                                            log.info("Today is Thursday and the current time is before 16:00, so the signal will not be stored in prod");
+                                        } else {
+                                            this.signalService.storeProdSignal(signal).subscribe();
+                                        }
+
 
                                         try {
                                             this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
