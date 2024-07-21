@@ -31,7 +31,29 @@ Session = sessionmaker(bind=engine)
 app = FastAPI()
 
 symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
-strategies = ["NNR",
+strategies = [
+              "Bj SuperScript TRM",
+              "Bj SuperScript TRM_WITHOUT_REG",
+
+              "Bj SuperScript Reversal",
+              "Bj SuperScript Reversal_WITHOUT_REG",
+
+              "Bj SuperScript MaCross",
+              "Bj SuperScript MaCross_WITHOUT_REG",
+
+              "Bj SuperScript RSI",
+              "Bj SuperScript RSI_WITHOUT_REG",
+
+              "Bj SuperScript RSI Momo",
+              "Bj SuperScript RSI Momo_WITHOUT_REG",
+
+              "Bj SuperScript TSI Curl",
+              "Bj SuperScript TSI Curl_WITHOUT_REG",
+
+              "Bj SuperScript SAR",
+              "Bj SuperScript SAR_WITHOUT_REG",
+
+              "NNR",
               "NNR_WITHOUT_REG",
 
               "ML kNN",
@@ -961,7 +983,14 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "MTI" \
                 or strategy == "Turtle Soup" \
                 or strategy == "Multiple Logistic Regression" \
-                or strategy == "ML kNN":
+                or strategy == "ML kNN" \
+                or strategy == "Bj SuperScript TRM" \
+                or strategy == "Bj SuperScript Reversal" \
+                or strategy == "Bj SuperScript MaCross" \
+                or strategy == "Bj SuperScript RSI" \
+                or strategy == "Bj SuperScript RSI Momo" \
+                or strategy == "Bj SuperScript TSI Curl" \
+                or strategy == "Bj SuperScript SAR":
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", session)
 

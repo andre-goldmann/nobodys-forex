@@ -68,6 +68,20 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - Bj SuperScript TRM
+        - Bj SuperScript TRM_WITHOUT_REG
+        - Bj SuperScript Reversal
+        - Bj SuperScript Reversal_WITHOUT_REG
+        - Bj SuperScript MaCross
+        - Bj SuperScript MaCross_WITHOUT_REG
+        - Bj SuperScript RSI
+        - Bj SuperScript RSI_WITHOUT_REG
+        - Bj SuperScript RSI Momo
+        - Bj SuperScript RSI Momo_WITHOUT_REG
+        - Bj SuperScript TSI Curl
+        - Bj SuperScript TSI Curl_WITHOUT_REG
+        - Bj SuperScript SAR
+        - Bj SuperScript SAR_WITHOUT_REG
         - ML kNN
         - ML kNN_WITHOUT_REG
         - Multiple Logistic Regression

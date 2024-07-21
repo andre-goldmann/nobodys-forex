@@ -10,6 +10,26 @@ public class StrategyNameMapping {
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
     
     static {
+
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_TRM, "Bj SuperScript TRM");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_TRM_WITHOUT_REG, "Bj SuperScript TRM_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_REVERSAL, "Bj SuperScript Reversal");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_REVERSAL_WITHOUT_REG, "Bj SuperScript Reversal_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_MACROSS, "Bj SuperScript MaCross");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_MACROSS_WITHOUT_REG, "Bj SuperScript MaCross_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_RSI, "Bj SuperScript RSI");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_RSI_WITHOUT_REG, "Bj SuperScript RSI_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_RSI_MOMO, "Bj SuperScript RSI Momo");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_RSI_MOMO_WITHOUT_REG, "Bj SuperScript RSI Momo_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_TSI_CURL, "Bj SuperScript TSI Curl");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_TSI_CURL_WITHOUT_REG, "Bj SuperScript TSI Curl_WITHOUT_REG");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_SAR, "Bj SuperScript SAR");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_SAR_WITHOUT_REG, "Bj SuperScript SAR_WITHOUT_REG");
+
         STRATEGY_NAMES.put(StrategyEnum.ML_KNN, "ML kNN");
         STRATEGY_NAMES.put(StrategyEnum.ML_KNN_WITHOUT_REG, "ML kNN_WITHOUT_REG");
         STRATEGY_NAMES.put(StrategyEnum.MULTIPLE_LOGISTIC_REGRESSION, "Multiple Logistic Regression");
