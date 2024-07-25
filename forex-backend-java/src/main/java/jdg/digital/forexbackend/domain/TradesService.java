@@ -48,7 +48,7 @@ public class TradesService {
 
 
     public Mono<String> updateHistory(final String env, final TradeHistoryUpdate update) {
-        log.info("updatehistory: {}", update);
+        //log.info("updatehistory: {}", update);
 
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> this.tradeRepository.updateDev(
