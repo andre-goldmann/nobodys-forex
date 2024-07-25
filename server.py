@@ -333,6 +333,11 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
 
 @app.post("/signalactivated")
 async def signalActivated(signalActivation:SignalActivationDto):
+    symbol = signalActivation.symbol
+    if symbol.endswith('#'):
+        symbol = symbol.replace("#", "")
+        signalActivation.symbol = symbol
+
     if signalActivation.symbol not in symbols:
         logger.warning(f"Ignore request because symbol is not handled yet: {signalActivation}")
         return
@@ -341,6 +346,11 @@ async def signalActivated(signalActivation:SignalActivationDto):
 
 @app.post("/signalactivatedprod")
 async def signalActivatedProd(signalActivation:SignalActivationDto):
+    symbol = signalActivation.symbol
+    if symbol.endswith('#'):
+        symbol = symbol.replace("#", "")
+        signalActivation.symbol = symbol
+
     if signalActivation.symbol not in symbols:
         logger.warning(f"Ignore request because symbol is not handled yet: {signalActivation}")
         return
