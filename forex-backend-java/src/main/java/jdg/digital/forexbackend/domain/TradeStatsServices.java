@@ -125,7 +125,6 @@ public class TradeStatsServices {
                 .collect(Collectors.toSet());
         if (strategies.isEmpty()) {
             log.warn("No StrategyEnum found for " + entity.getStrategy());
-            System.out.println("No StrategyEnum found for " + entity.getStrategy());
             throw new IllegalArgumentException("No StrategyEnum found for " + entity.getStrategy());
         } else if (strategies.size() > 1) {
             log.warn("Multiple StrategyEnums found for " + entity.getStrategy());
@@ -150,4 +149,6 @@ public class TradeStatsServices {
         }
         return stat;
     }
+
+
 }

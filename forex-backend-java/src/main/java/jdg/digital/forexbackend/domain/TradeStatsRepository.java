@@ -1,5 +1,6 @@
 package jdg.digital.forexbackend.domain;
 
+import jdg.digital.api_interface.Trade;
 import jdg.digital.forexbackend.domain.model.TradeStatEntity;
 import jdg.digital.forexbackend.domain.model.TradeStatInterface;
 import org.springframework.data.r2dbc.repository.Query;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.nio.channels.FileChannel;
 
 @Repository
 @Transactional
@@ -92,4 +95,5 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "GROUP BY symbol, strategy, timeframe\n"
     )
     Mono<TradeStatInterface> getProdStatsFor(@Param("symbol") String symbol, @Param("strategy") String strategy, @Param("timeframe") String timeframe);
+
 }

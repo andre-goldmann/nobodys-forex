@@ -44,5 +44,13 @@ public class ForexService {
     public Mono<List<StatsPerProdTrade>> getStatsForLastNTrades() {
         return this.forexDataServiceApi.getStatsForLastNTrades();
     }
+
+    public Mono<List<Trade>> getTrades(final String env) {
+        return this.forexDataServiceApi.getTrades(env);
+    }
+
+    public Mono<List<Trade>> searchTradesById(final String env, Integer tradeId) {
+        return this.forexDataServiceApi.searchTradesById(env, tradeId);
+    }
 }
 

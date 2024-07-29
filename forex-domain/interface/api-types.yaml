@@ -468,6 +468,8 @@ components:
           $ref: '#/components/schemas/StrategyEnum'
         type:
           $ref: '#/components/schemas/TradeTypeEnum'
+        openprice:
+          type: number
         entry:
           type: number
         exit:

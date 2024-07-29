@@ -1,3 +1,4 @@
+export * from './against-trend-signal';
 export * from './stats-per-prod-trade';
 export * from './strategy-enum';
 export * from './symbol-enum';

@@ -20,6 +20,16 @@ public class TradeController {
     @Autowired
     private TradeStatsServices tradeStatsServices;
 
+    @GetMapping("/{env}")
+    public Mono<List<Trade>> getTrades(@PathVariable("env") final String env) {
+        return this.tradeService.getTrades(env);
+    }
+
+    @GetMapping("/byid/{env}/{tradeId}")
+    public Mono<List<Trade>> searchTradesById(@PathVariable("env") final String env, @PathVariable("tradeId") final Integer tradeId) {
+        return this.tradeService.searchTrades(env, tradeId);
+    }
+
     @GetMapping("tradetats/{env}")
     public Mono<List<TradeStat>> getTradesDev(@PathVariable("env") final String env) {
         return this.tradeStatsServices.getTradeStats(env);

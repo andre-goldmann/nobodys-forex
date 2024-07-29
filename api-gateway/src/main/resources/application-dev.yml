@@ -11,7 +11,7 @@ logging:
     root: info
     org:
       springframework:
-        security: trace
+        security: error
 
 keycloak:
   #http://localhost:8080/realms/forex_admininstrator

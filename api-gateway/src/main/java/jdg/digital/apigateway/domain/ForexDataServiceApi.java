@@ -67,6 +67,24 @@ public class ForexDataServiceApi {
                 .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
+    public Mono<List<Trade>> getTrades(String env) {
+        return this.webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder.path("/trades/{env}").build(env))
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {});
+    }
+
+    public Mono<List<Trade>> searchTradesById(String env, Integer tradeId) {
+        return this.webClient
+                .get()
+                .uri(uriBuilder -> uriBuilder.path("/trades/byid/{env}/{tradeId}").build(env, tradeId))
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {});
+    }
+
     public Mono<List<Signal>> getIgnoredSignals() {
         return this.webClient
                 .get()
@@ -116,4 +134,5 @@ public class ForexDataServiceApi {
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<>() {});
     }
+
 }

@@ -9,6 +9,8 @@ import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.time.OffsetDateTime;
+
 @Table(name= "\"Trades\"")
 @Getter
 @Setter
@@ -51,4 +53,7 @@ public class TradesEntity {
     private Double commision;
 
     private Double exit;
+
+    private OffsetDateTime stamp;
+
 }

@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.nio.channels.FileChannel;
-
 @Transactional
 public interface TradeRepository extends ReactiveCrudRepository<TradesEntity, Integer> {
 
@@ -24,4 +22,18 @@ public interface TradeRepository extends ReactiveCrudRepository<TradesEntity, In
     @Query(value = "update \"ProdTrades\" set exit = :exit, profit = :profit, commision = :commision, swap = :swap, closed = :closed WHERE symbol = :symbol AND id = :magic")
     Mono<Integer> updateProd(@Param("symbol") String symbol, @Param("magic") Integer magic, @Param("exit") Double exit, @Param("profit") Double profit, @Param("commision") Double commision, @Param("swap") Double swap, @Param("closed") String closed);
 
+    @Query(value = "select * FROM \"Trades\" ORDER BY stamp DESC limit 10")
+    Flux<TradesEntity> getDevTrades();
+
+    @Query(value = "select * FROM \"ProdTrades\" ORDER BY stamp DESC limit 10")
+    Flux<TradesEntity> getProdTrades();
+
+    @Query(value = "SELECT * from \"Trades\" WHERE symbol = :symbol AND strategy = :strategy AND type = :type AND sl = :sl AND tp = :tp AND exit > 0 ORDER BY closed DESC")
+    Flux<TradesEntity> findBySymbolAndStrategyAndTypeAndSlAndTp(@Param("symbol") String symbol, @Param("strategy") String strategy, @Param("type") String type, @Param("sl") Double sl, @Param("tp") Double tp);
+
+    @Query(value = "select * FROM \"ProdTrades\" WHERE id = :id")
+    Mono<TradesEntity> findByIdWithinProd(@Param("id") Integer tradeId);
+
+    @Query(value = "select * FROM \"Trades\" WHERE id = :id")
+    Mono<TradesEntity> findByIdWithinDev(@Param("id") Integer tradeId);
 }

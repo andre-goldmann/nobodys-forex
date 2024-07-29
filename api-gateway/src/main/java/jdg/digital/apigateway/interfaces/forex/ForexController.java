@@ -47,6 +47,26 @@ public class ForexController {
         return this.forexService.getSignals(env);
     }
 
+    @GetMapping("/trades/{env}")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
+    public Mono<List<Trade>> getTrades(
+            @PathVariable("env") final String env) {
+        // kann man machen, aber @PreAuthorize prüft schon alles
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //log.info("auth: {}, {}", auth, auth.getAuthorities());
+        return this.forexService.getTrades(env);
+    }
+
+    @GetMapping("/trades/byid/{env}/{tradeId}")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
+    public Mono<List<Trade>> searchTradesById(
+            @PathVariable("env") final String env, @PathVariable("tradeId") final Integer tradeId) {
+        // kann man machen, aber @PreAuthorize prüft schon alles
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //log.info("auth: {}, {}", auth, auth.getAuthorities());
+        return this.forexService.searchTradesById(env, tradeId);
+    }
+
     @GetMapping("/signals/ignored")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Signal>> getIgnoredSignals() {

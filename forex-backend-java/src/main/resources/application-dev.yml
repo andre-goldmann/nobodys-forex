@@ -43,7 +43,7 @@ logging:
   level:
     root: INFO
     org:
-      springframework: TRACE
+      springframework: error
     #org:
     #  hibernate:
     #    SQL: DEBUG

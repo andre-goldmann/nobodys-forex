@@ -21,6 +21,7 @@ export interface Trade {
     timeframe: TimeFrameEnum;
     strategy: StrategyEnum;
     type?: TradeTypeEnum;
+    openprice?: number;
     entry?: number;
     exit?: number;
     profit?: number;

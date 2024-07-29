@@ -20,8 +20,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static jdg.digital.forexbackend.domain.TradeStatsServices.MIN_TRADES;
-import static jdg.digital.forexbackend.domain.TradeStatsServices.WIN_PERCENTAGE;
+import static jdg.digital.forexbackend.domain.TradeStatsServices.*;
 
 @RestController
 @Slf4j
@@ -91,9 +90,9 @@ public class SignalController {
                     this.signalService.storeDevSignal(signal, lots).subscribe();
 
                     // Only store to prod if stats are fulfilled
-                    if (stats.getWinpercentage().doubleValue() > WIN_PERCENTAGE
-                            && stats.getProfit().doubleValue() > TradeStatsServices.MIN_PROFIT
-                            && stats.getTotal() > MIN_TRADES) {
+                    if (stats.getWinpercentage().doubleValue() > (WIN_PERCENTAGE + 2.0)
+                            && stats.getProfit().doubleValue() > MIN_PROFIT
+                            && stats.getTotal() > (MIN_TRADES + 20)) {
 
                         return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
                                 .map(activeTrades -> {

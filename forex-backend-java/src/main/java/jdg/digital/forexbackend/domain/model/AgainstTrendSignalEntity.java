@@ -1,12 +1,9 @@
 package jdg.digital.forexbackend.domain.model;
 
-import jdg.digital.api_interface.*;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-
-import java.time.OffsetDateTime;
 
 @Table("AgainstTrendSignals")
 @Getter

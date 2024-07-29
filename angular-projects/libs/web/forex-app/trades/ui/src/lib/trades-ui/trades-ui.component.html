@@ -1,26 +1,77 @@
-<div class="container mx-auto">
-  <div role="tablist" class="tabs tabs-lifted">
-    <input type="text" name="my_tabs_2" role="tab" class="tab" aria-label="Active" checked/>
-    <!-- label not working here -->
-    <!--label role="tab" class="tab" aria-label="Active">Active</label-->
-    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-
-      <div class="overflow-x-auto">
-        ActiveTrades Content comming soon
-      </div>
-
+<!-- prod-trades.component.html -->
+<!-- TODO onclick on a trade, show also the Dev-Strategy-Stats -->
+<div class="container mx-auto p-4">
+  <div class="flex flex-col md:flex-row">
+    <!-- First Table (75% width) -->
+    <div class="w-full md:w-3/4 pr-0 md:pr-4 mb-4 md:mb-0">
+      <h3>Dev</h3>
+      <table class="table table-bordered w-full border-collapse">
+        <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Timeframe</th>
+          <th>Type</th>
+          <th>Strategy</th>
+          <th>Openprice</th>
+          <th>Exit</th>
+          <th>Closed</th>
+          <th>Profit</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let trade of prodTrades" (click)="selectTrade(trade)" [ngClass]="{'highlight': trade === selectedTrade}">
+          <td>{{ trade.symbol }}</td>
+          <td>{{ trade.timeframe }}</td>
+          <td>{{ trade.type }}</td>
+          <td>{{ trade.strategy }}</td>
+          <td>{{ trade.openprice }}</td>
+          <td>{{ trade.exit }}</td>
+          <td>{{ trade.closed }}</td>
+          <td>{{ trade.profit }}</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
 
-    <input type="text" name="my_tabs_2" role="tab" class="tab" aria-label="History" />
-    <!--label role="tab" class="tab" aria-label="History">History</label-->
-    <div role="tabpanel" class="tab-content bg-base-100 border-base-300 rounded-box p-6">
-
-      <div class="overflow-x-auto">
-        History Content comming soon
-      </div>
-
+    <!-- Second Table (25% width) -->
+    <div class="w-full md:w-1/4">
+      <h3 *ngIf="trades[0]">Prod</h3>
+      <table class="table table-bordered w-full border-collapse" *ngIf="trades[0]">
+        <tbody>
+        <tr>
+          <td>Symbol</td>
+          <td>{{ trades[0].symbol }}</td>
+        </tr>
+        <tr>
+          <td>Timeframe</td>
+          <td>{{ trades[0].timeframe }}</td>
+        </tr>
+        <tr>
+          <td>Type</td>
+          <td>{{ trades[0].type }}</td>
+        </tr>
+        <tr>
+          <td>Strategy</td>
+          <td>{{ trades[0].strategy }}</td>
+        </tr>
+        <tr>
+          <td>Openprice</td>
+          <td>{{ trades[0].openprice }}</td>
+        </tr>
+        <tr>
+          <td>Exit</td>
+          <td>{{ trades[0].exit }}</td>
+        </tr>
+        <tr>
+          <td>Closed</td>
+          <td>{{ trades[0].closed }}</td>
+        </tr>
+        <tr>
+          <td>Profit</td>
+          <td>{{ trades[0].profit }}</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
-
   </div>
-
 </div>
