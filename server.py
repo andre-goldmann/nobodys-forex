@@ -300,7 +300,7 @@ async def updateSignal(signalUpdateDto:SignalUpdateDto):
     symbol = signalUpdateDto.symbol
 
     if symbol.endswith('#'):
-        symbol = symbol.replace("#", "")
+        symbol = symbol.replace("#", "").replace(".r", "")
         signalUpdateDto.symbol = symbol
 
     if signalUpdateDto.symbol not in symbols:
@@ -322,7 +322,7 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
     symbol = historyUpdateDto.symbol
 
     if symbol.endswith('#'):
-        symbol = symbol.replace("#", "")
+        symbol = symbol.replace("#", "").replace(".r", "")
         historyUpdateDto.symbol = symbol
 
     if historyUpdateDto.symbol not in symbols:
@@ -335,7 +335,7 @@ async def updateHistory(historyUpdateDto:HistoryUpdateDto):
 async def signalActivated(signalActivation:SignalActivationDto):
     symbol = signalActivation.symbol
     if symbol.endswith('#'):
-        symbol = symbol.replace("#", "")
+        symbol = symbol.replace("#", "").replace(".r", "")
         signalActivation.symbol = symbol
 
     if signalActivation.symbol not in symbols:
@@ -348,7 +348,7 @@ async def signalActivated(signalActivation:SignalActivationDto):
 async def signalActivatedProd(signalActivation:SignalActivationDto):
     symbol = signalActivation.symbol
     if symbol.endswith('#'):
-        symbol = symbol.replace("#", "")
+        symbol = symbol.replace("#", "").replace(".r", "")
         signalActivation.symbol = symbol
 
     if signalActivation.symbol not in symbols:

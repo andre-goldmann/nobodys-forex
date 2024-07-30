@@ -49,7 +49,7 @@ public class TradesService {
 
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> this.tradeRepository.updateDev(
-                            update.getSymbol().getValue().replace("#", ""),
+                            update.getSymbol().getValue().replace("#", "").replace(".r", ""),
                             update.getMagic(),
                             update.getExit().doubleValue(),
                             update.getProfit().doubleValue(),
