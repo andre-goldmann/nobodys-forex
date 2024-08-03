@@ -6,11 +6,11 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /var/log/forex-backend.logs
-      - /var/log/api-gateway.logs
-      - /var/log/app.logs
-      - /var/log/apigateway/app.logs
-      - /var/log/javabackend/app.logs
+      #- /var/log/forex-backend.logs
+      #- /var/log/api-gateway.logs
+      #- /var/log/app.logs
+      - /var/log/apigateway/app.log
+      - /var/log/javabackend/app.log
 
 filebeat.autodiscover:
   providers:
