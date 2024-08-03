@@ -8,6 +8,9 @@ filebeat.inputs:
     paths:
       - /var/log/forex-backend.logs
       - /var/log/api-gateway.logs
+      - /var/log/app.logs
+      - /var/log/apigateway/app.logs
+      - /var/log/javabackend/app.logs
 
 filebeat.autodiscover:
   providers:
