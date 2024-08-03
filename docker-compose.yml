@@ -121,6 +121,7 @@ services:
       - ./certs/certificate.pem:/opt/apigateway/conf/certificate.pem
       - ./certs/private.key:/opt/apigateway/conf/private.key
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs:/var/log
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs:/app/logs
     depends_on:
       - keycloak
 
@@ -141,6 +142,7 @@ services:
       - ./certs/certificate.pem:/opt/javabackend/conf/certificate.pem
       - ./certs/private.key:/opt/javabackend/conf/private.key
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs:/var/log
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs:/app/logs
     depends_on:
       - keycloak
 
