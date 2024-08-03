@@ -296,8 +296,8 @@ services:
       #- certs:/usr/share/filebeat/certs
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs/apigateway:/var/log/apigateway:ro
       - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs/javabackend:/var/log/javabackend:ro
-      - - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs/apigateway:/ingest_data/apigateway:ro
-        - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs/javabackend:/ingest_data/javabackend:ro
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs/apigateway:/ingest_data/apigateway:ro
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs/javabackend:/ingest_data/javabackend:ro
       - filebeatdata01:/usr/share/filebeat/data
       - "./filebeat_ingest_data/:/usr/share/filebeat/ingest_data/"
       - "./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
