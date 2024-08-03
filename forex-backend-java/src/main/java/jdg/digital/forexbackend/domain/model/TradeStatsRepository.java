@@ -1,4 +1,4 @@
-package jdg.digital.forexbackend.domain;
+package jdg.digital.forexbackend.domain.model;
 
 import jdg.digital.api_interface.Trade;
 import jdg.digital.forexbackend.domain.model.TradeStatEntity;

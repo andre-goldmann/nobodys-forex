@@ -120,6 +120,7 @@ services:
     volumes:
       - ./certs/certificate.pem:/opt/apigateway/conf/certificate.pem
       - ./certs/private.key:/opt/apigateway/conf/private.key
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs:/var/log
     depends_on:
       - keycloak
 
@@ -139,6 +140,7 @@ services:
     volumes:
       - ./certs/certificate.pem:/opt/javabackend/conf/certificate.pem
       - ./certs/private.key:/opt/javabackend/conf/private.key
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs:/var/log
     depends_on:
       - keycloak
 
@@ -290,6 +292,7 @@ services:
     user: root
     volumes:
       #- certs:/usr/share/filebeat/certs
+      - ${DOCKER_VOLUME_DIRECTORY:-.}/volumes/logs:/var/log:ro
       - filebeatdata01:/usr/share/filebeat/data
       - "./filebeat_ingest_data/:/usr/share/filebeat/ingest_data/"
       - "./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"

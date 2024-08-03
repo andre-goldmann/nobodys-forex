@@ -2,9 +2,8 @@ package jdg.digital.forexbackend.interfaces;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdg.digital.forexbackend.domain.Signal;
-import jdg.digital.forexbackend.domain.TradeStatsRepository;
+import jdg.digital.forexbackend.domain.model.TradeStatsRepository;
 import jdg.digital.forexbackend.domain.model.SignalRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

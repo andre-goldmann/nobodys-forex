@@ -40,6 +40,7 @@ public class TradesService {
 
     public Mono<Trade> updateTrade(final String env, final Trade trade) {
         System.out.println("Update trade " + trade.toString());
+        // TODO implement this for FTMO see Line 452 server.py -> updateSignalProdInDb
         return Mono.empty();
     }
 
@@ -78,6 +79,21 @@ public class TradesService {
                             return "Trade not updated";
                         }
                     });
+            case "FTMO" -> this.tradeRepository.updateFtmo(
+                            update.getSymbol().getValue(),
+                            update.getMagic(),
+                            update.getExit().doubleValue(),
+                            update.getProfit().doubleValue(),
+                            update.getCommision().doubleValue(),
+                            update.getSwap().doubleValue(),
+                            update.getClosed())
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
 
@@ -88,6 +104,8 @@ public class TradesService {
             case "DEV" -> this.tradeRepository.getDevTrades()
                     .map(this::entityToDto).collectList();
             case "PROD" -> this.tradeRepository.getProdTrades()
+                    .map(this::entityToDto).collectList();
+            case "FTMO" -> this.tradeRepository.getFtmoTrades()
                     .map(this::entityToDto).collectList();
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
