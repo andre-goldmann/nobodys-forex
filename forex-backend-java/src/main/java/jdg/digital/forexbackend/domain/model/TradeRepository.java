@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.nio.channels.FileChannel;
+
 @Transactional
 public interface TradeRepository extends ReactiveCrudRepository<TradesEntity, Integer> {
 
@@ -43,4 +45,28 @@ public interface TradeRepository extends ReactiveCrudRepository<TradesEntity, In
 
     @Query(value = "select * FROM \"Trades\" WHERE id = :id")
     Mono<TradesEntity> findByIdWithinDev(@Param("id") Integer tradeId);
+
+    @Modifying
+    @Query(value = "update \"Trades\" set activated = :activated, openprice = :openPrice WHERE symbol = :symbol AND id = :magic")
+    Mono<Integer> activateTrade(@Param("symbol") String symbol, @Param("magic") Integer magic, @Param("activated") String activated, @Param("openPrice") Double openPrice);
+
+    @Modifying
+    @Query(value = "update \"ProdTrades\" set activated = :activated, openprice = :openPrice WHERE symbol = :symbol AND id = :magic")
+    Mono<Integer> activateProdTrade(@Param("symbol") String symbol,@Param("magic") Integer magic,@Param("activated") String activated, @Param("openPrice") Double openPrice);
+
+    @Modifying
+    @Query(value = "update \"FtmoTrades\" set activated = :activated, openprice = :openPrice WHERE symbol = :symbol AND id = :magic")
+    Mono<Integer> activateFtmoTrade(@Param("symbol") String symbol,@Param("magic") Integer magic,@Param("activated") String activated, @Param("openPrice") Double openPrice);
+
+    @Modifying
+    @Query(value = "update \"Trades\" set profit = :profit, swap = :swap, commision = :commision, closed = :closed WHERE symbol = :symbol AND id = :magic")
+    Mono<Integer>  updateTrade(@Param("symbol") String symbol, @Param("magic") Integer magic, @Param("profit") double profit, @Param("swap") double swap, @Param("commision") double commision, @Param("closed") String closed);
+
+    @Modifying
+    @Query(value = "update \"ProdTrades\" set profit = :profit, swap = :swap, commision = :commision, closed = :closed WHERE symbol = :symbol AND id = :magic")
+    Mono<Integer>  updateProdTrade(@Param("symbol") String symbol, @Param("magic") Integer magic, @Param("profit") double profit, @Param("swap") double swap, @Param("commision") double commision, @Param("closed") String closed);
+
+    @Modifying
+    @Query(value = "update \"FtmoTrades\" set profit = :profit, swap = :swap, commision = :commision, closed = :closed WHERE symbol = :symbol AND id = :magic")
+    Mono<Integer>  updateFtmoTrade(@Param("symbol") String symbol, @Param("magic") Integer magic, @Param("profit") double profit, @Param("swap") double swap, @Param("commision") double commision, @Param("closed") String closed);
 }

@@ -94,14 +94,14 @@ public class ForexDataServiceApi {
                 .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
-    public Mono<Trade> updateTrade(final String env, final Trade trade) {
+    public Mono<String> updateTrade(final String env, final TradeUpdateDto trade) {
         return this.webClient
-                .put()
+                .patch()
                 .uri(uriBuilder -> uriBuilder.path("/trades/update/{env}").build(env))
                 .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(trade), Trade.class)
+                .body(Mono.just(trade), TradeUpdateDto.class)
                 .retrieve()
-                .bodyToMono(Trade.class);
+                .bodyToMono(String.class);
     }
 
     public Mono<Void> deleteIgnoredSignal(final String json) {
@@ -135,4 +135,13 @@ public class ForexDataServiceApi {
                 .bodyToMono(new ParameterizedTypeReference<>() {});
     }
 
+    public Mono<String> activateTrade(String env, TradeActivationDto trade) {
+        return this.webClient
+                .patch()
+                .uri(uriBuilder -> uriBuilder.path("/trades/activate/{env}").build(env))
+                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(trade), TradeActivationDto.class)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<>() {});
+    }
 }

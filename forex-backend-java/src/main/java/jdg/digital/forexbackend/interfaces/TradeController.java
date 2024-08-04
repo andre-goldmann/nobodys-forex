@@ -50,9 +50,14 @@ public class TradeController {
         return this.tradeService.getTradesWithNegativeProfit(symbol, strategy);
     }
 
-    @PutMapping("update/{env}")
-    public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
+    @PatchMapping("update/{env}")
+    public Mono<String> updateTrade(@PathVariable("env") final String env, @RequestBody TradeUpdateDto trade) {
         return this.tradeService.updateTrade(env, trade);
+    }
+
+    @PatchMapping("activate/{env}")
+    public Mono<String> activateTrade(@PathVariable("env") final String env, @RequestBody TradeActivationDto trade) {
+        return this.tradeService.activateTrade(env, trade);
     }
 
     @PostMapping("updatehistory/{env}")

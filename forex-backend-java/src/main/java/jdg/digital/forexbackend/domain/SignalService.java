@@ -150,4 +150,18 @@ public class SignalService {
                 signal.strategy(),
                 LocalDateTime.now());
     }
+
+    public Mono<Void> storeFtmoSignal(Signal signal) {
+        return this.signalRepository.insertFtmoTradeEntity(
+                signal.symbol(),
+                signal.timeframe(),
+                signal.type(),
+                signal.entry(),
+                signal.sl(),
+                signal.tp(),
+                0.1,
+                signal.strategy(),
+                LocalDateTime.now());
+    }
+
 }

@@ -29,4 +29,8 @@ public interface SignalRepository extends ReactiveCrudRepository<SignalEntity, I
     @Modifying
     @Query(value = "INSERT INTO \"Trades\" (symbol, timeframe, type, entry, sl, tp, lots, strategy, stamp, activated) VALUES (:symbol, :timeframe, :type, :entry, :sl, :tp, :lots, :strategy, :stamp, '')")
     Mono<Void> insertDevTradeEntity(@Param("symbol") String symbol, @Param("timeframe") String timeframe, @Param("type") String type, @Param("entry") Double entry, @Param("sl") Double sl, @Param("tp") Double tp, @Param("lots") Double lots, @Param("strategy") String strategy, @Param("stamp") LocalDateTime stamp);
+
+    @Modifying
+    @Query(value = "INSERT INTO \"FtmoTrades\" (symbol, timeframe, type, entry, sl, tp, lots, strategy, stamp, activated) VALUES (:symbol, :timeframe, :type, :entry, :sl, :tp, :lots, :strategy, :stamp, '')")
+    Mono<Void> insertFtmoTradeEntity(String symbol, String timeframe, String type, double entry, double sl, double tp, double v, String strategy, LocalDateTime now);
 }

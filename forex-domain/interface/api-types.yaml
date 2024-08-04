@@ -451,6 +451,36 @@ components:
         profit:
           type: number
 
+    TradeActivationDto:
+      type: object
+      properties:
+        symbol:
+          $ref: '#/components/schemas/SymbolEnum'
+        timestamp:
+          type: string
+        magic:
+          type: integer
+        openPrice:
+          type: number
+
+    TradeUpdateDto:
+      type: object
+      properties:
+        symbol:
+          $ref: '#/components/schemas/SymbolEnum'
+        timestamp:
+          type: string
+        magic:
+          type: integer
+        profit:
+          type: number
+        swap:
+          type: number
+        closed:
+          type: string
+        commision:
+          type: number
+
     Trade:
       type: object
       required:

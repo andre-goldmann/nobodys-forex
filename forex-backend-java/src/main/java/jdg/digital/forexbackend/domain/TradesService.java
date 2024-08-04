@@ -38,11 +38,112 @@ public class TradesService {
                 .map(this::entityToDto).collectList();
     }
 
-    public Mono<Trade> updateTrade(final String env, final Trade trade) {
-        System.out.println("Update trade " + trade.toString());
-        // TODO implement this for FTMO see Line 452 server.py -> updateSignalProdInDb
-        return Mono.empty();
+    public Mono<String> updateTrade(final String env, final TradeUpdateDto tradeUpdateDto) {
+        return switch (env.toUpperCase(Locale.getDefault())) {
+            case "DEV" -> this.tradeRepository.updateTrade(
+                            tradeUpdateDto.getSymbol().getValue().replace("#", "").replace(".r", ""),
+                            tradeUpdateDto.getMagic(),
+                            tradeUpdateDto.getProfit().doubleValue(),
+                            tradeUpdateDto.getSwap().doubleValue(),
+                            tradeUpdateDto.getCommision().doubleValue(),
+                            tradeUpdateDto.getClosed()
+                    )
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
+            case "PROD" -> this.tradeRepository.updateProdTrade(
+                            tradeUpdateDto.getSymbol().getValue().replace("#", "").replace(".r", ""),
+                            tradeUpdateDto.getMagic(),
+                            tradeUpdateDto.getProfit().doubleValue(),
+                            tradeUpdateDto.getSwap().doubleValue(),
+                            tradeUpdateDto.getCommision().doubleValue(),
+                            tradeUpdateDto.getClosed()
+                    )
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
+            case "FTMO" -> this.tradeRepository.updateFtmoTrade(
+                            tradeUpdateDto.getSymbol().getValue().replace("#", "").replace(".r", ""),
+                            tradeUpdateDto.getMagic(),
+                            tradeUpdateDto.getProfit().doubleValue(),
+                            tradeUpdateDto.getSwap().doubleValue(),
+                            tradeUpdateDto.getCommision().doubleValue(),
+                            tradeUpdateDto.getClosed()
+                    )
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
+            default -> throw new IllegalArgumentException("Undefined env " + env);
+        };
     }
+
+    public Mono<String> activateTrade(final String env, final TradeActivationDto tradeActivationDto){
+        return switch (env.toUpperCase(Locale.getDefault())) {
+            case "DEV" -> this.tradeRepository.activateTrade(
+                            tradeActivationDto.getSymbol().getValue().replace("#", "").replace(".r", ""),
+                            tradeActivationDto.getMagic(),
+                            tradeActivationDto.getTimestamp(),
+                            tradeActivationDto.getOpenPrice().doubleValue())
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
+            case "PROD" -> this.tradeRepository.activateProdTrade(
+                            tradeActivationDto.getSymbol().getValue().replace("#", "").replace(".r", ""),
+                            tradeActivationDto.getMagic(),
+                            tradeActivationDto.getTimestamp(),
+                            tradeActivationDto.getOpenPrice().doubleValue())
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
+            case "FTMO" -> this.tradeRepository.activateFtmoTrade(
+                            tradeActivationDto.getSymbol().getValue().replace("#", "").replace(".r", ""),
+                            tradeActivationDto.getMagic(),
+                            tradeActivationDto.getTimestamp(),
+                            tradeActivationDto.getOpenPrice().doubleValue())
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Trade updated";
+                        } else {
+                            return "Trade not updated";
+                        }
+                    });
+            default -> throw new IllegalArgumentException("Undefined env " + env);
+        };
+    }
+
+    /*
+    def activateSignalProd(tradeActivationDto:SignalActivationDto):
+    #print("Activating Trade", tradeActivationDto)
+    with Session.begin() as session:
+        storeSignal = session.query(ProdSignal).filter(ProdSignal.symbol == tradeActivationDto.symbol, ProdSignal.id == tradeActivationDto.magic).first()
+        if storeSignal is not None:
+            storeSignal.activated=tradeActivationDto.timestamp
+            storeSignal.openprice=tradeActivationDto.open_price
+            session.commit()
+            session.close()
+        else:
+            print("No Trade found for ", tradeActivationDto)
+     */
 
 
     public Mono<String> updateHistory(final String env, final TradeHistoryUpdate update) {

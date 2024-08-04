@@ -29,10 +29,6 @@ public class ForexService {
         return this.forexDataServiceApi.getIgnoredSignals();
     }
 
-    public Mono<Trade> updateTrade(final String env,Trade trade) {
-        return this.forexDataServiceApi.updateTrade(env, trade);
-    }
-
     public Mono<Void> deleteIgnoredSignal(final String json) {
         return this.forexDataServiceApi.deleteIgnoredSignal(json);
     }
@@ -51,6 +47,14 @@ public class ForexService {
 
     public Mono<List<Trade>> searchTradesById(final String env, Integer tradeId) {
         return this.forexDataServiceApi.searchTradesById(env, tradeId);
+    }
+
+    public Mono<String> activateTrade(String env, TradeActivationDto trade) {
+        return this.forexDataServiceApi.activateTrade(env, trade);
+    }
+
+    public Mono<String> updateTrade(String env, TradeUpdateDto trade) {
+        return this.forexDataServiceApi.updateTrade(env, trade);
     }
 }
 

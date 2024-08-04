@@ -61,10 +61,14 @@ public class ForexController {
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
     public Mono<List<Trade>> searchTradesById(
             @PathVariable("env") final String env, @PathVariable("tradeId") final Integer tradeId) {
-        // kann man machen, aber @PreAuthorize prüft schon alles
-        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        //log.info("auth: {}, {}", auth, auth.getAuthorities());
         return this.forexService.searchTradesById(env, tradeId);
+    }
+
+    @PostMapping("/trades/activate/{env}")
+    @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
+    public Mono<String> activateTrade(
+            @PathVariable("env") final String env, @RequestBody final TradeActivationDto trade) {
+        return this.forexService.activateTrade(env, trade);
     }
 
     @GetMapping("/signals/ignored")
@@ -85,9 +89,9 @@ public class ForexController {
         return this.forexService.updateHistory(env, trade);
     }
 
-    @PutMapping("/trades/update/{env}")
+    @PostMapping("/trades/update/{env}")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
-    public Mono<Trade> updateTrade(@PathVariable("env") final String env, @RequestBody Trade trade) {
+    public Mono<String> updateTrade(@PathVariable("env") final String env, @RequestBody TradeUpdateDto trade) {
         return this.forexService.updateTrade(env, trade);
     }
 
