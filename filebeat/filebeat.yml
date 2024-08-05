@@ -2,8 +2,8 @@ filebeat.inputs:
   - type: filestream
     id: default-filestream
     paths:
-      - /var/log/apigateway/app.log
-      - /var/log/javabackend/app.log
+      - /var/log/apigateway/*.log
+      - /var/log/javabackend/*.log
   - type: log
     enabled: true
     paths:
