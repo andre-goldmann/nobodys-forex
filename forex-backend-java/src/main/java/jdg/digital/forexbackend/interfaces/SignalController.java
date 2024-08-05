@@ -90,16 +90,16 @@ public class SignalController {
                     this.signalService.storeDevSignal(signal, lots).subscribe();
 
 
-                    if (stats.getWinpercentage().doubleValue() > (FTMO_WIN_PERCENTAGE)
+                    if (stats.getWinpercentage().doubleValue() > FTMO_WIN_PERCENTAGE
                             && stats.getProfit().doubleValue() > FTMO_MIN_PROFIT
-                            && stats.getTotal() > (FTMO_MIN_TRADES)) {
+                            && stats.getTotal() > FTMO_MIN_TRADES) {
                         this.signalService.storeFtmoSignal(signal).subscribe();
                     }
 
                     // Only store to prod if stats are fulfilled
-                    if (stats.getWinpercentage().doubleValue() > (WIN_PERCENTAGE + 2.0)
+                    if (stats.getWinpercentage().doubleValue() > WIN_PERCENTAGE
                             && stats.getProfit().doubleValue() > MIN_PROFIT
-                            && stats.getTotal() > (MIN_TRADES + 20)) {
+                            && stats.getTotal() > MIN_TRADES) {
 
                         return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
                                 .map(activeTrades -> {
