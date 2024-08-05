@@ -56,6 +56,8 @@ public class SignalService {
                             .map(this::entityToDto).collectList();
             case "PROD" -> this.signalRepository.signalsProd()
                             .map(this::entityToDto).collectList();
+            case "FTMO" -> this.signalRepository.signalsFtmo()
+                    .map(this::entityToDto).collectList();
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
     }
