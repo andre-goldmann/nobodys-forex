@@ -173,7 +173,7 @@ public class SignalService {
                                     }
                                 });
                     } else {
-                        log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats);
+                        //log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats);
                         return Mono.just("Stats are not fulfilled");
                     }
                 })
