@@ -40,7 +40,6 @@ public class SignalController {
 
     @PostMapping("/againsttrendsignal")
     public Mono<AgainstTrendSignalEntity> createSignal(@RequestBody AgainstTrendSignal signal) {
-        log.info("Received against trend signal: {}", signal);
         return this.signalService.storeAgainstTrendSignal(signal);
     }
 
