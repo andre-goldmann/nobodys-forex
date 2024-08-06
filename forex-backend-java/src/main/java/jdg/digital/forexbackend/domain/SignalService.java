@@ -104,6 +104,7 @@ public class SignalService {
                     if (stats.getWinpercentage().doubleValue() > FTMO_WIN_PERCENTAGE
                             && stats.getProfit().doubleValue() > FTMO_MIN_PROFIT
                             && stats.getTotal() > FTMO_MIN_TRADES) {
+                        log.info("Storing ftmo signal for {}-{} with stats {}", signal.symbol(), signal.strategy(), stats);
                         this.storeFtmoSignal(signal).subscribe();
                     }
 
@@ -235,7 +236,7 @@ public class SignalService {
             //return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info + ": " + stats.toString());
     }
 
-    private Mono<Void> storeDevSignal(Signal signal, double lots) {
+    private Mono<Void> storeDevSignal(final Signal signal, final double lots) {
         return this.signalRepository.insertDevTradeEntity(
                 signal.symbol(),
                 signal.timeframe(),
@@ -248,7 +249,7 @@ public class SignalService {
                 LocalDateTime.now());
     }
 
-    private Mono<Void> storeProdSignal(Signal signal) {
+    private Mono<Void> storeProdSignal(final Signal signal) {
         return this.signalRepository.insertProdTradeEntity(
                 signal.symbol(),
                 signal.timeframe(),
@@ -261,7 +262,7 @@ public class SignalService {
                 LocalDateTime.now());
     }
 
-    private Mono<Void> storeFtmoSignal(Signal signal) {
+    private Mono<Void> storeFtmoSignal(final Signal signal) {
         return this.signalRepository.insertFtmoTradeEntity(
                 signal.symbol(),
                 signal.timeframe(),
@@ -275,16 +276,7 @@ public class SignalService {
     }
 
     private Mono<String> storeNewSignal(final Signal signal) {
-        return this.signalRepository.insertDevTradeEntity(
-                        signal.symbol(),
-                        signal.timeframe(),
-                        signal.type(),
-                        signal.entry(),
-                        signal.sl(),
-                        signal.tp(),
-                        signal.lots(),
-                        signal.strategy(),
-                        LocalDateTime.now())
+        return this.storeDevSignal(signal, 0.01)
                 .then(Mono.just("Stored new signal"));
     }
 }
