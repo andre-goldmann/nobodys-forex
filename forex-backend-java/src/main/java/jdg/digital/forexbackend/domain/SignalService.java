@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -85,15 +86,15 @@ public class SignalService {
         return this.tradeStatsServices.getStatsFor(signal, "DEV")
                 .flatMap(stats -> {
 
-                    if (stats.getTotal() >= MIN_TRADES
-                            && stats.getWinpercentage().doubleValue() < WIN_PERCENTAGE){
+                    final double winpercentage = stats.getWinpercentage().doubleValue();
+                    final Integer total = stats.getTotal();
+                    if (total >= MIN_TRADES && winpercentage < WIN_PERCENTAGE){
                         this.storeIgnoredSignal(signal, stats, "Stats not fulfilled").subscribe();
                         return Mono.just("Signal Ignored!");
                     }
 
                     double lots = signal.lots();
-                    if (stats.getTotal() >= MIN_TRADES
-                            && stats.getWinpercentage().doubleValue() >= WIN_PERCENTAGE){
+                    if (total >= MIN_TRADES && winpercentage >= WIN_PERCENTAGE){
                         lots = 0.1;
                     }
 
@@ -101,17 +102,17 @@ public class SignalService {
                     this.storeDevSignal(signal, lots).subscribe();
 
                     // Only store to ftmo if stats are fulfilled
-                    if (stats.getWinpercentage().doubleValue() > FTMO_WIN_PERCENTAGE
-                            && stats.getProfit().doubleValue() > FTMO_MIN_PROFIT
-                            && stats.getTotal() > FTMO_MIN_TRADES) {
+                    final double profit = stats.getProfit().doubleValue();
+                    if (winpercentage > FTMO_WIN_PERCENTAGE && profit > FTMO_MIN_PROFIT && total > FTMO_MIN_TRADES) {
                         log.info("Storing ftmo signal for {}-{} with stats {}", signal.symbol(), signal.strategy(), stats);
-                        this.storeFtmoSignal(signal).subscribe();
+                        this.storeFtmoSignal(signal).subscribe(result -> {
+                            log.info("Storing ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats);
+
+                        });
                     }
 
                     // Only store to prod if stats are fulfilled
-                    if (stats.getWinpercentage().doubleValue() > WIN_PERCENTAGE
-                            && stats.getProfit().doubleValue() > MIN_PROFIT
-                            && stats.getTotal() > MIN_TRADES) {
+                    if (winpercentage > WIN_PERCENTAGE && profit > MIN_PROFIT && total > MIN_TRADES) {
 
                         return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
                                 .map(activeTrades -> {
@@ -171,8 +172,8 @@ public class SignalService {
 
                                         return "Active trades are " + activeTrades;
                                     }
-                                });
-                    } else {
+                    });
+                } else {
                         //log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats);
                         return Mono.just("Stats are not fulfilled");
                     }
@@ -262,7 +263,7 @@ public class SignalService {
                 LocalDateTime.now());
     }
 
-    private Mono<Void> storeFtmoSignal(final Signal signal) {
+    private Mono<Integer> storeFtmoSignal(final Signal signal) {
         return this.signalRepository.insertFtmoTradeEntity(
                 signal.symbol(),
                 signal.timeframe(),
