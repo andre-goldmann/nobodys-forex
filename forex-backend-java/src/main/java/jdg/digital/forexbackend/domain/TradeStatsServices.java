@@ -21,7 +21,7 @@ public class TradeStatsServices {
 
     public static final double WIN_PERCENTAGE = 63.0;
     public static final double MIN_PROFIT = 10.0;
-    public static final int MIN_TRADES = 150;
+    public static final int MIN_TRADES = 160;
 
     public static final double FTMO_WIN_PERCENTAGE = 56.0;
     public static final double FTMO_MIN_PROFIT = 10.0;
@@ -93,7 +93,6 @@ public class TradeStatsServices {
                     });
         }).collectList();
     }
-
 
     // TODO change return to Mono<>
     public Mono<List<TradeStat>> getTradeStats(final String env) {

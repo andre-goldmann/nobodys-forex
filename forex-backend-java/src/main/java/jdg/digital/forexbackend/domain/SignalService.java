@@ -104,11 +104,10 @@ public class SignalService {
                     // Only store to ftmo if stats are fulfilled
                     final double profit = stats.getProfit().doubleValue();
                     if (winpercentage > FTMO_WIN_PERCENTAGE && profit > FTMO_MIN_PROFIT && total > FTMO_MIN_TRADES) {
-                        log.info("Storing ftmo signal for {}-{} with stats {}", signal.symbol(), signal.strategy(), stats);
-                        this.storeFtmoSignal(signal).subscribe(result -> {
-                            log.info("Storing ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats);
-
-                        });
+                        this.storeFtmoSignal(signal).subscribe(
+                                value -> log.info("Stored ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats),
+                                error -> log.error("Error while Storing ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats, error)
+                        );
                     }
 
                     // Only store to prod if stats are fulfilled
