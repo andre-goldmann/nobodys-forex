@@ -142,7 +142,7 @@ public class SignalService {
                                         try {
                                             this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
                                         } catch (JsonProcessingException e) {
-                                            throw new RuntimeException(e);
+                                            log.error("Error while sending Signal to topic: ", e);
                                         }
 
                                         return "Signal also stored in prod!";
@@ -166,7 +166,7 @@ public class SignalService {
                                         try {
                                             this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(newSignal));
                                         } catch (JsonProcessingException e) {
-                                            throw new RuntimeException(e);
+                                            log.error("Error while sending Signal to topic: ", e);
                                         }
 
                                         return "Active trades are " + activeTrades;
