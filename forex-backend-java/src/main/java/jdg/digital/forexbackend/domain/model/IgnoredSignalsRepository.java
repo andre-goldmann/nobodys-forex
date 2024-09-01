@@ -26,4 +26,10 @@ public interface IgnoredSignalsRepository extends ReactiveCrudRepository<Ignored
     Mono<Void> deleteByJson(@Param("json") String json);
 
     Mono<Boolean> existsBySymbolAndStrategyAndTimeframe(String symbol, String strategy, String timeframe);
+
+    Mono<Integer> countBySymbolAndStrategyAndTimeframe(String symbol, String strategy, String timeframe);
+
+    Mono<Integer> countBySymbolAndStrategyLikeAndTimeframe(String symbol, String strategy, String timeframe);
+
+
 }

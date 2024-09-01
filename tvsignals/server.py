@@ -756,18 +756,7 @@ async def signals(signal:SignalDto):
     proceedSignal(signal)
     return "Finished!"
 
-def calculateSlAndStoreSignal(signal, strategy, session):
-    df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
-    atrValue = atr(df)
-
-    sl = 0.0
-    tp = 0.0
-    if signal.type == "sell":
-        sl = signal.entry + atrValue.iloc[-1]
-        tp = signal.entry - atrValue.iloc[-1]
-    if signal.type == "buy":
-        sl = signal.entry - atrValue.iloc[-1]
-        tp = signal.entry + atrValue.iloc[-1]
+def calculateSlAndStoreSignal(signal, strategy, sl, tp):
 
     # Immer an Java Backend senden
     data = {"symbol": signal.symbol,
@@ -830,6 +819,37 @@ def proceedSignal(signal:SignalDto):
     logger.info(f"Received {jsonSignal} ..")
 
     with (Session.begin() as session):
+
+        df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
+        atrValue = atr(df)
+
+        sl = 0.0
+        tp = 0.0
+        if signal.type == "sell":
+            sl = signal.entry + atrValue.iloc[-1]
+            tp = signal.entry - atrValue.iloc[-1]
+        if signal.type == "buy":
+            sl = signal.entry - atrValue.iloc[-1]
+            tp = signal.entry + atrValue.iloc[-1]
+
+        # Signals without TrendCheck
+        response = requests.post(
+            "http://javabackend:5080/forex/signals",
+            json={"symbol": signal.symbol,
+                  "timestamp": signal.timestamp,
+                  "type": signal.type,
+                  "entry": signal.entry,
+                  "sl": sl,
+                  "tp": tp,
+                  "lots": 0.1,
+                  "strategy": strategy + "_DEFAULT",
+                  "timeframe": signal.timeframe},
+        )
+        if response.status_code != 200:
+            #logger.error("#############################Error sending to Java Backend##############################")
+            #logger.error(str(response.status_code))
+            #print(str(response))
+            logger.error("Error sending to Java Backend" + str(response))
 
         if signal.symbol not in symbols:
             #print(f"Ignore Signal because symbol is not handled yet: {signal}")
@@ -992,7 +1012,7 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "Bj SuperScript TSI Curl" \
                 or strategy == "Bj SuperScript SAR":
             # Ohne Beachtung der Regression Line speichern
-            calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", session)
+            calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", sl, tp)
 
 
         regressionLineH4 = session.query(Regressions).filter(
@@ -1022,7 +1042,7 @@ def proceedSignal(signal:SignalDto):
                 session.close()
                 return
             # Mit Beachtung der Regression Line speichern
-            calculateSlAndStoreSignal(signal, strategy, session)
+            calculateSlAndStoreSignal(signal, strategy, sl, tp)
             # session weiterhin beenden, da Stats aus DB geladen werden
             session.commit()
             session.close()

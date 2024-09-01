@@ -19,6 +19,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Locale;
+
 import static jdg.digital.forexbackend.domain.TradeStatsServices.*;
 import static jdg.digital.forexbackend.domain.TradeStatsServices.MIN_TRADES;
 
@@ -51,7 +52,7 @@ public class SignalService {
     private TradeStatsServices tradeStatsServices;
 
 
-    public Mono<AgainstTrendSignalEntity> storeAgainstTrendSignal(final AgainstTrendSignal signal){
+    public Mono<AgainstTrendSignalEntity> storeAgainstTrendSignal(final AgainstTrendSignal signal) {
         return this.againstTrendSignalRepository.save(AgainstTrendSignalEntity.builder()
                 .symbol(signal.getSymbol())
                 .timeframe(signal.getTimeframe())
@@ -64,9 +65,9 @@ public class SignalService {
     public Mono<List<Signal>> getSignals(String env) {
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> this.signalRepository.signalsDev()
-                            .map(this::entityToDto).collectList();
+                    .map(this::entityToDto).collectList();
             case "PROD" -> this.signalRepository.signalsProd()
-                            .map(this::entityToDto).collectList();
+                    .map(this::entityToDto).collectList();
             case "FTMO" -> this.signalRepository.signalsFtmo()
                     .map(this::entityToDto).collectList();
             default -> throw new IllegalArgumentException("Undefined env " + env);
@@ -75,112 +76,148 @@ public class SignalService {
 
     public Mono<List<Signal>> getIgnoredSignals() {
         return this.ignoredSignalsRepository.ignoredSignals()
-                        .map(this::ignoredSignalToDto).collectList();
+                .map(this::ignoredSignalToDto).collectList();
     }
 
     public Mono<Void> deleteIgnoredSignal(final String json) {
         return Mono.fromRunnable(() -> this.ignoredSignalsRepository.deleteByJson(json));
     }
 
-    public Mono<String> storeSignal(Signal signal){
-        return this.tradeStatsServices.getStatsFor(signal, "DEV")
-                .flatMap(stats -> {
+    public Mono<String> storeSignal(Signal signal) {
 
-                    final double winpercentage = stats.getWinpercentage().doubleValue();
-                    final Integer total = stats.getTotal();
-                    if (total >= MIN_TRADES && winpercentage < WIN_PERCENTAGE){
-                        this.storeIgnoredSignal(signal, stats, "Stats not fulfilled").subscribe();
-                        return Mono.just("Signal Ignored!");
-                    }
+        // check if there is an entry within ignoredsignalsnew for this strategy
+        // if so ignore this signal, otherwise check stats for this signal
+        String strategy = signal.strategy();
+        final Mono<Integer> filterMono;
 
-                    double lots = signal.lots();
-                    if (total >= MIN_TRADES && winpercentage >= WIN_PERCENTAGE){
-                        lots = 0.1;
-                    }
+        // when the is signal from the strategy with _DEFAULT then we need to check, if there is an entry with any strategy
+        if (signal.strategy().endsWith("_DEFAULT")) {
+            strategy = signal.strategy().replace("_DEFAULT", "");
+            filterMono = this.ignoredSignalsRepository.countBySymbolAndStrategyLikeAndTimeframe(
+                    signal.symbol(),
+                    "%" + strategy + "%",
+                    signal.timeframe()
+            );
+        } else {
+            filterMono = this.ignoredSignalsRepository.countBySymbolAndStrategyAndTimeframe(
+                    signal.symbol(),
+                    strategy,
+                    signal.timeframe()
+            );
+        }
 
-                    // Always store to dev
-                    this.storeDevSignal(signal, lots).subscribe();
+        return filterMono.flatMap(count -> {
+            if (count == 0) {
+                return this.tradeStatsServices.getStatsFor(signal, "DEV")
+                        .flatMap(stats -> {
 
-                    // Only store to ftmo if stats are fulfilled
-                    final double profit = stats.getProfit().doubleValue();
-                    if (winpercentage > FTMO_WIN_PERCENTAGE && profit > FTMO_MIN_PROFIT && total > FTMO_MIN_TRADES) {
-                        this.storeFtmoSignal(signal).subscribe(
-                                value -> log.info("Stored ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats),
-                                error -> log.error("Error while Storing ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats, error)
-                        );
-                    }
+                            final double winpercentage = stats.getWinpercentage().doubleValue();
+                            final Integer total = stats.getTotal();
+                            if (total >= MIN_TRADES && winpercentage < WIN_PERCENTAGE) {
+                                this.storeIgnoredSignal(signal, stats, "Stats not fulfilled").subscribe();
+                                return Mono.just("Signal Ignored!");
+                            }
 
-                    // Only store to prod if stats are fulfilled
-                    if (winpercentage > WIN_PERCENTAGE && profit > MIN_PROFIT && total > MIN_TRADES) {
+                            if (signal.strategy().endsWith("_DEFAUALT")) {
+                                // check if there is a strategy with loaded by
+                                String strat = signal.strategy().replace("_DEFAULT", "");
+                                // So this can be a strategy with "_WITHOUTH_REG" or quals to strat
+                                // this strategy needs then a statistik better or equalt to prod-stats
+                                //
+                            }
 
-                        return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
-                                .map(activeTrades -> {
-                                    if (activeTrades < ACTIVE_TRADES_MAX) {
-                                        log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats);
-                                        // TODO we could load prodStats here and dynamically set the lots
+                            double lots = signal.lots();
+                            if (total >= MIN_TRADES && winpercentage >= WIN_PERCENTAGE) {
+                                lots = 0.1;
+                            }
 
-                                        // check if today is Thursday and if actuall time is before 16:00
-                                        // if yes, then do nothing here
-                                        // if no, then store the signal in prod
+                            // Always store to dev
+                            this.storeDevSignal(signal, lots).subscribe();
 
-                                        // 1. Obtain the current date and time
-                                        final LocalDateTime now = LocalDateTime.now();
+                            // Only store to ftmo if stats are fulfilled
+                            final double profit = stats.getProfit().doubleValue();
+                            if (winpercentage > FTMO_WIN_PERCENTAGE && profit > FTMO_MIN_PROFIT && total > FTMO_MIN_TRADES) {
+                                this.storeFtmoSignal(signal).subscribe(
+                                        value -> log.info("Stored ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats),
+                                        error -> log.error("Error while Storing ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats, error)
+                                );
+                            }
 
-                                        // 2. Check if today is Thursday
-                                        final boolean isThursday = now.getDayOfWeek() == DayOfWeek.THURSDAY;
+                            // Only store to prod if stats are fulfilled
+                            if (winpercentage > WIN_PERCENTAGE && profit > MIN_PROFIT && total > MIN_TRADES) {
 
-                                        // 3. Check if the current time is before 16:00
-                                        final boolean isBefore16 = now.toLocalTime().isBefore(LocalTime.of(16, 0));
+                                return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
+                                        .map(activeTrades -> {
+                                            if (activeTrades < ACTIVE_TRADES_MAX) {
+                                                log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats);
+                                                // TODO we could load prodStats here and dynamically set the lots
 
-                                        if (isThursday && isBefore16) {
-                                            log.info("Today is Thursday and the current time is before 16:00, so the signal will not be stored in prod");
-                                        } else {
-                                            this.storeProdSignal(signal).subscribe();
-                                        }
+                                                // check if today is Thursday and if actuall time is before 16:00
+                                                // if yes, then do nothing here
+                                                // if no, then store the signal in prod
+
+                                                // 1. Obtain the current date and time
+                                                final LocalDateTime now = LocalDateTime.now();
+
+                                                // 2. Check if today is Thursday
+                                                final boolean isThursday = now.getDayOfWeek() == DayOfWeek.THURSDAY;
+
+                                                // 3. Check if the current time is before 16:00
+                                                final boolean isBefore16 = now.toLocalTime().isBefore(LocalTime.of(16, 0));
+
+                                                if (isThursday && isBefore16) {
+                                                    log.info("Today is Thursday and the current time is before 16:00, so the signal will not be stored in prod");
+                                                } else {
+                                                    this.storeProdSignal(signal).subscribe();
+                                                }
 
 
-                                        try {
-                                            this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
-                                        } catch (JsonProcessingException e) {
-                                            log.error("Error while sending Signal to topic: ", e);
-                                        }
+                                                try {
+                                                    this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
+                                                } catch (JsonProcessingException e) {
+                                                    log.error("Error while sending Signal to topic: ", e);
+                                                }
 
-                                        return "Signal also stored in prod!";
-                                    } else {
-                                        log.info("Stats found for Signal of {}-{} but amount of active trades ({}) allready reached", signal.symbol(), signal.strategy(), activeTrades);
+                                                return "Signal also stored in prod!";
+                                            } else {
+                                                log.info("Stats found for Signal of {}-{} but amount of active trades ({}) allready reached", signal.symbol(), signal.strategy(), activeTrades);
 
-                                        final Signal newSignal = new Signal(
-                                                1,
-                                                signal.symbol(),
-                                                signal.timeframe(),
-                                                signal.timestamp(),
-                                                signal.type(),
-                                                signal.entry(),
-                                                signal.sl(),
-                                                signal.tp(),
-                                                signal.lots(),
-                                                signal.strategy(),
-                                                true,
-                                                "Ignore because there more then " + activeTrades + " active trade.");
+                                                final Signal newSignal = new Signal(
+                                                        1,
+                                                        signal.symbol(),
+                                                        signal.timeframe(),
+                                                        signal.timestamp(),
+                                                        signal.type(),
+                                                        signal.entry(),
+                                                        signal.sl(),
+                                                        signal.tp(),
+                                                        signal.lots(),
+                                                        signal.strategy(),
+                                                        true,
+                                                        "Ignore because there more then " + activeTrades + " active trade.");
 
-                                        try {
-                                            this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(newSignal));
-                                        } catch (JsonProcessingException e) {
-                                            log.error("Error while sending Signal to topic: ", e);
-                                        }
+                                                try {
+                                                    this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(newSignal));
+                                                } catch (JsonProcessingException e) {
+                                                    log.error("Error while sending Signal to topic: ", e);
+                                                }
 
-                                        return "Active trades are " + activeTrades;
-                                    }
-                    });
-                } else {
-                        //log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats);
-                        return Mono.just("Stats are not fulfilled");
-                    }
-                })
-                .switchIfEmpty(storeNewSignal(signal));
+                                                return "Active trades are " + activeTrades;
+                                            }
+                                        });
+                            } else {
+                                //log.info("Stats found for Signal of {}-{} but stats are not fulfilled {}", signal.symbol(), signal.strategy(), stats);
+                                return Mono.just("Stats are not fulfilled");
+                            }
+                        })
+                        .switchIfEmpty(storeNewSignal(signal));
+            }
+            return Mono.just("Ignored!");
+        });
+
     }
 
-    private Signal ignoredSignalToDto(final IgnoredSignalInterface entity)  {
+    private Signal ignoredSignalToDto(final IgnoredSignalInterface entity) {
         return new Signal(
                 0,
                 entity.getJson(),
@@ -214,26 +251,26 @@ public class SignalService {
 
     private Mono<Boolean> storeIgnoredSignal(final Signal signal, final TradeStat stats, final String info) {
 
-            return this.ignoredSignalsRepository.existsBySymbolAndStrategyAndTimeframe(signal.symbol(), signal.strategy(), signal.timeframe())
-                    .map(exists -> {
-                        if(!exists){
-                            this.ignoredSignalsRepository.save(IgnoredSignalEntity.builder()
-                                    .symbol(signal.symbol())
-                                    .strategy(signal.strategy())
-                                    .timeframe(signal.timeframe())
-                                    .loses(stats.getLoses())
-                                    .wins(stats.getWins())
-                                    .total(stats.getTotal())
-                                    .info(info)
-                                    .build()).subscribe();
+        return this.ignoredSignalsRepository.existsBySymbolAndStrategyAndTimeframe(signal.symbol(), signal.strategy(), signal.timeframe())
+                .map(exists -> {
+                    if (!exists) {
+                        this.ignoredSignalsRepository.save(IgnoredSignalEntity.builder()
+                                .symbol(signal.symbol())
+                                .strategy(signal.strategy())
+                                .timeframe(signal.timeframe())
+                                .loses(stats.getLoses())
+                                .wins(stats.getWins())
+                                .total(stats.getTotal())
+                                .info(info)
+                                .build()).subscribe();
 
-                            return false;
-                        }
-                        return exists;
-                    });
+                        return false;
+                    }
+                    return exists;
+                });
 
-            // before storing this information check if it is exists allready
-            //return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info + ": " + stats.toString());
+        // before storing this information check if it is exists allready
+        //return ignoredSignalsRepository.insert(mapper.writeValueAsString(signal), info + ": " + stats.toString());
     }
 
     private Mono<Void> storeDevSignal(final Signal signal, final double lots) {
