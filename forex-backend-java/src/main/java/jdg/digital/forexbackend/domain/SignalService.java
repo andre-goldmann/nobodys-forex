@@ -106,7 +106,8 @@ public class SignalService {
         // when the is signal from the strategy with _DEFAULT then we need to check, if there is an entry with any strategy
         if (signal.strategy().endsWith("_DEFAULT")) {
             strategy = signal.strategy().replace("_DEFAULT", "");
-            if(!STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategy + " " + signal.timeframe())) {
+            if(!STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategy + " " + signal.timeframe())
+            && !STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategy + "_WITHOUT_REG" + " " + signal.timeframe())) {
                 return Mono.just("Ignored!");
             }
             filterMono = this.ignoredSignalsRepository.countBySymbolAndStrategyLikeAndTimeframe(
