@@ -19,6 +19,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static jdg.digital.forexbackend.domain.TradeStatsServices.*;
 import static jdg.digital.forexbackend.domain.TradeStatsServices.MIN_TRADES;
@@ -51,6 +52,18 @@ public class SignalService {
     @Autowired
     private TradeStatsServices tradeStatsServices;
 
+    private List<String> STRATEGIES_WITH_OVER_60_PERCENT = List.of(
+            "GBPCAD T3-Eams 15",
+            "AUDNZD VHMA_WITHOUT_REG 15",
+            "GBPCAD T3-NNFX_WITHOUT_REG 15",
+            "EURUSD T3-NNFX_WITHOUT_REG 15",
+            "CHFJPY T3-Eams 15",
+            "EURCHF VHMA_WITHOUT_REG 15",
+            "EURUSD Super AI Trend_WITHOUT_REG 15",
+            "AUDJPY T3-Eams 15",
+            "EURCHF Super AI Trend_WITHOUT_REG 15",
+            "AUDUSD VHMA_WITHOUT_REG 15",
+            "AUDUSD AdxRsi_M15 15");
 
     public Mono<AgainstTrendSignalEntity> storeAgainstTrendSignal(final AgainstTrendSignal signal) {
         return this.againstTrendSignalRepository.save(AgainstTrendSignalEntity.builder()
@@ -93,6 +106,9 @@ public class SignalService {
         // when the is signal from the strategy with _DEFAULT then we need to check, if there is an entry with any strategy
         if (signal.strategy().endsWith("_DEFAULT")) {
             strategy = signal.strategy().replace("_DEFAULT", "");
+            if(!STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategy + " " + signal.timeframe())) {
+                return Mono.just("Ignored!");
+            }
             filterMono = this.ignoredSignalsRepository.countBySymbolAndStrategyLikeAndTimeframe(
                     signal.symbol(),
                     "%" + strategy + "%",
@@ -105,6 +121,7 @@ public class SignalService {
                     signal.timeframe()
             );
         }
+
 
         return filterMono.flatMap(count -> {
             if (count == 0) {
