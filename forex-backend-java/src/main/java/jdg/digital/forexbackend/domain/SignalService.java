@@ -17,6 +17,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -103,6 +105,34 @@ public class SignalService {
 
     public Mono<String> storeSignal(Signal signal) {
 
+        // check if today is Thursday and if actuall time is before 16:00
+        // if yes, then do nothing here
+        // if no, then store the signal in prod
+
+        // 1. Obtain the current date and time
+        final LocalDateTime now = LocalDateTime.now();
+
+        // 2. Check if today is Thursday
+        final boolean isThursday = now.getDayOfWeek() == DayOfWeek.THURSDAY
+                && now.toLocalTime().isAfter(LocalTime.of(12, 30))
+                && now.toLocalTime().isBefore(LocalTime.of(15, 0));
+
+        final boolean isTuesday = now.getDayOfWeek() == DayOfWeek.TUESDAY
+                && now.toLocalTime().isAfter(LocalTime.of(14, 30))
+                && now.toLocalTime().isBefore(LocalTime.of(16, 30));
+
+        final boolean isFriday = now.getDayOfWeek() == DayOfWeek.FRIDAY
+                && now.toLocalTime().isAfter(LocalTime.of(14, 30))
+                && now.toLocalTime().isBefore(LocalTime.of(16, 30));
+
+        final boolean isNight = now.toLocalTime().isAfter(LocalTime.of(23, 30))
+                && now.toLocalTime().isBefore(LocalTime.of(0, 4));
+
+        if (isThursday || isTuesday || isFriday || isNight) {
+            log.info("Today is Tuesday/Thursday/Friday and the current time is before "+now+", so the signal will not be stored");
+            return Mono.just("Signal ignored");
+        }
+
         // check if there is an entry within ignoredsignalsnew for this strategy
         // if so ignore this signal, otherwise check stats for this signal
         String strategy = signal.strategy();
@@ -174,25 +204,8 @@ public class SignalService {
                                                 log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats);
                                                 // TODO we could load prodStats here and dynamically set the lots
 
-                                                // check if today is Thursday and if actuall time is before 16:00
-                                                // if yes, then do nothing here
-                                                // if no, then store the signal in prod
 
-                                                // 1. Obtain the current date and time
-                                                final LocalDateTime now = LocalDateTime.now();
-
-                                                // 2. Check if today is Thursday
-                                                final boolean isThursday = now.getDayOfWeek() == DayOfWeek.THURSDAY;
-
-                                                // 3. Check if the current time is before 16:00
-                                                final boolean isBefore16 = now.toLocalTime().isBefore(LocalTime.of(16, 0));
-
-                                                if (isThursday && isBefore16) {
-                                                    log.info("Today is Thursday and the current time is before 16:00, so the signal will not be stored in prod");
-                                                } else {
-                                                    this.storeProdSignal(signal).subscribe();
-                                                }
-
+                                                this.storeProdSignal(signal).subscribe();
 
                                                 try {
                                                     this.forexProducerService.sendMessage("signals", this.mapper.writeValueAsString(signal));
@@ -329,7 +342,7 @@ public class SignalService {
                 signal.entry(),
                 signal.sl(),
                 signal.tp(),
-                0.1,
+                1.0,
                 signal.strategy(),
                 LocalDateTime.now());
     }
