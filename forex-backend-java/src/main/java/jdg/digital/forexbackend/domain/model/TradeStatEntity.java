@@ -24,6 +24,8 @@ public class TradeStatEntity {
 
     private String strategy;
 
+    private String timeframe;
+
     private Double profit;
 
     private Integer loses;
