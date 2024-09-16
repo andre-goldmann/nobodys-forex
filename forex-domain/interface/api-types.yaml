@@ -442,7 +442,7 @@ components:
         strategy:
           $ref: '#/components/schemas/StrategyEnum'
         timeframe:
-          $ref: '#/components/schemas/TimeFrameEnum'
+          type: string
         wins:
           type: integer
         loses:

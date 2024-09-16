@@ -134,7 +134,7 @@ public class TradeStatsServices {
         }
         final TradeStat stat = new TradeStat();
         stat.setSymbol(SymbolEnum.fromValue(entity.getSymbol()));
-        stat.setTimeframe(TimeFrameEnum.fromValue(entity.getTimeframe()));
+        stat.setTimeframe(entity.getTimeframe());
         final Set<StrategyEnum> strategies = STRATEGY_NAMES.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(entity.getStrategy()))
                 .map(Map.Entry::getKey)
