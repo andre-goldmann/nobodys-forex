@@ -71,6 +71,7 @@ public class SignalService {
                     stats.forEach(stat -> {
                         STRATEGIES_WITH_OVER_60_PERCENT.add(stat.getSymbol() + " " + stat.getStrategy() + " " + stat.getTimeframe());
                     });
+                    log.info("############ Using strategies for DEFAULT: {}", STRATEGIES_WITH_OVER_60_PERCENT);
                 },
                 error -> log.error("Error while getting stats for last 10 trades", error)
         );
