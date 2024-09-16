@@ -94,7 +94,17 @@ public class TradeStatsServices {
         }).collectList();
     }
 
-    // TODO change return to Mono<>
+    public Mono<List<TradeStat>> getTradeStats(final String env, final int minTrades, final double winpercentage) {
+
+        return switch (env.toUpperCase(Locale.getDefault())) {
+            case "DEV" -> this.tradeStatsRepository.statsDevTrades(minTrades, MIN_PROFIT, winpercentage)
+                    .map(this::mapToTrade).collectList();
+            case "PROD" -> this.tradeStatsRepository.statsProdTrades()
+                    .map(this::mapToTrade).collectList();
+            default -> throw new IllegalArgumentException("Undefined env " + env);
+        };
+    }
+
     public Mono<List<TradeStat>> getTradeStats(final String env) {
 
         return switch (env.toUpperCase(Locale.getDefault())) {
@@ -124,7 +134,7 @@ public class TradeStatsServices {
         }
         final TradeStat stat = new TradeStat();
         stat.setSymbol(SymbolEnum.fromValue(entity.getSymbol()));
-
+        stat.setTimeframe(TimeFrameEnum.fromValue(entity.getTimeframe()));
         final Set<StrategyEnum> strategies = STRATEGY_NAMES.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(entity.getStrategy()))
                 .map(Map.Entry::getKey)

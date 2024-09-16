@@ -8,10 +8,12 @@ import jdg.digital.forexbackend.domain.model.*;
 import jdg.digital.forexbackend.interfaces.ForexProducerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -54,8 +57,27 @@ public class SignalService {
     @Autowired
     private TradeStatsServices tradeStatsServices;
 
-    // TODO load this over strategy-service
-    private final List<String> STRATEGIES_WITH_OVER_60_PERCENT = List.of(
+    @PostConstruct
+    public void runOnStartup() {
+        runDailyAt11PM();
+    }
+
+    @Scheduled(cron = "0 0 23 * * *")
+    public void runDailyAt11PM() {
+        STRATEGIES_WITH_OVER_60_PERCENT.clear();
+
+        this.tradeStatsServices.getTradeStats("dev", 200, 55.0).subscribe(
+                stats -> {
+                    stats.forEach(stat -> {
+                        STRATEGIES_WITH_OVER_60_PERCENT.add(stat.getSymbol() + " " + stat.getStrategy() + " " + stat.getTimeframe());
+                    });
+                },
+                error -> log.error("Error while getting stats for last 10 trades", error)
+        );
+    }
+
+    private final List<String> STRATEGIES_WITH_OVER_60_PERCENT = new ArrayList<>();
+    /*List.of(
             "GBPCAD T3-Eams 15",
             "GBPCAD T3-NNFX_WITHOUT_REG 15",
             "CHFJPY T3-Eams 15",
@@ -70,7 +92,7 @@ public class SignalService {
             "EURUSD VHMA_WITHOUT_REG 15",
             "AUDUSD Bj SuperScript TSI Curl_WITHOUT_REG 15",
             "AUDCHF SSL Hybrid_WITHOUT_REG 15",
-            "CHFJPY T3-Eams_WITHOUT_REG 15" );
+            "CHFJPY T3-Eams_WITHOUT_REG 15" );*/
 
     public Mono<AgainstTrendSignalEntity> storeAgainstTrendSignal(final AgainstTrendSignal signal) {
         return this.againstTrendSignalRepository.save(AgainstTrendSignalEntity.builder()
@@ -100,7 +122,7 @@ public class SignalService {
     }
 
     public Mono<Void> deleteIgnoredSignal(final String json) {
-        return Mono.fromRunnable(() -> this.ignoredSignalsRepository.deleteByJson(json));
+        return this.ignoredSignalsRepository.deleteByJson(json);
     }
 
     public Mono<String> storeSignal(Signal signal) {

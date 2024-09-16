@@ -430,6 +430,7 @@ components:
       required:
         - symbol
         - strategy
+        - timeframe
         - wins
         - loses
         - total
@@ -440,6 +441,8 @@ components:
           $ref: '#/components/schemas/SymbolEnum'
         strategy:
           $ref: '#/components/schemas/StrategyEnum'
+        timeframe:
+          $ref: '#/components/schemas/TimeFrameEnum'
         wins:
           type: integer
         loses:
