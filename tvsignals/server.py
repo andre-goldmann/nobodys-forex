@@ -30,7 +30,7 @@ engine = create_engine(os.environ['POSTGRES_URL'], pool_size=10, max_overflow=0)
 Session = sessionmaker(bind=engine)
 app = FastAPI()
 
-symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD"]
+symbols = ["AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD", "CADJPY", "NZDJPY", "EURJPY", "GBPJPY", "EURGBP", "NZDUSD", "EURCAD", "NZDCAD"]
 strategies = [
               "Bj SuperScript TRM",
               "Bj SuperScript TRM_WITHOUT_REG",
