@@ -1326,15 +1326,15 @@ if __name__ == "__main__":
 
     # NUR wenn DB leer bzw. für Kombination aus Symbol + Timeframe kein Eintrag
     # gefunden wird
-    for symbol in symbols:
-        for timeFrame in TimeFrame:
-            if TimeFrame.PERIOD_M1 is not timeFrame:
-                if countEntries(symbol,timeFrame) == 0:
-                    last = lastCandle(symbol, timeFrame)
-                    if last is None:
-                        storeData(symbol,timeFrame)
+    #for symbol in symbols:
+        #for timeFrame in TimeFrame:
+            #if TimeFrame.PERIOD_M1 is not timeFrame:
+                #if countEntries(symbol,timeFrame) == 0:
+                    #last = lastCandle(symbol, timeFrame)
+                    #if last is None:
+                        #storeData(symbol,timeFrame)
                         #loadDfFromDb(symbol, timeFrame)
-                        logger.info(f"Inserted data for {symbol} + {timeFrame}")
+                        #logger.info(f"Inserted data for {symbol} + {timeFrame}")
 
     #TODO on startup go through like this load the last candle and from this candle on load all until now other metatrade
     #for symbol in symbols:
