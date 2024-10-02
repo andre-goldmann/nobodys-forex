@@ -797,7 +797,7 @@ def proceedSignal(signal:SignalDto):
     if signal.timeframe == "TimeFrame.PERIOD_H4":
         signal.timeframe = "240"
 
-    if signal.symbol == "XRPUSD":
+    if signal.symbol == "XRPUSD" or signal.symbol == "CADJPY" or signal.symbol =="NZDJPY" or signal.symbol == "EURJPY" or signal.symbol == "GBPJPY" or signal.symbol =="EURGBP" or signal.symbol == "NZDUSD" or signal.symbol == "EURCAD" or signal.symbol == "NZDCAD":
         return
     #generates too much signals
     if "T3-MesaPhasor" == signal.strategy \
