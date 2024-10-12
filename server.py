@@ -997,23 +997,18 @@ async def storeCandle(candle:CandlesDto):
         storeCandleInDb(candle, logger)
         #Call strategies
 
-        df = loadDfFromDb(symbol, timeframeEnum, 10000)
-        df['open'] = df.OPEN
-        df['high'] = df.HIGH
-        df['low'] = df.LOW
-        df['close'] = df.CLOSE
-        df['volume'] = df.TICKVOL
-        df['vol'] = df.TICKVOL
-        #print("##################")
-        #print(str(df.iloc[0]))
-        #print("#######")
-        #print(str(df.iloc[-1]))
-        #print("##################")
-        entry = df.iloc[0].CLOSE
+        #df = loadDfFromDb(symbol, timeframeEnum, 10000)
+        #df['open'] = df.OPEN
+        #df['high'] = df.HIGH
+        #df['low'] = df.LOW
+        #df['close'] = df.CLOSE
+        #df['volume'] = df.TICKVOL
+        #df['vol'] = df.TICKVOL
+        #entry = df.iloc[0].CLOSE
 
-        if TimeFrame.PERIOD_H1 == timeframeEnum or TimeFrame.PERIOD_H4 == timeframeEnum:
-            dfM15 = loadDfFromDb(symbol, TimeFrame.PERIOD_M15, 10)
-            entry = dfM15.iloc[0].CLOSE
+        #if TimeFrame.PERIOD_H1 == timeframeEnum or TimeFrame.PERIOD_H4 == timeframeEnum:
+        #    dfM15 = loadDfFromDb(symbol, TimeFrame.PERIOD_M15, 10)
+        #    entry = dfM15.iloc[0].CLOSE
 
         # Just always 3 to not interupt TradingView-Signals
         # allready running start
