@@ -1016,12 +1016,14 @@ async def storeCandle(candle:CandlesDto):
             entry = dfM15.iloc[0].CLOSE
 
         # Just always 3 to not interupt TradingView-Signals
-        adx(df, symbol, timeframeEnum, entry)
-        adxRsi(df, symbol, timeframeEnum, entry)
-        awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry)
-        awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry)
-        bladeRunner(df, symbol, timeframeEnum, entry)
-        bollingerBandsAndRSI(df, symbol, timeframeEnum, entry)
+        # allready running start
+        #adx(df, symbol, timeframeEnum, entry)
+        #adxRsi(df, symbol, timeframeEnum, entry)
+        #awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry)
+        #awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry)
+        #bladeRunner(df, symbol, timeframeEnum, entry)
+        #bollingerBandsAndRSI(df, symbol, timeframeEnum, entry)
+        # allready running end
         #bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry)
         #cciMacdPsar(df, symbol, timeframeEnum, entry)
         #cciMovingAverage(df, symbol, timeframeEnum, entry)
@@ -1356,8 +1358,8 @@ if __name__ == "__main__":
     #uvicorn_access = logging.getLogger("uvicorn.access")
     #uvicorn_access.disabled = True
     # almost no logs
-    uvicorn.run(app, host="0.0.0.0", port=6081, log_level="critical", access_log=False)
-    #uvicorn.run(app, host="0.0.0.0", port=6081, log_level="info", access_log=True)
+    #uvicorn.run(app, host="0.0.0.0", port=6081, log_level="critical", access_log=False)
+    uvicorn.run(app, host="0.0.0.0", port=6081, log_level="info", access_log=True)
 
     #consumer.subscribe(['test:1:1'])
 
