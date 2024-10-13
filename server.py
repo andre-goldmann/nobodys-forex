@@ -991,10 +991,10 @@ async def storeCandle(candle:CandlesDto):
 
     timeframeEnum: TimeFrame = TimeFrame.__dict__[candle.TIMEFRAME]
 
-    if (timeframeEnum != TimeFrame.PERIOD_M1
-            and timeframeEnum != TimeFrame.PERIOD_W1) \
-            and timeframeEnum != TimeFrame.PERIOD_D1:
-        storeCandleInDb(candle, logger)
+    #if (timeframeEnum != TimeFrame.PERIOD_M1
+    #        and timeframeEnum != TimeFrame.PERIOD_W1) \
+    #        and timeframeEnum != TimeFrame.PERIOD_D1:
+    storeCandleInDb(candle, logger)
         #Call strategies
 
         #df = loadDfFromDb(symbol, timeframeEnum, 10000)
