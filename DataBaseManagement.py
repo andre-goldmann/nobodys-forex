@@ -26,7 +26,43 @@ load_dotenv()
 engine = create_engine(os.environ['POSTGRES_URL'], pool_size=10, max_overflow=0)
 Session = sessionmaker(bind=engine)
 
-symbols = ["AUDCAD", "AUDUSD", "AUDCHF", "AUDJPY", "AUDNZD", "CHFJPY", "EURUSD", "EURCHF", "EURNZD", "GBPUSD", "GBPCAD", "GBPCHF", "GBPNZD",  "XAGUSD", "USDCAD", "USDCHF", "XRPUSD", "CADJPY", "NZDJPY", "EURJPY", "GBPJPY", "EURGBP", "NZDUSD", "EURCAD", "NZDCAD"]
+symbols = [
+    "AUDCAD",
+    "AUDUSD",
+    "AUDCHF",
+    "AUDJPY",
+    "AUDNZD",
+
+    "CADJPY",
+    "CHFJPY",
+
+    "EURAUD",
+    "EURCAD",
+    "EURUSD",
+    "EURCHF",
+    "EURNZD",
+    "EURJPY",
+    "EURGBP",
+
+    "GBPAUD",
+    "GBPUSD",
+    "GBPCAD",
+    "GBPCHF",
+    "GBPNZD",
+    "GBPJPY",
+
+    "USDCAD",
+    "USDCHF",
+    "USDJPY",
+
+    "NZDCAD",
+    "NZDCHF",
+    "NZDJPY",
+    "NZDUSD",
+
+    "XAGUSD",
+
+    "XRPUSD"]
 tradeTypes = ["buy", "sell"]
 
 @unique

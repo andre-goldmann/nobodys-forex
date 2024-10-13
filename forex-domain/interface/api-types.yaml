@@ -24,30 +24,31 @@ components:
     SymbolEnum:
       type: string
       enum:
+        - AUDCAD
+        - AUDJPY
         - AUDCHF
-        - EURUSD
+        - AUDUSD
+        - AUDNZD
+        - CHFJPY
+        - CADJPY
+        - GBPJPY
+        - GBPNZD
+        - GBPCAD
         - GBPUSD
+        - GBPCHF
+        - EURUSD
+        - EURGBP
+        - EURJPY
+        - EURNZD
+        - EURCHF
+        - EURCAD
+        - NZDCAD
+        - NZDCHF
+        - NZDJPY
+        - NZDUSD
         - USDJPY
         - USDCHF
         - USDCAD
-        - AUDUSD
-        - NZDUSD
-        - EURGBP
-        - EURJPY
-        - GBPJPY
-        - EURCHF
-        - GBPCHF
-        - EURCAD
-        - GBPCAD
-        - AUDCAD
-        - NZDCAD
-        - AUDJPY
-        - NZDJPY
-        - AUDNZD
-        - EURNZD
-        - GBPNZD
-        - CADJPY
-        - CHFJPY
         - XAUUSD
         - XAGUSD
         - BTCUSD
