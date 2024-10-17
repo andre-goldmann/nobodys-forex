@@ -995,33 +995,35 @@ async def storeCandle(candle:CandlesDto):
     #        and timeframeEnum != TimeFrame.PERIOD_W1) \
     #        and timeframeEnum != TimeFrame.PERIOD_D1:
     storeCandleInDb(candle, logger)
-        #Call strategies
 
-        #df = loadDfFromDb(symbol, timeframeEnum, 10000)
-        #df['open'] = df.OPEN
-        #df['high'] = df.HIGH
-        #df['low'] = df.LOW
-        #df['close'] = df.CLOSE
-        #df['volume'] = df.TICKVOL
-        #df['vol'] = df.TICKVOL
-        #entry = df.iloc[0].CLOSE
+    #Call strategies
+    if (timeframeEnum != TimeFrame.PERIOD_M15
+            or timeframeEnum != TimeFrame.PERIOD_H1
+            or timeframeEnum != TimeFrame.PERIOD_H4):
+        df = loadDfFromDb(symbol, timeframeEnum, 10000)
+        df['open'] = df.OPEN
+        df['high'] = df.HIGH
+        df['low'] = df.LOW
+        df['close'] = df.CLOSE
+        df['volume'] = df.TICKVOL
+        df['vol'] = df.TICKVOL
+        entry = df.iloc[0].CLOSE
 
-        #if TimeFrame.PERIOD_H1 == timeframeEnum or TimeFrame.PERIOD_H4 == timeframeEnum:
-        #    dfM15 = loadDfFromDb(symbol, TimeFrame.PERIOD_M15, 10)
-        #    entry = dfM15.iloc[0].CLOSE
+        if TimeFrame.PERIOD_H1 == timeframeEnum or TimeFrame.PERIOD_H4 == timeframeEnum:
+            dfM15 = loadDfFromDb(symbol, TimeFrame.PERIOD_M15, 10)
+            entry = dfM15.iloc[0].CLOSE
 
         # Just always 3 to not interupt TradingView-Signals
         # allready running start
-        #adx(df, symbol, timeframeEnum, entry)
-        #adxRsi(df, symbol, timeframeEnum, entry)
-        #awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry)
-        #awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry)
-        #bladeRunner(df, symbol, timeframeEnum, entry)
-        #bollingerBandsAndRSI(df, symbol, timeframeEnum, entry)
-        # allready running end
-        #bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry)
-        #cciMacdPsar(df, symbol, timeframeEnum, entry)
-        #cciMovingAverage(df, symbol, timeframeEnum, entry)
+        adx(df, symbol, timeframeEnum, entry)
+        adxRsi(df, symbol, timeframeEnum, entry)
+        awesomeOscillatorSaucer(df, symbol, timeframeEnum, entry)
+        awesomeOscillatorZeroCrossover(df, symbol, timeframeEnum, entry)
+        bladeRunner(df, symbol, timeframeEnum, entry)
+        bollingerBandsAndRSI(df, symbol, timeframeEnum, entry)
+        bollingerBandsAndRSI2(df, symbol, timeframeEnum, entry)
+        cciMacdPsar(df, symbol, timeframeEnum, entry)
+        cciMovingAverage(df, symbol, timeframeEnum, entry)
         #commodityChannelIndex(df, symbol, timeframeEnum, entry)
         #donchianATR(df, symbol, timeframeEnum, entry)
         #donchianBreakout(df, symbol, timeframeEnum, entry)
