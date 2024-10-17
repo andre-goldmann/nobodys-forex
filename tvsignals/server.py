@@ -69,6 +69,9 @@ symbols = [
     "XRPUSD"]
 
 strategies = [
+              "NNFX-Signals",
+              "NNFX-Signals_WITHOUT_REG",
+
               "Bj SuperScript TRM",
               "Bj SuperScript TRM_WITHOUT_REG",
 
@@ -1047,7 +1050,8 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "Bj SuperScript RSI" \
                 or strategy == "Bj SuperScript RSI Momo" \
                 or strategy == "Bj SuperScript TSI Curl" \
-                or strategy == "Bj SuperScript SAR":
+                or strategy == "Bj SuperScript SAR" \
+                or strategy == "NNFX-Signals":
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", sl, tp)
 
