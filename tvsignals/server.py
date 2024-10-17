@@ -865,6 +865,12 @@ def proceedSignal(signal:SignalDto):
     with (Session.begin() as session):
 
         df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
+        if df is None or len(df) == 0:
+            logger.error("No data found for symbol " + signal.symbol)
+            session.commit()
+            session.close()
+            return
+
         atrValue = atr(df)
 
         sl = 0.0
