@@ -997,9 +997,7 @@ async def storeCandle(candle:CandlesDto):
     storeCandleInDb(candle, logger)
 
     #Call strategies
-    if (timeframeEnum != TimeFrame.PERIOD_M15
-            or timeframeEnum != TimeFrame.PERIOD_H1
-            or timeframeEnum != TimeFrame.PERIOD_H4):
+    if timeframeEnum == TimeFrame.PERIOD_M15 or timeframeEnum == TimeFrame.PERIOD_H1 or timeframeEnum == TimeFrame.PERIOD_H4:
         df = loadDfFromDb(symbol, timeframeEnum, 10000)
         df['open'] = df.OPEN
         df['high'] = df.HIGH
