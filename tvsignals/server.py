@@ -70,6 +70,9 @@ symbols = [
 
 strategies = [
 
+              "EvWmaVwapMacd-Strategy",
+              "EvWmaVwapMacd-Strategy_WITHOUT_REG",
+
               "BollingerBands Pinbar",
               "BollingerBands Pinbar_WITHOUT_REG",
 
@@ -1061,7 +1064,8 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "Bj SuperScript TSI Curl" \
                 or strategy == "Bj SuperScript SAR" \
                 or strategy == "NNFX-Signals" \
-                or strategy == "BollingerBands Pinbar":
+                or strategy == "BollingerBands Pinbar" \
+                or strategy == "EvWmaVwapMacd-Strategy":
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", sl, tp)
 
