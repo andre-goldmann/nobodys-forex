@@ -1137,5 +1137,5 @@ if __name__ == "__main__":
     Base.metadata.create_all(engine)
     #port can only be 80 see tradingview
     # almost no logs
-    #uvicorn.run(app, host="0.0.0.0", port=80, log_level="critical", access_log=False)
-    uvicorn.run(app, host="0.0.0.0", port=80, log_level="info", access_log=True)
+    uvicorn.run(app, host="0.0.0.0", port=80, log_level="critical", access_log=False)
+    #uvicorn.run(app, host="0.0.0.0", port=80, log_level="info", access_log=True)
