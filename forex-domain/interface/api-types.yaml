@@ -69,6 +69,12 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - EvWmaVwapMacd-Strategy
+        - EvWmaVwapMacd-Strategy_WITHOUT_REG
+        - BollingerBands Pinbar
+        - BollingerBands Pinbar_WITHOUT_REG
+        - NNFX-Signals
+        - NNFX-Signals_WITHOUT_REG
         - Bj SuperScript TRM
         - Bj SuperScript TRM_WITHOUT_REG
         - Bj SuperScript Reversal
