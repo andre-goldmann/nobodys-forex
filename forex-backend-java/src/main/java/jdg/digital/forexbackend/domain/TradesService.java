@@ -147,7 +147,7 @@ public class TradesService {
 
 
     public Mono<String> updateHistory(final String env, final TradeHistoryUpdate update) {
-        if(update.getMagic() != null) {
+        /*if(update.getMagic() != null) {
             if (224497 == update.getMagic()
                     || 225290 == update.getMagic()
                     || 225291 == update.getMagic()
@@ -155,7 +155,7 @@ public class TradesService {
                     || 224455 == update.getMagic()) {
                 log.info("############## updatehistory: {}", update);
             }
-        }
+        }*/
 
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> this.tradeRepository.updateDev(
