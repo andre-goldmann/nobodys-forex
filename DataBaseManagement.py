@@ -300,8 +300,8 @@ def storeCandleInDb(candle:CandlesDto, logger):
             session.add(spongebob)
             session.commit()
             session.close()
-        else:
-            logger.warning("Allreadys exists:" + str(candle))
+        #else:
+        #    logger.warning("Allreadys exists:" + str(candle))
 
 
 def lastCandle(symbol:str, timeFrame:TimeFrame):
