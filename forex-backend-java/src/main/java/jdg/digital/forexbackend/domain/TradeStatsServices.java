@@ -101,6 +101,8 @@ public class TradeStatsServices {
                     .map(this::mapToTrade).collectList();
             case "PROD" -> this.tradeStatsRepository.statsProdTrades()
                     .map(this::mapToTrade).collectList();
+            case "FTMO" -> this.tradeStatsRepository.statsFtmoTrades()
+                    .map(this::mapToTrade).collectList();
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
     }
@@ -123,6 +125,9 @@ public class TradeStatsServices {
                             .map(this::mapToTrade);
             case "PROD" ->
                     this.tradeStatsRepository.getProdStatsFor(signal.symbol(), signal.strategy(), signal.timeframe())
+                            .map(this::mapToTrade);
+            case "FTMO" ->
+                    this.tradeStatsRepository.getFtmoStatsFor(signal.symbol(), signal.strategy(), signal.timeframe())
                             .map(this::mapToTrade);
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };

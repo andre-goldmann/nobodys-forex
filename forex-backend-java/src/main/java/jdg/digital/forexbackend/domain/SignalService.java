@@ -189,7 +189,7 @@ public class SignalService {
                                 return Mono.just("Signal Ignored!");
                             }
 
-                            if (signal.strategy().endsWith("_DEFAUALT")) {
+                            if (signal.strategy().endsWith("_DEFAULT")) {
                                 // check if there is a strategy with loaded by
                                 String strat = signal.strategy().replace("_DEFAULT", "");
                                 // So this can be a strategy with "_WITHOUTH_REG" or quals to strat
