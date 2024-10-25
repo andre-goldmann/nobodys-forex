@@ -172,7 +172,9 @@ public class TradesService {
                         } else {
                             return "Trade not updated";
                         }
-                    });
+                    }).doOnError(
+                            error -> log.error("Error updating trade: {}", update)
+                    );
             case "PROD" -> this.tradeRepository.updateProd(
                             update.getSymbol().getValue(),
                             update.getMagic(),
@@ -187,7 +189,9 @@ public class TradesService {
                         } else {
                             return "Trade not updated";
                         }
-                    });
+                    }).doOnError(
+                            error -> log.error("Error updating trade: {}", update)
+                    );
             case "FTMO" -> this.tradeRepository.updateFtmo(
                             update.getSymbol().getValue(),
                             update.getMagic(),
@@ -202,7 +206,10 @@ public class TradesService {
                         } else {
                             return "Trade not updated";
                         }
-                    });
+                    })
+                    .doOnError(
+                            error -> log.error("Error updating trade: {}", update)
+                    );
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
 
