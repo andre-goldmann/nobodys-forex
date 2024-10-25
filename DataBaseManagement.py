@@ -295,7 +295,7 @@ def storeCandleInDb(candle:CandlesDto, logger):
                 VOL=candle.VOL,
                 SPREAD=candle.SPREAD,
             )
-            last = lastCandle(candle.symbol, timeFrame)
+            #last = lastCandle(candle.symbol, timeFrame)
             #logger.info(f"New: {candle} ----- last {last}")
             session.add(spongebob)
             session.commit()
