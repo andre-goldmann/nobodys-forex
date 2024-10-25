@@ -62,9 +62,13 @@ public class SignalService {
         runDailyAt11PM();
     }
 
+    private final List<String> STRATEGIES_WITH_OVER_60_PERCENT = new ArrayList<>();
+    private final List<String> FTMO_STRATEGIES_WITH_OVER_60_PERCENT = new ArrayList<>();
+
     @Scheduled(cron = "0 0 23 * * *")
     public void runDailyAt11PM() {
         STRATEGIES_WITH_OVER_60_PERCENT.clear();
+        FTMO_STRATEGIES_WITH_OVER_60_PERCENT.clear();
 
         this.tradeStatsServices.getTradeStats("dev", 200, 55.0).subscribe(
                 stats -> {
@@ -75,25 +79,17 @@ public class SignalService {
                 },
                 error -> log.error("Error while getting stats for last 10 trades", error)
         );
-    }
 
-    private final List<String> STRATEGIES_WITH_OVER_60_PERCENT = new ArrayList<>();
-    /*List.of(
-            "GBPCAD T3-Eams 15",
-            "GBPCAD T3-NNFX_WITHOUT_REG 15",
-            "CHFJPY T3-Eams 15",
-            "AUDNZD VHMA_WITHOUT_REG 15",
-            "EURUSD T3-NNFX_WITHOUT_REG 15",
-            "EURCHF VHMA_WITHOUT_REG 15",
-            "EURUSD Super AI Trend_WITHOUT_REG 15",
-            "AUDJPY T3-Eams 15",
-            "EURCHF Super AI Trend_WITHOUT_REG 15",
-            "AUDUSD VHMA_WITHOUT_REG 15",
-            "AUDUSD AdxRsi_M15 15",
-            "EURUSD VHMA_WITHOUT_REG 15",
-            "AUDUSD Bj SuperScript TSI Curl_WITHOUT_REG 15",
-            "AUDCHF SSL Hybrid_WITHOUT_REG 15",
-            "CHFJPY T3-Eams_WITHOUT_REG 15" );*/
+        this.tradeStatsServices.getTradeStats("ftmo", 200, 60.0).subscribe(
+                stats -> {
+                    stats.forEach(stat -> {
+                        FTMO_STRATEGIES_WITH_OVER_60_PERCENT.add(stat.getSymbol() + " " + stat.getStrategy() + " " + stat.getTimeframe());
+                    });
+                    log.info("############ Using strategies for FTMO: {}", FTMO_STRATEGIES_WITH_OVER_60_PERCENT);
+                },
+                error -> log.error("Error while getting stats for last 10 trades", error)
+        );
+    }
 
     public Mono<AgainstTrendSignalEntity> storeAgainstTrendSignal(final AgainstTrendSignal signal) {
         return this.againstTrendSignalRepository.save(AgainstTrendSignalEntity.builder()
@@ -180,7 +176,7 @@ public class SignalService {
                     signal.timeframe()
             );
         }
-
+        final String strategyClean = strategy;
         return filterMono.flatMap(count -> {
             if (count == 0) {
                 return this.tradeStatsServices.getStatsFor(signal, "DEV")
@@ -219,7 +215,10 @@ public class SignalService {
                             }
 
                             // Only store to prod if stats are fulfilled
-                            if (winpercentage > WIN_PERCENTAGE && profit > MIN_PROFIT && total > MIN_TRADES) {
+                            if ((FTMO_STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + " " + signal.timeframe())
+                                    && FTMO_STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + "_WITHOUT_REG" + " " + signal.timeframe()))
+                                    &&
+                                    winpercentage > WIN_PERCENTAGE && profit > MIN_PROFIT && total > MIN_TRADES) {
 
                                 return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
                                         .map(activeTrades -> {
