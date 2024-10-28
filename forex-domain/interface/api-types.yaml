@@ -33,6 +33,7 @@ components:
         - CADJPY
         - GBPJPY
         - GBPNZD
+        - GBPAUD
         - GBPCAD
         - GBPUSD
         - GBPCHF
