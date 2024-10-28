@@ -77,7 +77,7 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             " GROUP BY symbol, strategy, timeframe\n" +
             " HAVING\n" +
             "    --count(*) > 150\n" +
-            "   sum(profit - \"FtmoTrades\".swap - \"ProdTrades\".commision) > 5\n" +
+            "   sum(profit - \"FtmoTrades\".swap - \"FtmoTrades\".commision) > 5\n" +
             "   AND COUNT(CASE WHEN profit > 0 THEN 1 END) > COUNT(CASE WHEN profit < 0 THEN 1 END)\n" +
             "   --AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > 55\n" +
             " ORDER BY symbol, sum(profit) DESC")
