@@ -166,7 +166,6 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
-                    .doOnSuccess(rowsAffected -> log.info("Updated {} trade(s)", rowsAffected))
                     .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
             case "PROD" -> this.tradeRepository.updateProd(
                             update.getSymbol().getValue(),
@@ -176,7 +175,6 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
-                    .doOnSuccess(rowsAffected -> log.info("Updated {} trade(s)", rowsAffected))
                     .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
             case "FTMO" -> this.tradeRepository.updateFtmo(
                             update.getSymbol().getValue(),
@@ -186,7 +184,6 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
-                    .doOnSuccess(rowsAffected -> log.info("Updated {} trade(s)", rowsAffected))
                     .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
