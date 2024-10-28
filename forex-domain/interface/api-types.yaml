@@ -82,10 +82,13 @@ components:
         - Bj SuperScript MaCross
         - Bj SuperScript MaCross_WITHOUT_REG
         - Bj SuperScript RSI
+        - Bj SuperScript RSI_DEFAULT
         - Bj SuperScript RSI_WITHOUT_REG
         - Bj SuperScript RSI Momo
+        - Bj SuperScript RSI Momo_DEFAULT
         - Bj SuperScript RSI Momo_WITHOUT_REG
         - Bj SuperScript TSI Curl
+        - Bj SuperScript TSI Curl_DEFAULT
         - Bj SuperScript TSI Curl_WITHOUT_REG
         - Bj SuperScript SAR
         - Bj SuperScript SAR_WITHOUT_REG
@@ -115,6 +118,7 @@ components:
         - AI_VOLUME_SUPERTREND
         - SSL_+_Wave_Trend_Strategy
         - VHMA
+        - VHMA_DEFAULT
         - VHMA_WITHOUT_REG
         - T3Fvma
         - T3Fvma_WITHOUT_REG
@@ -139,6 +143,7 @@ components:
         - T3_TrendAI
         - T3_TrendAI_WITHOUT_REG
         - T3_NNFX
+        - T3_NNFX_DEFAULT
         - T3_NNFX_WITHOUT_REG
         - T3_EfficientTrendStepMod
         - T3_EfficientTrendStepMod_WITHOUT_REG
@@ -155,6 +160,7 @@ components:
         - T3_SupportAndResistanceLevels
         - T3_SupportAndResistanceLevels_WITHOUT_REG
         - T3_Eams
+        - T3_EAMS_DEFAULT
         - T3_EAMS_WITHOUT_REG
         - T3_VolumeDifferenceDeltaCycleOscillator
         - T3_VolumeDifferenceDeltaCycleOscillator_WITHOUT_REG
@@ -250,6 +256,8 @@ components:
         - ADXEMA14_M15
         - ADXEMA14_H1
         - ADXEMA14_H4
+        - AdxRsi_M15_DEFAULT
+        - AdxRsi_M15_WITHOUT_REG
         - AdxRsi_M15
         - AdxRsi_H1
         - AdxRsi_H4
@@ -268,6 +276,7 @@ components:
         - BladeRunner_M15
         - BladeRunner_H1
         - BladeRunner_H4
+        - BollingerBandsAndRSI_M15_DEFAULT
         - BollingerBandsAndRSI_M15
         - BollingerBandsAndRSI_H1
         - BollingerBandsAndRSI_H4
