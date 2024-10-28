@@ -27,16 +27,16 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       COUNT(CASE WHEN profit < 0 THEN 1 END) AS loses,\n" +
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
-            "FROM  \"Trades\"\n" +
+            " FROM  \"Trades\"\n" +
             //"WHERE activated!='' AND openprice > 0 and exit > 0\n" +
-            "WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
-            "GROUP BY symbol, strategy, timeframe\n" +
-            "HAVING\n" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
+            " GROUP BY symbol, strategy, timeframe\n" +
+            " HAVING\n" +
             "    count(*) > :minTrades\n" +
             "   AND sum(profit - \"Trades\".swap - \"Trades\".commision) > :minProfit\n" +
             "   AND COUNT(CASE WHEN profit > 0 THEN 1 END) > COUNT(CASE WHEN profit < 0 THEN 1 END)\n" +
             "   AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > :winPercentage\n" +
-            "ORDER BY symbol, sum(profit) DESC")
+            " ORDER BY symbol, sum(profit) DESC")
     Flux<TradeStatInterface> statsDevTrades(@Param("minTrades") Integer minTrades, @Param("minProfit") Double minProfit, @Param("winPercentage") Double winPercentage);
 
     @Query(value = "SELECT symbol,\n" +
@@ -49,16 +49,16 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       COUNT(CASE WHEN profit < 0 THEN 1 END) AS loses,\n" +
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
-            "FROM  \"ProdTrades\"\n" +
+            " FROM  \"ProdTrades\"\n" +
             //"WHERE activated!='' AND openprice > 0 --and exit > 0\n" +
-            "WHERE ((activated IS NOT NULL or activated!='') and openprice > 0 and exit > 0)" +
-            "GROUP BY symbol, strategy, timeframe\n" +
-            "HAVING\n" +
+            " WHERE ((activated IS NOT NULL or activated!='') and openprice > 0 and exit > 0)" +
+            " GROUP BY symbol, strategy, timeframe\n" +
+            " HAVING\n" +
             "    --count(*) > 150\n" +
             "   sum(profit - \"ProdTrades\".swap - \"ProdTrades\".commision) > 5\n" +
             "   AND COUNT(CASE WHEN profit > 0 THEN 1 END) > COUNT(CASE WHEN profit < 0 THEN 1 END)\n" +
             "   --AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > 55\n" +
-            "ORDER BY symbol, sum(profit) DESC")
+            " ORDER BY symbol, sum(profit) DESC")
     Flux<TradeStatInterface> statsProdTrades();
 
     @Query(value = "SELECT symbol,\n" +
@@ -71,16 +71,16 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       COUNT(CASE WHEN profit < 0 THEN 1 END) AS loses,\n" +
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
-            "FROM  \"FtmoTrades\"\n" +
+            " FROM  \"FtmoTrades\"\n" +
             //"WHERE activated!='' AND openprice > 0 --and exit > 0\n" +
-            "WHERE ((activated IS NOT NULL or activated!='') and openprice > 0 and exit > 0)" +
-            "GROUP BY symbol, strategy, timeframe\n" +
-            "HAVING\n" +
+            " WHERE ((activated IS NOT NULL or activated!='') and openprice > 0 and exit > 0)" +
+            " GROUP BY symbol, strategy, timeframe\n" +
+            " HAVING\n" +
             "    --count(*) > 150\n" +
             "   sum(profit - \"FtmoTrades\".swap - \"ProdTrades\".commision) > 5\n" +
             "   AND COUNT(CASE WHEN profit > 0 THEN 1 END) > COUNT(CASE WHEN profit < 0 THEN 1 END)\n" +
             "   --AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > 55\n" +
-            "ORDER BY symbol, sum(profit) DESC")
+            " ORDER BY symbol, sum(profit) DESC")
     Flux<TradeStatInterface> statsFtmoTrades();
 
     @Query(value = "SELECT symbol,\n" +
@@ -93,10 +93,10 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       COUNT(CASE WHEN profit < 0 THEN 1 END) AS loses,\n" +
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
-            "FROM  \"Trades\"\n" +
-            "WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
+            " FROM  \"Trades\"\n" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
             " and symbol = :symbol and strategy = :strategy and timeframe = :timeframe\n " +
-            "GROUP BY symbol, strategy, timeframe\n"
+            " GROUP BY symbol, strategy, timeframe\n"
     )
     Mono<TradeStatInterface> getDevStatsFor(@Param("symbol") String symbol, @Param("strategy") String strategy, @Param("timeframe") String timeframe);
 
@@ -111,10 +111,10 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       COUNT(CASE WHEN profit < 0 THEN 1 END) AS loses,\n" +
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
-            "FROM  \"ProdTrades\"\n" +
-            "WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
+            " FROM  \"ProdTrades\"\n" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
             " and symbol = :symbol and strategy = :strategy and timeframe = :timeframe\n " +
-            "GROUP BY symbol, strategy, timeframe\n"
+            " GROUP BY symbol, strategy, timeframe\n"
     )
     Mono<TradeStatInterface> getProdStatsFor(@Param("symbol") String symbol, @Param("strategy") String strategy, @Param("timeframe") String timeframe);
 
@@ -128,10 +128,10 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       COUNT(CASE WHEN profit < 0 THEN 1 END) AS loses,\n" +
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
-            "FROM  \"FtmoTrades\"\n" +
-            "WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
-            " and symbol = :symbol and strategy = :strategy and timeframe = :timeframe\n " +
-            "GROUP BY symbol, strategy, timeframe\n"
+            " FROM  \"FtmoTrades\"\n" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
+            " and symbol = :symbol and strategy = :strategy and timeframe = :timeframe\n" +
+            " GROUP BY symbol, strategy, timeframe\n"
     )
     Mono<TradeStatInterface> getFtmoStatsFor(@Param("symbol") String symbol, @Param("strategy") String strategy, @Param("timeframe") String timeframe);
 }
