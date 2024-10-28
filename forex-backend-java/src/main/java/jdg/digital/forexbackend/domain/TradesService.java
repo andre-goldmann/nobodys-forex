@@ -146,7 +146,7 @@ public class TradesService {
      */
 
 
-    public Mono<String> updateHistory(final String env, final TradeHistoryUpdate update) {
+    public Mono<Integer> updateHistory(final String env, final TradeHistoryUpdate update) {
         /*if(update.getMagic() != null) {
             if (224497 == update.getMagic()
                     || 225290 == update.getMagic()
@@ -166,15 +166,8 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
-                    .map(result -> {
-                        if (result == 1) {
-                            return "Trade updated";
-                        } else {
-                            return "Trade not updated";
-                        }
-                    }).doOnError(
-                            error -> log.error("Error updating trade: {}", update)
-                    );
+                    .doOnSuccess(rowsAffected -> log.info("Updated {} trade(s)", rowsAffected))
+                    .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
             case "PROD" -> this.tradeRepository.updateProd(
                             update.getSymbol().getValue(),
                             update.getMagic(),
@@ -183,15 +176,8 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
-                    .map(result -> {
-                        if (result == 1) {
-                            return "Trade updated";
-                        } else {
-                            return "Trade not updated";
-                        }
-                    }).doOnError(
-                            error -> log.error("Error updating trade: {}", update)
-                    );
+                    .doOnSuccess(rowsAffected -> log.info("Updated {} trade(s)", rowsAffected))
+                    .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
             case "FTMO" -> this.tradeRepository.updateFtmo(
                             update.getSymbol().getValue(),
                             update.getMagic(),
@@ -200,16 +186,8 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
-                    .map(result -> {
-                        if (result == 1) {
-                            return "Trade updated";
-                        } else {
-                            return "Trade not updated";
-                        }
-                    })
-                    .doOnError(
-                            error -> log.error("Error updating trade: {}", update)
-                    );
+                    .doOnSuccess(rowsAffected -> log.info("Updated {} trade(s)", rowsAffected))
+                    .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
 

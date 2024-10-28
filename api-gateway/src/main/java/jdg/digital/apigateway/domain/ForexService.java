@@ -33,7 +33,7 @@ public class ForexService {
         return this.forexDataServiceApi.deleteIgnoredSignal(json);
     }
 
-    public Mono<String> updateHistory(String env, TradeHistoryUpdate tradeHistoryUpdate) {
+    public Mono<Integer> updateHistory(String env, TradeHistoryUpdate tradeHistoryUpdate) {
         return this.forexDataServiceApi.updateHistory(env, tradeHistoryUpdate);
     }
 

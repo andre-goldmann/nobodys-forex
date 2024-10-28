@@ -61,7 +61,7 @@ public class TradeController {
     }
 
     @PostMapping("updatehistory/{env}")
-    public Mono<String> updatehistory(@PathVariable("env") final String env, @RequestBody TradeHistoryUpdate trade) {
+    public Mono<Integer> updatehistory(@PathVariable("env") final String env, @RequestBody TradeHistoryUpdate trade) {
         return this.tradeService.updateHistory(env, trade);
     }
 }

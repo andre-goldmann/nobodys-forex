@@ -116,14 +116,14 @@ public class ForexDataServiceApi {
                 .bodyToMono(Void.class);
     }
 
-    public Mono<String> updateHistory(String env, TradeHistoryUpdate tradeHistoryUpdate) {
+    public Mono<Integer> updateHistory(String env, TradeHistoryUpdate tradeHistoryUpdate) {
         return this.webClient
                 .post()
                 .uri(uriBuilder -> uriBuilder.path("/trades/updatehistory/{env}").build(env))
                 .accept(MediaType.APPLICATION_JSON)
                 .body(Mono.just(tradeHistoryUpdate), TradeHistoryUpdate.class)
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(Integer.class);
     }
 
     public Mono<List<StatsPerProdTrade>> getStatsForLastNTrades() {
