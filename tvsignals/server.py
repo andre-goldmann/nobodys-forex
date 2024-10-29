@@ -952,7 +952,7 @@ def proceedSignal(signal:SignalDto):
                 session.close()
                 return
             if trendInfo.trendscore < 7 and signal.type == "buy":
-                logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                #logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
                 response = requests.post(
                     "http://javabackend:5080/forex/signals/againsttrendsignal",
                     json=data,
