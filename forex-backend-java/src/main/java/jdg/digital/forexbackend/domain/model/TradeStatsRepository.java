@@ -1,8 +1,5 @@
 package jdg.digital.forexbackend.domain.model;
 
-import jdg.digital.api_interface.Trade;
-import jdg.digital.forexbackend.domain.model.TradeStatEntity;
-import jdg.digital.forexbackend.domain.model.TradeStatInterface;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
@@ -10,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.nio.channels.FileChannel;
 
 @Repository
 @Transactional
@@ -32,7 +27,7 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
             " GROUP BY symbol, strategy, timeframe\n" +
             " HAVING\n" +
-            "    count(*) > :minTrades\n" +
+            "   count(*) > :minTrades\n" +
             "   AND sum(profit - \"Trades\".swap - \"Trades\".commision) > :minProfit\n" +
             "   AND COUNT(CASE WHEN profit > 0 THEN 1 END) > COUNT(CASE WHEN profit < 0 THEN 1 END)\n" +
             "   AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > :winPercentage\n" +
@@ -50,16 +45,16 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
             " FROM  \"ProdTrades\"\n" +
-            //"WHERE activated!='' AND openprice > 0 --and exit > 0\n" +
-            " WHERE ((activated IS NOT NULL or activated!='') and openprice > 0 and exit > 0)" +
+            //"WHERE activated!='' AND openprice > 0 and exit > 0\n" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
             " GROUP BY symbol, strategy, timeframe\n" +
             " HAVING\n" +
-            "    --count(*) > 150\n" +
-            "   sum(profit - \"ProdTrades\".swap - \"ProdTrades\".commision) > 5\n" +
+            "   count(*) > :minTrades\n" +
+            "   AND sum(profit - \"ProdTrades\".swap - \"ProdTrades\".commision) > :minProfit\n" +
             "   AND COUNT(CASE WHEN profit > 0 THEN 1 END) > COUNT(CASE WHEN profit < 0 THEN 1 END)\n" +
-            "   --AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > 55\n" +
+            "   AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > :winPercentage\n" +
             " ORDER BY symbol, sum(profit) DESC")
-    Flux<TradeStatInterface> statsProdTrades();
+    Flux<TradeStatInterface> statsProdTrades(@Param("minTrades") Integer minTrades, @Param("minProfit") Double minProfit, @Param("winPercentage") Double winPercentage);
 
     @Query(value = "SELECT symbol,\n" +
             "       strategy,\n" +
@@ -72,16 +67,15 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
             " FROM  \"FtmoTrades\"\n" +
-            //"WHERE activated!='' AND openprice > 0 --and exit > 0\n" +
-            " WHERE ((activated IS NOT NULL or activated!='') and openprice > 0 and exit > 0)" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
             " GROUP BY symbol, strategy, timeframe\n" +
             " HAVING\n" +
-            "    --count(*) > 150\n" +
-            "   sum(profit - \"FtmoTrades\".swap - \"FtmoTrades\".commision) > 5\n" +
+            "   count(*) > :minTrades\n" +
+            "   AND sum(profit - \"FtmoTrades\".swap - \"FtmoTrades\".commision) > :minProfit\n" +
             "   AND COUNT(CASE WHEN profit > 0 THEN 1 END) > COUNT(CASE WHEN profit < 0 THEN 1 END)\n" +
-            "   --AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > 55\n" +
+            "   AND ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) > :winPercentage\n" +
             " ORDER BY symbol, sum(profit) DESC")
-    Flux<TradeStatInterface> statsFtmoTrades();
+    Flux<TradeStatInterface> statsFtmoTrades(@Param("minTrades") Integer minTrades, @Param("minProfit") Double minProfit, @Param("winPercentage") Double winPercentage);
 
     @Query(value = "SELECT symbol,\n" +
             "       strategy,\n" +

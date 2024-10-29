@@ -99,9 +99,9 @@ public class TradeStatsServices {
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> this.tradeStatsRepository.statsDevTrades(minTrades, MIN_PROFIT, winpercentage)
                     .map(this::mapToTrade).collectList();
-            case "PROD" -> this.tradeStatsRepository.statsProdTrades()
+            case "PROD" -> this.tradeStatsRepository.statsProdTrades(minTrades, MIN_PROFIT, winpercentage)
                     .map(this::mapToTrade).collectList();
-            case "FTMO" -> this.tradeStatsRepository.statsFtmoTrades()
+            case "FTMO" -> this.tradeStatsRepository.statsFtmoTrades(minTrades, MIN_PROFIT, winpercentage)
                     .map(this::mapToTrade).collectList();
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
@@ -112,7 +112,9 @@ public class TradeStatsServices {
         return switch (env.toUpperCase(Locale.getDefault())) {
             case "DEV" -> this.tradeStatsRepository.statsDevTrades(MIN_TRADES, MIN_PROFIT, WIN_PERCENTAGE)
                     .map(this::mapToTrade).collectList();
-            case "PROD" -> this.tradeStatsRepository.statsProdTrades()
+            case "PROD" -> this.tradeStatsRepository.statsProdTrades(MIN_TRADES, MIN_PROFIT, WIN_PERCENTAGE)
+                    .map(this::mapToTrade).collectList();
+            case "FTMO" -> this.tradeStatsRepository.statsFtmoTrades(MIN_TRADES, MIN_PROFIT, WIN_PERCENTAGE)
                     .map(this::mapToTrade).collectList();
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };

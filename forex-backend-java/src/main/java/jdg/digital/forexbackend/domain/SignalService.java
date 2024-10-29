@@ -216,16 +216,13 @@ public class SignalService {
 
                             // Only store to prod if stats are fulfilled
                             if ((FTMO_STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + " " + signal.timeframe())
-                                    && FTMO_STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + "_WITHOUT_REG" + " " + signal.timeframe()))
-                                    &&
-                                    winpercentage > WIN_PERCENTAGE && profit > MIN_PROFIT && total > MIN_TRADES) {
+                                    && FTMO_STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + "_WITHOUT_REG" + " " + signal.timeframe()))) {
 
                                 return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
                                         .map(activeTrades -> {
                                             if (activeTrades < ACTIVE_TRADES_MAX) {
                                                 log.info("Stats found for Signal of {}-{} and stats are fulfilled {}", signal.symbol(), signal.strategy(), stats);
                                                 // TODO we could load prodStats here and dynamically set the lots
-
 
                                                 this.storeProdSignal(signal).subscribe();
 
