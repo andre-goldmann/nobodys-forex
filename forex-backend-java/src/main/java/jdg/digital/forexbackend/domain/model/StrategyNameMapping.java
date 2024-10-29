@@ -10,6 +10,14 @@ public class StrategyNameMapping {
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
     
     static {
+        STRATEGY_NAMES.put(StrategyEnum.NNFX_SIGNALS, "NNFX-Signals");
+        STRATEGY_NAMES.put(StrategyEnum.NNFX_SIGNALS_WITHOUT_REG, "NNFX-Signals_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDS_PINBAR, "BollingerBands Pinbar");
+        STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDS_PINBAR_WITHOUT_REG, "BollingerBands Pinbar_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.EVWMAVWAPMACD_STRATEGY, "EvWmaVwapMacd-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.EVWMAVWAPMACD_STRATEGY_WITHOUT_REG, "EvWmaVwapMacd-Strategy_WITHOUT_REG");
 
         STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_TRM, "Bj SuperScript TRM");
         STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_TRM_WITHOUT_REG, "Bj SuperScript TRM_WITHOUT_REG");
@@ -203,6 +211,7 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_M15, "BladeRunner_M15");
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_H1, "BladeRunner_H1");
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_H4, "BladeRunner_H4");
+        STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_M15_DEFAULT, "BollingerBandsAndRSI_M15_DEFAULT");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_M15, "BollingerBandsAndRSI_M15");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_H1, "BollingerBandsAndRSI_H1");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_H4, "BollingerBandsAndRSI_H4");
