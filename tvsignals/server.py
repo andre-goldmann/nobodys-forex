@@ -863,7 +863,7 @@ def proceedSignal(signal:SignalDto):
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
 
-    logger.info(f"Received {jsonSignal} ..")
+    #logger.info(f"Received {jsonSignal} ..")
 
     with (Session.begin() as session):
 
