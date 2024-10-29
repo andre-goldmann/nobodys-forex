@@ -816,6 +816,7 @@ def calculateSlAndStoreSignal(signal, strategy, sl, tp):
             "strategy": strategy,
             "timeframe": signal.timeframe}
     #logger.info("Sending signal to backend ...")
+    logger.info(f"Sending signal to backend {data}")
     response = requests.post(
         "http://javabackend:5080/forex/signals",
         json=data,
@@ -933,7 +934,7 @@ def proceedSignal(signal:SignalDto):
                     "trendinfo": + trendInfo.id}
 
             if trendInfo.trendscore > -7 and signal.type == "sell":
-                logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
+                #logger.info(f"Ignore Signal because signal {signal} is against trendscore: {trendInfo.trendscore} \n")
                 #"http://javabackend:5080/forex/signals"
                 response = requests.post(
                     "http://javabackend:5080/forex/signals/againsttrendsignal",
