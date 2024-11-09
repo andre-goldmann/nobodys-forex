@@ -70,12 +70,12 @@ public class SignalService {
         STRATEGIES_WITH_OVER_60_PERCENT.clear();
         FTMO_STRATEGIES_WITH_OVER_60_PERCENT.clear();
 
-        this.tradeStatsServices.getTradeStats("dev", 200, 55.0).subscribe(
+        this.tradeStatsServices.getTradeStats("dev", 200, 62.0).subscribe(
                 stats -> {
                     stats.forEach(stat -> {
                         STRATEGIES_WITH_OVER_60_PERCENT.add(stat.getSymbol() + " " + stat.getStrategy() + " " + stat.getTimeframe());
                     });
-                    log.info("############ Using strategies for DEFAULT: {}", STRATEGIES_WITH_OVER_60_PERCENT);
+                    log.info("############ Using strategies for FTMO/DEFAULT: {}", STRATEGIES_WITH_OVER_60_PERCENT);
                 },
                 error -> log.error("Error while getting stats for last 10 trades", error)
         );
@@ -85,7 +85,7 @@ public class SignalService {
                     stats.forEach(stat -> {
                         FTMO_STRATEGIES_WITH_OVER_60_PERCENT.add(stat.getSymbol() + " " + stat.getStrategy() + " " + stat.getTimeframe());
                     });
-                    log.info("############ Using strategies for FTMO: {}", FTMO_STRATEGIES_WITH_OVER_60_PERCENT);
+                    log.info("############ Using strategies for PROD: {}", FTMO_STRATEGIES_WITH_OVER_60_PERCENT);
                 },
                 error -> log.error("Error while getting stats for last 10 trades", error)
         );
@@ -189,13 +189,13 @@ public class SignalService {
                                 return Mono.just("Signal Ignored!");
                             }
 
-                            if (signal.strategy().endsWith("_DEFAULT")) {
+                            /*if (signal.strategy().endsWith("_DEFAULT")) {
                                 // check if there is a strategy with loaded by
                                 String strat = signal.strategy().replace("_DEFAULT", "");
                                 // So this can be a strategy with "_WITHOUTH_REG" or quals to strat
                                 // this strategy needs then a statistik better or equalt to prod-stats
                                 //
-                            }
+                            }*/
 
                             double lots = signal.lots();
                             if (total >= MIN_TRADES && winpercentage >= WIN_PERCENTAGE) {
@@ -205,9 +205,8 @@ public class SignalService {
                             // Always store to dev
                             this.storeDevSignal(signal, lots).subscribe();
 
-                            // Only store to ftmo if stats are fulfilled
-                            final double profit = stats.getProfit().doubleValue();
-                            if (winpercentage > FTMO_WIN_PERCENTAGE && profit > FTMO_MIN_PROFIT && total > FTMO_MIN_TRADES) {
+                            if ((STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + " " + signal.timeframe())
+                                    && STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + "_WITHOUT_REG" + " " + signal.timeframe()))) {
                                 this.storeFtmoSignal(signal).subscribe(
                                         value -> log.info("Stored ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats),
                                         error -> log.error("Error while Storing ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats, error)
