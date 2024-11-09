@@ -994,7 +994,10 @@ async def storeCandle(candle:CandlesDto):
     #if (timeframeEnum != TimeFrame.PERIOD_M1
     #        and timeframeEnum != TimeFrame.PERIOD_W1) \
     #        and timeframeEnum != TimeFrame.PERIOD_D1:
-    storeCandleInDb(candle, logger)
+    count = storeCandleInDb(candle, logger)
+
+    if count > 0:
+        return
 
     #Call strategies
     if timeframeEnum == TimeFrame.PERIOD_M15 or timeframeEnum == TimeFrame.PERIOD_H1 or timeframeEnum == TimeFrame.PERIOD_H4:
@@ -1025,8 +1028,8 @@ async def storeCandle(candle:CandlesDto):
         commodityChannelIndex(df, symbol, timeframeEnum, entry)
         donchianATR(df, symbol, timeframeEnum, entry)
         donchianBreakout(df, symbol, timeframeEnum, entry)
-        #donchianMiddle(df, symbol, timeframeEnum, entry)
-        #dpoCandlestick(df, symbol, timeframeEnum, entry)
+        donchianMiddle(df, symbol, timeframeEnum, entry)
+        dpoCandlestick(df, symbol, timeframeEnum, entry)
         #threeEma(df, symbol, timeframeEnum, entry)
         #threeEmaAlternative(df, symbol, timeframeEnum, entry)
         #eMACrossover(df, symbol, timeframeEnum, entry)
