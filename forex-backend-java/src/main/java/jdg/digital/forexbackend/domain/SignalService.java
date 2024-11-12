@@ -145,7 +145,7 @@ public class SignalService {
                 && now.toLocalTime().isBefore(LocalTime.of(16, 30));
 
         final boolean isNight = now.toLocalTime().isAfter(LocalTime.of(23, 30))
-                && now.toLocalTime().isBefore(LocalTime.of(0, 4));
+                && now.toLocalTime().isBefore(LocalTime.of(0, 1));
 
         if (isThursday || isTuesday || isFriday || isNight) {
             log.info("Today is Tuesday/Thursday/Friday and the current time is before "+now+", so the signal will not be stored");
