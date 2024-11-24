@@ -32,4 +32,6 @@ public class IgnoredSignalEntity {
 
     private String info;
 
+    private double winpercentage;
+
 }
