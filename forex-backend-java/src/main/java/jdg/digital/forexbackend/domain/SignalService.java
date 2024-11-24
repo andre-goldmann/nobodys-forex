@@ -206,7 +206,7 @@ public class SignalService {
                             this.storeDevSignal(signal, lots).subscribe();
 
                             if ((STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + " " + signal.timeframe())
-                                    && STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + "_WITHOUT_REG" + " " + signal.timeframe()))) {
+                                    || STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + "_WITHOUT_REG" + " " + signal.timeframe()))) {
                                 this.storeFtmoSignal(signal).subscribe(
                                         value -> log.info("Stored ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats),
                                         error -> log.error("Error while Storing ftmo signal for {}-{} with stats {} resulted ", signal.symbol(), signal.strategy(), stats, error)
@@ -215,7 +215,7 @@ public class SignalService {
 
                             // Only store to prod if stats are fulfilled
                             if ((FTMO_STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + " " + signal.timeframe())
-                                    && FTMO_STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + "_WITHOUT_REG" + " " + signal.timeframe()))) {
+                                    || FTMO_STRATEGIES_WITH_OVER_60_PERCENT.contains(signal.symbol() + " " + strategyClean + "_WITHOUT_REG" + " " + signal.timeframe()))) {
 
                                 return this.prodTradeRepository.countActiveTrades(signal.symbol(), signal.strategy())
                                         .map(activeTrades -> {
@@ -314,6 +314,7 @@ public class SignalService {
                                 .loses(stats.getLoses())
                                 .wins(stats.getWins())
                                 .total(stats.getTotal())
+                                .winpercentage(stats.getWinpercentage().doubleValue())
                                 .info(info)
                                 .build()).subscribe();
 
