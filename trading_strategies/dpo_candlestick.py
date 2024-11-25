@@ -21,7 +21,8 @@ class DpoCandlestick:
         # initialise DPO indicator for n = 20
         indicator_dpo = ta.trend.DPOIndicator(close = self.df['close'], window = 20)
         # calculate values
-        self.df['dpo'] = indicator_dpo.dpo() 
+        self.df = self.df.copy()  # Ensure self.df is a copy if it's derived from another DataFrame slice
+        self.df['dpo'] = indicator_dpo.dpo()
     
     def determine_signal(self, dframe):
         action = 0
