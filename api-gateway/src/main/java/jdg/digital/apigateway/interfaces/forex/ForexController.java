@@ -85,7 +85,7 @@ public class ForexController {
 
     @PostMapping("/trades/updatehistory/{env}")
     @PreAuthorize("isAuthenticated() and hasRole('ROLE_USER')")
-    public Mono<Integer> updatehistory(@PathVariable("env") final String env, @RequestBody TradeHistoryUpdate trade) {
+    public Mono<String> updatehistory(@PathVariable("env") final String env, @RequestBody TradeHistoryUpdate trade) {
         return this.forexService.updateHistory(env, trade);
     }
 

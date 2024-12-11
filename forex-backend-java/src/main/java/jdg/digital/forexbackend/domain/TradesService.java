@@ -146,7 +146,7 @@ public class TradesService {
      */
 
 
-    public Mono<Integer> updateHistory(final String env, final TradeHistoryUpdate update) {
+    public Mono<String> updateHistory(final String env, final TradeHistoryUpdate update) {
         /*if(update.getMagic() != null) {
             if (224497 == update.getMagic()
                     || 225290 == update.getMagic()
@@ -166,6 +166,13 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Tradehistory updated";
+                        } else {
+                            return "Tradehistory not updated";
+                        }
+                    })
                     .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
             case "PROD" -> this.tradeRepository.updateProd(
                             update.getSymbol().getValue(),
@@ -175,6 +182,13 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Tradehistory updated";
+                        } else {
+                            return "Tradehistory not updated";
+                        }
+                    })
                     .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
             case "FTMO" -> this.tradeRepository.updateFtmo(
                             update.getSymbol().getValue(),
@@ -184,7 +198,14 @@ public class TradesService {
                             update.getCommision().doubleValue(),
                             update.getSwap().doubleValue(),
                             update.getClosed())
-                    .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()));
+                    .doOnError(error -> log.error("Error updating trade: {}", error.getMessage()))
+                    .map(result -> {
+                        if (result == 1) {
+                            return "Tradehistory updated";
+                        } else {
+                            return "Tradehistory not updated";
+                        }
+                    });
             default -> throw new IllegalArgumentException("Undefined env " + env);
         };
 
