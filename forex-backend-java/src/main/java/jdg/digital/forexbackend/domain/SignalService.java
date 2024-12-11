@@ -361,7 +361,7 @@ public class SignalService {
                 signal.entry(),
                 signal.sl(),
                 signal.tp(),
-                1.0,
+                0.5,
                 signal.strategy(),
                 LocalDateTime.now());
     }
