@@ -24,7 +24,7 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
             " FROM  \"Trades\"\n" +
             //"WHERE activated!='' AND openprice > 0 and exit > 0\n" +
-            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0 AND (closed IS NOT NULL or closed != ''))" +
             " GROUP BY symbol, strategy, timeframe\n" +
             " HAVING\n" +
             "   count(*) > :minTrades\n" +
@@ -46,7 +46,7 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
             " FROM  \"ProdTrades\"\n" +
             //"WHERE activated!='' AND openprice > 0 and exit > 0\n" +
-            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0 AND (closed IS NOT NULL or closed != ''))" +
             " GROUP BY symbol, strategy, timeframe\n" +
             " HAVING\n" +
             "   count(*) > :minTrades\n" +
@@ -67,7 +67,7 @@ public interface TradeStatsRepository extends ReactiveCrudRepository<TradeStatEn
             "       count(*) as total,\n" +
             "       ROUND((COUNT(CASE WHEN profit > 0 THEN 1 END) * 100.0) / COUNT(*), 2) AS winpercentage\n" +
             " FROM  \"FtmoTrades\"\n" +
-            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0)" +
+            " WHERE ((activated IS NOT NULL or activated!='') and exit > 0 and openprice > 0 AND (closed IS NOT NULL or closed != ''))" +
             " GROUP BY symbol, strategy, timeframe\n" +
             " HAVING\n" +
             "   count(*) > :minTrades\n" +
