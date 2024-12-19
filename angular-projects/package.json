@@ -13,6 +13,7 @@
     "@angular/platform-browser": "19.0.5",
     "@angular/platform-browser-dynamic": "19.0.5",
     "@angular/router": "19.0.5",
+    "@angular/service-worker": "19.0.5",
     "@ngneat/svg-icon": "^7.1.6",
     "@ngneat/until-destroy": "^10.0.0",
     "@nx/angular": "20.2.2",
@@ -37,6 +38,9 @@
     "@angular/cli": "~19.0.6",
     "@angular/compiler-cli": "19.0.5",
     "@angular/language-service": "19.0.5",
+    "@angular/pwa": "^19.0.6",
+    "@eslint/eslintrc": "^2.1.1",
+    "@eslint/js": "~8.57.0",
     "@nx/devkit": "20.2.2",
     "@nx/eslint": "20.2.2",
     "@nx/eslint-plugin": "20.2.2",
@@ -62,9 +66,10 @@
     "@types/jest": "29.5.14",
     "@types/node": "22.10.2",
     "@types/plotly.js-dist-min": "^2.3.4",
-    "@typescript-eslint/eslint-plugin": "8.18.1",
-    "@typescript-eslint/parser": "8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
     "@typescript-eslint/utils": "^8.18.1",
+    "angular-eslint": "^19.0.2",
     "daisyui": "^4.12.22",
     "eslint": "~9.17.0",
     "eslint-config-prettier": "^9.1.0",
@@ -79,6 +84,7 @@
     "tailwindcss": "^3.4.17",
     "ts-jest": "^29.2.5",
     "ts-node": "10.9.2",
-    "typescript": "5.6.3"
+    "typescript": "5.6.3",
+    "typescript-eslint": "^8.13.0"
   }
 }
