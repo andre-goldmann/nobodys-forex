@@ -23,3 +23,15 @@ bin\kc.bat start-dev --log-level=DEBUG
 
 # TODOS
 * login does not work on cellphone
+
+
+Vercel-Config
+
+Build-Command:
+node -r dotenv/config mynode.js && npx nx build forex-trades-analysis --prod
+
+Output-Directory:
+dist/apps/forex-trades-analysis
+
+Development-Command:
+npx nx serve forex-trades-analysis --port $PORT
