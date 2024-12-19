@@ -2,11 +2,10 @@ import { Component, computed, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'lib-playground-ui',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './playground-ui.component.html',
-  styleUrl: './playground-ui.component.css',
+    selector: 'lib-playground-ui',
+    imports: [CommonModule],
+    templateUrl: './playground-ui.component.html',
+    styleUrl: './playground-ui.component.css'
 })
 export class PlaygroundUiComponent {
   price = 100;

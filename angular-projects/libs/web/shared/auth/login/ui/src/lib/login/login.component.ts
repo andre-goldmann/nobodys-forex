@@ -7,9 +7,8 @@ import {BehaviorSubject} from "rxjs";
 
 
 @Component({
-  standalone: true,
-  selector: 'lib-login',
-  template: `
+    selector: 'lib-login',
+    template: `
     <div class="container gradient-bg">
       @if(!authService.hasValidAccessToken()){
       } @else {
@@ -17,7 +16,7 @@ import {BehaviorSubject} from "rxjs";
       }
     </div>
   `,
-  imports: [CommonModule, RouterModule, SpinnerComponent, AsyncPipe]
+    imports: [CommonModule, RouterModule, SpinnerComponent, AsyncPipe]
 })
 export default class LoginComponent implements OnInit{
   private isLoadingSubject = new BehaviorSubject<boolean>(false);

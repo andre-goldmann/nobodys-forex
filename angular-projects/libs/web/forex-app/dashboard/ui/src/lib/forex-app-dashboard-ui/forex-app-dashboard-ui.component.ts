@@ -6,13 +6,14 @@ import {
   TradeStatService
 } from '@angular-projects/forex-app-data-access';
 import { Observable, zip } from 'rxjs';
+import {ExampleBarchartsComponent} from "@angular-projects/example-barcharts";
+import {ExampleLinechartsComponent} from "@angular-projects/example-linecharts";
 
 @Component({
-  selector: 'lib-forex-app-dashboard-ui',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './forex-app-dashboard-ui.component.html',
-  styleUrl: './forex-app-dashboard-ui.component.scss',
+    selector: 'lib-forex-app-dashboard-ui',
+    imports: [CommonModule, ExampleBarchartsComponent, ExampleLinechartsComponent],
+    templateUrl: './forex-app-dashboard-ui.component.html',
+    styleUrl: './forex-app-dashboard-ui.component.scss'
 })
 export class ForexAppDashboardUiComponent implements OnInit{
 
@@ -22,6 +23,12 @@ export class ForexAppDashboardUiComponent implements OnInit{
 
   map = new Map();
   items!: Observable<StatsPerProdTrade[]>;
+
+  // https://plotly.com/javascript/line-and-scatter/ -->
+
+
+  //layout: {width: 320, height: 240, title: 'A Fancy Plot'}
+
 
   ngOnInit(): void {
 

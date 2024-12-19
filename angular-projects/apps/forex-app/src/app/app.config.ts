@@ -12,7 +12,9 @@ import {provideAnimations} from "@angular/platform-browser/animations";
 import {provideHttpClient, withInterceptors, withInterceptorsFromDi} from "@angular/common/http";
 import {provideOAuthClient} from "angular-oauth2-oidc";
 import {authenticationInterceptor} from "@angular-projects/utils";
-
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PlotlyModule } from 'angular-plotly.js';
+PlotlyModule.plotlyjs = PlotlyJS;
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -37,6 +39,7 @@ export const appConfig: ApplicationConfig = {
       BrowserModule,
       FormsModule,
       CommonModule,
+      PlotlyModule
       /*OAuthModule.forRoot({
         resourceServer: {
           allowedUrls: ['http://172.26.181.56:4000/spring'],

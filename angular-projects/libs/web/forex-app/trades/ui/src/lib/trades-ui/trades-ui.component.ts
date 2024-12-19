@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Trade, TradesService } from '@angular-projects/forex-app-data-access';
 
 @Component({
-  selector: 'lib-trades-ui',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './trades-ui.component.html',
-  styleUrl: './trades-ui.component.css',
+    selector: 'lib-trades-ui',
+    imports: [CommonModule],
+    templateUrl: './trades-ui.component.html',
+    styleUrl: './trades-ui.component.css'
 })
 export class TradesUiComponent implements OnInit{
   prodTrades: Trade[] = [];

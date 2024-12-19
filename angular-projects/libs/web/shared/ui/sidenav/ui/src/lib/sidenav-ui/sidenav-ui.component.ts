@@ -8,40 +8,33 @@ import {SideNavToggle} from "@angular-projects/sidenav-models";
 import {NavbarData} from "@angular-projects/ui-data-access-models";
 
 @Component({
-  selector: 'lib-sidenav-ui',
-  standalone: true,
-  templateUrl: './sidenav-ui.component.html',
-  styleUrl: './sidenav-ui.component.scss',
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
-  animations: [
-    trigger('fadeInOut', [
-      transition(':enter', [
-        style({opacity: 0}),
-        animate('350ms',
-          style({opacity: 1})
-        )
-      ]),
-      transition(':leave', [
-        style({opacity: 1}),
-        animate('350ms',
-          style({opacity: 0})
-        )
-      ])
-    ]),
-    trigger('rotate', [
-      transition(':enter', [
-        animate('1000ms',
-          keyframes([
-            style({transform: 'rotate(0deg)', offset: '0'}),
-            style({transform: 'rotate(2turn)', offset: '1'})
-          ])
-        )
-      ])
-    ])
-  ]
+    selector: 'lib-sidenav-ui',
+    templateUrl: './sidenav-ui.component.html',
+    styleUrl: './sidenav-ui.component.scss',
+    imports: [
+        CommonModule,
+        RouterModule
+    ],
+    animations: [
+        trigger('fadeInOut', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('350ms', style({ opacity: 1 }))
+            ]),
+            transition(':leave', [
+                style({ opacity: 1 }),
+                animate('350ms', style({ opacity: 0 }))
+            ])
+        ]),
+        trigger('rotate', [
+            transition(':enter', [
+                animate('1000ms', keyframes([
+                    style({ transform: 'rotate(0deg)', offset: '0' }),
+                    style({ transform: 'rotate(2turn)', offset: '1' })
+                ]))
+            ])
+        ])
+    ]
 })
 export class SidenavUiComponent implements OnInit {
 
@@ -71,7 +64,10 @@ export class SidenavUiComponent implements OnInit {
           this.navData.set(value);
         },
         error: error => {
-          console.error('error receiving layout', error);
+          let defaultNav:NavbarData[] = [];
+          defaultNav.push({label: 'Home', routeLink: '/dashboard', icon: 'home'});
+          this.navData.set(defaultNav);
+          //console.error('error receiving layout', error);
         }
       }
     )

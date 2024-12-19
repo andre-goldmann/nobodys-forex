@@ -5,7 +5,6 @@ import { APP_CONFIG, AppConfig } from '@angular-projects/app-config';
 import { Trade } from './models/trade';
 import { SymbolEnum } from './models/symbol-enum';
 import { StrategyEnum } from './models/strategy-enum';
-import { HttpUrlEncodingCodec } from '@angular/common/http';
 
 export const mockProdTrades: Trade[] = [
   { id: 1, symbol: SymbolEnum.Usdjpy, strategy: StrategyEnum.VhmaWithoutReg, entry: 1.1234, exit: 1.1250, profit: 0.0016, activated: new Date(), closed: new Date(), timeframe: 'H1', type: 'BUY' },
@@ -24,7 +23,6 @@ export const mockTrades: Trade[] = [
 })
 export class TradesService {
   private apiUrl: string;
-  private codec = new HttpUrlEncodingCodec();
   constructor(private http: HttpClient,
               @Inject(APP_CONFIG) private appConfig: AppConfig) {
     this.apiUrl = `${appConfig.baseURL}/trades`;

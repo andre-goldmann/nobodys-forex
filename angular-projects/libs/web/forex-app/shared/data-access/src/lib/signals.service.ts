@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { APP_CONFIG, AppConfig } from '@angular-projects/app-config';
 import { HttpUrlEncodingCodec } from '@angular/common/http';
 import { Signal } from './models/signal';
-import { AuthService } from '@angular-projects/login-data-access';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +15,7 @@ export class SignalsService {
   private codec = new HttpUrlEncodingCodec();
 
   constructor(private http: HttpClient,
-              @Inject(APP_CONFIG) appConfig: AppConfig,
-              private authService: AuthService) {
+              @Inject(APP_CONFIG) appConfig: AppConfig) {
     this.apiUrl = `${appConfig.baseURL}/signals`;
   }
 

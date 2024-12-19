@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import {RouterOutlet} from "@angular/router";
 
 @Component({
-  selector: 'lib-nav-body',
-  standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet],
-  templateUrl: './nav-body.component.html',
-  styleUrl: './nav-body.component.scss',
+    selector: 'lib-nav-body',
+    imports: [
+        CommonModule,
+        RouterOutlet
+    ],
+    templateUrl: './nav-body.component.html',
+    styleUrl: './nav-body.component.scss'
 })
 export class NavBodyComponent {
   @Input() collapsed = false;

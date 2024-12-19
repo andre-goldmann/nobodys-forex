@@ -11,12 +11,11 @@ import {SideNavToggle} from "@angular-projects/sidenav-models";
 
 
 @Component({
-  standalone: true,
-  selector: 'app-root',
-  //imports: [CommonModule, RouterOutlet, NavBodyComponent, NavUiComponent],
-  imports: [CommonModule, RouterOutlet, SidenavUiComponent, SidenavBodyComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    //imports: [CommonModule, RouterOutlet, NavBodyComponent, NavUiComponent],
+    imports: [CommonModule, RouterOutlet, SidenavUiComponent, SidenavBodyComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit{
   title = 'financial-data-analysis';

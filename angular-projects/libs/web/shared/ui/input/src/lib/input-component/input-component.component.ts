@@ -14,11 +14,10 @@ export const IconSizesInPx: { [key in IconSize]: number } = {
 };
 
 @Component({
-  selector: 'lib-input-component',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, IconModule],
-  templateUrl: './input-component.component.html',
-  styleUrl: './input-component.component.scss',
+    selector: 'lib-input-component',
+    imports: [CommonModule, ReactiveFormsModule, IconModule],
+    templateUrl: './input-component.component.html',
+    styleUrl: './input-component.component.scss'
 })
 export class InputComponent implements AfterViewInit {
   @Input() control = new FormControl('');

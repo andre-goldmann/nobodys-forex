@@ -8,11 +8,10 @@ import {SidenavUiComponent} from "@angular-projects/sidenav-ui";
 import {SideNavToggle} from "@angular-projects/sidenav-models";
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, RouterOutlet, SidenavUiComponent, SidenavBodyComponent],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
+    imports: [CommonModule, RouterOutlet, SidenavUiComponent, SidenavBodyComponent],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   title = 'forex-app';

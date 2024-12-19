@@ -5,11 +5,10 @@ import { APP_CONFIG, AppConfig } from '@angular-projects/app-config';
 import { Signal, SignalsService, WebsocketService } from '@angular-projects/forex-app-data-access';
 
 @Component({
-  selector: 'lib-signals-ui',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './signals-ui.component.html',
-  styleUrl: './signals-ui.component.css',
+    selector: 'lib-signals-ui',
+    imports: [CommonModule],
+    templateUrl: './signals-ui.component.html',
+    styleUrl: './signals-ui.component.css'
 })
 export class SignalsUiComponent implements OnInit {
 

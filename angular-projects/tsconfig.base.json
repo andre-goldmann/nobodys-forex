@@ -19,6 +19,12 @@
         "libs/web/shared/app-config/src/index.ts"
       ],
       "@angular-projects/auth_routes": ["libs/web/shared/auth/index.ts"],
+      "@angular-projects/example-barcharts": [
+        "libs/web/shared/ui/charts/example/bar/src/index.ts"
+      ],
+      "@angular-projects/example-linecharts": [
+        "libs/web/shared/ui/charts/example/line/src/index.ts"
+      ],
       "@angular-projects/fda-dashboard-ui": [
         "libs/web/fda/ui/dashboard/ui/src/index.ts"
       ],
