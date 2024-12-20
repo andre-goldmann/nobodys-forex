@@ -43,9 +43,18 @@
       "@angular-projects/input-component": [
         "libs/web/shared/ui/input/src/index.ts"
       ],
+      "@angular-projects/instruments-list": [
+        "libs/web/shared/instruments-list/src/index.ts"
+      ],
       "@angular-projects/login": ["libs/web/shared/auth/login/ui/src/index.ts"],
       "@angular-projects/login-data-access": [
         "libs/web/shared/auth/login/data-access/src/index.ts"
+      ],
+      "@angular-projects/main-view": [
+        "libs/web/forex-trades-analysis/main-view/src/index.ts"
+      ],
+      "@angular-projects/multipanel": [
+        "libs/web/shared/ui/header/multipanel/src/index.ts"
       ],
       "@angular-projects/nav-body": [
         "libs/web/shared/ui/nav/body/ui/src/index.ts"

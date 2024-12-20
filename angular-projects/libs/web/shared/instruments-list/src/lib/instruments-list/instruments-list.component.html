@@ -1,0 +1,16 @@
+<div class="instrument-list">
+  <ul>
+    <li *ngFor="let instrument of instruments" (click)="onInstrumentClick(instrument)">
+      <svg width="30" height="20" viewBox="0 0 300 200" class="flag-icon">
+        <image [attr.href]="getFlagUrl(instrument.split('')[0])" width="300" height="200" />
+        <image [attr.href]="getFlagUrl(instrument.split('')[3])" x="150" width="150" height="200" />
+      </svg>
+      <span class="instrument-name">{{ instrument }}</span>
+      <span class="instrument-price">{{ getInstrumentPrice(instrument) }}</span>
+      <span [ngClass]="getPriceDirectionClass(instrument)" class="price-indicator">
+        {{ getPriceDirectionSymbol(instrument) }}
+      </span>
+    </li>
+  </ul>
+  <button (click)="clearSelection()" class="clear-button">Clear Selection</button>
+</div>

@@ -1,0 +1,65 @@
+.instrument-list {
+  padding: 15px;
+  background-color: #f9f9f9;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+li:hover {
+  background-color: #e9e9e9;
+}
+
+.flag-icon {
+  margin-right: 10px;
+}
+
+.instrument-name {
+  flex-grow: 1;
+}
+
+.instrument-price {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.price-indicator {
+  width: 20px;
+  text-align: center;
+}
+
+.up-arrow {
+  color: green;
+}
+
+.down-arrow {
+  color: red;
+}
+
+.clear-button {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.clear-button:hover {
+  background-color: #e0e0e0;
+}

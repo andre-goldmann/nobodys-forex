@@ -7,7 +7,7 @@ node -r dotenv/config mynode.js
 npx nx serve financial-data-analysis
 npx nx serve forex-app --port=4300
 
-nx g @nx/angular:library nav-ui --directory=libs/web/shared/nav/ui --standalone
+nx g @nx/angular:library --directory=libs/web/shared/ui/header/multipanel --standalone
 npx nx g @nrwl/js:lib login-data-access --directory=libs/web/shared/auth/login/data-access
 nx g rm login-data-access
 

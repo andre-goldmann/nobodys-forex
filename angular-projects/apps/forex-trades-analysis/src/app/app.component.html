@@ -1,0 +1,9 @@
+<div class="dashboard">
+  <lib-multipanel (environmentChange)="onEnvironmentChange($event)"></lib-multipanel>
+
+  <div class="content-wrapper">
+    <lib-main-view [environment]="environment"
+                   [selectedInstrument]="selectedInstrument"></lib-main-view>
+    <lib-instruments-list (instrumentSelected)="onInstrumentSelected($event)"></lib-instruments-list>
+  </div>
+</div>
