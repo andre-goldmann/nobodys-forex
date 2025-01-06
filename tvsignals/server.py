@@ -70,7 +70,7 @@ symbols = [
 
 strategies = [
               "JMaCrossover-Strategy",
-              "JMaCrossover-Strategy_WITHOUT_REG"
+              "JMaCrossover-Strategy_WITHOUT_REG",
               
               "EvWmaVwapMacd-Strategy",
               "EvWmaVwapMacd-Strategy_WITHOUT_REG",
