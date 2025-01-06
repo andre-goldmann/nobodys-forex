@@ -70,6 +70,8 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - JMaCrossover-Strategy
+        - JMaCrossover-Strategy_WITHOUT_REG
         - EvWmaVwapMacd-Strategy
         - EvWmaVwapMacd-Strategy_WITHOUT_REG
         - BollingerBands Pinbar

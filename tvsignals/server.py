@@ -69,7 +69,9 @@ symbols = [
     "XRPUSD"]
 
 strategies = [
-
+              "JMaCrossover-Strategy",
+              "JMaCrossover-Strategy_WITHOUT_REG"
+              
               "EvWmaVwapMacd-Strategy",
               "EvWmaVwapMacd-Strategy_WITHOUT_REG",
 
@@ -1066,7 +1068,8 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "Bj SuperScript SAR" \
                 or strategy == "NNFX-Signals" \
                 or strategy == "BollingerBands Pinbar" \
-                or strategy == "EvWmaVwapMacd-Strategy":
+                or strategy == "EvWmaVwapMacd-Strategy" \
+                or strategy == "JMaCrossover-Strategy":
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", sl, tp)
 

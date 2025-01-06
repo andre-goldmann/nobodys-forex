@@ -10,6 +10,9 @@ public class StrategyNameMapping {
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
     
     static {
+        STRATEGY_NAMES.put(StrategyEnum.JMACROSSOVER_STRATEGY, "JMaCrossover-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.JMACROSSOVER_STRATEGY_WITHOUT_REG, "JMaCrossover-Strategy_WITHOUT_REG");
+
         STRATEGY_NAMES.put(StrategyEnum.NNFX_SIGNALS, "NNFX-Signals");
         STRATEGY_NAMES.put(StrategyEnum.NNFX_SIGNALS_WITHOUT_REG, "NNFX-Signals_WITHOUT_REG");
 
