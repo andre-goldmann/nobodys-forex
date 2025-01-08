@@ -603,7 +603,7 @@ class TradingViewAnalysis(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     symbol: Mapped[str] = mapped_column(String(6))
     timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
-    recommendation: Mapped[str] = mapped_column(String(4))
+    recommendation: Mapped[str]# = mapped_column(String(6))
 
 class Regressions(Base):
     __tablename__ = "regressions"
