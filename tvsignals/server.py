@@ -884,7 +884,7 @@ def proceedSignal(signal:SignalDto):
 
     if len(recommendationsResult) >=2:
         contains_signal_direction = all(signal.type in item.lower() for item in recommendationsResult)
-
+        print(f"Signal {signal} recommendations {recommendationsResult} filled = {contains_signal_direction}" )
         if not contains_signal_direction:
             print(f"Ignore signal {signal} as recommendations {recommendationsResult} are not full filled!" )
             return
