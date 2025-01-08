@@ -598,6 +598,13 @@ class TimeFrame(enum.Enum):
     PERIOD_D1 = 6*240
     PERIOD_W1 = 30*6*240
 
+class TradingViewAnalysis(Base):
+    __tablename__ = "analysis"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    recommendation: Mapped[str] = mapped_column(String(4))
+
 class Regressions(Base):
     __tablename__ = "regressions"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -865,8 +872,9 @@ def proceedSignal(signal:SignalDto):
                      'tp': signal.tp,
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
-
-    #logger.info(f"Received {jsonSignal} ..")
+    timeFrame:TimeFrame = TimeFrame.__dict__[signal.timeframe]
+    recommendations = loadRecommendations(signal.symbol, timeFrame)
+    logger.info(f"Recommendations {recommendations}")
 
     with (Session.begin() as session):
 
@@ -1125,9 +1133,14 @@ def storeSignal(signal: Signal, session):
 def storeIgnoredSignal(signal: IgnoredSignal, session):
     session.add(signal)
 
+def loadRecommendations(symbol:str, timeFrame:TimeFrame):
+    with Session.begin() as session:
+        entries = session.query(TradingViewAnalysis).filter(TradingViewAnalysis.symbol == symbol, TradingViewAnalysis.timeFrame == timeFrame).all()
+        session.expunge_all()
+        session.close()
+        return entries
+
 if __name__ == "__main__":
-
-
 
     # Create a console handler
     console_handler = logging.StreamHandler(sys.stdout)
