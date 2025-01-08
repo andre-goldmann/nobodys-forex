@@ -30,7 +30,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
     getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, countSignals, \
-    geTrendInfos, storeTradingViewAnalysis
+    geTrendInfos, storeTradingViewAnalysis, deleteTradingViewAnalysis
 from trading_strategies.adx_crossover import AdxCrossover
 from trading_strategies.adx_ema_14 import ADXEMA14
 from trading_strategies.adx_rsi import AdxRsi
@@ -1275,13 +1275,14 @@ def run_continuously(interval=1):
     return cease_continuous_run
 
 def fifteenMinutejob():
+    deleteTradingViewAnalysis(TimeFrame.PERIOD_M15)
     storeTradingViewAnalysis(TimeFrame.PERIOD_M15)
 
 
 def job():
 
     # TODO needs timeframe
-
+    deleteTradingViewAnalysis(TimeFrame.PERIOD_H1)
     storeTradingViewAnalysis(TimeFrame.PERIOD_H1)
 
     now = datetime.datetime.now()
