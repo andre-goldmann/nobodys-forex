@@ -84,7 +84,7 @@ class Base(DeclarativeBase):
 
 
 class TradingViewAnalysis(Base):
-    __tablename__ = "regressions"
+    __tablename__ = "analysis"
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     symbol: Mapped[str] = mapped_column(String(6))
     timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
