@@ -873,7 +873,7 @@ def proceedSignal(signal:SignalDto):
                      'tp': signal.tp,
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
-    timeFrame:TimeFrame = TimeFrame.__dict__[signal.timeframe]
+    #timeFrame:TimeFrame = TimeFrame.__dict__[signal.timeframe]
     #recommendations = loadRecommendations(signal.symbol, timeFrame)
     #logger.info(f"Recommendations {recommendations}")
 
