@@ -37,6 +37,7 @@ components:
         - GBPCAD
         - GBPUSD
         - GBPCHF
+        - EURAUD
         - EURUSD
         - EURGBP
         - EURJPY
