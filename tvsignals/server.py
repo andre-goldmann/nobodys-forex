@@ -877,7 +877,7 @@ def proceedSignal(signal:SignalDto):
     recommendations = loadRecommendations(signal.symbol)
 
     for recommendation in recommendations:
-        logger.info(f"Recommendation for {signal.symbol} : {recommendation.recommendation}")
+        logger.info(f"Recommendation for {signal.symbol} {recommendation.timeFrame}: {recommendation.recommendation}")
 
 
     with (Session.begin() as session):
