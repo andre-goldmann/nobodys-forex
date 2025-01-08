@@ -17,7 +17,7 @@ from sqlalchemy import UniqueConstraint
 from sqlalchemy import create_engine, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.orm import sessionmaker
-
+from tradingview_ta import *
 from utils import loadData
 
 load_dotenv()
@@ -81,6 +81,14 @@ class TimeFrame(enum.Enum):
 
 class Base(DeclarativeBase):
     pass
+
+
+class TradingViewAnalysis(Base):
+    __tablename__ = "regressions"
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    symbol: Mapped[str] = mapped_column(String(6))
+    timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
+    recommendation: Mapped[str] = mapped_column(String(4))
 
 class Regressions(Base):
     __tablename__ = "regressions"
@@ -628,6 +636,47 @@ def deleteSupportResistance(symbol:str, timeFrame:TimeFrame):
             print("-"*60)
             session.rollback()
             session.close()
+
+def deleteTradingViewAnalysis(timeframe:TimeFrame):
+    with Session.begin() as session:
+        try:
+            results = session.query(TradingViewAnalysis).filter(
+                TradingViewAnalysis.timeframe==timeframe).all()
+            for r in results:
+                session.delete(r)
+            session.commit()
+            session.close()
+        except Exception:
+            print("Exception while deleting TradingViewAnalysis:")
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+            session.rollback()
+            session.close()
+
+def storeTradingViewAnalysis(timeframe:TimeFrame):
+
+    deleteTradingViewAnalysis(timeframe)
+
+    interval=Interval.INTERVAL_1_HOUR
+    if timeframe == TimeFrame.PERIOD_M15:
+        interval=Interval.INTERVAL_15_MINUTES
+
+    symbols = ["OANDA:" + symbol for symbol in symbols]
+    analysis = get_multiple_analysis(screener="forex", exchange="oanda", interval=interval, symbols=symbols)
+
+    with Session.begin() as session:
+        for symbol in symbols:
+            spongebob = TradingViewAnalysis(
+                symbol=symbol,
+                timeFrame=timeframe.name,
+                recommendation=analysis[symbol].summary['RECOMMENDATION']
+            )
+
+            session.add_all([spongebob])
+        session.commit()
+        session.close()
+
 
 def storeSupportResistance(sr:SupportResistance):
     # nur jeden Tage einmal löschen

@@ -16,3 +16,4 @@ ta
 requests
 pyarrow
 ecs-logging
+tradingview-ta

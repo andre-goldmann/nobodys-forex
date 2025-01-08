@@ -30,7 +30,7 @@ from DataBaseManagement import initTradingDb, symbols, storeSignal, Signal, \
     getLinesInfo, regressionCalculation, lastCandle, CandlesDto, loadDfFromDb, storeCandleInDb, countEntries, storeData, \
     getSrLevels, SupportResistanceType, storeSupportResistance, SupportResistance, deleteSupportResistance, \
     getInstrumentstats, deleteSignalFromDb, SignalId, deleteIgnoredSignalFromDb, countSignals, \
-    geTrendInfos
+    geTrendInfos, storeTradingViewAnalysis
 from trading_strategies.adx_crossover import AdxCrossover
 from trading_strategies.adx_ema_14 import ADXEMA14
 from trading_strategies.adx_rsi import AdxRsi
@@ -1274,9 +1274,15 @@ def run_continuously(interval=1):
     continuous_thread.start()
     return cease_continuous_run
 
+def fifteenMinutejob():
+    storeTradingViewAnalysis(TimeFrame.PERIOD_M15)
+
+
 def job():
 
     # TODO needs timeframe
+
+    storeTradingViewAnalysis(TimeFrame.PERIOD_H1)
 
     now = datetime.datetime.now()
     hour = now.hour
@@ -1347,6 +1353,7 @@ if __name__ == "__main__":
     #            regressionCalculation(symbol,startDate, timeFrame, logger)
 
     schedule.every().hour.do(job)
+    schedule.every(15).minutes.do(fifteenMinutejob)
     #schedule.every().hour.do(runFirstStrategy)
     # Start the background thread
     stop_run_continuously = run_continuously()
