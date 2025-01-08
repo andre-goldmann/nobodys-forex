@@ -603,7 +603,7 @@ class TradingViewAnalysis(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     symbol: Mapped[str] = mapped_column(String(6))
     timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
-    recommendation: Mapped[str]# = mapped_column(String(6))
+    recommendation: Mapped[str]
 
 class Regressions(Base):
     __tablename__ = "regressions"
@@ -771,7 +771,7 @@ def lastCandle(symbol:str, timeFrame:TimeFrame):
         return candle
 
 @app.post("/trendinfo")
-async def signals(trendInfo:TrendInfoDto):
+async def trendinfo(trendInfo:TrendInfoDto):
     #print("########################################trendinfo########################################")
     #print(str(trendInfo))
     #print("########################################trendinfo########################################")
@@ -872,9 +872,9 @@ def proceedSignal(signal:SignalDto):
                      'tp': signal.tp,
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
-    #timeFrame:TimeFrame = TimeFrame.__dict__[signal.timeframe]
-    #recommendations = loadRecommendations(signal.symbol, timeFrame)
-    #logger.info(f"Recommendations {recommendations}")
+    timeFrame:TimeFrame = TimeFrame.__dict__[signal.timeframe]
+    recommendations = loadRecommendations(signal.symbol, timeFrame)
+    logger.info(f"Recommendations {recommendations}")
 
     with (Session.begin() as session):
 
