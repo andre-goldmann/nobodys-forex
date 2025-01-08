@@ -876,8 +876,10 @@ def proceedSignal(signal:SignalDto):
 
     recommendations = loadRecommendations(signal.symbol)
 
-    for recommendation in recommendations:
-        logger.info(f"Recommendation for {signal.symbol} {recommendation.timeFrame}: {recommendation.recommendation}")
+    # nur wenn wir mindestens zwei Empfehlungen haben
+    if (len(recommendations) >= 2):
+        for recommendation in recommendations:
+            logger.info(f"Recommendation for {signal.symbol} {recommendation.timeFrame}: {recommendation.recommendation}")
 
 
     with (Session.begin() as session):
