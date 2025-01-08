@@ -875,12 +875,19 @@ def proceedSignal(signal:SignalDto):
                      'timeframe': signal.timeframe})
 
     recommendations = loadRecommendations(signal.symbol)
-
+    recommendationsResult = []
     # nur wenn wir mindestens zwei Empfehlungen haben
+
     if len(recommendations) >= 2:
         for recommendation in recommendations:
-            logger.info(f"Recommendation for {signal.symbol} {recommendation.timeFrame}: {recommendation.recommendation}")
+            recommendationsResult.append(recommendation.recommendation.lower())
 
+    contains_signal_direction = all(signal.type in item.lower() for item in recommendationsResult)
+
+    if contains_signal_direction:
+        print("Both entries contain " + signal.type)
+    else:
+        print("Not all entries contain " + signal.type)
 
     with (Session.begin() as session):
 
