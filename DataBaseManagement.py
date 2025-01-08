@@ -663,7 +663,7 @@ def storeTradingViewAnalysis(timeframe:TimeFrame):
         interval=Interval.INTERVAL_15_MINUTES
 
     oandaSymbols = ["OANDA:" + symbol for symbol in symbols]
-    analysis = get_multiple_analysis(screener="forex", exchange="oanda", interval=interval, symbols=oandaSymbols)
+    analysis = get_multiple_analysis(screener="forex", interval=interval, symbols=oandaSymbols)
 
     with Session.begin() as session:
         for symbol in symbols:
