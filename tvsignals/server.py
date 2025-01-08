@@ -1134,7 +1134,7 @@ def storeSignal(signal: Signal, session):
 def storeIgnoredSignal(signal: IgnoredSignal, session):
     session.add(signal)
 
-def loadRecommendations(symbol:str, timeFrame:TimeFrame):
+def loadRecommendations(symbol:str):
     with Session.begin() as session:
         entries = session.query(TradingViewAnalysis).filter(TradingViewAnalysis.symbol == symbol).all()
         session.expunge_all()
