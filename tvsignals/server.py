@@ -604,6 +604,7 @@ class TradingViewAnalysis(Base):
     symbol: Mapped[str] = mapped_column(String(6))
     timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
     recommendation: Mapped[str]
+    stamp: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now())
 
 class Regressions(Base):
     __tablename__ = "regressions"
