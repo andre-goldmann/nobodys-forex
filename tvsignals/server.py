@@ -873,8 +873,8 @@ def proceedSignal(signal:SignalDto):
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
     timeFrame:TimeFrame = TimeFrame.__dict__[signal.timeframe]
-    #recommendations = loadRecommendations(signal.symbol, timeFrame)
-    #logger.info(f"Recommendations {recommendations}")
+    recommendations = loadRecommendations(signal.symbol, timeFrame)
+    logger.info(f"Recommendations {recommendations}")
 
     with (Session.begin() as session):
 
@@ -1141,13 +1141,14 @@ def loadRecommendations(symbol:str, timeFrame:TimeFrame):
         return entries
 
 if __name__ == "__main__":
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
 
     # Create a console handler
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(console_handler)
 
-    # needs to be a different log files than default-server
     handler = logging.FileHandler('logs.json')
     handler.setFormatter(ecs_logging.StdlibFormatter())
     logger.addHandler(handler)

@@ -666,9 +666,9 @@ def storeTradingViewAnalysis(timeframe:TimeFrame):
     analysis = get_multiple_analysis(screener="forex", interval=interval, symbols=oandaSymbols)
 
     with Session.begin() as session:
-        for symbol in symbols:
+        for symbol in oandaSymbols:
             spongebob = TradingViewAnalysis(
-                symbol=symbol,
+                symbol=symbol.replace("OANDA:", ""),
                 timeFrame=timeframe.name,
                 recommendation=analysis[symbol].summary['RECOMMENDATION']
             )
