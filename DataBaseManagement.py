@@ -88,7 +88,7 @@ class TradingViewAnalysis(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     symbol: Mapped[str] = mapped_column(String(6))
     timeFrame: Mapped[Enum] = mapped_column(Enum(TimeFrame))
-    recommendation: Mapped[str] = mapped_column(String(4))
+    recommendation: Mapped[str] = mapped_column(String(6))
 
 class Regressions(Base):
     __tablename__ = "regressions"
@@ -664,7 +664,7 @@ def storeTradingViewAnalysis(timeframe:TimeFrame):
 
     oandaSymbols = ["OANDA:" + symbol for symbol in symbols]
     analysis = get_multiple_analysis(screener="forex", interval=interval, symbols=oandaSymbols)
-    print(f"Analysis for {timeframe}:{analysis}")
+    print(f"Analysis for {interval}:{analysis}")
     with Session.begin() as session:
         for symbol in oandaSymbols:
             entry = analysis[symbol]
