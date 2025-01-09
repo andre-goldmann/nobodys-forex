@@ -642,7 +642,7 @@ def deleteTradingViewAnalysis(timeframe:TimeFrame):
     with Session.begin() as session:
         try:
             results = session.query(TradingViewAnalysis).filter(
-                TradingViewAnalysis.timeFrame==timeframe).all()
+                TradingViewAnalysis.timeFrame==timeframe.name).all()
             for r in results:
                 session.delete(r)
             session.commit()
