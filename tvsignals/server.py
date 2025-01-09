@@ -875,20 +875,19 @@ def proceedSignal(signal:SignalDto):
                      'strategy': strategy,
                      'timeframe': signal.timeframe})
 
-    recommendations = loadRecommendations(signal.symbol)
-    recommendationsResult = []
-    # nur wenn wir mindestens zwei Empfehlungen haben
+    #recommendations = loadRecommendations(signal.symbol)
+    #recommendationsResult = []
 
-    if len(recommendations) >= 2:
-        for recommendation in recommendations:
-            recommendationsResult.append(recommendation.recommendation.lower())
+    #if len(recommendations) >= 2:
+    #    for recommendation in recommendations:
+    #        recommendationsResult.append(recommendation.recommendation.lower())
 
-    if len(recommendationsResult) >=2:
-        contains_signal_direction = all(signal.type in item.lower() for item in recommendationsResult)
-        #print(f"Signal {signal} recommendations {recommendationsResult} filled = {contains_signal_direction}" )
-        if not contains_signal_direction:
-            print(f"Ignore signal {signal} as recommendations {recommendationsResult} are not full filled!" )
-            return
+    #if len(recommendationsResult) >=2:
+    #    contains_signal_direction = all(signal.type in item.lower() for item in recommendationsResult)
+    #    #print(f"Signal {signal} recommendations {recommendationsResult} filled = {contains_signal_direction}" )
+    #    if not contains_signal_direction:
+    #        print(f"Ignore signal {signal} as recommendations {recommendationsResult} are not full filled!" )
+    #        return
 
     with (Session.begin() as session):
 

@@ -665,21 +665,28 @@ def storeTradingViewAnalysis(timeframe:TimeFrame):
     analysis = get_multiple_analysis(screener="forex", interval=interval, symbols=oandaSymbols)
     print(f"Analysis for {interval}:{analysis}")
     with Session.begin() as session:
-        for symbol in oandaSymbols:
-            entry = analysis[symbol]
-            if entry is None:
-                continue
+        try:
+            for symbol in oandaSymbols:
+                entry = analysis[symbol]
+                if entry is None:
+                    continue
 
-            spongebob = TradingViewAnalysis(
-                symbol=symbol.replace("OANDA:", ""),
-                timeFrame=timeframe.name,
-                recommendation=entry.summary['RECOMMENDATION']
-            )
+                spongebob = TradingViewAnalysis(
+                    symbol=symbol.replace("OANDA:", ""),
+                    timeFrame=timeframe.name,
+                    recommendation=entry.summary['RECOMMENDATION']
+                )
 
-            session.add_all([spongebob])
-        session.commit()
-        session.close()
-
+                session.add_all([spongebob])
+            session.commit()
+            session.close()
+        except Exception:
+            print("Exception while deleting TradingViewAnalysis:")
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+            session.rollback()
+            session.close()
 
 def storeSupportResistance(sr:SupportResistance):
     # nur jeden Tage einmal löschen
