@@ -642,7 +642,7 @@ def deleteTradingViewAnalysis(timeframe:TimeFrame):
     with Session.begin() as session:
         try:
             results = session.query(TradingViewAnalysis).filter(
-                TradingViewAnalysis.timeFrame==timeframe.name).all()
+                TradingViewAnalysis.timeFrame==timeframe).all()
             for r in results:
                 session.delete(r)
             session.commit()
@@ -673,7 +673,7 @@ def storeTradingViewAnalysis(timeframe:TimeFrame):
 
                 spongebob = TradingViewAnalysis(
                     symbol=symbol.replace("OANDA:", ""),
-                    timeFrame=timeframe.name,
+                    timeFrame=timeframe,
                     recommendation=entry.summary['RECOMMENDATION']
                 )
 

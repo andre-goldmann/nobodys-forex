@@ -302,6 +302,7 @@ components:
         - DonchianBreakout_M15
         - DonchianBreakout_H1
         - DonchianBreakout_H4
+        - DonchianMiddle_M15_DEFAULT
         - DonchianMiddle_M15
         - DonchianMiddle_H1
         - DonchianMiddle_H4
@@ -317,12 +318,15 @@ components:
         - ThreeEma_M15
         - ThreeEma_H1
         - ThreeEma_H4
+        - ThreeEmaAlternative_M15_DEFAULT
         - ThreeEmaAlternative_M15
         - ThreeEmaAlternative_H1
         - ThreeEmaAlternative_H4
+        - EMACrossover_M15_DEFAULT
         - EMACrossover_M15
         - EMACrossover_H1
         - EMACrossover_H4
+        - EMACrossoverAlternative_M15_DEFAULT
         - EMACrossoverAlternative_M15
         - EMACrossoverAlternative_H1
         - EMACrossoverAlternative_H4
