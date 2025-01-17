@@ -24,6 +24,9 @@ components:
     SymbolEnum:
       type: string
       enum:
+        - EMACrossoverRSIAlternative_M15_DEFAULT
+        - EMACrossoverAlternative_M15_DEFAULT
+        - ThreeEmaAlternative_M15_DEFAULT
         - AUDCAD
         - AUDJPY
         - AUDCHF
