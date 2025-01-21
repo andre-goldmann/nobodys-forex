@@ -11,6 +11,7 @@ public class StrategyNameMapping {
     
     static {
 
+        STRATEGY_NAMES.put(StrategyEnum.EMACROSSOVERALTERNATIVE_M15_DEFAULT, "EMACrossoverAlternative_M15_DEFAULT");
         STRATEGY_NAMES.put(StrategyEnum.DONCHIANMIDDLE_M15_DEFAULT, "DonchianMiddle_M15_DEFAULT");
         STRATEGY_NAMES.put(StrategyEnum.ADXRSI_M15_DEFAULT, "AdxRsi_M15_DEFAULT");
         STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_RSI_DEFAULT, "Bj SuperScript RSI_DEFAULT");
