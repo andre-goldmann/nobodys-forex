@@ -10,6 +10,21 @@ public class StrategyNameMapping {
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
     
     static {
+
+        STRATEGY_NAMES.put(StrategyEnum.DONCHIANMIDDLE_M15_DEFAULT, "DonchianMiddle_M15_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.ADXRSI_M15_DEFAULT, "AdxRsi_M15_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_RSI_DEFAULT, "Bj SuperScript RSI_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.EMACROSSOVER_M15_DEFAULT, "EMACrossover_M15_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_M15_DEFAULT, "BollingerBandsAndRSI_M15_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.EMACROSSOVERRSIALTERNATIVE_M15_DEFAULT, "EMACrossoverRSIAlternative_M15_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_RSI_MOMO_DEFAULT, "Bj SuperScript RSI Momo_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.T3_EAMS_DEFAULT, "T3_EAMS_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.T3_NNFX_DEFAULT, "T3_NNFX_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.VHMA_DEFAULT, "VHMA_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.THREEEMAALTERNATIVE_M15_DEFAULT, "ThreeEmaAlternative_M15_DEFAULT");
+        STRATEGY_NAMES.put(StrategyEnum.BJ_SUPERSCRIPT_TSI_CURL_DEFAULT, "Bj SuperScript TSI Curl_DEFAULT");
+
+
         STRATEGY_NAMES.put(StrategyEnum.JMACROSSOVER_STRATEGY, "JMaCrossover-Strategy");
         STRATEGY_NAMES.put(StrategyEnum.JMACROSSOVER_STRATEGY_WITHOUT_REG, "JMaCrossover-Strategy_WITHOUT_REG");
 
@@ -214,7 +229,6 @@ public class StrategyNameMapping {
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_M15, "BladeRunner_M15");
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_H1, "BladeRunner_H1");
         STRATEGY_NAMES.put(StrategyEnum.BLADERUNNER_H4, "BladeRunner_H4");
-        STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_M15_DEFAULT, "BollingerBandsAndRSI_M15_DEFAULT");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_M15, "BollingerBandsAndRSI_M15");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_H1, "BollingerBandsAndRSI_H1");
         STRATEGY_NAMES.put(StrategyEnum.BOLLINGERBANDSANDRSI_H4, "BollingerBandsAndRSI_H4");
