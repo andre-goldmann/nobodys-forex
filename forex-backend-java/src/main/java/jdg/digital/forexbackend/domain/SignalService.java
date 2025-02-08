@@ -57,6 +57,9 @@ public class SignalService {
     @Autowired
     private TradeStatsServices tradeStatsServices;
 
+    @Autowired
+    DayTimeTradingRule tradingRule;
+
     @PostConstruct
     public void runOnStartup() {
         runDailyAt11PM();
@@ -123,32 +126,8 @@ public class SignalService {
     }
 
     public Mono<String> storeSignal(Signal signal) {
-
-        // check if today is Thursday and if actuall time is before 16:00
-        // if yes, then do nothing here
-        // if no, then store the signal in prod
-
-        // 1. Obtain the current date and time
-        final LocalDateTime now = LocalDateTime.now();
-
-        // 2. Check if today is Thursday
-        final boolean isThursday = now.getDayOfWeek() == DayOfWeek.THURSDAY
-                && now.toLocalTime().isAfter(LocalTime.of(12, 30))
-                && now.toLocalTime().isBefore(LocalTime.of(15, 0));
-
-        final boolean isTuesday = now.getDayOfWeek() == DayOfWeek.TUESDAY
-                && now.toLocalTime().isAfter(LocalTime.of(14, 30))
-                && now.toLocalTime().isBefore(LocalTime.of(16, 30));
-
-        final boolean isFriday = now.getDayOfWeek() == DayOfWeek.FRIDAY
-                && now.toLocalTime().isAfter(LocalTime.of(14, 30))
-                && now.toLocalTime().isBefore(LocalTime.of(16, 30));
-
-        final boolean isNight = now.toLocalTime().isAfter(LocalTime.of(23, 30))
-                && now.toLocalTime().isBefore(LocalTime.of(0, 1));
-
-        if (isThursday || isTuesday || isFriday || isNight) {
-            log.info("Today is Tuesday/Thursday/Friday and the current time is before "+now+", so the signal will not be stored");
+        if (!tradingRule.trade(signal.symbol())) {
+            log.info("Trading rule conditions not met at {}. Signal will not be stored", LocalDateTime.now());
             return Mono.just("Signal ignored");
         }
 
