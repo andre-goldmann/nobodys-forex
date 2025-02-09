@@ -61,7 +61,7 @@ public class DayTimeTradingRule {
                (day == DayOfWeek.THURSDAY &&
                 ((!time.isBefore(LocalTime.of(20,0)) && time.isBefore(LocalTime.of(21,0))) ||
                  (!time.isBefore(LocalTime.of(22,0)) && time.isBefore(LocalTime.of(23,0))) ||
-                 (!time.isBefore(LocalTime.of(23,0)) && time.isBefore(LocalTime.of(24,0))))) ||
+                 (!time.isBefore(LocalTime.of(23,0)) && time.isBefore(LocalTime.of(0,0))))) ||
                (day == DayOfWeek.FRIDAY && (!time.isBefore(LocalTime.of(4,0)) && time.isBefore(LocalTime.of(5,0))))) {
                 return false;
             }
