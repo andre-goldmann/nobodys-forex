@@ -1,16 +1,16 @@
-#
-FROM python:3.11
+FROM pgvector/pgvector:pg17
 
-#
-WORKDIR /code
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    build-essential \
+    postgresql-server-dev-all
 
-#
-COPY ./requirements.txt /code/requirements.txt
+# Clone, build, and install pgvector
+RUN git clone --branch v0.8.0 https://github.com/pgvector/pgvector.git && \
+    cd pgvector && \
+    make && \
+    make install
 
-#
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
-#
-COPY ./ /code/
-
-CMD ["python", "./server.py"]
+# Copy the initialization script
+COPY init.sql /docker-entrypoint-initdb.d/
