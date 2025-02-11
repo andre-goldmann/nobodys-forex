@@ -10,6 +10,12 @@ public class StrategyNameMapping {
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
 
     static {
+        STRATEGY_NAMES.put(StrategyEnum.RANGEFILTERS_STRATEGY, "RangeFilters-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.RANGEFILTERS_STRATEGY_WITHOUT_REG, "RangeFilters-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.MOMENTUMBASEDZIGZAGSIGNALS_STRATEGY, "MomentumBasedZigZagSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.MOMENTUMBASEDZIGZAGSIGNALS_STRATEGY_WITHOUT_REG, "MomentumBasedZigZagSignals-Strategy_WITHOUT_REG");
+
         STRATEGY_NAMES.put(StrategyEnum.AROONBASEDSIGNALS_STRATEGY, "AroonBasedSignals-Strategy");
         STRATEGY_NAMES.put(StrategyEnum.AROONBASEDSIGNALS_STRATEGY_WITHOUT_REG, "AroonBasedSignals-Strategy_WITHOUT_REG");
 

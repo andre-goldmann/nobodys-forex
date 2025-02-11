@@ -71,6 +71,10 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - MomentumBasedZigZagSignals-Strategy
+        - MomentumBasedZigZagSignals-Strategy_WITHOUT_REG
+        - RangeFilters-Strategy
+        - RangeFilters-Strategy_WITHOUT_REG
         - AroonBasedSignals-Strategy
         - AroonBasedSignals-Strategy_WITHOUT_REG
         - UhlMASystemSignals-Strategy

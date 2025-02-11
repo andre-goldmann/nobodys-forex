@@ -69,6 +69,12 @@ symbols = [
     "XRPUSD"]
 
 strategies = [
+                "MomentumBasedZigZagSignals-Strategy",
+                "MomentumBasedZigZagSignals-Strategy_WITHOUT_REG",
+
+                "RangeFilters-Strategy",
+                "RangeFilters-Strategy_WITHOUT_REG",
+
                 "AroonBasedSignals-Strategy",
                 "AroonBasedSignals-Strategy_WITHOUT_REG",
 
@@ -1126,7 +1132,11 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "LlorensActivatorSignals-Strategy" \
                 or strategy == "LlorensActivatorSignals-Strategy_WITHOUT_REG" \
                 or strategy == "DekidakaAshiSignals-Strategy" \
-                or strategy == "DekidakaAshiSignals-Strategy_WITHOUT_REG":
+                or strategy == "DekidakaAshiSignals-Strategy_WITHOUT_REG" \
+                or strategy == "MomentumBasedZigZagSignals-Strategy" \
+                or strategy == "MomentumBasedZigZagSignals-Strategy_WITHOUT_REG" \
+                or strategy == "RangeFilters-Strategy" \
+                or strategy == "RangeFilters-Strategy_WITHOUT_REG":
 
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", sl, tp)
