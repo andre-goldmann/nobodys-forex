@@ -71,6 +71,20 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - AroonBasedSignals-Strategy
+        - AroonBasedSignals-Strategy_WITHOUT_REG
+        - UhlMASystemSignals-Strategy
+        - UhlMASystemSignals-Strategy_WITHOUT_REG
+        - BernoulliEntropyFunctionSignals-Strategy
+        - BernoulliEntropyFunctionSignals-Strategy_WITHOUT_REG
+        - EmaStrategySignals-Strategy
+        - EmaStrategySignals-Strategy_WITHOUT_REG
+        - EfficientTrendStepModSignals-Strategy
+        - EfficientTrendStepModSignals-Strategy_WITHOUT_REG
+        - LlorensActivatorSignals-Strategy
+        - LlorensActivatorSignals-Strategy_WITHOUT_REG
+        - DekidakaAshiSignals-Strategy
+        - DekidakaAshiSignals-Strategy_WITHOUT_REG
         - EMACrossoverRSIAlternative_M15_DEFAULT
         - JMaCrossover-Strategy
         - JMaCrossover-Strategy_WITHOUT_REG

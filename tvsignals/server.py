@@ -69,6 +69,28 @@ symbols = [
     "XRPUSD"]
 
 strategies = [
+                "AroonBasedSignals-Strategy",
+                "AroonBasedSignals-Strategy_WITHOUT_REG",
+
+                "EfficientTrendStepModSignals-Strategy",
+                "EfficientTrendStepModSignals-Strategy_WITHOUT_REG",
+
+                "UhlMASystemSignals-Strategy",
+                "UhlMASystemSignals-Strategy_WITHOUT_REG",
+
+                "BernoulliEntropyFunctionSignals-Strategy",
+                "BernoulliEntropyFunctionSignals-Strategy_WITHOUT_REG",
+
+                "EmaStrategySignals-Strategy",
+                "EmaStrategySignals-Strategy_WITHOUT_REG",
+
+                "LlorensActivatorSignals-Strategy",
+                "LlorensActivatorSignals-Strategy_WITHOUT_REG",
+
+                "DekidakaAshiSignals-Strategy",
+                "DekidakaAshiSignals-Strategy_WITHOUT_REG",
+
+
               "JMaCrossover-Strategy",
               "JMaCrossover-Strategy_WITHOUT_REG",
               
@@ -1090,7 +1112,22 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "NNFX-Signals" \
                 or strategy == "BollingerBands Pinbar" \
                 or strategy == "EvWmaVwapMacd-Strategy" \
-                or strategy == "JMaCrossover-Strategy":
+                or strategy == "JMaCrossover-Strategy" \
+                or strategy == "AroonBasedSignals-Strategy" \
+                or strategy == "AroonBasedSignals-Strategy_WITHOUT_REG" \
+                or strategy == "EfficientTrendStepModSignals-Strategy" \
+                or strategy == "EfficientTrendStepModSignals-Strategy_WITHOUT_REG" \
+                or strategy == "UhlMASystemSignals-Strategy" \
+                or strategy == "UhlMASystemSignals-Strategy_WITHOUT_REG" \
+                or strategy == "BernoulliEntropyFunctionSignals-Strategy" \
+                or strategy == "BernoulliEntropyFunctionSignals-Strategy_WITHOUT_REG" \
+                or strategy == "EmaStrategySignals-Strategy" \
+                or strategy == "EmaStrategySignals-Strategy_WITHOUT_REG" \
+                or strategy == "LlorensActivatorSignals-Strategy" \
+                or strategy == "LlorensActivatorSignals-Strategy_WITHOUT_REG" \
+                or strategy == "DekidakaAshiSignals-Strategy" \
+                or strategy == "DekidakaAshiSignals-Strategy_WITHOUT_REG":
+
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", sl, tp)
 

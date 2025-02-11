@@ -8,8 +8,28 @@ import java.util.Map;
 public class StrategyNameMapping {
     
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
-    
+
     static {
+        STRATEGY_NAMES.put(StrategyEnum.AROONBASEDSIGNALS_STRATEGY, "AroonBasedSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.AROONBASEDSIGNALS_STRATEGY_WITHOUT_REG, "AroonBasedSignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.UHLMASYSTEMSIGNALS_STRATEGY, "UhLMASystemSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.UHLMASYSTEMSIGNALS_STRATEGY_WITHOUT_REG, "UhLMASystemSignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.BERNOULLIENTROPYFUNCTIONSIGNALS_STRATEGY, "BernoulliEntropyFunctionSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.BERNOULLIENTROPYFUNCTIONSIGNALS_STRATEGY_WITHOUT_REG, "BernoulliEntropyFunctionSignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.EMASTRATEGYSIGNALS_STRATEGY, "EmaStrategySignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.EMASTRATEGYSIGNALS_STRATEGY_WITHOUT_REG, "EmaStrategySignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.EFFICIENTTRENDSTEPMODSIGNALS_STRATEGY, "EfficientTrendStepModSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.EFFICIENTTRENDSTEPMODSIGNALS_STRATEGY_WITHOUT_REG, "EfficientTrendStepModSignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.LLORENSACTIVATORSIGNALS_STRATEGY, "LlorensActivatorSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.LLORENSACTIVATORSIGNALS_STRATEGY_WITHOUT_REG, "LLorensActivatorSignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.DEKIDAKAASHISIGNALS_STRATEGY, "DekidakaAshiSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.DEKIDAKAASHISIGNALS_STRATEGY_WITHOUT_REG, "DeKidakaAshiSignals-Strategy_WITHOUT_REG");
 
         STRATEGY_NAMES.put(StrategyEnum.EMACROSSOVERALTERNATIVE_M15_DEFAULT, "EMACrossoverAlternative_M15_DEFAULT");
         STRATEGY_NAMES.put(StrategyEnum.DONCHIANMIDDLE_M15_DEFAULT, "DonchianMiddle_M15_DEFAULT");
