@@ -69,6 +69,12 @@ symbols = [
     "XRPUSD"]
 
 strategies = [
+                "BilateralStochasticOscillatorSignals-Strategy",
+                "BilateralStochasticOscillatorSignals-Strategy_WITHOUT_REG",
+
+                "NickRypockTrailingReverseSignals-Strategy",
+                "NickRypockTrailingReverseSignals-Strategy_WITHOUT_REG",
+
                 "MomentumBasedZigZagSignals-Strategy",
                 "MomentumBasedZigZagSignals-Strategy_WITHOUT_REG",
 
@@ -95,7 +101,6 @@ strategies = [
 
                 "DekidakaAshiSignals-Strategy",
                 "DekidakaAshiSignals-Strategy_WITHOUT_REG",
-
 
               "JMaCrossover-Strategy",
               "JMaCrossover-Strategy_WITHOUT_REG",
@@ -917,7 +922,7 @@ def proceedSignal(signal:SignalDto):
     #        print(f"Ignore signal {signal} as recommendations {recommendationsResult} are not full filled!" )
     #        return
 
-    with (Session.begin() as session):
+    with ((Session.begin() as session)):
 
         df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
         if df is None or len(df) == 0:
@@ -1136,7 +1141,11 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "MomentumBasedZigZagSignals-Strategy" \
                 or strategy == "MomentumBasedZigZagSignals-Strategy_WITHOUT_REG" \
                 or strategy == "RangeFilters-Strategy" \
-                or strategy == "RangeFilters-Strategy_WITHOUT_REG":
+                or strategy == "RangeFilters-Strategy_WITHOUT_REG" \
+                or strategy == "NickRypockTrailingReverseSignals-Strategy" \
+                or strategy == "NickRypockTrailingReverseSignals-Strategy_WITHOUT_REG" \
+                or strategy == "BilateralStochasticOscillatorSignals-Strategy" \
+                or strategy == "BilateralStochasticOscillatorSignals-Strategy_WITHOUT_REG":
 
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", sl, tp)

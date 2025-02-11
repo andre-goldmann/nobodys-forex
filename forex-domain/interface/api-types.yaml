@@ -71,6 +71,10 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - BilateralStochasticOscillatorSignals-Strategy
+        - BilateralStochasticOscillatorSignals-Strategy_WITHOUT_REG
+        - NickRypockTrailingReverseSignals-Strategy
+        - NickRypockTrailingReverseSignals-Strategy_WITHOUT_REG
         - MomentumBasedZigZagSignals-Strategy
         - MomentumBasedZigZagSignals-Strategy_WITHOUT_REG
         - RangeFilters-Strategy
