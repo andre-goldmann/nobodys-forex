@@ -922,7 +922,7 @@ def proceedSignal(signal:SignalDto):
     #        print(f"Ignore signal {signal} as recommendations {recommendationsResult} are not full filled!" )
     #        return
 
-    with ((Session.begin() as session)):
+    with (Session.begin() as session):
 
         df = loadDfFromDb(signal.symbol, TimeFrame.PERIOD_D1, session, 200)
         if df is None or len(df) == 0:
