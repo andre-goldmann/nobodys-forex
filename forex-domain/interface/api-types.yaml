@@ -71,6 +71,14 @@ components:
     StrategyEnum:
       type: string
       enum:
+        - HalfTrendSignals-Strategy
+        - HalfTrendSignals-Strategy_WITHOUT_REG
+        - SupportAndResistanceLevelsSignals-Strategy
+        - SupportAndResistanceLevelsSignals-Strategy_WITHOUT_REG
+        - ScaledNormalizedVectorSignals-Strategy
+        - ScaledNormalizedVectorSignals-Strategy_WITHOUT_REG
+        - AntiBreakoutSignals-Strategy
+        - AntiBreakoutSignals-Strategy_WITHOUT_REG
         - BilateralStochasticOscillatorSignals-Strategy
         - BilateralStochasticOscillatorSignals-Strategy_WITHOUT_REG
         - NickRypockTrailingReverseSignals-Strategy

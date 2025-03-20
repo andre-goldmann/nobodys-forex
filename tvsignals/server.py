@@ -69,6 +69,18 @@ symbols = [
     "XRPUSD"]
 
 strategies = [
+                "HalfTrendSignals-Strategy",
+                "HalfTrendSignals-Strategy_WITHOUT_REG",
+
+                "SupportAndResistanceLevelsSignals-Strategy",
+                "SupportAndResistanceLevelsSignals-Strategy_WITHOUT_REG",
+
+                "ScaledNormalizedVectorSignals-Strategy",
+                "ScaledNormalizedVectorSignals-Strategy_WITHOUT_REG",
+
+                "AntiBreakoutSignals-Strategy",
+                "AntiBreakoutSignals-Strategy_WITHOUT_REG",
+
                 "BilateralStochasticOscillatorSignals-Strategy",
                 "BilateralStochasticOscillatorSignals-Strategy_WITHOUT_REG",
 
@@ -1145,7 +1157,15 @@ def proceedSignal(signal:SignalDto):
                 or strategy == "NickRypockTrailingReverseSignals-Strategy" \
                 or strategy == "NickRypockTrailingReverseSignals-Strategy_WITHOUT_REG" \
                 or strategy == "BilateralStochasticOscillatorSignals-Strategy" \
-                or strategy == "BilateralStochasticOscillatorSignals-Strategy_WITHOUT_REG":
+                or strategy == "BilateralStochasticOscillatorSignals-Strategy_WITHOUT_REG" \
+                or strategy == "HalfTrendSignals-Strategy" \
+                or strategy == "HalfTrendSignals-Strategy_WITHOUT_REG" \
+                or strategy == "SupportAndResistanceLevelsSignals-Strategy" \
+                or strategy == "SupportAndResistanceLevelsSignals-Strategy_WITHOUT_REG" \
+                or strategy == "ScaledNormalizedVectorSignals-Strategy" \
+                or strategy == "ScaledNormalizedVectorSignals-Strategy_WITHOUT_REG" \
+                or strategy == "AntiBreakoutSignals-Strategy" \
+                or strategy == "AntiBreakoutSignals-Strategy_WITHOUT_REG":
 
             # Ohne Beachtung der Regression Line speichern
             calculateSlAndStoreSignal(signal, strategy + "_WITHOUT_REG", sl, tp)

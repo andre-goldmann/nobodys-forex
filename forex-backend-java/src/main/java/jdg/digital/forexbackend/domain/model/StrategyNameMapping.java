@@ -10,6 +10,18 @@ public class StrategyNameMapping {
     public static final Map<StrategyEnum, String> STRATEGY_NAMES = new HashMap<>();
 
     static {
+        STRATEGY_NAMES.put(StrategyEnum.HALFTRENDSIGNALS_STRATEGY, "HalfTrendSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.HALFTRENDSIGNALS_STRATEGY_WITHOUT_REG, "HalfTrendSignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.SUPPORTANDRESISTANCELEVELSSIGNALS_STRATEGY, "SupportAndResistanceLevelsSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.SUPPORTANDRESISTANCELEVELSSIGNALS_STRATEGY_WITHOUT_REG, "SupportAndResistanceLevelsSignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.ANTIBREAKOUTSIGNALS_STRATEGY, "AntiBreakoutSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.ANTIBREAKOUTSIGNALS_STRATEGY_WITHOUT_REG, "AntiBreakoutSignals-Strategy_WITHOUT_REG");
+
+        STRATEGY_NAMES.put(StrategyEnum.SCALEDNORMALIZEDVECTORSIGNALS_STRATEGY, "ScaledNormalizedVectorSignals-Strategy");
+        STRATEGY_NAMES.put(StrategyEnum.SCALEDNORMALIZEDVECTORSIGNALS_STRATEGY_WITHOUT_REG, "ScaledNormalizedVectorSignals-Strategy_WITHOUT_REG");
+
         STRATEGY_NAMES.put(StrategyEnum.NICKRYPOCKTRAILINGREVERSESIGNALS_STRATEGY, "NickRypockTrailingReverseSignals-Strategy");
         STRATEGY_NAMES.put(StrategyEnum.NICKRYPOCKTRAILINGREVERSESIGNALS_STRATEGY_WITHOUT_REG, "NickRypockTrailingReverseSignals-Strategy_WITHOUT_REG");
 
